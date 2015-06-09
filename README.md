@@ -1,9 +1,7 @@
-#Precourse-Assessment
+#Week-1-Assessment
 
 ##Summary
-The precourse assessment will be used to assess your understanding of the material provided in the past week. At the end of the period, commit your work and submit a pull request.
-
-Unlike the precourse projects, assessment will not come with a built-in testing suite. Feel free to test in the console or create your own tests.
+Week 1 assessment will be used to assess your understanding of the material provided in the past week. At the end of the period, commit your work and submit a pull request.
 
 ##How do I get started?
 1. Complete the challenge in located in src/HashTable.js.
