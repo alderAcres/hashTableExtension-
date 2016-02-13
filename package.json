@@ -7,7 +7,10 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "get-test-utils": "node test/get-test-utils.js",
+    "merge": "node test/merge.js",
+    "update-package": "node test/update-package.js",
+    "remote-test": "node test/remote-test.js main.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/CodesmithLLC/week-1-assessment/issues"
   },
-  "homepage": "https://github.com/CodesmithLLC/week-1-assessment"
+  "homepage": "https://github.com/CodesmithLLC/week-1-assessment",
+  "dependencies": {
+    "request": "^2.69.0"
+  }
 }

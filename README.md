@@ -19,7 +19,7 @@ There are no tests for this assessment. **The onus is on you to determine if our
 ##What do I do when I am done?
 1. When completed - commit and push your changes to your GitHub
 
-2. Submit a pull request to the CodesmithLLC organization
+1. Submit a pull request to the CodesmithLLC organization to the branch name matching your GitHub handle
 
   - click the pull request icon the on the left side of the screen ![Alt text](http://u.cubeupload.com/codesmith/howtopullrequest.png)
   - click set the base of the pull request the specially created branch named after your GitHub handle ![Alt text](http://u.cubeupload.com/codesmith/howtopullrequest2.png)
