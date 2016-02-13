@@ -10,7 +10,7 @@
     "get-test-utils": "node test/get-test-utils.js",
     "merge": "node test/merge.js",
     "update-package": "node test/update-package.js",
-    "remote-test": "node test/remote-test.js main.js"
+    "remote-test": "node test/remote-test.js src/HashTable.js"
   },
   "repository": {
     "type": "git",
