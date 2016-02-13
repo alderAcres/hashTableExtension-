@@ -1,6 +1,6 @@
 function HashTable() {
   this.SIZE = 16;
-
+  
   // the array will be instantiated as [undefined, undefined....]
   // the array length should not change in this problem
   this.storage = new Array(this.SIZE);
@@ -8,17 +8,18 @@ function HashTable() {
 
 HashTable.prototype.set = function(key, value) {
 
-}
+};
 
 HashTable.prototype.get = function(key) {
 
-}
+};
 
 HashTable.prototype.remove = function(key) {
 
-}
+};
 
-// returns a number between 0 and size that is unique* and generated from the the inputted string
+
+// Do not modify
 function hashCode(string, size){
   var hash = 0;
   if (string.length == 0) return hash;
@@ -29,3 +30,6 @@ function hashCode(string, size){
   }
   return Math.abs(hash) % size ;
 }
+
+// Do not remove!!
+module.exports = HashTable;
