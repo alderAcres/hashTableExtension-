@@ -47,9 +47,9 @@ HashTable.prototype.get = function(key) {
 * remove - delete a key/value pair from the hash table
 *
 * - If the key does not exist in the hash table, return undefined
-* - If the result of removing the item drops the number of stored items to under
-*   25% of the hash table's SIZE, then reduce the hash table's SIZE by 1/2 and rehash
-*   everything
+* - If the hash table's SIZE is greater than 16 and the result of removing the
+*   item drops the number of stored items to be less than 25% of the hash table's SIZE
+*   (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
 *
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
