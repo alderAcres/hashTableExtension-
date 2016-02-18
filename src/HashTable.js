@@ -1,5 +1,3 @@
-'use strict'
-
 /**
 * HashTable costructor
 *
@@ -63,6 +61,8 @@ HashTable.prototype.remove = function(key) {
 
 // Do not modify
 function hashCode(string, size) {
+  'use strict';
+  
   let hash = 0;
   if (string.length === 0) return hash;
   
