@@ -4,20 +4,21 @@
 Week 1 assessment will be used to assess your understanding of the material provided in the past week. We'll be building an implementation of a hash table. At the end of the period, commit your work and submit a pull request. This is done solo. **DO NOT** look at previous code or ask your cohort-mates for help. However, your other resources (e.g. google, stack overflow) are allowed.
 
 ##How do I get started?
-1. Complete the challenge in located in src/HashTable.js.
-
-1. Make sure the hash table has the following properties:
-
-  - can get, set, and remove properties and their values
-  - can handle collisions
-  - doubles in size when 75% of the space is filled
-  - halves in size when 25% of the space is filled
+1. Fork this repo
+1. Clone your fork
+1. Complete the challenge in located in `src/HashTable.js`.
+  - You must implement the `get`, `set`, and `remove` functions on the HashTable prototype. 
+  - Each function is commented with its specifications. Implement the functions exactly as their documentation prescribes. You may assume the functions will be called with the types listed in their documentation.
+  - **important** Be sure to return the specified return value from each function's documentation
 
 ##How do I know if my answer is correct?
-There are no tests for this assessment. **The onus is on you to determine if our answer is correct.** You can test the behavior of your data structure in the chrome console, in node in the terminal, or any other JavaScript interpreter. 
+There are no provided tests for this assessment. **The onus is on you to determine if your answer is correct.** You can test the behavior of your data structure in the chrome console, with node in the terminal, or any other JavaScript interpreter. 
 
-##What do I do when I am done?
-1. When completed - commit and push your changes to your GitHub
+##Can I use ES2015 syntax?
+Yes, you may use ES2015 syntax if you would like. Before we test your code it will be run through a babel compiler. Any languages features not available in Node will be compiled down to a compatible version.
+
+##What do I do when I'm done?
+1. When completed, commit and push your changes to your GitHub fork
 
 1. Submit a pull request to the CodesmithLLC organization to the branch name matching your GitHub handle
 
