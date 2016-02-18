@@ -24,7 +24,7 @@ function hashCode(string, size){
   var hash = 0;
   if (string.length === 0) return hash;
   
-  for (i = 0; i < string.length; i++) {
+  for (var i = 0; i < string.length; i++) {
     var letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
