@@ -1,39 +1,39 @@
-const path = require('path');
+/**
+* Script for copying in common test files from assessments-archive to this repo.
+* Allows each assessment to share common grading utilities, linting rules, and
+* reporting methods.
+*/
+
 const fs = require('fs');
 const async = require('async');
 const GithubApi = require('./util/GithubApi');
-
-const commit = process.env.TRAVIS_COMMIT;
-const pull = process.env.TRAVIS_PULL_REQUEST;
 const org = 'CodesmithLLC';
-const repo = path.dirname(__dirname).split('/').slice(-1)[0];
-const lintFileName = '.eslintrc';
+const github = new GithubApi({ org, token: process.env.GITHUB_ACCESS_TOKEN });
 
-var github = new GithubApi({ org: org, token: process.env.GITHUB_ACCESS_TOKEN });
+// Files to copy over from assessments-archive repo into the test/ dir locally
+const filesToCopyFromArchive = [
+  'test/util/remote-test.js',
+  'test/util/report.js',
+  'test/util/dynamodbDoc.js',
+  'test/util/lint.js',
+  'test/util/report.js',
+  '.eslintrc',
+];
 
-async.series([
-  (next) => {
-    copyFile('test/util/remote-test.js', next);
-  },
-  (next) => {
-    copyFile('test/util/report.js', next);
-  },
-  (next) => {
-    copyFile('test/util/dynamodbDoc.js', next);
-  },
-  (next) => {
-    copyFile('.eslintrc', next);
-  }
-], (err, results) => {
-  if (err) throw err;
-});
+/**
+* Copy a file from assessments-archive GitHub repo for use locally
+*/
+function copyFileFromArchive(path, next) {
+  github.fileContents({ path, repo: 'assessments-archive' }, (err, res, body) => {
+    const buf = new Buffer(body.content, 'base64');
 
-function copyFile(path, next) {
-  github.fileContents({ path: path, repo: 'assessments-archive' }, (err, res, body) => {
-    var buf = new Buffer(body.content, 'base64');
-    
-    var filepath = `${__dirname}/${body.name}`;
-    
+    const filepath = `${__dirname}/${body.name}`;
+
     fs.writeFile(filepath, buf, next);
   });
 }
+
+// Limit to 1 request concurrently
+async.eachSeries(filesToCopyFromArchive, copyFileFromArchive, (err) => {
+  if (err) throw err;
+});

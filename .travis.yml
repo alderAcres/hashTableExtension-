@@ -19,7 +19,7 @@ env:
     - secure: gyHPFww9XMFUcq/iW+snBSVh7Ooh4cgzbpjTY82cYWJ+U+WUMRHQaTTIxBCi+g3DK2j+91/cUlfLTPi6XYvYgy6Kq6xyN7HfeVhaJ10l1CYopMHPLrkKz/B8u47kLmta5M6dJaEeSQW0RduRQiZHcA3+U9tY+zjeGjiUlJr6w+U=
 script:
   - if [ $TRAVIS_SECURE_ENV_VARS == "true" ]; then
-      npm run get-test-utils && npm run remote-test;
+      npm run get-test-utils && npm run test ; npm run lint ; npm run report;
     else
       npm run merge;
     fi
