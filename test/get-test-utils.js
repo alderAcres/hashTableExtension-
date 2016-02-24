@@ -9,10 +9,11 @@ const async = require('async');
 const GithubApi = require('./util/GithubApi');
 const org = 'CodesmithLLC';
 const github = new GithubApi({ org, token: process.env.GITHUB_ACCESS_TOKEN });
+const repo = path.dirname(__dirname).split('/').slice(-1)[0];
 
 // Files to copy over from assessments-archive repo into the test/ dir locally
 const filesToCopyFromArchive = [
-  'test/util/remote-test.js',
+  `test/${repo}.js`,
   'test/util/report.js',
   'test/util/dynamodbDoc.js',
   'test/util/lint.js',

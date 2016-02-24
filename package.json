@@ -10,7 +10,8 @@
     "get-test-utils": "node test/get-test-utils.js",
     "merge": "node test/merge.js",
     "update-package": "node test/update-package.js",
-    "lint": "node test/lint.js src/HashTable.js"
+    "lint": "node test/lint.js src/HashTable.js",
+    "test": "mocha --timeout 5000 -R mocha-email-reporter -O json=test/output.json test/week-1-assessment.js"
   },
   "repository": {
     "type": "git",
