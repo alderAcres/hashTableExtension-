@@ -11,7 +11,7 @@
     "merge": "node test/merge.js",
     "update-package": "node test/update-package.js",
     "lint": "node test/lint.js src/HashTable.js",
-    "test": "node test/util/remote-test.js"
+    "test": "node test/remote-test.js"
   },
   "repository": {
     "type": "git",
