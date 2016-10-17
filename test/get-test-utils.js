@@ -19,6 +19,7 @@ const filesToCopyFromArchive = [
   'test/util/dynamodbDoc.js',
   'test/util/lint.js',
   'test/util/report.js',
+  'test/util/remote-test.js',
   '.eslintrc',
 ];
 
