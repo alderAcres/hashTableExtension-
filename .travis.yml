@@ -11,9 +11,8 @@ before_install:
     fi
 env:
   global:
-    - secure: aWKgpO/mjI5hmLE3zvi9fUklrXXcS9tqEsVDf633uFS0hink8IA6pRfSe/0X0TgMroO4/wJ6fpc3conMOEGxeGPYI7Gv0TsSv+iQw9Iyb6nAs8+iem+pncs9ta+ug4T7/+KVefq4S+tJUj0J8DdsWQmWLFrkkxR/IWiY3lTbS0I=
-    - secure: aqWoZPpZhYFNjrPWR0ucjqeScXZ62gSbmyTKH3fGmbsxsAswZc+PZJsWxEXtmt+dQWVq9L1SO9s+IO9v8h4NaNQlafkFa5EKUfUQEcHZIjLhFG+LoXljzrfiK4irG/x9+/ZNr1GxOYNUrFXug+D1NCMbJ1UEgc5UfarsTkG7yFc=
-    - secure: gyHPFww9XMFUcq/iW+snBSVh7Ooh4cgzbpjTY82cYWJ+U+WUMRHQaTTIxBCi+g3DK2j+91/cUlfLTPi6XYvYgy6Kq6xyN7HfeVhaJ10l1CYopMHPLrkKz/B8u47kLmta5M6dJaEeSQW0RduRQiZHcA3+U9tY+zjeGjiUlJr6w+U=
+    - secure: fFjmJKhmjdAY3qS661LKJvCpIaRpCSYSIqY5ZUinkjHVl6N2ScvmnnOigfen0W9tF/AvtAodQl0NY92AhR6pIod9lgo9GMrvErw1BUiZCpNM/y//8WDiAcK9hgtzMY9xI4mm5eZa6YiIV2CTy5nX/pn9FGHS9MVD5+WbirxNLDA=
+    - secure: kxX8q45cckLA9Me/T7JkMpeKbqCvB6K8nhvTaRR2KpO+xa7g346yWp6cVk568ozIYlEMpLqj/uNnQyq7D8Em/9VsM64fdJ6JHXWTqbNwjgzBoBpn+LihsrBF8gLCOq3GmKWUaPtgiwEdK1JlliAOsoibgWoty0DLdH6NLpk6ix0=
 script:
   - if [ $TRAVIS_SECURE_ENV_VARS == "true" ]; then
       npm run get-test-utils && npm run test ; npm run lint ; npm run report;
