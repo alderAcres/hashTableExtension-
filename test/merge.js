@@ -13,7 +13,9 @@ const repo = path.dirname(__dirname).split('/').slice(-1)[0];
 const github = new GithubApi({ org, token: process.env.MERGE_TOKEN });
 
 github.pullInfo({ repo, pull }, (err, res, body) => {
-  if (body.user.login !== body.base.ref) {
+  console.log('user keys', Object.keys(body.user));
+  console.log('base keys', Object.keys(body.base));
+  if (body.user.login !== body.base.ref && body.user.login !== 'codesmith-admin') {
     console.log('Must pull to correct branch name. Exiting.');
     process.exit(1);
   }
