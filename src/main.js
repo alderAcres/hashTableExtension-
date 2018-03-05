@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +23,14 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  const index = hashCode(key, this.SIZE);
+  if (this.storage[index]) { //if it exists, place in object
+    this.storage[index][key] = value;
+  } else { // create object and put inside
+    this.storage[index] = {}
+    this.storage[index][key] = value;
+  }
 };
 
 /**
@@ -37,8 +43,9 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function (key) {
+  const index = hashCode(key, this.SIZE);
+  if (this.storage[index][key]) return this.storage[index][key];
 };
 
 /**
@@ -49,24 +56,42 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
-
+HashTable.prototype.remove = function (key) {
+  let index = hashCode(key, this.SIZE);
+  if (!this.storage[index]) return;
+  // else -- find and remove value
+  let removed = this.storage[index][key];
+  delete this.storage[index][key];
+  // console.log(this.storage)
+  return removed;
 };
+
+let ht = new HashTable();
+
+ht.set("a", 1)
+ht.set("lk", 2)
+ht.set("c", 3)
+console.log(ht.get("lk"))
+console.log(ht.get("c"))
+console.log(ht.remove("asdf"))
+console.log(ht.remove("c"))
+
+
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
