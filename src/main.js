@@ -10,7 +10,7 @@ function HashTable() {
   
   this.storage = new Array(this.SIZE);
   for (let i = 0; i < 16; i++) {
-    this.storage = undefined;
+    this.storage[i] = undefined;
   }
   this.count = 0;
 }
