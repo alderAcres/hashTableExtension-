@@ -6,9 +6,7 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
+  this.storage = {};
 }
 
 /**
@@ -24,7 +22,7 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  this.storage[key] = value;
 };
 
 /**
@@ -38,7 +36,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[key];
 };
 
 /**
@@ -50,7 +48,7 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  return this.storage[key] ? delete this.storage[key] : undefined;
 };
 
 
