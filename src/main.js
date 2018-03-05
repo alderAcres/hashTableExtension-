@@ -10,6 +10,11 @@ function HashTable() {
   
   this.storage = new Array(this.SIZE);
 }
+function Node(value,key,next = null){
+  this.value = value;
+  this.key = key;
+  this.next = next;
+}
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,7 +29,14 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let index = hashCode(key, this.SIZE)
+  if(this.storage[index] === null){
+    let newNode = new Node(value,key);
+    this.storage[index] = newNode
+  } else {
+    let newNode = new Node(value,key, this.storage[index])
+    this.storage[index] = newNode;
+  }
 };
 
 /**
@@ -38,7 +50,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let index = hashCode(key,this.SIZE)
+  let bucket = this.storage[index];
+  while(bucket || bucket.key !== key){
+    if(bucket.key === key){
+      return bucket.value
+    }
+    bucket=bucket.next
+  }
+  return "Not found"
 };
 
 /**
@@ -50,7 +70,22 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key,this.SIZE)
+  let bucket = this.storage[index];
+  let prevBucket = this.storage[index]
+  while(bucket || bucket.key !== key){
+    if(bucket.key === key){
+      if(prevBucket.next === bucket.next){
+        prevBucket.next = null;
+      } else {
+        prevBucket.next = bucket.next;
+      }
+      return bucket.value;
+    }
+    prevBucket = bucket;
+    bucket=bucket.next;
+  }
+  return null;
 };
 
 
