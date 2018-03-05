@@ -15,7 +15,94 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+/**
+* HashTable costructor
+*
+* construct a new hash table
+*
+* - You may modify this constructor as you need to achieve the challenges below.
+*/
+function HashTable() {
+  this.SIZE = 16;
+  this.count = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+/**
+* set - Adds given value to the hash table with specified key.
+*
+* - If the provided key has already been used to store another value, simply overwrite
+*   the existing value with the new value.
+* - If the hashed address already contains another key/value pair, you must handle
+*   the collision appropriately.
+*
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+  if(this.SIZE * .75 <= this.count){
+    let tempTable = this.storage;
+    this.storage = [];
+    this.SIZE = this.SIZE * 2;
+    this.count = 0;
+    for(let prop in tempTable){
+      // let newHash = hashCode(prop, this.SIZE);
+      // this.storage[newHash] = tempTable[prop];
+      this.set(JSON.parse(prop), tempTable[prop]);
+    }
+  }
+  key = JSON.stringify(key);
+  let hashed = hashCode(key, this.SIZE);
+  if(!this.storage[hashed]){
+    let newObj = {};
+    newObj[key] = value;
+    this.storage[hashed] = newObj;
+  }else{
+    this.storage[hashed][key] = value;
+  }
+  return ++this.count;
+};
+
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+*
+* - If more than one value is stored at the key's hashed address, then you must retrieve
+*   the correct value that was originally stored with the provided key
+*
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+key = JSON.stringify(key);
+let hashed = hashCode(key, this.SIZE);
+if(!this.storage[hashed]) return 'Not Found';
+  return this.storage[hashed][key];
+};
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  key = JSON.stringify(key);
+  let hashed = hashCode(key, this.SIZE);
+  let result;
+  if(!this.storage[hashed] || !this.storage[hashed][key]) return;
+  result = this.storage[hashed][key];
+  if(Object.keys(this.storage[hashed]).length > 1){
+    delete this.storage[hashed][key];
+  }else{
+    delete this.storage[hashed];
+  }
+  this.count--;
+  return result;
+};
 
 // YOUR CODE ABOVE
 
@@ -36,3 +123,4 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+]
