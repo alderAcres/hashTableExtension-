@@ -1,3 +1,14 @@
+function LinkedList() {
+  this.head = null;
+  this.tail = null;
+}
+
+function Node(key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+}
+
 /**
 * HashTable costructor
 *
@@ -7,8 +18,11 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.number = 0;
   this.storage = new Array(this.SIZE);
+  for (let i = 0; i < this.SIZE; i++) {
+    this.storage[i] = new LinkedList();
+  }
 }
 
 /**
@@ -24,7 +38,42 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let index = hashCode(key, this.SIZE);
+  
+  if (this.storage[index].head === null && this.storage[index].tail=== null) {
+    let newNode = new Node(key, value);
+    this.number++;
+    this.storage[index].head = newNode;
+    this.storage[index].tail = newNode;
+    return this.number;
+  }
+  
+  let curNode = this.storage[index].head;
+  if (curNode.key === key) {
+    curNode.value = value;
+    return this.number;
+  }
+  
+  while (curNode.next !== null) {
+    if (curNode.key === key) {
+      curNode.value = value;
+      return this.number;
+    }
+    curNode = curNode.next;
+  }
+  
+  if (curNode.key === key) {
+      curNode.value = value;
+      return this.number;
+    }
+  
+  if (curNode.next === null) {
+    let newNode = new Node(key, value);
+    this.number++;
+    curNode.next = newNode;
+    this.storage[index].tail = newNode;
+    return this.number;
+  }
 };
 
 /**
@@ -38,7 +87,25 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  let curNode = this.storage[index].head;
+  
+  if (this.storage[index].head === null && this.storage[index].tail=== null) {
+    return 'this key does not exist in the hash table'
+  }
+  
+  while (curNode.next !== null) {
+    if (curNode.key === key) {
+      return curNode.value;
+    }
+    curNode = curNode.next;
+  }
+  
+  if (curNode.key === key) {
+      return curNode.value;
+    }
+  
+  return 'this key does not exist in the hash table'
 };
 
 /**
@@ -50,7 +117,44 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key, this.SIZE); 
+  if (this.storage[index].head === null && this.storage[index].tail=== null) {
+    return undefined;
+  }
+  
+  let curNode = this.storage[index].head;
+  if (this.storage[index].head === curNode && this.storage[index].tail === curNode) {
+    this.storage[index].head = null;
+    this.storage[index].tail = null;
+    this.number--;
+    return curNode.value;
+  }
+  
+  if (curNode.key === key) {
+    this.storage[index].head = curNode.next;
+    this.number--;
+    return curNode.value;
+  }
+  
+  while (curNode.next !== null && curNode.next.key !== key) {
+    curNode = curNode.next;
+  }
+  
+  if (curNode.next.key === key) {
+      let removedNode = curNode.next;
+      if (this.storage[index].tail === removedNode) {
+        curNode.next = null;
+        this.storage[index].tail === curNode;
+        this.number--;
+        return removedNode.value;
+      }
+      curNode.next = curNode.next.next;
+      this.number--;
+      return removedNode.value;
+    }
+  
+  return undefined;
+  
 };
 
 
