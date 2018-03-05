@@ -14,6 +14,64 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 4;
+  
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key,this.SIZE);
+  if(!this.storage[index]){
+    this.storage[index] = {}; 
+  }
+  this.storage[index][key]= value; 
+  //increase size
+  
+  
+  let present = 0;  
+  for(let i = 0; i < this.storage.length; i++){
+    if(this.storage[i]){
+      present++; 
+    }
+  }//end of forloop
+  console.log({present}); 
+  if(present>this.SIZE * 0.75){
+    //run increase size function
+    increaseSize.call(this); 
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  let index = hashCode(key,this.SIZE);
+  if(!this.storage[index]) return undefined;
+  return this.storage[index][key]; 
+};
+
+//helper function
+function increaseSize(){
+  //increase size of this.storage here...
+}
+
+
+HashTable.prototype.remove = function(key) {
+  let index = hashCode(key,this.SIZE);
+  if(!this.storage[index]) return undefined; 
+  delete this.storage[index][key];
+  //decrease size
+
+
+};
+let student = new HashTable(); 
+student.set("me", "blha");
+student.set("you", "he");
+student.set("hm", "foo");
+student.set("fuck", "ha");
+student.set("uck", "ha");
+student.set("k", "ha");
+student.set("uc", "ha");
+console.log(student); 
+student.set("al;kdjfad", "ha");
 
 
 

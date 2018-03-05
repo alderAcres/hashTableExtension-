@@ -22,11 +22,15 @@ function HashTable() {
 * @param {string} key - key to be used to create hashed address
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
-*/
+*///hashCode(string, size)
 HashTable.prototype.set = function(key, value) {
-
+  let index = hashCode(key,this.SIZE);
+  if(!this.storage[index]){
+    this.storage[index] = {}; 
+  }
+  this.storage[index][key]= value; 
 };
-
+ 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -38,7 +42,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let index = hashCode(key,this.SIZE);
+  if(!this.storage[index]) return undefined;
+  return this.storage[index][key]; 
 };
 
 /**
@@ -48,9 +54,11 @@ HashTable.prototype.get = function(key) {
 *
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
-*/
+*///return just value
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key,this.SIZE);
+  if(!this.storage[index]) return undefined; 
+  delete this.storage[index][key];
 };
 
 
@@ -69,6 +77,22 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
-
 // Do not remove!!
 module.exports = HashTable;
+
+
+//tests
+// let student = new HashTable(); 
+// student.set("firstName", "phillip"); 
+// student.set("lastName", "troutman"); 
+// student.set("DOB", 050589); 
+// student.set("address", "11720"); 
+// student.set("street", "walcroft");
+// console.log(student); 
+// console.log(student.get("DOB")); 
+// student.remove("DOB"); 
+// console.log(student); 
+// student.set("firstName","Paul"); 
+// console.log(student); 
+
+
