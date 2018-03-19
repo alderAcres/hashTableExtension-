@@ -29,7 +29,7 @@ console.log("Running")
 //For testing purposes 
 //After testing need to change "newHashTable" 
 //back to "this"
-let newHashTable = new HashTable();
+//let newHashTable = new HashTable();
 
 HashTable.prototype.set = function(key, value) {
   let hash = hashCode(key, this.SIZE);
