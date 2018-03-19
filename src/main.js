@@ -24,7 +24,33 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  if (this.capacity >= 0.75*this.SIZE){
+    this.SIZE = this.SIZE*2
+    
+    let deepCloned = new Array(this.SIZE)
+    
+    
+    for (var i = 0; i < this.SIZE/2; i++) {
+      deepClone = {}
+      for (var j = 0; j < this.storage[i].length; j++) {
+        let newPosition = hashCode(Object.keys(this.storage[i])[0],this.SIZE);
+        let oldPosition = hashCode(Object.keys(this.storage[i])[0],this.SIZE/2)
+        deepCloned[newPosition] = this.storage[oldPosition]
+    }}
 
+    this.storage = deepCloned
+  }
+  let position = hashCode(key,this.SIZE);
+  if (this.storage[position] === undefined){
+    let newObj = {};
+    newObj[key] = value;
+    return this.storage[position] = [newObj];
+  }
+  else{
+    let newObj = {};
+    newObj[key] = value;
+    return this.storage[position][this.storage[position].length] = newObj;
+  }
 };
 
 /**
@@ -38,7 +64,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let position = hashCode(key,this.SIZE);
+  for (let i=0; i<this.storage[position].length; i++){
+    if (Object.keys(this.storage[position][i])[0] ===`${key}`){
+      return this.storage[position][i][key];
+    }
+  }
 };
 
 /**
@@ -50,7 +81,25 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  if (this.capacity <= 0.25*this.SIZE && this.SIZE > 16){
+    this.SIZE = this.SIZE/2
+    let deepCloned = new Array(this.SIZE)
+    for (var i = 0; i < this.SIZE/2; i++) {
+      for (var j = 0; j < this.storage[i].length; j++) {
+        let newPosition = hashCode(Object.keys(this.storage[i])[0],this.SIZE);
+        let oldPosition = hashCode(Object.keys(this.storage[i])[0],this.SIZE/2)
+        deepCloned[newPosition] = this.storage[oldPosition]
+    }}
+    this.storage = deepCloned
+  }
+  let position = hashCode(key,this.SIZE);
+  for (let i=0; i<this.storage[position].length; i++){
+    if (Object.keys(this.storage[position][i])[0] ===`${key}`){
+      let value = JSON.stringify(this.storage[position][i][key]);
+      this.storage[position][i][key] = undefined;
+      return value = JSON.parse(value)
+    }
+  }
 };
 
 
