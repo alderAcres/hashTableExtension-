@@ -7,8 +7,14 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
+}
+
+function Node(key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
 }
 
 /**
@@ -24,7 +30,21 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  var newKey = hashCode(key, this.SIZE);
 
+  var newNode = new Node(key, value);
+  var currentKey = this.storage[newKey];
+
+  if(!currentKey) {
+    this.storage[newKey] = newNode;
+    return;
+  }
+
+  while(currentKey.next) {
+    currentKey = currentKey.next;
+  }
+
+  currentKey.next = newNode;
 };
 
 /**
@@ -38,7 +58,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  var newKey = hashCode(key, this.SIZE);
+  var currentKey = this.storage[newKey];
+  while(currentKey) {
+    if(currentKey.key === key) {
+      return currentKey.value;
+    } else {
+      currentKey = currentKey.next;
+    }
+  }
 };
 
 /**
@@ -50,23 +78,55 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+    var newKey = hashCode(key, this.SIZE);
+    var currentKey = this.storage[newKey];
+    while (currentKey) {
+      if(currentKey.key === key) {
+        if(previousKey) {
+          previousKey.next = currentKey.next;
+          return;
+        } else {
+          this.storage[newKey] = this.storage.next;
+          return;
+        }
+      } else {
+        var previousKey = currentKey;
+        currentKey = currentKey.next;
+      }
+    }
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
+  return Math.abs(hash) % size;
+}
+
+
+// Do not modify
+function hashCode(string, size) {
+  'use strict';
+
+  let hash = 0;
+  if (string.length === 0) return hash;
+
+  for (let i = 0; i < string.length; i++) {
+    const letter = string.charCodeAt(i);
+    hash = ((hash << 5) - hash) + letter;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+
   return Math.abs(hash) % size;
 }
 
