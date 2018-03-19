@@ -11,6 +11,8 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+
+console.log("Running")
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -23,9 +25,29 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+//For testing purposes 
+//After testing need to change "newHashTable" 
+//back to "this"
+let newHashTable = new HashTable();
+
+HashTable.prototype.set = function(key, value) {
+  let hash = hashCode(key, this.SIZE);
+  let currentNode = this.storage[hash]
+  
+  if (this.storage[hash] === undefined){
+    this.storage[hash] = {"key": key, "value": value, "next": null};
+  } else {
+    while (currentNode.next){
+      currentNode = currentNode.next;
+    }
+    currentNode.next = {"key": key, "value": value, "next": null};
+  }
 };
+
+//Testing
+// HashTable.prototype.set("Mary", "Stephen");
+// HashTable.prototype.set("Mary", "Heyy");
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +60,28 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let hash = hashCode(key, this.SIZE);
+  let currentNode = this.storage[hash];
 
+  if (currentNode.key === key){
+    return isItAMatch(key, currentNode)
+  } else {
+    while (currentNode.next){
+      currentNode = currentNode.next;
+      return isItAMatch(key, currentNode)
+    }
+    return undefined;
+  }
+
+  function isItAMatch (key, node){
+    if (node.key === key){
+      return currentNode.value;
+    } 
+  }
 };
+
+//Testing
+//console.log("REturn value: ", HashTable.prototype.get("Mary"))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +92,35 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let hash = hashCode(key, this.SIZE);
+  let currentNode = this.storage;
 
+  if (currentNode.key === key){
+    if (isItAMatch(key, currentNode)){
+      delete currentNode;
+    }
+  } else {
+    while (currentNode.next){
+      currentNode = currentNode.next;
+      if (isItAMatch(key, currentNode)){
+        delete currentNode
+      }
+    }
+    return undefined;
+  }
+
+  function isItAMatch (key, node){
+    if (node.key === key){
+      return true;
+    } else {
+      return false;
+    }
+  }
 };
+
+
+//HashTable.prototype.remove('Mary')
+
 
 
 // Do not modify
