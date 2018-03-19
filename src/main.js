@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.counter = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,9 +23,29 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+HashTable.prototype.set = function(key, value) {
+  let location = hashCode(key,this.SIZE);
+  let newObj = {};
+  newObj[key] = value;
+  if(this.storage[location] === undefined){
+    this.storage[location] = [newObj];
+     this.counter ++
+     return this.counter;
+  }
+  else{
+    for(let i=0; i<this.storage[location].length; i++){
+      if(this.storage[location][i].hasOwnProperty(key)){
+        this.storage[location][i] = newObj;
+         return this.counter;
+      }
+    }
+    this.storage[location][this.storage[location].length] = newObj;
+    this.counter ++
+    return this.counter;
+  }
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +58,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let location = hashCode(key,this.SIZE);
+  storedAtLocation = this.storage[location];
+  for (let i=0; i<storedAtLocation.length; i++){
+    if (storedAtLocation[i].hasOwnProperty(key)){
+      return storedAtLocation[i][key];
+    }
+  }
+  return undefined;
 };
 
 /**
@@ -50,7 +77,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let location = hashCode(key,this.SIZE);
+  // storedAtLocation = this.storage[location]
+  for (let i=0; i<this.storage[location].length; i++){
+    if (this.storage[location][i].hasOwnProperty(key)){
+      let value = this.storage[location][i][key];
+      this.storage[location].splice(i,1);
+      this.counter --;
+      return value;
+    }
+  }
+  return undefined;
 };
 
 
