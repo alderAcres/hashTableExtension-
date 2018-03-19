@@ -88,8 +88,6 @@ HashTable.prototype.remove = function(deleteKey) {
   }
   //iterate with while loop top check .value of all nodes and remove
 
-};
-
 
 // Do not modify
 function hashCode(string, size) {
