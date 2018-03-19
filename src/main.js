@@ -5,9 +5,18 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
+function Node(value, key) {
+  this.value = value;
+  this.next = null;
+  this.key = null;
+}
+
+function LinkedList(node) {
+  this.head = node;
+}
+
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +32,23 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+HashTable.prototype.set = function(key, value) {
+  let idx = hashCode(key, this.SIZE);
+  let node = new Node(value, key); // tack node onto list
+
+  if (!this.storage[idx]) {
+    let list = new LinkedList(node);
+    this.storage[idx] = list;
+  } else {
+    let currentNode = list.head;
+
+    while (currentNode.next) {
+      currentNode = currentNode.next;
+    }
+
+    currentNode.next = node;
+  }
 };
 
 /**
@@ -38,6 +62,29 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let idx = hashCode(key, this.SIZE);
+  // return this.storage[idx];
+
+  if (!this.storage[idx]) {
+    'Invalid';
+  } else {
+    // if node key equals provided key, return node value;
+
+    let currentNode = this.storage[idx].head;
+
+    if (currentNode.key === key) {
+      return currentNode.value;
+    }
+
+
+    while (currentNode.next) {
+      if (currentNode.key === key) {
+        return currentNode.value;
+      }
+
+      currentNode = currentNode.next;
+    }
+  }
 
 };
 
@@ -50,6 +97,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let idx = this.storage[hashCode(key, this.SIZE)];
+  // this.storage[hashCode(key, this.SIZE)] = undefined;
+
+  let currentNode = this.storage[idx].head;
+
+  while (currentNode.next) {
+    if (currentNode.key === key) {
+      
+    }
+  }
 
 };
 
@@ -57,16 +114,16 @@ HashTable.prototype.remove = function(key) {
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
