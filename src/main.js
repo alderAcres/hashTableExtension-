@@ -24,7 +24,25 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  if (this.storage[key] !== undefined) {
+    function NewObj() {
+      this.obj = {};
+      this.length = 0;
+    }
+    var firstValue = this.storage[key];
+    this.storage[key] = new NewObj();
+    for (var i = 0; i < this.storage[key][length]; i++) {
+      if (this.storage[key][length] === 0) {
+        this.storage[key][obj][i] = firstValue;
+        this.storage[key][length]++;
+      } else {
+        this.storage[key][length] = this.storage[value];
+      }
+    }
+    this.storage[key][object] = this.storage[key];
+  } else {
+    this.storage[key] = this.storage[value];
+  }
 };
 
 /**
@@ -72,3 +90,8 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+var table = new HashTable();
+console.log(table);
+table.set(5, 'chicken');
+console.log(table);
