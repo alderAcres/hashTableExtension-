@@ -50,8 +50,8 @@ HashTable.prototype.get = function(key) {
   } 
 
   for (var i = 0; i < list.length; i++) {
-    if (list[i] === key) {
-      return list[i][0];
+    if (list[i][0] === key) {
+      return list[i][1];
     }
   }
 };
@@ -73,8 +73,10 @@ HashTable.prototype.remove = function(key) {
   }
 
   for (var i = 0; i < list.length; i++) {
-    if (list[i] === key) {
-      delete list[i][0];
+    if (list[i][0] === key) {
+      delete list[i][1];
+    } else if (list[i][0] === undefined) {
+      return undefined;
     }
   }
   return list;
