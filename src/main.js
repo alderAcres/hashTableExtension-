@@ -7,8 +7,11 @@
 */
 function HashTable() {
   this.SIZE = 16;
+  this.count = 0;
+
   
   this.storage = new Array(this.SIZE);
+  console.log(this.storage);
 }
 
 /**
@@ -24,7 +27,34 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key, this.SIZE);
+  console.log(index);
 
+  let bucket = this.storage[index];
+  console.log(bucket);
+
+  if (!bucket) {
+   console.log('bucket undefined, adding now');
+   bucket = [key, value];
+   console.log(bucket);
+   this.storage[index] = bucket;
+   this.count++;
+
+   if (this.count > this.SIZE * 0.75) {
+     this.SIZE = this.SIZE * 2;
+   }
+  }
+  
+  let collision = false;
+  for (let i = 0; i < bucket.length; i++) {
+    let tuple = bucket[i];
+    if ( tuple[0] === key ) {
+      tuple[i] = value;
+      collision = true;
+    }
+  }
+
+  return this;
 };
 
 /**
@@ -38,7 +68,25 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
+  console.log(index);
+  let bucket = this.storage[index];
+  console.log('get method, on bucket: ' + bucket);
+  
+  if ( !bucket ) {
+    return null;
+  }
+  
+  for (let i = 0; i < bucket.length; i++) {
+    let tuple = bucket[i];
+    console.log(tuple);
+    if (tuple[0] === key) {
+      return key;
+    }
+    let value = tuple[1];  //RIGHT HERE, current, 10:10AM
+  }
 
+  return value;
 };
 
 /**
@@ -50,9 +98,47 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let index = this.hashCode(key, this.SIZE);
+  let bucket = this.storage[index];
+  if ( !bucket ) {
+    return null;
+  }
+
+  for (let i = 0; i < bucket.length; i++) {
+    let tuple = bucket[i];
+
+    if ( tuple[0] === key ) {
+      bucket.splice(i, 1);
+      this.count--;
+      if (this.count < this.SIZE * 0.25) {
+        this.SIZE = this.SIZE / 2;
+      }
+      return tuple[1];
+     }
+  }
 
 };
 
+
+// Do not modify
+function hashCode(string, size) {
+  'use strict';
+  
+  let hash = 0;
+  if (string.length === 0) return hash;
+  
+  for (let i = 0; i < string.length; i++) {
+    const letter = string.charCodeAt(i);
+    hash = ((hash << 5) - hash) + letter;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  
+  return Math.abs(hash) % size;
+}
+
+// var hashT = new HashTable(); TEST CASES!!! 
+// hashT.set('Alex Hawkins', '510-599-1930');
+// console.log(hashT.get('Alex Hawkins'));
 
 // Do not modify
 function hashCode(string, size) {
