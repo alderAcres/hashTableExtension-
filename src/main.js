@@ -24,8 +24,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  if (this.storage[key] !=== undefined) {
+    this.storage[key] = value;
+  }
 };
+
+HashTable
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +43,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  if(this.storage[index]) return this.storage[index].contains(key);
 };
 
 /**
