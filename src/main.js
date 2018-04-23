@@ -26,17 +26,20 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   const hashkey = hashCode(key, this.SIZE);
-  this.storage[hashkey] = value;
+
+  //this handles collisions
+  if ( this.storage[hashkey] === undefined ) {
+    const o = {};
+    o[key] = value;
+    this.storage[hashkey] = o;
+  } else {
+    this.storage[hashkey][key] = value;
+  }
+  
   this.numItems++;
   return this.numItems;
 };
 
-// ht = new HashTable();
-// ht.set("james", "tu");
-// console.log(ht.storage[1]);
-// ht
-// console.log(ht.storage.length)
-// console.log(ht.numItems);
 /**
  * get - Retrieves a value stored in the hash table with a specified key
  *
@@ -49,10 +52,11 @@ HashTable.prototype.set = function(key, value) {
  */
 HashTable.prototype.get = function(key) {
   const hashkey = hashCode(key, this.SIZE);
-  return this.storage[hashkey];
+  if ( this.storage[hashkey] === undefined ) {
+    return undefined; //handles the edge case when that positionin storage has not had an object yet;
+  }
+  return this.storage[hashkey][key];
 };
-
-// console.log(ht.get("james"))
 
 
 /**
@@ -65,18 +69,17 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
   const hashkey = hashCode(key, this.SIZE);
-  hashkey
-  const delVal = this.storage[hashkey];
-  console.log(delVal); 
-  this.storage[hashkey] = undefined;
+  let delVal;
+  
+  if ( this.storage[hashkey] === undefined ) {
+    return undefined; //handles the case when that position does not have a value;
+  }
+
+  delVal = this.storage[hashkey][key];
+  delete this.storage[hashkey][key];
   this.numItems--;
   return delVal;
 };
-
-// console.log(ht.numItems);
-// console.log(ht.remove("james"))
-
-// console.log(ht.numItems);
 
 
 // Do not modify
