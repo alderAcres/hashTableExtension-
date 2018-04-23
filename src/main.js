@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.numItems = 0; // JT created to keep track of the number of items in the HashTable
 }
 
 /**
@@ -24,22 +25,39 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const hashkey = hashCode(key, this.SIZE);
 
+  //this handles collisions
+  if ( this.storage[hashkey] === undefined ) {
+    const o = {};
+    o[key] = value;
+    this.storage[hashkey] = o;
+  } else {
+    this.storage[hashkey][key] = value;
+  }
+  
+  this.numItems++;
+  return this.numItems;
 };
 
 /**
-* get - Retrieves a value stored in the hash table with a specified key
-*
-* - If more than one value is stored at the key's hashed address, then you must retrieve
-*   the correct value that was originally stored with the provided key
-*
-* @param {string} key - key to lookup in hash table
-* @return {string|number|boolean} The value stored with the specifed key in the
-* hash table
-*/
+ * get - Retrieves a value stored in the hash table with a specified key
+ *
+ * - If more than one value is stored at the key's hashed address, then you must retrieve
+ *   the correct value that was originally stored with the provided key
+ *
+ * @param {string} key - key to lookup in hash table
+ * @return {string|number|boolean} The value stored with the specifed key in the
+ * hash table
+ */
 HashTable.prototype.get = function(key) {
-
+  const hashkey = hashCode(key, this.SIZE);
+  if ( this.storage[hashkey] === undefined ) {
+    return undefined; //handles the edge case when that positionin storage has not had an object yet;
+  }
+  return this.storage[hashkey][key];
 };
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,7 +68,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const hashkey = hashCode(key, this.SIZE);
+  let delVal;
+  
+  if ( this.storage[hashkey] === undefined ) {
+    return undefined; //handles the case when that position does not have a value;
+  }
 
+  delVal = this.storage[hashkey][key];
+  delete this.storage[hashkey][key];
+  this.numItems--;
+  return delVal;
 };
 
 
