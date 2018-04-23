@@ -49,6 +49,7 @@ HashTable.prototype.get = function(key) {
 
 HashTable.prototype.remove = function(key) {
   let hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash] || !this.storage[hash][key]) return undefined;
   const returnVal = this.storage[hash][key];
   delete this.storage[hash][key];
   this.entries--;
@@ -115,3 +116,7 @@ console.log(table);
 table.get('colin');
 table.remove('colin');
 console.log(table);
+
+for (let i = 0; i < 6; i++) {
+  table.remove(`key${i}`, 'whatever');
+}

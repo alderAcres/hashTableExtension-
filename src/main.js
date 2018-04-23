@@ -54,6 +54,7 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
   const hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash] || !this.storage[hash][key]) return undefined;
   const returnVal = this.storage[hash][key];
   delete this.storage[hash][key];
   return returnVal;
@@ -78,15 +79,3 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
-
-
-// const table = new HashTable();
-
-// table.set('this', 'that');
-// table.set('20', 40);
-// table.set('colin', 31);
-// console.log(table);
-// table.get('this');
-// table.remove('colin');
-// table.get('colin');
-// console.log(table);
