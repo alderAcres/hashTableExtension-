@@ -24,7 +24,16 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(key, this.SIZE);
 
+  if (this.storage[hash] === undefined) {
+    // if no existing object exists at the specific hash bucket, initialize an empty object
+    this.storage[hash] = {};
+  }
+
+  this.storage[hash][key] = value;
+
+  // TODO: I believe this is supposed to be done with linked lists… clarify with Codesmith later & refactor tonight
 };
 
 /**
@@ -38,7 +47,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  return this.storage[hash][key];
 };
 
 /**
@@ -50,7 +60,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  let val = this.storage[hash][key];
+  if (val !== undefined) {
+    // delete the value for the key in the specified hash bucket if defined
+    delete this.storage[hash][key];
+  }
+  return val;
 };
 
 
