@@ -15,6 +15,83 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  this.count = 0;
+}
+
+
+
+HashTable.prototype.set = function(key, value) {
+
+  let buck = hashCode(key, this.SIZE);
+
+  if(this.storage[buck] !== undefined){
+    this.storage[buck][key] = value;
+  }
+  else{
+      obj = {};
+      obj[key] = value;
+      this.storage[buck] = obj;
+      }
+
+  if (this.count > 0.75*this.SIZE){
+        temp = new HashTable();
+        temp.SIZE = 2 * this.SIZE;
+    
+        for(var x in this.storage){
+          let k =  this.storage[x];
+          let v = this.storage[x][v];
+    
+          if(this.storage[x] !== undefined){
+            temp.storage[hashCode(k, temp.SIZE)][k] = v;
+          }
+          else{
+            obj = {};
+            obj[k] = v;
+            temp.storage[x] = obj;
+          }
+        }
+        this = temp;
+  }};
+
+
+HashTable.prototype.remove = function(key) {
+  if(typeof this.storage[hashCode(key, this.SIZE)] === "object"){
+    const output = this.storage[hashCode(key, this.SIZE)][key];
+    this.storage[hashCode(key, this.SIZE)] = undefined;
+    this.count =- 1;
+    
+
+    if (this.count < 0.25*this.SIZE){
+    temp = new HashTable();
+    temp.SIZE = 0.25 * this.SIZE;
+
+    for(var x in this.storage){
+      let k =  this.storage[x];
+      let v = this.storage[x][v];
+
+      if(this.storage[x] !== undefined){
+        temp.storage[hashCode(k, temp.SIZE)][k] = v;
+      }
+      else{
+        obj = {};
+        obj[k] = v;
+        temp.storage[x] = obj;
+      }
+    
+    this = temp;
+  }}
+  return output;
+}
+
+else{
+  return undefined;
+
+}};
+
+
 
 
 // YOUR CODE ABOVE
