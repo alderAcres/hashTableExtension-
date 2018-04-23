@@ -7,9 +7,16 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.ITEMS_COUNT = 0;
   this.storage = new Array(this.SIZE);
 }
+
+// // TODO: Refactor to use HashNodes instead of default JavaScript objects
+// function HashNode(key, value, next /* optional */) {
+//   this.key = key;
+//   this.value = value;
+//   this.next = next;
+// }
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,7 +31,23 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  
+  const hash = hashCode(key, this.SIZE);
 
+  if (this.storage[hash] === undefined) {
+    // if no existing object exists at the specific hash bucket, initialize an empty object
+    this.storage[hash] = {};
+  }
+
+  if (this.storage[hash][key] === undefined) {
+    // if no existing item exists at specified key in bucket, increment the ITEMS_COUNT
+    this.ITEMS_COUNT += 1;
+  }
+
+  // TODO: I believe this is supposed to be done with linked lists… clarify with Codesmith later & refactor tonight
+  this.storage[hash][key] = value;
+
+  return this.ITEMS_COUNT;
 };
 
 /**
@@ -38,7 +61,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  return this.storage[hash][key];
 };
 
 /**
@@ -50,7 +74,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  let val = this.storage[hash][key];
+  if (val !== undefined) {
+    // delete the value for the key in the specified hash bucket if defined
+    delete this.storage[hash][key];
+    this.ITEMS_COUNT -= 1;
+  }
+  return val;
 };
 
 
