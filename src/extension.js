@@ -15,7 +15,67 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  this.entries = 0;
+}
 
+HashTable.prototype.set = function(key, value) {
+  let hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash]) {
+    this.storage[hash] = {};
+    this.entries++;
+  }
+  if (this.entries / this.SIZE >= 0.75) {
+    const oldStore = JSON.parse(JSON.stringify(this.storage));
+    const oldSize = this.SIZE;
+    this.SIZE *= 2;
+    this.rehash(oldStore, oldSize);
+    hash = hashCode(key, this.SIZE);
+    if (!this.storage[hash]) {
+      this.storage[hash] = {};
+      this.entries++;
+    }
+  }
+  this.storage[hash][key] = value;
+};
+
+HashTable.prototype.get = function(key) {
+  const hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash] || !this.storage[hash][key]) return undefined;
+  return this.storage[hash][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  let hash = hashCode(key, this.SIZE);
+  const returnVal = this.storage[hash][key];
+  delete this.storage[hash][key];
+  this.entries--;
+  if (this.entries / this.SIZE <= 0.25) {
+    const oldStore = JSON.parse(JSON.stringify(this.storage));
+    const oldSize = this.SIZE;
+    this.SIZE /= 2;
+    this.rehash(oldStore, oldSize);
+    hash = hashCode(key, this.SIZE);
+  }
+  return returnVal;
+};
+
+HashTable.prototype.rehash = function(oldStore, oldSize) {
+  const hashes = Object.values(oldStore);
+  const self = this;
+  this.storage = new Array(this.SIZE);
+  this.entries = 0;
+  hashes.forEach((bucket) => {
+    if (bucket) {
+      const keys = Object.keys(bucket);
+      keys.forEach((key) => {
+        self.set(key, bucket[key]);
+      });
+    }
+  });
+};
 
 // YOUR CODE ABOVE
 
@@ -36,3 +96,22 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+const table = new HashTable();
+
+for (let i = 0; i < 14; i++) {
+  table.set(`key${i}`, 'whatever');
+}
+
+for (let i = 0; i < 6; i++) {
+  table.remove(`key${i}`, 'whatever');
+}
+
+console.log(table);
+table.set('this', 'that');
+table.get('this');
+table.set('colin', 'yo');
+console.log(table);
+table.get('colin');
+table.remove('colin');
+console.log(table);
