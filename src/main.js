@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.numItems = 0; // JT created to keep track of the number of items in the HashTable
 }
 
 /**
@@ -24,22 +25,35 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hashkey = hashCode(key, this.SIZE);
+  this.storage[hashkey] = value;
+  this.numItems++;
+  return this.numItems;
 };
 
+// ht = new HashTable();
+// ht.set("james", "tu");
+// console.log(ht.storage[1]);
+// ht
+// console.log(ht.storage.length)
+// console.log(ht.numItems);
 /**
-* get - Retrieves a value stored in the hash table with a specified key
-*
-* - If more than one value is stored at the key's hashed address, then you must retrieve
-*   the correct value that was originally stored with the provided key
-*
-* @param {string} key - key to lookup in hash table
-* @return {string|number|boolean} The value stored with the specifed key in the
-* hash table
-*/
+ * get - Retrieves a value stored in the hash table with a specified key
+ *
+ * - If more than one value is stored at the key's hashed address, then you must retrieve
+ *   the correct value that was originally stored with the provided key
+ *
+ * @param {string} key - key to lookup in hash table
+ * @return {string|number|boolean} The value stored with the specifed key in the
+ * hash table
+ */
 HashTable.prototype.get = function(key) {
-
+  const hashkey = hashCode(key, this.SIZE);
+  return this.storage[hashkey];
 };
+
+// console.log(ht.get("james"))
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +64,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hashkey = hashCode(key, this.SIZE);
+  hashkey
+  const delVal = this.storage[hashkey];
+  console.log(delVal); 
+  this.storage[hashkey] = undefined;
+  this.numItems--;
+  return delVal;
 };
+
+// console.log(ht.numItems);
+// console.log(ht.remove("james"))
+
+// console.log(ht.numItems);
 
 
 // Do not modify
