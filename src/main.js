@@ -5,10 +5,10 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
+function HashTable(obj) {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.myCount = 0;
 }
 
 /**
@@ -24,8 +24,35 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  var index = this.hashCode(key, this.SIZE);
+  var bucket = this.storage[index];
 
+  if (!bucket){
+    var bucket = [];
+    this.storage[index] = bucket;
+  }
+
+  var override = false;
+
+  for (var i = 0; i < bucket.length; i++){
+    var sequence = bucket[i];
+    if (sequence[0] === key){
+      sequence[1] = value;
+      override = true;
+    }
+  }
+  if (!override){
+    bucket.push([key, value]);
+    this.myCount++;
+  if (this.myCount > this.SIZE * .75){
+    this.resize(this.SIZE * 2);
+  }
+}
+  return this;
 };
+
+
+// ran out of time! didn't get to put in collision logic yet :( - J
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +65,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  var index = this.hashCode(key, this.SIZE);
+  var bucket = this.storage[index];
 
+  if (!bucket){
+    return null;
+  }
+  for (var i = 0; i < bucket.length; i++){
+    var sequence = bucket[i];
+    if (sequence[0] === key){
+      return sequence[1];
+    }
+  }
+  return null;
 };
 
 /**
@@ -50,7 +89,24 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  var index = this.hashCode(key, this.SIZE);
+  var bucket = this.storage[index];
+  if (!bucket){
+    return null;
+  }
 
+  for (var i = 0; i < bucket.length; i++){
+    var sequence = bucket[i];
+
+    if (sequence[0] === key){
+      bucket.splice(i, 1);
+      this.myCount--;
+      if (this.myCount < this.SIZE * .25){
+        this.resize(this.SIZE/2);
+      }
+      return sequence[1];
+    }
+  }
 };
 
 
