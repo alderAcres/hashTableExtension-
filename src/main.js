@@ -24,7 +24,22 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let hash = new hashCode('string', this.size); 
+  console.log(hash);
+  if(!this.storage[hash]) {
+    // hash does not exist already
+     // add to storage array with the key as the index and insert the value 
+    this.storage[hash][key] = value;
+  } else {
+    // hash does exist 
+    // need to add another value to the same hash/bucket/index of the this.storage array 
+      // create an object which can hold multiple values
+      // add key to the obj with new value (as we can overwrite)
 
+    this.storage[hash] = {};
+    this.storage[hash][key] = value;
+
+  }
 };
 
 /**
@@ -38,7 +53,17 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  if (Object.keys(this.storage[hash]) === 1) {
+    // can't measure the length of on object, so put all the keys at that specified hash into an array
+     // check if length of the array is 1, if so return the only key 
+    return this.storage[hash][key];
+  } else if (Object.keys(this.storage[hash]) > 1) {
+    // if we have multiple keys stored in the object which the hash is pointing to, need to get that specific key
+    return this.storage[hash][key]; 
+  } else {
+    // the hash points to an empty object, so there are no keys inside of it 
+    return undefined;
+  }
 };
 
 /**
@@ -50,6 +75,11 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  // in order to remove a value, we remove a key (or overwrite the value with a new one)
+  // in order to remove a key, we have to find it first 
+    // if the key is inside of an object, we can use the 'delete' keyword to remove it
+      // we don't have to adjust the indexes of other key/value pairs stored inside the obj? 
+    // if the key is stored at the hash without other keys, we need to remove it from the array  
 
 };
 
@@ -72,3 +102,7 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+var test = new HashTable();
+console.log(test);
+// console.log(test.set('key', 5));
