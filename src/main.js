@@ -24,8 +24,46 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let list = new LinkedList();
+  let node = new HashNode(key, value);
+  let hashKey = hashCode(key);
+  let current = this.storage[hashKey].head;
+  let overwrited = false;
 
+  if(!current) {
+    list.head = node;
+    list.tail = node;
+    this.storage[hashKey] = list;
+  } else {
+    while(current.next) {
+      if(current.key === key) {
+        current.value = value;
+        overwrited = true;
+        break;
+      }
+      current = current.next;
+    }
+    if(!overwrited) {
+      current.next = node;
+      this.storage[hashKey].tail = current.next;
+    }
+  }
+  if(overwrited) {
+    return 0;
+  } else {
+    return 1;
+  }
 };
+
+function LinkedList() {
+  this.head = null;;
+  this.tail = null;
+}
+function HashNode(key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+}
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +76,17 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hashKey = hashCode(key);
+  let current = this.storage[hashKey].head;
+  if(current) {
+    while(current.key !== key) {
+      current = current.next;
+      if(!current) return false;
+    }
+    return current.value;
+  } else {
+    return false;
+  }
 };
 
 /**
@@ -50,7 +98,29 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let hashKey = hashCode(key);
+  let current = this.storage[hashKey].head;
+  let previous;
+  if(current) {
+    while(current.key !== key) {
+      previous = current;
+      current = current.next;
+      if(!current) return false;
+    }
+    if(previous) {
+      if(current.next) {
+        previous.next = current.next;
+      } else {
+        
+      }
+    } else {
+      if(current.next) {
+        current = currnet.next;
+      } else {
 
+      }
+    }
+  }
 };
 
 
