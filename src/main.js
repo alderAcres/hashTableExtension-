@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
 * HashTable costructor
 *
@@ -7,7 +8,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.numItems = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +25,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let binNum = hashCode(key, this.size);
 
+  // Add new object to store things if bin was empty
+  if (this.storage[binNum] === undefined) this.storage[binNum] = {};
+
+  // Test to see if we are overwriting the key, only want to increment number of items if not overwriting
+  if (this.storage[binNum][key] === undefined) this.numItems += 1;
+
+  // Store/Overwrite key value
+  this.storage[binNum][key] = value;
+
+  // Return new number of items
+  return this.numItems;
 };
 
 /**
@@ -38,7 +51,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let binNum = hashCode(key, this.size);
 
+  // Returns the value stored with the key or undefined if the key/value pair was never set
+  return this.storage[binNum][key];
 };
 
 /**
@@ -50,7 +66,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let binNum = hashCode(key, this.size);
 
+  // Check for an object in that bin
+  if (this.storage[binNum] === undefined) return undefined;
+
+  // Gets the value stored with the key or undefined if the key/value pair was never set
+  let returnValue =  this.storage[binNum][key];
+
+  // If the value exists, remove and decrement the number of items
+  if (returnValue !== undefined){
+      delete this.storage[binNum][key];
+      this.numItems -= 1;
+  }
+
+  return returnValue;
 };
 
 
