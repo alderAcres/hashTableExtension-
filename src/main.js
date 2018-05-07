@@ -11,6 +11,12 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+//if implementing via LinkedList
+function hashNode (key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+}
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,7 +30,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const binNum = hashCode (key, this.SIZE);
+  if (this.storage[binNum] === undefined) {
+    this.storage[binNum] = {};
+    this.storage[binNum][key] = value;
+  } else {
+    this.storage[binNum][key] = value;
+  }
 };
 
 /**
@@ -38,7 +50,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const binNum = hashCode(key, this.SIZE);
+  if (this.storage[binNum] === undefined) return undefined;
+  if (this.storage[binNum][value] === undefined) return undefined;
+  else return this.storage[binNum][value];
 };
 
 /**
@@ -50,7 +65,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const binNum = hashCode(key, this.SIZE);
+  if (this.storage[binNum].hasOwnProperty(key)) return undefined;
+  if (this.storage[binNum][key] === undefined) return undefined;
+  else {
+    const removedVal = this.storage[binNum][key];
+    delete this.storage[binNum][key];
+    return removedVal;
+  }
 };
 
 
