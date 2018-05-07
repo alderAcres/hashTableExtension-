@@ -11,6 +11,17 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+function Node(element) {
+  this.element = element;
+  this.next = null
+}
+
+function LinkedLs() {
+  this.head = new Node;
+  this.next = undefined;
+  this.length = 0;
+}
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,8 +35,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
-};
+  let index = hashCode(key, this.size);
+  let bucket = this.storage[index];
+    if (bucket === undefined) {
+      bucket = this.head;
+    } else {
+        let current = bucket;
+          while (this.next) {
+            if (!this.next) {
+              current = this.next;
+            }
+      }
+        }
+}
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
