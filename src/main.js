@@ -5,9 +5,18 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
+function LinkedList() {
+  this.head = null;
+};
+
+function Node(val) {
+  this.value = val;
+  this.next = null;
+};
+
 function HashTable() {
   this.SIZE = 16;
-  
+  this.totalValues = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +33,22 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  var location =  hashCode(key, this.SIZE);
+  var node = new Node(key)
+  // if hash location is undefined (has never receive a value), create a new linked list
+  if(this.storage[location] === undefined) {
+    this.storage[location] = new LinkedList();
+    this.storage[location] = node;
+  } else {
+  // if storage location does contain a LL, traverse through and append new node to the end of list
+    var curr = this.storage[location];
+    while(curr.next) {
+       curr = curr.next;
+     } 
+    curr.next = node;
+  }
+  // increment total values in list by 1
+  return ++this.totalValues;
 };
 
 /**
@@ -38,7 +62,21 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  var location = hashCode(key, this.SIZE);
+  // if location is undefined, no values exist => return undefined
+  if(location === undefined) {
+    return undefined;
+  } else {
+  // else, check the value of each location until either value is found or return undefined if LL has been exhausted
+    var currValue = this.storage[location].value;
+    var currPosition = this.storage[location];
+    while(currValue !== key) {
+      currPosition = currPosition.next
+      currValue = currPosition.value;
+    }
+    return currValue;
+  }
+  return undefined
 };
 
 /**
@@ -50,7 +88,23 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  var location = hashCode(key, this.SIZE);
+  //if location is undefined, no values exist => return undefined
+  if(this.storage[location] === undefined) return undefined;
+  var curr = this.storage[location];
+  // else, traverse through array checking each node value against key 
+  while(curr.value !== key) {
+    curr = curr.next;
+  }
+  // if value is a match, delete the value and decrease total values by 1. return val.
+  if(curr.value === key) {
+    var val = curr.value;
+    delete curr.value;
+    --this.totalValues;
+    return val;
+  }
+  // no match was found, return undefined.
+  return undefined;
 };
 
 
