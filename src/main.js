@@ -27,14 +27,12 @@ function HashTable(size = 16) {
 HashTable.prototype.set = function(key, value) {
   let obj = { key, value, next: null};
   let index = hashCode(key, this.SIZE);
-  console.log(index, "suhj");
   let temp = this.storage[index];
   if (temp) {
     this.storage[index] = obj;
     obj.next = temp;
   } else
     this.storage[index] = obj;
-
   return this.length  += 1;
 };
 
@@ -101,8 +99,3 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
-let testHash = new HashTable();
-testHash.set({"bb1": "BLessing"})
-console.log(testHash.storage);
-testHash.set({"bb2": "BLessing"})
-testHash.set({"bb3": "BLessing"})
