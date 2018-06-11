@@ -5,8 +5,8 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
-  this.SIZE = 16;
+function HashTable(size = 16) {
+  this.SIZE = size;
   
   this.storage = new Array(this.SIZE);
   this.length = 0;
@@ -26,16 +26,15 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   let obj = { key, value, next: null};
-  let index = hashCode(key);
+  let index = hashCode(key, this.SIZE);
+  console.log(index, "suhj");
   let temp = this.storage[index];
   if (temp) {
     this.storage[index] = obj;
     obj.next = temp;
   } else
     this.storage[index] = obj;
-  while (temp.next) {
-    temp = temp.next;
-  }
+
   return this.length  += 1;
 };
 
@@ -50,7 +49,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-  let temp = this.storage[hashCode(key)];
+  let temp = this.storage[hashCode(key, this.SIZE)];
   if (!temp) return;
   while (temp) {
     if (temp[key]) {
@@ -70,7 +69,7 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-  let temp = this.storage[hashCode(key)];
+  let temp = this.storage[hashCode(key, this.SIZE)];
   if (!temp) return;
   while (temp) {
     if (temp[key]) {
@@ -102,3 +101,8 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+let testHash = new HashTable();
+testHash.set({"bb1": "BLessing"})
+console.log(testHash.storage);
+testHash.set({"bb2": "BLessing"})
+testHash.set({"bb3": "BLessing"})
