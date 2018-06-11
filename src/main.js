@@ -5,11 +5,16 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
+// Object.keys(obj).length
 function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  for ( let i = 0; i < this.SIZE; i++ ) {
+    this.storage[i] = {};
+  }
 }
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,8 +29,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+    let theHash = hashCode(key, this.SIZE);
+    this.storage[theHash][key] = value;
 
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +46,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+    let theHash = hashCode(key, this.SIZE);
+    return this.storage[theHash][key];
 
 };
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,6 +61,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+    let theHash = hashCode(key, this.SIZE);
+    let returnVal;
+    if ( this.storage[theHash][key] !== undefined ) {
+        returnVal = this.storage[theHash][key];
+        delete this.storage[theHash][key];
+        return returnVal;
+    } else return undefined;
 
 };
 
@@ -72,3 +90,12 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+// let testHT = new HashTable();
+// testHT.set("mom", 35);
+// console.log('​testHT', testHT);
+// console.log('get', testHT.get("mom"));
+// console.log('remove', testHT.remove("mom"));
+// console.log('​testHT', testHT);
+// console.log("end");
