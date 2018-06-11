@@ -15,7 +15,19 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+Hashtable.prototype.set = function(key, value) {
+  let i = hashCode(key, this.SIZE);
+  const obj = this.storage[i];
 
+  if (!obj) {
+    obj = {key : value};
+  }
+  obj[key] = value;
+}
+
+Hashtable.prototype.remove = function(key) {
+
+}
 
 // YOUR CODE ABOVE
 
