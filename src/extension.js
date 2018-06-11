@@ -22,10 +22,11 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
-  this.SIZE = 16;
+function HashTable(size = 16) {
+  this.SIZE = size;
   
   this.storage = new Array(this.SIZE);
+  this.length = 0;
 }
 
 /**
@@ -42,19 +43,38 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   let obj = { key, value, next: null};
-  let index = hashCode(key);
-  let length = 1;
+  let index = hashCode(key, this.SIZE);
   let temp = this.storage[index];
   if (temp) {
     this.storage[index] = obj;
     obj.next = temp;
   } else
-    temp = obj;
-  while (temp.next) {
-    length++;
+    this.storage[index] = obj;
+
+
+  if (Math.ceil((this.length/this.SIZE) * 100) > 75) {
+    this.updateSize(this.SIZE * 2);
   }
-  return length;
+
+  return this.length += 1;
 };
+
+HashTable.prototype.updateSize = function (size) {
+  let newHash = new HashTable(size);
+  this.storage.forEach(({key, value, next}) => {
+    newHash.set(key, value);
+    if (next) {
+      let temp = next;
+      while (temp.next) {
+        newHash.set(temp.key, temp.value);
+        temp = temp.next;
+      }
+    }
+  });
+  this.storage = newHash.storage;
+  this.SIZE = newHash.SIZE; 
+};
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -67,10 +87,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-  let temp = this.storage[hashCode(key)];
+  let temp = this.storage[hashCode(key, this.SIZE)];
   if (!temp) return;
   while (temp) {
-    if (temp[key]) {
+    if (temp.key) {
       let value = temp.value;
       return value;
     }
@@ -87,37 +107,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-  let temp = this.storage[hashCode(key)];
+  let temp = this.storage[hashCode(key, this.SIZE)];
   if (!temp) return;
   while (temp) {
-    if (temp[key]) {
+    if (temp.key) {
       let value = temp.value;
       temp = undefined;
+      this.length -= 1;
+      if (Math.ceil((this.length/this.SIZE) * 100) < 25 && this.SIZE > 16) {
+        this.updateSize(this.size / 2);
+      }
       return value;
     }
     temp = temp.next;
   }
 };
-
-// Do not modify
-function hashCode(string, size) {
-  'use strict';
-  
-  let hash = 0;
-  if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
-    const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  
-  return Math.abs(hash) % size;
-}
-
-// Do not remove!!
-module.exports = HashTable;
-
 
 
 // YOUR CODE ABOVE

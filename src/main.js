@@ -5,10 +5,11 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
-  this.SIZE = 16;
+function HashTable(size = 16) {
+  this.SIZE = size;
   
   this.storage = new Array(this.SIZE);
+  this.length = 0;
 }
 
 /**
@@ -25,18 +26,14 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   let obj = { key, value, next: null};
-  let index = hashCode(key);
-  let length = 1;
+  let index = hashCode(key, this.SIZE);
   let temp = this.storage[index];
   if (temp) {
     this.storage[index] = obj;
     obj.next = temp;
   } else
-    temp = obj;
-  while (temp.next) {
-    length++;
-  }
-  return length;
+    this.storage[index] = obj;
+  return this.length  += 1;
 };
 
 /**
@@ -50,10 +47,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-  let temp = this.storage[hashCode(key)];
+  let temp = this.storage[hashCode(key, this.SIZE)];
   if (!temp) return;
   while (temp) {
-    if (temp[key]) {
+    if (temp.key) {
       let value = temp.value;
       return value;
     }
@@ -70,12 +67,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-  let temp = this.storage[hashCode(key)];
+  let temp = this.storage[hashCode(key, this.SIZE)];
   if (!temp) return;
   while (temp) {
-    if (temp[key]) {
+    if (temp.key) {
       let value = temp.value;
       temp = undefined;
+      this.length -= 1;
       return value;
     }
     temp = temp.next;
