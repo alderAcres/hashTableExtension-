@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.items = 0;
 }
 
 /**
@@ -24,7 +25,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hash = hashCode(key, this.SIZE);
+  
+  // if no store at hash, create the store
+  if (!this.storage[hash])
+    this.storage[hash] = {};
+  
+  const store = this.storage[hash];
+  // if store doesn't already have the key, increment this.items
+  if (!store.hasOwnProperty(key))
+    this.items++;
+  
+  store[key] = value;
+  return this.items;
 };
 
 /**
@@ -38,7 +51,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  const store = this.storage[hash];
+  
+  // if no store at hash, return
+  if (!store)
+    return;
+  
+  return store[key];
 };
 
 /**
@@ -50,9 +70,88 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  const store = this.storage[hash];
+  
+  // if no store at hash, return
+  if (!store)
+    return;
+  
+  // if store doesn't have key, return
+  if (!store.hasOwnProperty(key))
+    return;
+  
+  const results = store[key];
+  delete store[key];
+  // if store becomes empty an empty object, completely remove the store object from the storage array
+  if (Object.keys(store).length === 0)
+    delete this.storage[hash];
+  
+  this.items--;
+  return results;
 };
 
+// tests
+
+/*
+const x = new HashTable();
+*/
+
+/*
+console.log('add only 1 element tests');
+console.log(x.set('a', 30)); // 1
+console.log(x.get('a')); // 30
+console.log(x.get('b')); // undefined
+console.log(x.remove('a')); // 30
+console.log(x.remove('a')); // undefined
+console.log(x.remove('b')); // undefined
+console.log(x.get('b')); // undefined
+console.log(x.remove('b')); // undefined
+console.log(x.items); // 0
+
+console.log('add 3 elements tests');
+console.log(x.set('a', 20)); // 1
+console.log(x.set('b', 40)); // 2
+console.log(x.set('c', 50)); // 3
+console.log(x.get('b')); // 40
+console.log(x.remove('b')); // 40
+console.log(x.remove('b')); // undefined
+console.log(x.set('d', 60)); // 3
+console.log(x.set('b', 30)); // 4
+console.log(x.remove('a')); // 20
+console.log(x.remove('b')); // 30
+console.log(x.remove('b')); // undefined
+console.log(x.get('b')); // undefined
+console.log(x.remove('c')); // 50
+console.log(x.remove('d')); // 60
+console.log(x.items); // 0
+
+console.log('reset value tests');
+console.log(x.set('a', 20)); // 1
+console.log(x.set('a', 20)); // 1
+console.log(x.set('a', 20)); // 1
+console.log(x.get('a')); // 20
+console.log(x.set('b', 30)); // 2
+console.log(x.set('b', 30)); // 2
+console.log(x.get('b')); // 30
+console.log(x.remove('a')); // 20
+console.log(x.remove('b')); // 30
+console.log(x.get('a')); // undefined
+console.log(x.get('b')); // undefined
+console.log(x.items); // 0
+*/
+
+/*
+console.log('many elements');
+for (let i = 0; i < 20; i++) {
+  console.log(x.set(i, 10 * i)); // i + 1
+}
+for (let i = 0; i < 20; i++) {
+  console.log(x.remove(i)); // 10 * i
+  console.log(x.remove(i)); // undefined
+}
+console.log(x.items); // 0
+*/
 
 // Do not modify
 function hashCode(string, size) {
