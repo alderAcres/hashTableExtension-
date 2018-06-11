@@ -22,10 +22,11 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
-  this.SIZE = 16;
+function HashTable(size = 16) {
+  this.SIZE = size;
   
   this.storage = new Array(this.SIZE);
+  this.length = 0;
 }
 
 /**
@@ -43,19 +44,41 @@ function HashTable() {
 HashTable.prototype.set = function(key, value) {
   let obj = { key, value, next: null};
   let index = hashCode(key);
-  let length = 1;
   let temp = this.storage[index];
   if (temp) {
     this.storage[index] = obj;
     obj.next = temp;
   } else
-    temp = obj;
+  this.storage[index] = obj;
+  console.log(this.storage, obj);
+    console.log(this.storage);
   while (temp.next) {
     temp = temp.next;
-    length++;
   }
-  return length;
+  console.log(this.storage);
+  if (Math.ceil((this.length/this.SIZE) * 100) > 75) {
+    this.updateSize(this.SIZE * 2);
+  }
+
+  return this.length += 1;
 };
+
+HashTable.prototype.updateSize = function (size) {
+  let newHash = new HashTable(size);
+  this.storage.forEach(({key, value, next}) => {
+    newHash.set(key, value);
+    if (next) {
+      let temp = next;
+      while (temp.next) {
+        newHash.set(temp.key, temp.value);
+        temp = temp.next;
+      }
+    }
+  });
+  this.storage = newHash.storage;
+  this.SIZE = newHash.SIZE; 
+};
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -94,31 +117,15 @@ HashTable.prototype.remove = function(key) {
     if (temp[key]) {
       let value = temp.value;
       temp = undefined;
+      this.length -= 1;
+      if (Math.ceil((this.length/this.SIZE) * 100) < 25 && this.SIZE > 16) {
+        this.updateSize(this.size / 2);
+      }
       return value;
     }
     temp = temp.next;
   }
 };
-
-// Do not modify
-function hashCode(string, size) {
-  'use strict';
-  
-  let hash = 0;
-  if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
-    const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  
-  return Math.abs(hash) % size;
-}
-
-// Do not remove!!
-module.exports = HashTable;
-
 
 
 // YOUR CODE ABOVE
@@ -140,3 +147,32 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let testHash = new HashTable();
+testHash.set({"bb1": "BLessing"})
+console.log(testHash.storage);
+testHash.set({"bb2": "BLessing"})
+testHash.set({"bb3": "BLessing"})
+testHash.set({"bb4": "BLessing"})
+testHash.set({"bb5": "BLessing"})
+testHash.set({"bb6": "BLessing"})
+testHash.set({"bb7": "BLessing"})
+testHash.set({"bb8": "BLessing"})
+testHash.set({"bb9": "BLessing"})
+testHash.set({"b1b": "BLessing"})
+testHash.set({"b3b": "BLessing"})
+testHash.set({"b2b": "BLessing"})
+testHash.set({"3bb": "BLessing"})
+console.log(testHash.set({"b4b": "BLessing"}))
+testHash.set({"b6b": "BLessing"})
+testHash.set({"bb": "BLessing"})
+testHash.set({"b7b": "BLessing"})
+testHash.set({"bb": "BLessing"})
+testHash.set({"b6b": "BLessing"})
+testHash.set({"bb4": "BLessing"})
+testHash.set({"bb2": "BLessing"})
+testHash.set({"b4b": "BLessing"})
+testHash.set({"b3b": "BLessing"})
+testHash.set({"brb": "BLessing"})
+testHash.set({"bfb": "BLessing"})
+

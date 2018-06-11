@@ -32,7 +32,7 @@ HashTable.prototype.set = function(key, value) {
     this.storage[index] = obj;
     obj.next = temp;
   } else
-    temp = obj;
+    this.storage[index] = obj;
   while (temp.next) {
     temp = temp.next;
     length++;
