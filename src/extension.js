@@ -14,7 +14,55 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) {
+  let number = 1;
+  this.storage.forEach(el => {
+    for (let prop in el) {
+      number++;
+    }
+  });
 
+  if(number >= .75 * this.SIZE) {
+    this.SIZE *= 2;
+  }
+
+  let storageIndex = hashCode(key, this.SIZE);
+  if (this.storage[storageIndex] === undefined) {
+    this.storage[storageIndex] = {}
+  };
+  this.storage[storageIndex][key] = value;
+  
+  return number;
+};
+
+HashTable.prototype.get = function(key) {
+  let storageIndex = hashCode(key, this.SIZE);
+  return this.storage[storageIndex][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  let storageIndex = hashCode(key, this.SIZE);
+  let deleted = this.storage[storageIndex][key];
+  delete this.storage[storageIndex][key];
+  return deleted;
+};
+
+
+// Do not modify
+function hashCode(string, size) {
+  'use strict';
+  
+  let hash = 0;
+  if (string.length === 0) return hash;
+  
+  for (let i = 0; i < string.length; i++) {
+    const letter = string.charCodeAt(i);
+    hash = ((hash << 5) - hash) + letter;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  
+  return Math.abs(hash) % size;
+}
 
 
 // YOUR CODE ABOVE
