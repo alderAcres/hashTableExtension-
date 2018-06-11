@@ -15,7 +15,62 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  this.length = 0;
+}
 
+HashTable.prototype.set = function(key, value) {
+  let location = new hashCode(key, this.SIZE), orgSize = this.SIZE;
+  this.length += 1; 
+  
+  if (this.length / orgSize > 0.75 ){
+    this.SIZE = this.SIZE * 2;
+    for (let i = 0; i < orgSize; i++){
+      if (this.storage[i] !== undefined){
+        let currentObj = this.storage[i];
+        delete this.storage[i];
+        location = new hashCode(key, this.SIZE);
+        this.storage[location] = currentObj;
+      }
+    }
+    location = new hashCode(key, this.SIZE);
+  }
+
+  if (this.storage[location] === undefined){
+    this.storage[location] = {}
+  }
+  this.storage[location][key] = value;
+};
+
+
+HashTable.prototype.get = function(key) {
+  let location = new hashCode(key, this.SIZE); 
+  return this.storage[location][key];
+};
+
+
+HashTable.prototype.remove = function(key) {
+  
+  let location = new hashCode(key, this.SIZE), orgSize = this.SIZE;
+  let val = this.storage[location][key];
+  delete this.storage[location][key];
+  this.length -= 1;
+
+  if (this.length / this.SIZE < 0.25){
+    this.SIZE = this.SIZE / 2;
+    for (let i = 0; i < orgSize; i++){
+      if (this.storage[i] !== undefined){
+        let currentObj = this.storage[i];
+        delete this.storage[i];
+        location = new hashCode(key, this.SIZE);
+        this.storage[location] = currentObj;
+      }
+    }
+  }  
+  return val;
+};
 
 // YOUR CODE ABOVE
 
@@ -36,3 +91,9 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+// let hashTable = new HashTable();
+// hashTable.set('first key', 'first value');
+// hashTable.set('second key', 'second value');
+// hashTable.remove('first key');
