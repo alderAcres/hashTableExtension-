@@ -51,6 +51,7 @@ HashTable.prototype.set = function(key, value) {
   } else
     temp = obj;
   while (temp.next) {
+    temp = temp.next;
     length++;
   }
   return length;
