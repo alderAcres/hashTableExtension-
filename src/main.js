@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let location = hashCode(key, this.SIZE);
+  if (this.storage[location] === undefined) {
+    this.storage[location] = new ItemList;
+  }
+  this.storage[location].addItem(key, value);
+  this.items += 1;
+  return this.items;
 };
 
 /**
@@ -38,7 +44,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let location = hashCode(key, this.SIZE);
+  if (this.storage[location] === undefined) {
+    return undefined;
+  }
+  return this.storage[location].getItem(key);
 };
 
 /**
@@ -50,8 +60,78 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let location = hashCode(key, this.SIZE);
+  if (this.storage[location] === undefined) {
+    return undefined;
+  }
+  this.items -= 1;
+  return this.storage[location].removeItem(key);
 };
+
+//functionality for linked list at each hash location to avoid conflicts
+
+//linked list helper constructor function
+function ItemList() {
+  this.head = null;
+  this.tail = null;
+}
+
+//linked list node constructor function
+function ItemNode(key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+}
+
+//linked list add node function
+ItemList.prototype.addItem = function(key, value) {
+  let tempNode = new ItemNode(key, value);
+  if (this.head === null) {
+    this.head = tempNode;
+  } else {
+    this.tail.next = tempNode;
+  }
+  this.tail = tempNode;
+}
+
+//linked list get node function
+ItemList.prototype.getItem = function(key) {
+  let currentNode = this.head;
+  while (currentNode.key !== key) {
+    if (currentNode === this.tail) {
+      return undefined;
+    }
+    currentNode = currentNode.next;
+  }
+  return currentNode.value;
+}
+
+//linked list remove node function
+ItemList.prototype.removeItem = function(key) {
+  let currentNodeParent = this.head;
+  let removedNode;
+  if (this.head.key === key)  {
+    removedNode = this.head;
+    this.head = null;
+    this.tail = null;
+    return removedNode.value;
+  }
+  while (currentNodeParent.next.key !== key) {
+    if (currentNodeParent.next === this.tail) {
+      return undefined;
+    }
+    currentNodeParent = currentNodeParent.next;
+  }
+  removedNode = currentNodeParent.next;
+  if (removedNode === this.tail) {
+    this.tail = currentNodeParent;
+    currentNodeParent.next = null;
+  } else {
+    currentNodeParent.next = removedNode.next;
+  }
+  return removedNode.value;
+}
+
 
 
 // Do not modify
