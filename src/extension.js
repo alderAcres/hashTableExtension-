@@ -50,12 +50,10 @@ HashTable.prototype.set = function(key, value) {
     obj.next = temp;
   } else
   this.storage[index] = obj;
-  console.log(this.storage, obj);
-    console.log(this.storage);
   while (temp.next) {
     temp = temp.next;
   }
-  console.log(this.storage);
+
   if (Math.ceil((this.length/this.SIZE) * 100) > 75) {
     this.updateSize(this.SIZE * 2);
   }
@@ -147,32 +145,3 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
-
-let testHash = new HashTable();
-testHash.set({"bb1": "BLessing"})
-console.log(testHash.storage);
-testHash.set({"bb2": "BLessing"})
-testHash.set({"bb3": "BLessing"})
-testHash.set({"bb4": "BLessing"})
-testHash.set({"bb5": "BLessing"})
-testHash.set({"bb6": "BLessing"})
-testHash.set({"bb7": "BLessing"})
-testHash.set({"bb8": "BLessing"})
-testHash.set({"bb9": "BLessing"})
-testHash.set({"b1b": "BLessing"})
-testHash.set({"b3b": "BLessing"})
-testHash.set({"b2b": "BLessing"})
-testHash.set({"3bb": "BLessing"})
-console.log(testHash.set({"b4b": "BLessing"}))
-testHash.set({"b6b": "BLessing"})
-testHash.set({"bb": "BLessing"})
-testHash.set({"b7b": "BLessing"})
-testHash.set({"bb": "BLessing"})
-testHash.set({"b6b": "BLessing"})
-testHash.set({"bb4": "BLessing"})
-testHash.set({"bb2": "BLessing"})
-testHash.set({"b4b": "BLessing"})
-testHash.set({"b3b": "BLessing"})
-testHash.set({"brb": "BLessing"})
-testHash.set({"bfb": "BLessing"})
-

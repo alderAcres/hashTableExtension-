@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.length = 0;
 }
 
 /**
@@ -26,7 +27,6 @@ function HashTable() {
 HashTable.prototype.set = function(key, value) {
   let obj = { key, value, next: null};
   let index = hashCode(key);
-  let length = 1;
   let temp = this.storage[index];
   if (temp) {
     this.storage[index] = obj;
@@ -35,9 +35,8 @@ HashTable.prototype.set = function(key, value) {
     this.storage[index] = obj;
   while (temp.next) {
     temp = temp.next;
-    length++;
   }
-  return length;
+  return this.length  += 1;
 };
 
 /**
@@ -77,6 +76,7 @@ HashTable.prototype.remove = function(key) {
     if (temp[key]) {
       let value = temp.value;
       temp = undefined;
+      this.length -= 1;
       return value;
     }
     temp = temp.next;
