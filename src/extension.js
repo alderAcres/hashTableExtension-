@@ -15,10 +15,82 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+  this.storage[0]={"work":"work"};
+  this.count=0;
+}
 
 
-// YOUR CODE ABOVE
+HashTable.prototype.set = function(key, value) {
+  let location=hashCode(key,this.SIZE);
 
+  if (!this.storage[location]) { 
+    this.storage[location]={}; 
+    this.count += 1;
+    }
+  
+  this.storage[location][key]=value;
+ 
+  if ( this.count/this.SIZE >= .75){
+      this.double();
+  }
+};
+
+HashTable.prototype.double = function (){
+
+  this.SIZE=this.SIZE*2;
+  
+  let newObj=this.storage;
+  
+  this.storage = new Array(this.SIZE);
+  this.count=0;
+  
+  //this.storage= new Array(this.SIZE);
+  for (let i=0;i<newObj.length;i++){
+    console.log(newObj[i]);
+
+    for (let prop in newObj[i]){
+        
+      this.set( prop, newObj[i][prop]);
+    }
+  } 
+
+};
+
+HashTable.prototype.get = function(key) {
+  for (let i=0;i<this.storage.length;i++){
+    //console.log(this.storage[i]);
+    for (const prop in this.storage[i]){
+        //console.log(prop);
+      if (prop===key){
+        //onsole.log(key+ ' is equal to '+ this.storage[prop]);
+        return this.storage[i][prop];
+      }
+    }
+    }
+   return -1; //if key not in storage, will return -1 
+};
+
+HashTable.prototype.remove = function(key) {
+    for (let i=0;i<this.storage.length;i++){
+    //console.log(this.storage[i]);
+    for (var prop in this.storage[i]){
+        //console.log(prop);
+      if (prop===key){
+        //console.log(key+ ' is equal to '+ this.storage[prop]);
+        delete this.storage[i][prop];
+        return;
+         }
+      }
+    }
+   return undefined;
+};
+
+
+// Do not modify
 function hashCode(string, size) {
   'use strict';
   
@@ -33,6 +105,7 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
 
 // Do not remove!!
 module.exports = HashTable;
