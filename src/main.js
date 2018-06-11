@@ -50,7 +50,7 @@ HashTable.prototype.get = function(key) {
   let temp = this.storage[hashCode(key, this.SIZE)];
   if (!temp) return;
   while (temp) {
-    if (temp[key]) {
+    if (temp.key) {
       let value = temp.value;
       return value;
     }
@@ -70,7 +70,7 @@ HashTable.prototype.remove = function(key) {
   let temp = this.storage[hashCode(key, this.SIZE)];
   if (!temp) return;
   while (temp) {
-    if (temp[key]) {
+    if (temp.key) {
       let value = temp.value;
       temp = undefined;
       this.length -= 1;
