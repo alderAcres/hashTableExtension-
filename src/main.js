@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+	this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,14 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+ let hashKey = hashCode(key,this.SIZE);
+ //console.log(hashKey);
+ //console.log(`this.storage[hashKey] ${this.storage[hashKey]}`)
+ if(this.storage[hashKey]) this.storage[hashKey][key] = value;
+ else this.storage[hashKey] = {[key]:value};
+ //console.log(this.storage[hashKey]);
+ this.items += 1;
+ return this.items;
 };
 
 /**
@@ -38,7 +45,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+ 	let hashKey = hashCode(key,this.SIZE);
+	//console.log(`GET this.storage[hashKey][key] ${this.storage[hashKey][key]}`)
+	return this.storage[hashKey][key]
 };
 
 /**
@@ -50,25 +59,41 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+	let hashKey = hashCode(key,this.SIZE);
+	let result = this.storage[hashKey][key];
+	if(this.storage[hashKey][key]){
+		delete this.storage[hashKey][key];
+		this.items -= 1;
+		return result;
+	}
+	return -1;
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
+/*let hashTable = new HashTable();
+hashTable.set(1,2);
+hashTable.set(2,5);
+hashTable.set(12,4);
+console.log(hashTable);
+hashTable.get(1);
+console.log(hashTable.remove(12));
+console.log(hashTable.remove(3))
+console.log(hashTable)*/
 // Do not remove!!
-module.exports = HashTable;
+//module.exports = HashTable;
