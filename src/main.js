@@ -11,6 +11,13 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+function Node(val, key) {
+  this.value = val;
+  // this[key] = value;
+  this.next = null;
+  this.tail = null;
+}
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -25,7 +32,36 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+  let index = hashCode(key, this.SIZE); // table's index;
+  // let node = new Node(value, key);      // creates new node
+ if (!this.storage[index]) { 
+    this.storage[index] = {} 
+    this.storage[index][key] = value
+  }
+  else {
+    this.storage[index][key] = value
+  }
+
+  // }
+  // if (this.head === null && this.tail === null) {
+  //   this.head = node;
+  //   this.tail = node;
+  // } else {
+  //   this.tail.next = node
+  //   this.tail = node;
+  // }
+  // this.storage[index] = this.head;
 };
+var table = new HashTable();
+table.set("America", "Argentina");
+table.set("America", "USA");
+table.set("Guiness", "Ireland");
+table.set("Guiness", "Northern Ireland");
+
+
+
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +74,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  return this.storage[index][key];
 };
 
 /**
@@ -50,14 +87,28 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+    let index = hashCode(key, this.SIZE);
+    let removed = this.storage[index][key]
+    delete this.storage[index][key]
+    // for(let i = 0; i < this.SIZE; i++){
+    //   if(this.storage[index] === key) {
+    //     console.log(this.storage[index]);
+    //     removed = this.storage[i];
+    //     this.storage[i] = undefined;
+    //   }
+    // }
+    return removed;
 };
+console.log(table.remove("Guiness"));
+console.log(table);
+  
 
 
 // Do not modify
-function hashCode(string, size) {
+// This funtion will return a value which will be the "index" where the node will be located/stored.
+function hashCode(string, size) {   
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
   
