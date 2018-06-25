@@ -5,11 +5,18 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
-  this.SIZE = 16;
+function HashTable(size = 16) {
+  this.SIZE = size;
   
   this.storage = new Array(this.SIZE);
 }
+
+function BucketNode(key, value){
+  this.key;
+  this.value = value;
+  this.chain = null;
+}
+//[null, null, null, this.storage[3]]
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,9 +31,22 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key, this.SIZE); // generates a number out of a key
+  let bucket = this.storage[index] ; // the storage location itself
+//   console.log(bucket);
 
+  if(!this.storage[index]) { // checks to see if there is a value already in the bucket
+    this.storage[index] = {};
+    this.storage[index][key] = value; // assigns the value to the bucket
+    this.storage[index]["headLink"] = null; 
+  } else {
+    this.storage[index][key] = value;
+  }
+  // } else {
+  //   let newLink = new BucketNode(key,value)
+  //   this.storage[index][headLink] = newLink;
+  // } 
 };
-
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -38,7 +58,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  return this.storage[index][key]
 };
 
 /**
@@ -50,7 +71,11 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  if(this.storage[index][key] === undefined){
+    return undefined;
+  }
+  delete this.storage[index][key]
 };
 
 
