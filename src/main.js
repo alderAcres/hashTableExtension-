@@ -24,15 +24,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 
-const obj = {};
-
 HashTable.prototype.set = function(key, value) {
-  obj[key] = value;
-  this.storage[hashCode(key, this.SIZE)] = obj;
-
   if (this.storage[hashCode(key, this.SIZE)] !== undefined) {
     this.storage[hashCode(key, this.SIZE)][key] = value;
+    return;
   }
+  
+  const obj = {};
+  obj[key] = value;
+  this.storage[hashCode(key, this.SIZE)] = obj
 };
 
 /**
