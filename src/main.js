@@ -7,10 +7,55 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
+function LinkedList(key, value){
+  this.head = new Node(key, value);
+  this.tail = this.head;
+}
+
+function Node(key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+}
+
+LinkedList.prototype.add = function (key, value) {
+  let currNode = this.head;
+  while(currNode !== null){
+    if(currNode.key === key) {
+      currNode.value = value;
+      return;
+    }
+    currNode = currNode.next;
+  }
+  this.tail.next = new Node(key, value);
+  this.tail = this.tail.next;
+}
+
+LinkedList.prototype.getValue = function (key) {
+  let currNode = this.head;
+  while(currNode !== null){
+    if(currNode.key === key) {
+      return currNode.value;
+    }
+    currNode = currNode.next;
+  }
+}
+
+
+LinkedList.prototype.containsKey = function (key) {
+  let currNode = this.head;
+  while(currNode !== null){
+    if(currNode.key === key) {
+      return true;
+    }
+    currNode = currNode.next;
+  }
+  return false;
+}
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,7 +69,12 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  if(this.storage[hashCode(key, this.SIZE)] === undefined){
+    this.storage[hashCode(key, this.SIZE)] = new LinkedList(key, value);
+    console.log(this.storage[hashCode(key, this.SIZE)]);
+  } else {
+    this.storage[hashCode(key, this.SIZE)].add(key, value);
+  }
 };
 
 /**
@@ -38,7 +88,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  if(typeof this.storage[hashCode(key, this.SIZE)] !== 'object') {
+    return undefined;
+  }
+  return this.storage[hashCode(key, this.SIZE)].containsKey(key) ? this.storage[hashCode(key, this.SIZE)].getValue(key) : undefined;
 };
 
 /**
@@ -50,23 +103,29 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  if(this.get(key) !== undefined){
+    let temp = this.get(key);
+    this.storage[hashCode(key, this.SIZE)].add(key, undefined);
+    return temp;
+  } else {
+    return undefined;
+  }
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
