@@ -24,7 +24,22 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const index = new hashCode(key, this.storage.length);
+  //if bucket is empty, store
+  if(!this.storage[index]){
+    this.storage[index] = [key, value];
+  }
+  //if not empty,
+  else {
+    //iterate key/value pairs in the bucket, check if same key exists; if exists, overwrite with new value
+    this.storage[index].forEach(el => {
+      if(el[0] === key){
+        el[1] = value;
+      }
+    })
+    //if not same key, create new key/value pair
+    this.storage[index].push([key, value])
+  }
 };
 
 /**
@@ -38,7 +53,38 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const index = new hashCode(key, this.storage.length);
+  let result;
+  //if bucket is empty
+  if(!this.storage[index]){
+    return undefined;
+  }
+  //if not empty, iterate bucket then return value
+  else {
+    this.storage[index].forEach(el => {
+      if(el[0] === key){
+        result = el[1];
+      }
+    })
+    //if the key doesn't exist in the bucket (case of collision)
+    return result;
+  }
 
+  // const index = new hashCode(key, this.storage.length);
+  // //if bucket is empty
+  // if(!this.storage[index]){
+  //   return undefined;
+  // }
+  // //if not empty, iterate bucket then return value
+  // else {
+  //   this.storage[index].forEach(el => {
+  //     if(el[0] === key){
+  //       return = el[1];
+  //     }
+  //   })
+  //   //if the key doesn't exist in the bucket (case of collision)
+  //   return undefined;
+  // }
 };
 
 /**
@@ -50,6 +96,23 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const index = new hashCode(key, this.storage.length);
+
+  let result;
+  //if bucket is empty
+  if(!this.storage[index]){
+    return result;
+  }
+  //if not empty, iterate bucket then return value
+  else {
+    this.storage[index].forEach(el => {
+      if(el[0] === key){
+        result = el[1];
+      }
+    })
+    //if the key doesn't exist in the bucket (case of collision)
+    return result;
+  }
 
 };
 
