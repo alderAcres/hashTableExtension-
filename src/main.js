@@ -11,6 +11,7 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,8 +25,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hash = hashCode(key, this.SIZE)
+  //The storage has 16 keys, and will inevitably will have collision.
+  //Each of the 16 keys stores an object that has the key argument as the key, and value argument as the value
+  //the if checks if there is an object already at the key, if so, adds onto the object
+  //if not, the else will add an object at this key
+  if (this.storage[hash]) this.storage[hash][key] = value
+  else {
+    const hashObj = {};
+    hashObj[key] = value
+    this.storage[hash] = hashObj;
+  } 
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +50,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //HashTable.add stores an object at each key. If there was already an object at the key,
+  //then a key and value were added to the existing obj. To retrieve the value, just search for 
+  //the key of this.storage[hash]
+  const hash = hashCode(key, this.SIZE)
+  return this.storage[hash][key]
 };
 
 /**
@@ -50,7 +66,9 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hash = hashCode(key, this.SIZE)
+  if (this.storage[hash][key]) delete this.storage[hash][key]
+  else return undefined
 };
 
 
@@ -72,3 +90,16 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+//test cases
+let test = new HashTable()
+test.set('test', 1);
+test.set('alice', 2);
+test.set('test2', 3)
+console.log(test.set('hi', 4))
+console.log(test)
+test.remove('test2')
+test.remove('alice')
+console.log(test.remove('test2'))
+console.log(test)
+console.log('length: ', Object.keys(test.storage).length)

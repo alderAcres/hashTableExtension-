@@ -15,6 +15,48 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(key, this.SIZE)
+  //The storage has 16 keys, and will inevitably will have collision.
+  //Each of the 16 keys stores an object that has the key argument as the key, and value argument as the value
+  //the if checks if there is an object already at the key, if so, adds onto the object
+  //if not, the else will add an object at this key
+  if (this.storage[hash]) this.storage[hash][key] = value
+  else {
+    const hashObj = {};
+    hashObj[key] = value
+    this.storage[hash] = hashObj;
+  }
+  if (Object.keys(this.storage).length > this.SIZE * 0.75){
+    this.SIZE *= 2
+    const tempStorage = {}
+    for (let hash in this.storage){
+      for (let key in this.storage[key]){
+        
+      }
+    }
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  //HashTable.add stores an object at each key. If there was already an object at the key,
+  //then a key and value were added to the existing obj. To retrieve the value, just search for 
+  //the key of this.storage[hash]
+  const hash = hashCode(key, this.SIZE)
+  return this.storage[hash][key]
+};
+
+HashTable.prototype.remove = function(key) {
+  const hash = hashCode(key, this.SIZE)
+  if (this.storage[hash][key]) delete this.storage[hash][key]
+  else return undefined
+};
 
 
 // YOUR CODE ABOVE
