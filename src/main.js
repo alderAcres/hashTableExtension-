@@ -46,7 +46,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-  return this.storage[hashCode(key, this.SIZE)][key];
+  if (this.storage[hashCode(key, this.SIZE)]!== undefined) {  
+    return this.storage[hashCode(key, this.SIZE)][key];
+  }
 };
 
 /**
