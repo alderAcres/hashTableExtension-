@@ -5,10 +5,19 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
+function HashTable(obj) {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
+  
+  this.length = 0;
+  this.items = {};
+  for (let prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+          this.items[prop] = obj[prop];
+          this.length++;
+      }
+  }
 }
 
 /**
@@ -24,7 +33,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let previous = undefined;
+  //check if object contains specified property
+  if (this.items.hasOwnProperty(key)) {
+    previous = this.items[key];
+  } else {
+    this.length++;
+  }
+  this.items[key] = value;
+  return previous;
 };
 
 /**
@@ -38,7 +55,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //check if object contains specified property
+  if (this.items.hasOwnProperty(key)) {
+    return this.items[key];
+  } else {
+    return undefined;
+  }
 };
 
 /**
@@ -50,25 +72,36 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let previous = undefined;
+  //check if object contains specified property
+  if (this.items.hasOwnProperty(key)) {
+    previous = this.items[key];
+    this.length--;
+    delete this.items[key];
+    return previous;
+  } else {
+    return undefined;
+  }
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
 // Do not remove!!
 module.exports = HashTable;
+
+// TESTS
