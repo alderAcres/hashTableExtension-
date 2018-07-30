@@ -1,3 +1,4 @@
+
 /**
 * HashTable costructor
 *
@@ -7,8 +8,9 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
+  //console.log (this.storage);
 }
 
 /**
@@ -25,8 +27,26 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
-};
+    const index = this.hashCode(key, this.SIZE);
+    const bucket = this.storage[index];
+    this.SIZE++;
 
+
+    if (bucket) {
+      for (let i = 0; i < bucket.length; i++) {
+        const variant = bucket[i];
+        if (variant[0] === key) {
+          variant[1] = value;
+          this.SIZE--;
+          return;
+        }
+      }
+    }
+    
+   return bucket.push([key, value]);
+
+};
+  
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -39,7 +59,20 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
-};
+    const index = hashCode(key, this.SIZE);
+    const bucket = this.storage[index];
+    if (bucket === undefined) {
+      // Return undefined
+      return undefined;
+    }
+  
+    for (let i = 0; i < bucket.length; i++) {
+      const variant = bucket[i];
+      if (variant[0] === key) return variant[1];
+    }
+  } 
+    return undefined;
+  };
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +83,24 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const index = this.hashCode(key, this.SIZE);
+  const bucket = this.storage[index];
+  if (bucket === undefined) {
+    // Return undefined
+    return undefined;
+  }
+  
+  for (let i = 0; i < bucket.length; i++) {
+    const variant = bucket[i];
+    if (variant[0] === key) {
+      this.SIZE--;
+      return bucket.splice(i, 1);
+    }
+  }
+  
+  return bucket;
 };
+
 
 
 // Do not modify
