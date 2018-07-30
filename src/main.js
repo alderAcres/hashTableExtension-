@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.values = new Array();
 }
 
 /**
@@ -24,7 +25,26 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //find index
+  const indexOfKey = this.hashCode(key, this.size);
 
+  //check if key has already been used
+  for (var i = 0; i < this.storage.length; i++) {
+    if (this.storage[i] === key) {
+      this.values[i] = value
+    }
+  }
+  const index = 0;
+  if (this.storage[indexOfKey] === undefined) {
+    this.storage[indexOfKey] = key;
+    this.values[indexOfKey] = value;
+  } else {
+    while (this.storage[indexOfKey] !== undefined ) {
+      index++;
+    }
+    this.storage[indexOfKey] = key;
+    this.values[indexOfKey] = value;
+  }
 };
 
 /**
@@ -38,7 +58,17 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const hashedIndex = this.hashCode(key, this.size);
 
+  //starting at the hashed index provided by the hash function
+    //loop over all indexes of storage until that storage value is not undefined
+      //this will help check for collisions as a collision that occured put the next collided element in the next available storage spot
+  for (var i = hashedIndex; this.storage[i] !== undefined; i++) {
+    if (this.storage[i] === key) {
+      return this.values[i];
+    }
+  }
+  return undefined;
 };
 
 /**
@@ -50,7 +80,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  for (var i = 0; i < this.storage.length; i++) {
+    if (this.storage[i] === key) {
+      //splice that key and this.values i as well
+    }
+  }
+  return !this.storage[this.hash(key, this.size)] ? undefined : delete this.storage[this.hash(key, this.size)]
 };
 
 
