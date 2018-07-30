@@ -6,9 +6,9 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
+  // this.SIZE = size;
+  this.index = 0; 
+  this.storage = {}; 
 }
 
 /**
@@ -24,7 +24,16 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //Setting the return value of hasCode function to hashed key. 
+  var hashedKey = this.hashCode(key, value); 
+  //checking if key is already on the storage object. 
+  if(!this.storage.hasOwnProperty(hashedKey)) {
+    this.storage = {}; 
+  }
+  if(!this.storage[hashedKey].hasOwnProperty(key)) {
+    this.index++; 
+  }
+  this.storage[hashedKey][key] = value;
 };
 
 /**
@@ -49,9 +58,10 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+// HashTable.prototype.remove = function(key) {
+//   if(this.stroage[])
 
-};
+// };
 
 
 // Do not modify
@@ -70,5 +80,10 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
-// Do not remove!!
-module.exports = HashTable;
+// // Do not remove!!
+// module.exports = HashTable;
+
+
+let newHashTable = new HashTable(3)
+console.log('hi:', newHashTable)
+console.log(newHashTable.set('first', 1))
