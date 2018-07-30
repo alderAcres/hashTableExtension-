@@ -14,6 +14,12 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -28,9 +34,16 @@
 */
 HashTable.prototype.set = function(key, value) {
   let index = hashCode(key, this.SIZE);
-
+  
+  let counter = 0;
+  this.storage.forEach(function(element){
+    if(element !== undefined){
+      counter++;
+    }
+  });
   this.storage[index] = value;
 };
+//let myFunc = new HashTable();
 
 
 
