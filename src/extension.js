@@ -38,7 +38,13 @@ HashTable.prototype.set = function(key, value) {
     const tempStorage = {}
     for (let hash in this.storage){
       for (let key in this.storage[key]){
-        
+        const newHash = hashCode(this.storage[hash][key])
+        if (tempStorage[newhash]) tempStorage[hash][key] = this.storage[hash][key]
+        else {
+          const hashObj = {};
+          hashObj[key] = this.storage[hash][key]
+          tempStorage[hash] = hashObj;
+        }
       }
     }
   }
