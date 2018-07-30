@@ -16,7 +16,7 @@
 // PASTE AND MODIFY YOUR CODE BELOW
 
 function HashTable() {
-   this.SIZE = 6;
+   this.SIZE = 16;
    this.total = 0;
    this.storage = new Array(this.SIZE);
 }
@@ -52,7 +52,7 @@ HashTable.prototype.resize = function(newSize) {
  */
 HashTable.prototype.set = function(key, value) {
    //resize table if total becomes 75% of size
-   if ((Math.floor(this.SIZE * 0.75) === this.total)) this.resize(this.SIZE * 2);
+    if ((Math.floor(this.SIZE * 0.75) === this.total)) this.resize(this.SIZE * 2);
    //assign values
    if (this.storage[hashCode(key, this.SIZE)] === undefined) this.storage[hashCode(key, this.SIZE)] = {};
    this.storage[hashCode(key, this.SIZE)][key] = value;
@@ -89,7 +89,7 @@ HashTable.prototype.remove = function(key) {
    this.total -= 1;
 
    //resize table if total drops below 25% of size (16 is minimum)
-   if (this.SIZE > 3 && (Math.floor(this.SIZE * 0.25) === this.total)) this.resize(this.SIZE / 2);
+   if (this.SIZE > 16 && (Math.floor(this.SIZE * 0.75) === this.total)) this.resize(this.SIZE * 2);
    return returnVal;
 };
 
@@ -114,16 +114,13 @@ const table = new HashTable;
 table.set("hi", 5);
 table.set("hey", 6);
 table.set("hello", 7);
+table.set("hola", 8);
 
 console.log(table.get('hi'));
 console.log(table.get('hey'));
 console.log(table.get('hello'));
-
-table.set("hola", 8);
-console.log(table.set("hola"));
-table.remove('hi');
-console.log(table.SIZE);
-console.log(table.get('hi'));
+//table.remove('hi');
+console.log(table.get('hola'));
 
 // Do not remove!!
 //module.exports = HashTable;
