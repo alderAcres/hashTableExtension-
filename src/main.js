@@ -23,8 +23,14 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+// input: key & value parameters, key is a reference to an index position i.e. 1,2,3.
+// output: As outlined in the instructions provided and the pseudo below.
+
+HashTable.prototype.set = function(key, value) {
+  // Check if key passed as argument and overwrite the existing value associated with that key.
+  // If a key/value pair exists at the address deal with the collision.
+  //
 };
 
 /**
