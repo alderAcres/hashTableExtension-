@@ -7,9 +7,23 @@
 */
 function HashTable() {
   this.SIZE = 16;
+  this.ITEMS = 0;
   
   this.storage = new Array(this.SIZE);
 }
+
+//LinkedList will be used to handle collisions;
+function LinkedList(){
+  this.head = null;
+  this.tail = null;
+}
+
+function Node(key, value){
+  this.value = value;
+  this.key = key
+  this.next = null
+}
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,6 +38,46 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key, this.SIZE);
+
+  //Handle collisions by implementing new LinkedList
+  if(this.storage[index] === undefined){
+
+    let newList = new LinkedList();
+    let newNode = new Node(key, value);
+
+    newList.head = newList.tail = newNode;
+    
+
+    this.storage[index] = newList;
+    this.ITEMS++;
+    return this.ITEMS;
+
+  }
+  else {
+
+    let currNode = this.storage[index].head;
+    let lastNode = this.storage[index].tail;
+    let newNode = new Node(value);
+
+    //If list has one item, reassign tail and add node as value to head.next
+    if( currNode === lastNode){
+      currNode.next = newNode;
+      lastNode = newNode;
+      this.ITEMS++;
+      return this.ITEMS;
+    } else {
+      
+      //Loop through list till we find
+      while( currentNode.next !== null) {
+        currNode = currNode.next;
+      }
+
+      currentNode.next = lastNode = newNode;
+      this.ITEMS++;
+      return this.ITEMS;
+    }
+  }
 
 };
 
@@ -39,6 +93,27 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+  let index = hashCode(key, this.SIZE);
+  let head = this.storage[index].head;
+
+  // Return value if there is only one node in List
+  if(head.next === null){
+    return head.value;
+  }
+
+  else{
+
+    let currNode = head.next;
+    debugger;
+    //Loop until we find Node with correct key in List
+    while( currNode.key !== key ){
+      currNode = currNode.next
+    }
+
+    return currNode.value;
+  }
+
+
 };
 
 /**
@@ -51,7 +126,50 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
 
+  let index = hashCode(key, this.SIZE);
+
+  if(!index){
+    return undefined;
+  }
+
+  let list = this.storage[index];
+
+  let target = list.get(key);
+
+  
+
 };
+
+/**
+* find - retrieve the target node and its previous node and 
+*
+* - If the key does not exist, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {INT|INT|object} 
+*/
+
+HashTable.prototype.find = function(key){
+
+  let index = hashCode(key, this.SIZE);
+  let list = this.storage[index];
+  let head = list.head;
+  let position = 0
+
+  if( head.next === null ){
+    return {
+      index,
+      position,
+      head
+  }
+
+  else {
+
+    while
+
+  }
+
+}
 
 
 // Do not modify
@@ -70,5 +188,27 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
+
+
+let table = new HashTable();
+
+table.set("Aaron@gmail.com", "password123");
+
+table.set("Aaron1@gmail.com", "123456");
+table.set("Aaron1@gmail.com", "123456");
+table.set("Aaron2@gmail.com", "123456");
+table.set("Aaron3@gmail.com", "123456");
+
+table.get("Aaron1@gmail.com");
+
+console.log(table);
+console.log(table.ITEMS);
+debugger;
+
 // Do not remove!!
-module.exports = HashTable;
+module.exports = {
+  HashTable,
+  LinkedList,
+  Node,
+}
+
