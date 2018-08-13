@@ -41,6 +41,14 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   const index = hashCode(key, key.length)
+  const totalItems = this.storage.reduce((acc, cur) => {
+    if (cur !== undefined) {
+      acc + (cur.length / 2) // total key/value pairs in arr
+    }
+    return acc
+  }, 0)
+  
+  
 
   if (this.storage[index] === undefined) {
     const indexArr = []
@@ -52,6 +60,8 @@ HashTable.prototype.set = function(key, value) {
     const existingIdx = this.storage[index].indexOf(key)
     this.storage[index][existingIdx + 1] = value
   }
+
+  return totalItems + 1
 };
 
 
