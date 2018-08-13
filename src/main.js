@@ -23,8 +23,32 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+HashTable.prototype.set = function (key, value) {
+  let obj = {};
+  this.storage.forEach((el)=>{
+      for(keyo in el){
+    ///if key exists
+    if(keyo === key){
+      //store its value in variable
+      let variable = el[keyo];
+      // console.log(el[keyo])
+      //make value and array of values
+      el[keyo]= [];
+      //push all values to it
+      el[keyo].push(variable,value);
+    }
+  });
 
+
+  if(this.storage[key]) {
+
+  } else {
+    obj[key] = value;
+  }
+  this.storage.push(obj);
+  return obj;
+
+  // return Object.values(obj);
 };
 
 /**
@@ -37,8 +61,12 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function (key) {
+  let value = [];
+  this.storage.forEach((el) => {
+    value.push(el[key]);
+  });
+  return value;
 };
 
 /**
@@ -49,8 +77,16 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
-
+HashTable.prototype.remove = function (key) {
+  for (let i = 0; i < this.storage.length; i++) {
+    for (keyo in this.storage){
+      if(this.storage[i].keyo === key){
+        delete this.storage[i].keyo;
+      }
+    }
+    
+  }
+  return this.storage;
 };
 
 
