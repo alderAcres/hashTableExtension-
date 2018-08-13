@@ -24,8 +24,20 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const index = hashCode(key, key.length)
 
+  if (this.storage[index] === undefined) {
+    const indexArr = []
+    this.storage[index] = indexArr
+  } 
+  
+  if (this.storage[index].indexOf(key) === -1) {this.storage[index].push(key, value)}
+  else {
+    const existingIdx = this.storage[index].indexOf(key)
+    this.storage[index][existingIdx + 1] = value
+  }
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +50,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const index = hashCode(key, key.length)
+  if (this.storage[index] === undefined) {
+    return undefined 
+  } else {
+    const indexOfVal = this.storage[index].indexOf(key) + 1
+    return this.storage[index][indexOfVal]
+  }
 };
 
 /**
@@ -50,8 +68,28 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, key.length)
+
+  if (this.storage[index] === undefined) {
+    return undefined 
+  } else {
+    const indexOfVal = this.storage[index].indexOf(key) + 1
+    const val = this.storage[index][indexOfVal].slice(0)
+    const keyInd = this.storage[index].indexOf(key)
+    const valInd = keyInd + 1
+    delete this.storage[index][keyInd]
+    delete this.storage[index][keyInd]
+    return val 
+  }
 
 };
+
+
+let test = new HashTable()
+test.set("test key", "test val")
+// test.get("test key")
+test.remove("test key")
+test.get("test key")
 
 
 // Do not modify
