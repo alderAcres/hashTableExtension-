@@ -24,7 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let obj = {};
+  obj[key] = value;
+  obj.next = null
+  address  = hashCode(key, this.storage.length);
+  if(this.storage[address] === undefined) {
+    this.storage[address] = obj;
+  } else {
+    let prev = this.storage[address]
+    while(prev.next) {
+      prev = prev.next;
+    }
+    prev.next = obj;
+  }
 };
 
 /**
@@ -38,7 +50,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // let address  = hashCode(key, this.storage.length);
+  let curr = this.storage[address];
+  let objKey = Object.keys(this.storage[address])
+  while(curr.next) {
+    curr = this.storage[address].next;
+    objKey = Object.keys(this.storage[address].next)
+    console.log(objKey[0])
+    console.log(this.storage[address][key])
+    if(objKey[0] === key) {
+      return console.log(this.storage[address][key])
+    }
+  }
+  return console.log('doesn\'t exist');
 };
 
 /**
@@ -69,6 +93,11 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
-
 // Do not remove!!
-module.exports = HashTable;
+// module.exports = HashTable;
+
+let j = new HashTable();
+j.set('one', 'here')
+j.set('four', 'one')
+
+j.get('four')
