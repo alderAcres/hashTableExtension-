@@ -94,7 +94,7 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 // Do not remove!!
-// module.exports = HashTable;
+module.exports = HashTable;
 
 let j = new HashTable();
 j.set('one', 'here')
