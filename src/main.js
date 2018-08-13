@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,26 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // will need to pass in the key and size of storage to the hashcode
+  // to retrieve the 'address' of where to storage the value to
 
+  // the address to store the value in this.storage
+  // this defaults to overwriting the existing value with the new value
+  let hashAddress = hashCode(key, this.SIZE);
+  this.storage[hashAddress] = value;
+  return ++this.items;
+  // return the number of items 
+
+  // 3 CHECKES! 1. when the hashAddress is undefined, create new obj with key and value
+  //            2. when the hashAddress is already occupied, and its the same key and value
+  //               simpley overwrite
+  //            3. when collision occurs
+
+  // HANDLING COLLISIONS
+  // once set function is invoked,
+  // check if the hashAddress has anything
+  //   if it does, create an obj and store the previous in it
+  //   if not, create an new object to hold the value
 };
 
 /**
@@ -38,7 +57,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // how would i retrieve the key?
+  
+  // iterate through the storage, and when the element in the array
+  // matches the key
+  for (let i = 0; i < this.SIZE; i += 1) {
+    if (this.storage[i] === key) {
+      // return the value stored with the speficied key
+      return this.storage[i];
+    }
+  }
+  // what happens when the key is not founded?
+  // return what? -> undefined? or throw an Error()?
+  return new Error('Key not founded');
 };
 
 /**
@@ -50,7 +81,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // let use native functions on this.storage
+  // save some time
+  // includes ->
+  if (this.storage.includes(key)) {
+    // the key exist
+    // remove the key and value pair
+    this.storage.splice(this.storage.indexOf(key), 1);
+  } else {
+    return undefined;
+  }
 };
 
 
