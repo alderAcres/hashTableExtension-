@@ -15,22 +15,39 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+HashTable.this.set(key, value) {
+  let newLength = this.storage.length + 1;
 
+  if(newLength >= newLength * 0.75) {
+    let additionalLength = this.storage.length * 2;
+
+    this.storage.forEach(function(el, i) { // deep clone of array
+      newStorage[i] = el;
+    });
+
+    this.SIZE = additionalLength; // resetting this values to create new standard storage array
+    this.storage = new Array(this.SIZE);
+
+    newStorage.forEach(function(el, i) { // new standard storage array
+      this.storage[i] = el;
+    });
+  }
+}
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
