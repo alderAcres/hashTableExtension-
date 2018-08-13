@@ -25,7 +25,54 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+  let counter = 0; 
+  let idx = hashCode(key, this.SIZE);
+
+  //console.log("index is %i", idx);
+
+  // if returned index
+  if(idx) {
+    // create a new node for LList
+    let node = {};
+    node[key] = value;
+    node.next = null;
+
+    //console.log("new node is: ", node);
+
+    // check for node at index
+    let oldNode = this.storage[idx];
+
+    //console.log("current node: ", oldNode);
+
+    if (oldNode) {
+      // check whether same value as [value]
+
+      //console.log("there's an old node, it's next value is: %i", oldNode.next);
+
+      if (oldNode[key]) {
+        oldNode[key] = value;
+        return 0;
+      }
+      // while the next pointers are non-null, traverse LList
+      else while (oldNode.next){
+        oldNode = oldNode.next;
+      }
+      // set new node to end of LList
+      oldNode.next = node;
+        counter++;
+    }
+    // if no node is present at index
+    else {
+      this.storage[idx] = node;
+    }
+    counter++;
+  } 
+  return counter;
 };
+
+
+
+let table9 = new HashTable;
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,6 +85,21 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+
+  let idx = hashCode(key, this.SIZE);
+
+  let currentNode = this.storage[idx];
+
+  while(currentNode) {
+    if (currentNode[key] === key) {
+      return currentNode[key];
+    }
+    else {
+      currentNode = this.storage[idx].next;
+    }
+  }
+
+  return 'not found';
 
 };
 
