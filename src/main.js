@@ -7,8 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.storedVals = 0;
 }
 
 /**
@@ -24,7 +24,43 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  'use strict';
+  let hshCode = hashCode(key, this.SIZE);
+  let head = this.storage[hshCode];
+  // if key has already been used to store another value, overwrite
+  let hasKey = false;
+  for(let code in this.storage) {
+    if(this.storage[code].hasOwnProperty(key)) {
+      this.storage[code][key] = value;
+      hasKey = true;
+    } 
+  }
+  if(!hasKey) {
+    this.storage[hshCode] = {key: value};
+  }
 
+  // collisions
+  if(head.hasOwnProperty(key)) {
+    head[key].next = {key, value};
+    head = head[key][next];
+  } else {
+    head = {key, value};
+  }
+  let storedVals = 0;
+  // stored Vals count
+  for(let code in this.storage) {
+    let head = this.storage[code];
+    if(this.storage.hasOwnProperty(next)) {
+      storedVals++;
+      while(head[next]) {
+        storedVals++;
+        head = head.next;
+      }
+    } else {
+      storedVals++;
+    }
+  }
+  return storedVals;
 };
 
 /**
@@ -38,7 +74,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let head = this.storage;
+  // search through storage and retrieve first occurence of key in HashTable  
+  for(let code in head) {
+    //  storage[hashCode] has the property of key, return key value
+    if(head[code].hasOwnProperty(key)) {
+      return head[code][key];
+    }
+  }
 };
 
 /**
@@ -50,7 +93,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let deleted = undefined;
+  for(let code in this.storage) {
+    if(this.storage[code].hasOwnProperty(key)) {
+      // assign deleted property to deleted variable
+      deleted = this.storage[code][key];
+      delete this.storage[code][key];
+    }
+  }
+  //return undefined if not reassigned and key does not exist in HashTable
+  return deleted;
 };
 
 
