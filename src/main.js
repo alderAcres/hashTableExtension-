@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +23,26 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(key, this.SIZE);
 
+  //check if location exists
+  if(this.storage[hash]) {
+
+    //check if object at location has key
+    const i = this.storage[hash].findIndex(function(obj){
+      return obj.hasOwnProperty(key);
+    })
+    //if found, override the obj
+    if(i >= 0) {
+      this.storage[hash][i] = {[key]: value};
+    //if not found, push key/value to array
+    } else {
+      this.storage[hash].push({[key]: value})
+    }
+  } else {
+    //create array;
+    this.storage[hash] = [ {[key]: value} ];
+  }
 };
 
 /**
@@ -38,7 +56,17 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash]) {
+    const i = this.storage[hash].findIndex(function(obj){
+      return obj.hasOwnProperty(key);
+    })
+    if (i >= 0) {
+      return this.storage[hash][i][key];
+    }
+    return undefined
+  }
+  return undefined
 };
 
 /**
@@ -50,7 +78,27 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const hash = hashCode(key, this.SIZE);
+  
+  // check if hash exists
+  if(this.storage[hash]) {
+    const i = this.storage[hash].findIndex(function(obj){
+      return obj.hasOwnProperty(key);
+    })
+    //check if obj exists at hash location
+    if(i >= 0) {
 
+      //remove obj. mutates the array
+      this.storage[hash].splice(i, 1);
+
+      //check if array is empty. If so, set it to undefined
+      if (this.storage[hash].length === 0) {
+        this.storage[hash] = undefined;
+      }
+    }
+    return undefined
+  }
+  return undefined
 };
 
 
