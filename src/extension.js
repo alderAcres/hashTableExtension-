@@ -42,13 +42,9 @@ function HashTable() {
 HashTable.prototype.set = function(key, value) {
   const index = hashCode(key, key.length)
   const totalItems = this.storage.reduce((acc, cur) => {
-    if (cur !== undefined) {
-      acc + (cur.length / 2) // total key/value pairs in arr
-    }
+    if (cur !== undefined) { acc + (cur.length / 2) } // total # key/val pairs
     return acc
   }, 0)
-  
-  
 
   if (this.storage[index] === undefined) {
     const indexArr = []
@@ -59,6 +55,25 @@ HashTable.prototype.set = function(key, value) {
   else {
     const existingIdx = this.storage[index].indexOf(key)
     this.storage[index][existingIdx + 1] = value
+  }
+
+  if ((totalItems + 1) > this.SIZE * 0.75)  {
+    this.SIZE = this.SIZE * 2
+    //double the hash table's SIZE and rehash everything
+    
+    // get each key and its hashed val (index)
+    // const allKeys = this.storage.reduce((acc, cur) => {
+    //   if (cur !== undefined) { 
+    //     for ()
+    //     acc.push() // cur is an array
+
+    //   }
+    //   return acc
+    // }, [])
+
+    // set each pair 
+    
+    
   }
 
   return totalItems + 1
@@ -100,15 +115,14 @@ HashTable.prototype.remove = function(key) {
     return undefined 
   } else {
     const indexOfVal = this.storage[index].indexOf(key) + 1
-    const val = this.storage[index][indexOfVal].slice(0)
+    const valCopy = this.storage[index][indexOfVal].slice(0)
     const keyInd = this.storage[index].indexOf(key)
     const valInd = keyInd + 1
     delete this.storage[index][keyInd]
     delete this.storage[index][keyInd]
-    return val 
+    return valCopy
   }
 };
-
 
 
 // YOUR CODE ABOVE
