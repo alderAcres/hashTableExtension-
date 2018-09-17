@@ -14,9 +14,55 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  this.storagelength = 0;
+}
 
+HashTable.prototype.set = function set(key, value) {
+  const hash = hashCode(key, this.SIZE);
+  this.storagelength += 1;
+  if (this.storagelength > Math.ceil(0.75 * this.SIZE)) {
+    this.SIZE *= 2;
+    this.storage = new Array(this.SIZE);
+  }
+  if (this.storage[hash]) {
+    this.storage[hash].push([key, value]);
+    return this.storagelength;
+  }
+  this.storage[hash] = [[key, value]];
+  return this.storagelength;
+};
 
+HashTable.prototype.get = function get(key) {
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash].length > 1) {
+    return this.storage[hash].find(ele => ele[0] === key)[1];
+  }
+  return this.storage[hash][0][1];
+};
 
+HashTable.prototype.remove = function remove(key) {
+  const hash = hashCode(key, this.SIZE);
+  this.storagelength -= 1;
+  if (this.storagelength < Math.floor(0.25 * this.SIZE)) {
+    this.SIZE /= 2;
+    this.storage = new Array(this.SIZE);
+  }
+  if (this.storage[hash] === '') {
+    return undefined;
+  }
+  if (this.storage[hash].length > 1) {
+    const indexToDelete = this.storage[hash].findIndexOf(ele => ele[0] === key);
+    const deleted2 = this.storage[hash][indexToDelete];
+    this.storage[hash].splice(indexToDelete, 1);
+    return deleted2[1];
+  }
+  const deleted = this.storage[hash];
+  this.storage[hash] = '';
+  return deleted[0][1];
+};
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
