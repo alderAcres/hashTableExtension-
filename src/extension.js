@@ -14,8 +14,70 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  let hash = hashCode(key, this.SIZE);
+  let items = 0;
+  let stored = [];
+  let obj = {};
+  obj[key] = value;
+  for (let i = 0; i < this.storage.length; i++){
+    items += this.storage[i].length;
+  }
+  if (items > (0.75 * this.SIZE)){
+    for (let i = 0; i < this.storage.length; i++){
+      if (this.storage[i].length > 0){
+        stored.push(this.storage[i])
+      }
+    }
+    this.SIZE *= 2;
+    this.storage = newArray(this.SIZE);
+    for (let i = 0; i < stored.length; i++){
+      for (let j = 0; j < stored[i].length; j++){
+        let newHash = hashCode(Object.keys(stored[i][j])[0], this.SIZE);
+        let newObj = {};
+        newObj[Object.keys(stored[i][j])[0]] = Object.values(stored[i][j])[0]
+        if (this.storage[newHash] === undefined) {
+          this.storage[newHash] = [newObj];
+        } else {
+          this.storage[newHash].push(newObj);
+        }
+      }
+    }
+  } else {
+    if (this.storage[hash] === undefined){
+      this.storage[hash] = [obj];
+    } else {
+      this.storage[hash].push(obj);
+    }
+  }
+};
 
+//ran out of time
+HashTable.prototype.get = function(key) {
+  let hash = hashCode(key, this.SIZE);
+  for (let i = 0; i < this.storage[hash].length; i++){
+    if (this.storage[hash][i].hasOwnProperty(key)){
+      return this.storage[hash][i][key];
+    }
+  }
+};
+
+HashTable.prototype.remove = function(key) {
+  let hash = hashCode(key, this.SIZE);
+  for (let i = 0; i < this.storage[hash].length; i++){
+    if(this.storage[hash][i].hasOwnProperty(key)){
+      this.storage[hash].splice(i, 1);
+    } else if(i == this.storage[hash].length - 1){
+      return undefined;
+    }
+  }
+};
 
 // YOUR CODE ABOVE
 
