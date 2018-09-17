@@ -14,9 +14,58 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) {
+  let hashKey = hashCode(key, this.SIZE);
 
+  if (Object.keys(this.storage).length / this.SIZE > 0.75) {
+    this.rehash(this.SIZE * 2);
+    // resize the storage
+    // this.SIZE *= 2;
+    // this.newStorage = new Array(this.SIZE);
+    // for (let i = 0; i < this.storage.length; i++)
+    // this.newStorage[i] = {};
 
+    // //rehash & update occupiedCount
+    // this.storage.array.forEach((obj, _) => {
+    //   Object.keys(obj).forEach((key, _) => {
+    //     let newHashKey = hashCode(key, this.SIZE);
+    //     this.newStorage[newHashKey][key] = value;
+    //   });
+    // });
+    this.storage = newStorage;
+  }
+  this.storage[hashKey][key] = value;
 
+};
+
+HashTable.prototype.remove = function(key) {
+  let hashKey = hashCode(key, this.SIZE);
+  ret = this.storage[hashKey][key];
+  delete this.storage[hashKey][key];
+  if (Object.keys(this.storage).length / this.SIZE < 0.25) {
+    rehash(this.SIZE / 2);
+  return ret;
+};
+
+HashTable.prototype.rehash = function(newSize) {
+    // reset occupiedCount
+    this.occupiedCount = 0;
+    // update this.SIZE
+    this.SIZE = newSize
+    // create a new storage base on newSize
+    newStorage = new Array(newSize);
+    for (let i = 0; i < newSize; i++)
+      newStorage[i] = {};
+    //  iterate the old storage for non-empty objects, for each object iterate those keys to rehash
+    this.storage.forEach(obj => {
+      Object.keys(obj).forEach(key => {
+        // calculate new hash key
+        let newHashKey = hashCode(key, newSize);
+        this.newStorage[newHashKey] = obj[key];
+      });
+    });
+    this.storage = newStorage;
+}
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
