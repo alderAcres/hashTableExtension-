@@ -25,6 +25,7 @@ HashTable.prototype.set = function set(key, value) {
   this.storagelength += 1;
   if (this.storagelength > Math.ceil(0.75 * this.SIZE)) {
     this.SIZE *= 2;
+    this.storage = new Array(this.SIZE);
   }
   if (this.storage[hash]) {
     this.storage[hash].push([key, value]);
@@ -47,6 +48,7 @@ HashTable.prototype.remove = function remove(key) {
   this.storagelength -= 1;
   if (this.storagelength < Math.floor(0.25 * this.SIZE)) {
     this.SIZE /= 2;
+    this.storage = new Array(this.SIZE);
   }
   if (this.storage[hash] === '') {
     return undefined;
