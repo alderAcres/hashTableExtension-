@@ -14,7 +14,66 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  //index from running hashCode
+  let index = hashCode(key, this.SIZE) 
+  
+  //condition 1: if object does not exist within the array, create an object with the key/value pair
+  if (this.storage[index] === undefined) {
+    const newObj = {};
+    newObj[key] = value;
+    this.storage[index] = newObj;
+
+  //condition 2: if object does exist, then add the key/value pair to existing object within array
+  }
+    let numberOfKeys = 0;
+    for (let i = 0; i < this.storage.length; i++) {
+      for(let key in this.storage[i]) {
+        numberOfKeys += 1;
+      }
+    }
+    
+    if (numberOfKeys >= (.75*this.SIZE)) {
+      this.SIZE *= 2
+  }
+    this.storage[index][key] = value;  
+};
+
+//test 
+// let test = new HashTable();
+// test.set('Elliot',50);
+// test.set('Brian',40);
+// test.set('Sam',70);
+// test.set('Joel',20);
+// test.set('Ellio',52);
+// test.set('Bria',43);
+// test.set('Sa',32);
+// test.set('Joe',22);
+// test.set('Elli',55);
+// test.set('Bri',45);
+// test.set('S',35);
+// test.set('Jo',25);
+// test.set('Ell',58);
+// test.set('Ban',48);
+// test.set('Sm',38);
+// test.set('Jel',28);
+// console.log(test);
+
+HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
+  return this.storage[index][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  let index = hashCode(key, this.SIZE);
+  delete this.storage[index][key];
+};
 
 
 // YOUR CODE ABOVE
