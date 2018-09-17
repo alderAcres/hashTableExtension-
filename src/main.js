@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,8 +23,29 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const location = hashCode(key, this.SIZE);
+  const hashTable = this.storage;
+  if(hashTable[location] === undefined) {
+    hashTable[location] = {};
+    hashTable[location][key] = value;
+  } else {
+    hashTable[location][key] = value;
+  }
+  function countItems() {
+    let count = 0;
+    hashTable.forEach(function(el) {
+      if(el !== undefined){
+        count += Object.keys(el).length
+      }
+    });
+    return count;
+  }
+  return countItems();
 };
+
+
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +58,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const location = hashCode(key, this.SIZE);
+  const hashTable = this.storage;
+  return hashTable[location][key];
 };
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +73,29 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const location = hashCode(key, this.SIZE);
+  const hashTable = this.storage;
+  if(hashTable[location] === undefined) {
+    return undefined;
+  } else if(!hashTable[location].hasOwnProperty(key)) {
+    return undefined;
+  } else {
+    returnValue = hashTable[location][key];
+    delete hashTable[location][key]
+  }
+  return returnValue;
 };
+// const hashtab = new HashTable()
+// console.log(hashtab.set("hello", 3))
+// console.log(hashtab.set("world", 2))
+// console.log(hashtab.set("codesmith", 2))
+
+// console.log(hashtab.get("hello"))
+// console.log(hashtab.remove("hello"))
+// console.log(hashtab);
+// console.log(hashCode("hello", 16))
+// console.log(hashCode("world", 16))
+// console.log(hashCode("codesmith", 16))
 
 
 // Do not modify
