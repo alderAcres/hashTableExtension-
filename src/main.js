@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,9 +22,16 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function set(key, value) {
+  const realK = hashCode(key, this.SIZE);
+  if (this.storage[realK] === undefined) {
+    this.storage[realK] = {};
+    this.storage[realK][key] = value;
+  } else {
+    this.storage[realK][key] = value;
+  }
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -37,8 +43,14 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function get(key) {
+  const realK = hashCode(key, this.SIZE);
+  // console.log(this.storage[realK]);
+  if (this.storage[realK] === undefined) return undefined;
+  if (this.storage[realK][key] !== undefined) {
+    return this.storage[realK][key];
+  }
+  return undefined;
 };
 
 /**
@@ -49,7 +61,14 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function remove(key) {
+   const realK = hashCode(key, this.SIZE);
+  // if (!this.storage[realK][key] || !this.stroage[realK]) {
+  //   return undefined;
+  // }
+  const cache = this.storage[realK][key];
+  delete this.storage[realK][key];
+  return cache;
 
 };
 
@@ -72,3 +91,12 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+let hh = new HashTable();
+hh.set('apple','ap');
+hh.set('banana','ba');
+hh.set('orange','oran');
+hh.set('lime','li');
+hh.set('strawb','str');
+hh.remove('lime');
+console.log(hh.remove('lime'));
+console.log(hh.get('apple'))
