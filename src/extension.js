@@ -42,7 +42,9 @@ HashTable.prototype.set = function(key, value) {
   if (this.length > limit) {
     this.SIZE = this.SIZE * 2;
     let newStorage = new HashTable();
-    this.storage.forEach(obj => for (let key in ))
+    this.storage.forEach(obj => for (let key in obj){
+      
+    })
   }
 };
 
