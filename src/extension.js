@@ -154,8 +154,8 @@ module.exports = HashTable;
 // console.log('\nStep 3: Add enough key/value pairs into hashTable to trigger another resize');
 // console.log('Use a for loop to create key/value pairs up to "k25" and "v25"')
 // for (let i = 15; i < 26; i += 1) {
-//   const inKey = 'k' + i;
-//   const inValue = 'v' + i;
+//   const inKey = `k + ${i}`;
+//   const inValue = `v + ${i}`;
 //   hashTable.set(inKey, inValue);
 // }
 // console.log(`hashTable.resizing: expect -> 'false': actual -> ${hashTable.resizing}`);
@@ -166,7 +166,7 @@ module.exports = HashTable;
 
 // console.log('\nStep 4: Use a loop to remove key/value pairs from hashTable to trigger resize');
 // for (let i = 25; i > 14; i -= 1) {
-//   const inKey = 'k' + i;
+//   const inKey = `k + ${i}`;
 //   hashTable.remove(inKey);
 // }
 // console.log(`hashTable.resizing: expect -> 'false': actual -> ${hashTable.resizing}`);
