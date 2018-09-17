@@ -1,5 +1,5 @@
 /**
-* HashTable costructor
+* HashTable constructor
 *
 * construct a new hash table
 *
@@ -24,7 +24,8 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let newHash = hashCode(key, this.SIZE) // random number from 1-15
+  this.storage[newHash] = value // random number is equal to the object of newObj
 };
 
 /**
@@ -34,11 +35,12 @@ HashTable.prototype.set = function(key, value) {
 *   the correct value that was originally stored with the provided key
 *
 * @param {string} key - key to lookup in hash table
-* @return {string|number|boolean} The value stored with the specifed key in the
+* @return {string|number|boolean} The value stored with the specified key in the
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+let newHash = hashCode(key, this.SIZE)
+return this.storage[newHash]
 };
 
 /**
@@ -50,7 +52,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+let newHash = hashCode(key, this.SIZE)
+let rem = this.storage[newHash]
+if(rem === undefined) {
+  return undefined
+}
+delete this.storage[rem]
 
+return rem
 };
 
 
