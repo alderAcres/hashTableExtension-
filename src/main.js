@@ -24,8 +24,32 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let index = hashCode(key, this.SIZE);
+  console.log(index);
+  const hashArray = this.storage;
+  // check to see if there are any entries. if not, create new arrays and push in inputs of key and value
+  if (!Array.isArray(hashArray[index])) {
+    const keyValueArray = [];
+    const keys = [];
+    const values = [];
+    keys.push(key);
+    values.push(value);
+    keyValueArray.push(keys, values);
+    hashArray[index] = keyValueArray;
+  } else {
+    // if entries exist, push into existing the input key and value
+    hashArray[index][0].push(key);
+    hashArray[index][1].push(value);
+  }
+  console.log(hashArray);
 };
+
+const hashTable = new HashTable();
+
+console.log(hashTable.set('hello', 'firstkey'));
+console.log(hashTable.set('world', 'secondkey'));
+
+console.log(hashTable);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +62,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  const hashArray = this.storage;
+  // find the index of the key to access in value array
+  let indexOfKey = hashArray[index][0].indexOf(key);
+  return hashArray[index][1][indexOfKey];
 };
+
+console.log(hashTable.get('hello')); // 'firstkey'
+console.log(hashTable.get('world')); // 'secondkey'
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +81,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  const hashArray = this.storage;
+  // get index of the key and value pair and store in variable
+  let indexOfKey = hashArray[index][0].indexOf(key);
+  let removedValue = hashArray[index][1][indexOfKey];
+  // delete pair using splice
+  hashArray[index][0].splice(indexOfKey, 1);
+  hashArray[index][1].splice(indexOfKey, 1);
+  // return the store value variable
+  return removedValue;
 };
+
+console.log(hashTable.remove('world')); // 'secondkey'
 
 
 // Do not modify
