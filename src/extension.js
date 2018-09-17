@@ -22,27 +22,26 @@ function HashTable() {
 
 HashTable.prototype.set = function(key, value) {
   //index from running hashCode
+  let numberOfKeys = 0;
+  for (let i = 0; i < this.storage.length; i++) {
+    for(let key in this.storage[i]) {
+      numberOfKeys += 1;
+    }
+  }
+    
+  if (numberOfKeys >= (.75*this.SIZE)) {
+    this.SIZE *= 2
+ 	} 
+  
   let index = hashCode(key, this.SIZE) 
   
-  //condition 1: if object does not exist within the array, create an object with the key/value pair
   if (this.storage[index] === undefined) {
     const newObj = {};
     newObj[key] = value;
     this.storage[index] = newObj;
-
-  //condition 2: if object does exist, then add the key/value pair to existing object within array
+  } else {
+    this.storage[index][key] = value;
   }
-    let numberOfKeys = 0;
-    for (let i = 0; i < this.storage.length; i++) {
-      for(let key in this.storage[i]) {
-        numberOfKeys += 1;
-      }
-    }
-    
-    if (numberOfKeys >= (.75*this.SIZE)) {
-      this.SIZE *= 2
-  }
-    this.storage[index][key] = value;  
 };
 
 //test 
