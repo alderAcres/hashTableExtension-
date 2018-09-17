@@ -15,6 +15,73 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+/**
+* set - Adds given value to the hash table with specified key.
+*
+* - If the provided key has already been used to store another value, simply overwrite
+*   the existing value with the new value.
+* - If the hashed address already contains another key/value pair, you must handle
+*   the collision appropriately.
+*
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+  
+  let index = hashCode(key, this.SIZE)
+  // array to handle collusions
+  let list = [];
+
+  //push values into an array that will be stored in the hash address
+  list.push(value);
+  
+  //store the list in the storage index;
+  this.storage[index] = list;
+
+};
+
+
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+*
+* - If more than one value is stored at the key's hashed address, then you must retrieve
+*   the correct value that was originally stored with the provided key
+*
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE)
+
+  // returns the first value that was stored in the index
+  return this.storage[index][0]
+
+};
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+
+  let index = hashCode(key, this.SIZE)
+
+  let removed = this.storage[index][0];
+
+  if(this.storage[index]){
+    delete this.storage[index]
+  }
+
+  return removed;
+
+};
+
 
 
 // YOUR CODE ABOVE
