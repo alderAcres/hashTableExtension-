@@ -9,7 +9,20 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+
+  this.length = 0;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -25,6 +38,17 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+  let index = hashCode(key, this.SIZE);
+
+  if (!this.storage[index]) {
+    this.storage[index] = {};
+  }
+
+  if (!this.storage[index][key]) {
+    this.length++;
+  }
+  this.storage[index][key] = value;
+  return this.length;
 };
 
 /**
@@ -38,7 +62,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  return this.storage[index][key];
 };
 
 /**
@@ -50,7 +75,10 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  let returnVal = this.storage[index][key];
+  delete this.storage[index][key];
+  return returnVal;
 };
 
 
