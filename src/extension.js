@@ -136,42 +136,42 @@ function hashCode(string, size) {
 // Do not remove!!
 module.exports = HashTable;
 
-console.log('---TEST CASES---');
-console.log('Step 1: Declare a Hash Table with "const hashTable = new HashTable()"')
-const hashTable = new HashTable()
-console.log('\nStep 2: Add enough key/value pairs into hashTable to trigger resize');
-console.log('Use a for loop to create 14 key/value pairs resembling "k1" "v1" ... "k12" "v12"')
-for (let i = 0; i < 14; i += 1) {
-  const inKey = 'k' + i;
-  const inValue = 'v' + i;
-  hashTable.set(inKey, inValue);
-}
-console.log(`hashTable.resizing: expect -> 'false': actual -> ${hashTable.resizing}`);
-console.log(`hashTable.storageSize: expect -> '14': actual -> ${hashTable.storageSize}`);
-console.log(`hashTable.SIZE: expect -> '32': actual -> ${hashTable.SIZE}`);
-console.log(`hashTable.get('k1'): expect -> 'v1': actual -> ${hashTable.get('k1')}`);
-console.log(`hashTable.get('k12'): expect -> 'v12': actual -> ${hashTable.get('k12')}`);
-console.log('\nStep 3: Add enough key/value pairs into hashTable to trigger another resize');
-console.log('Use a for loop to create key/value pairs up to "k25" and "v25"')
-for (let i = 15; i < 26; i += 1) {
-  const inKey = 'k' + i;
-  const inValue = 'v' + i;
-  hashTable.set(inKey, inValue);
-}
-console.log(`hashTable.resizing: expect -> 'false': actual -> ${hashTable.resizing}`);
-console.log(`hashTable.storageSize: expect -> '25': actual -> ${hashTable.storageSize}`);
-console.log(`hashTable.SIZE: expect -> '64': actual -> ${hashTable.SIZE}`);
-console.log(`hashTable.get('k1'): expect -> 'v1': actual -> ${hashTable.get('k1')}`);
-console.log(`hashTable.get('k24'): expect -> 'v24': actual -> ${hashTable.get('k24')}`);
+// console.log('---TEST CASES---');
+// console.log('Step 1: Declare a Hash Table with "const hashTable = new HashTable()"')
+// const hashTable = new HashTable()
+// console.log('\nStep 2: Add enough key/value pairs into hashTable to trigger resize');
+// console.log('Use a for loop to create 14 key/value pairs resembling "k1" "v1" ... "k12" "v12"')
+// for (let i = 0; i < 14; i += 1) {
+//   const inKey = 'k' + i;
+//   const inValue = 'v' + i;
+//   hashTable.set(inKey, inValue);
+// }
+// console.log(`hashTable.resizing: expect -> 'false': actual -> ${hashTable.resizing}`);
+// console.log(`hashTable.storageSize: expect -> '14': actual -> ${hashTable.storageSize}`);
+// console.log(`hashTable.SIZE: expect -> '32': actual -> ${hashTable.SIZE}`);
+// console.log(`hashTable.get('k1'): expect -> 'v1': actual -> ${hashTable.get('k1')}`);
+// console.log(`hashTable.get('k12'): expect -> 'v12': actual -> ${hashTable.get('k12')}`);
+// console.log('\nStep 3: Add enough key/value pairs into hashTable to trigger another resize');
+// console.log('Use a for loop to create key/value pairs up to "k25" and "v25"')
+// for (let i = 15; i < 26; i += 1) {
+//   const inKey = 'k' + i;
+//   const inValue = 'v' + i;
+//   hashTable.set(inKey, inValue);
+// }
+// console.log(`hashTable.resizing: expect -> 'false': actual -> ${hashTable.resizing}`);
+// console.log(`hashTable.storageSize: expect -> '25': actual -> ${hashTable.storageSize}`);
+// console.log(`hashTable.SIZE: expect -> '64': actual -> ${hashTable.SIZE}`);
+// console.log(`hashTable.get('k1'): expect -> 'v1': actual -> ${hashTable.get('k1')}`);
+// console.log(`hashTable.get('k24'): expect -> 'v24': actual -> ${hashTable.get('k24')}`);
 
-console.log('\nStep 4: Use a loop to remove key/value pairs from hashTable to trigger resize');
-for (let i = 25; i > 14; i -= 1) {
-  const inKey = 'k' + i;
-  hashTable.remove(inKey);
-}
-console.log(`hashTable.resizing: expect -> 'false': actual -> ${hashTable.resizing}`);
-console.log(`hashTable.storageSize: expect -> '14': actual -> ${hashTable.storageSize}`);
-console.log(`hashTable.SIZE: expect -> '32': actual -> ${hashTable.SIZE}`);
-console.log(`hashTable.get('k1'): expect -> 'v1': actual -> ${hashTable.get('k1')}`);
-console.log(`hashTable.get('k12'): expect -> 'v12': actual -> ${hashTable.get('k12')}`);
-console.log(`hashTable.get('k24'): expect -> 'undefined': actual -> ${hashTable.get('k24')}`);
+// console.log('\nStep 4: Use a loop to remove key/value pairs from hashTable to trigger resize');
+// for (let i = 25; i > 14; i -= 1) {
+//   const inKey = 'k' + i;
+//   hashTable.remove(inKey);
+// }
+// console.log(`hashTable.resizing: expect -> 'false': actual -> ${hashTable.resizing}`);
+// console.log(`hashTable.storageSize: expect -> '14': actual -> ${hashTable.storageSize}`);
+// console.log(`hashTable.SIZE: expect -> '32': actual -> ${hashTable.SIZE}`);
+// console.log(`hashTable.get('k1'): expect -> 'v1': actual -> ${hashTable.get('k1')}`);
+// console.log(`hashTable.get('k12'): expect -> 'v12': actual -> ${hashTable.get('k12')}`);
+// console.log(`hashTable.get('k24'): expect -> 'undefined': actual -> ${hashTable.get('k24')}`);
