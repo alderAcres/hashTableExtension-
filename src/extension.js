@@ -14,9 +14,35 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key, this.SIZE);
+  console.log(index);
+  const hashArray = this.storage;
+  if (!Array.isArray(hashArray[index])) {
+    const keyValueArray = [];
+    const keys = [];
+    const values = [];
+    keys.push(key);
+    values.push(value);
+    keyValueArray.push(keys, values);
+    hashArray[index] = keyValueArray;
+  } else {
+    hashArray[index][0].push(key);
+    hashArray[index][1].push(value);
+  }
+  if (hashArray)
+  console.log(hashArray);
+};
 
-
-
+HashTable.prototype.remove = function(key) {
+  let index = hashCode(key, this.SIZE);
+  const hashArray = this.storage;
+  let indexOfKey = hashArray[index][0].indexOf(key);
+  let removedValue = hashArray[index][1][indexOfKey];
+  hashArray[index][0].splice(indexOfKey, 1);
+  hashArray[index][1].splice(indexOfKey, 1);
+  return removedValue;
+};
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
