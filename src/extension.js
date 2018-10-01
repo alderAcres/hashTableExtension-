@@ -48,14 +48,14 @@ HashTable.prototype.set = function(key, value) {
       this.storage[index][i][1] = value;
       return;
     }
-  }
-
-  if((this.items + 1) / this.SIZE > 0.75 && !this.reSizing){
-    this.reSize(this.SIZE * 2);
-  }
-  
+  }  
   this.storage[index].push([key, value]);
   this.items++;
+
+  if((this.items) / this.SIZE > 0.75 && !this.reSizing){
+    this.reSize(this.SIZE * 2);
+    
+  }
 };
 
 /**
@@ -90,12 +90,12 @@ HashTable.prototype.remove = function(key) {
   let index = hashCode(key, this.SIZE);
   for (let i = 0; i < this.storage[index].length; i++){
     if (this.storage[index][i][0] === key){
-      if (((this.items - 1) / this.SIZE) < 0.25){
-        this.reSize(this.SIZE * .5);
-      }
       let temp = this.storage[index][i][1];
       this.storage[index].splice(i, 1);
       this.items--;
+      if (((this.items - 1) / this.SIZE) < 0.25 && !this.reSizing){
+        this.reSize(this.SIZE * .5);
+      }
       return temp;
     }
   }
@@ -104,7 +104,7 @@ HashTable.prototype.remove = function(key) {
 HashTable.prototype.reSize = function(newSize){
   this.reSizing = true;
   this.SIZE = newSize;
-  console.log(this.SIZE);
+  this.items = 0;
   let old = this.storage;
   this.storage = new Array(this.SIZE);
   for (let i = 0; i < old.length; i++){
@@ -114,7 +114,7 @@ HashTable.prototype.reSize = function(newSize){
       }
     }
   }
-  this.reSized = false;
+  this.reSizing = false;
 }
 
 
@@ -139,25 +139,39 @@ function hashCode(string, size) {
 module.exports = HashTable;
 
 
-let andrew = new HashTable();
+// let andrew = new HashTable();
 
-andrew.set('a' ,1);
-andrew.set('b' ,1);
-andrew.set('c' ,1);
-andrew.set('d' ,1);
-andrew.set('e' ,1);
-andrew.set('f' ,1);
-andrew.set('g' ,1);
-andrew.set('h' ,1);
-andrew.set('i' ,1);
-console.log(andrew);
-//console.log(andrew.remove('a'));
-//console.log(andrew.remove('b'));
-//console.log(andrew.remove('c'));
-andrew.set('j' ,1);
-andrew.set('k' ,1);
-andrew.set('l' ,1);
-andrew.set('m' ,1);
-andrew.set('n' ,1);
+// andrew.set('a' ,1);
+// andrew.set('b' ,1);
+// andrew.set('c' ,1);
+// andrew.set('d' ,1);
+// andrew.set('e' ,1);
+// andrew.set('f' ,1);
+// andrew.set('g' ,1);
+// andrew.set('h' ,1);
+// andrew.set('i' ,1);
+// console.log(andrew);
+// //console.log(andrew.remove('a'));
+// //console.log(andrew.remove('b'));
+// //console.log(andrew.remove('c'));
+// andrew.set('j' ,1);
+// andrew.set('k' ,1);
+// andrew.set('l' ,1);
+// andrew.set('m' ,1);
+// andrew.set('n' ,1);
+// console.log(andrew);
+// andrew.remove('a');
+// andrew.remove('b');
+// andrew.remove('c');
+// andrew.remove('d');
+// andrew.remove('e');
+// console.log(andrew);
+// andrew.remove('f');
+// andrew.remove('g');
+// andrew.remove('h');
+// andrew.remove('i');
+// andrew.remove('j');
+// andrew.remove('k');
+// andrew.remove('l');
 
-console.log(andrew);
+// console.log(andrew);
