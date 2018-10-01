@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.itemCount = 0;
 }
 
 /**
@@ -24,7 +25,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hashConverted = hashCode(key, this.SIZE);
+  if (!this.storage[hashConverted]) {
+    this.storage[hashConverted] = [[key, value]];
+  } else {
+    this.storage[hashConverted].push([key, value]);
+  }
+  return ++this.itemCount;
 };
 
 /**
@@ -38,7 +45,20 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  debugger;
+  let hashConverted = hashCode(key, this.SIZE);
+  if (!this.storage[hashConverted]) return undefined; 
 
+  if (this.storage[hashConverted].length === 1 && this.storage[hashConverted][0] === key) {
+    return this.storage[hashConverted][0][1];
+  } else {
+    for (let i = 0; i < this.storage[hashConverted].length; i++) {
+      if (this.storage[hashConverted][i][0] === key) {
+        return this.storage[hashConverted][i][1];
+      }
+    }
+  }
+  
 };
 
 /**
@@ -50,6 +70,27 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let hashConverted = hashCode(key, this.SIZE);
+  console.log(hashConverted);
+  console.log(this.storage[hashConverted].length)
+  if (!this.storage[hashConverted]) return undefined; 
+
+  if (this.storage[hashConverted].length === 1) {
+    let deletedVal = this.storage[hashConverted][0][1];
+    delete this.storage[hashConverted];
+    return deletedVal;
+  } else {
+    for (let i = 0; i < this.storage[hashConverted].length; i++) {
+      if (this.storage[hashConverted][i][0] === key) {
+        deletedVal = this.storage[hashConverted][i][1];
+        this.storage[hashConverted].splice(i, 1);
+        this.itemCount--;
+        console.log(this.storage[hashConverted])
+        // console.log(deletedVal)
+        return deletedVal;
+      }
+    }
+  }
 
 };
 
@@ -70,5 +111,22 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
+let hashy = new HashTable();
+console.log(hashy.set('man', 'John Smith'));
+console.log(hashy.set('woman', 'Joan Smith'));
+console.log(hashy.set('girl', 'Jeannie Smith'));
+console.log(hashy.set('boy', 'Johnny Smith'));
+console.log(hashy.set('ape', 'Tarzan Smith'));
+console.log(hashy.set('fish', 'Guppy Smith'));
+console.log(hashy.get('boy'));
+console.log(hashy.get('dog'));
+console.log(hashy.get('girl'));
+console.log(hashy.set('cat', 'Whiskers Smith'));
+console.log(hashy.remove('cat'));
+console.log(hashy.get('cat'));
+console.log(hashy.get('ape'));
+console.log(hashy.set('friend', 'Jane Doe'));
+// console.log(hashy.get('woman'));
+console.log(hashy);
 // Do not remove!!
 module.exports = HashTable;
