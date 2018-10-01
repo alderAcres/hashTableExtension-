@@ -14,8 +14,82 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
 
+  this.stored = 0;
+}
 
+HashTable.prototype.set = function(key, value) {
+  let location = hashCode(key, this.SIZE);
+  if(this.storage[location]) {
+    this.storage[location][key] = value;
+  } else {
+    this.storage[location] = {};
+    this.storage[location][key] = value;
+  }
+  this.stored++;
+  if(this.stored > this.SIZE * 3 / 4) {
+    let storedElements = {};
+    let storedElementsKeys = [];
+    for(let i = 0; i < this.SIZE; i++) {
+      if(this.storage[i]) {
+        let keys = Object.keys(this.storage[i]);
+        for(let x in keys) {
+          storedElements[keys[x]] = this.storage[i][keys[x]];
+          storedElementsKeys.push(keys[x]);
+        }
+      }
+      delete this.storage[i];
+    }
+    this.SIZE = this.SIZE * 2;
+    this.stored = 0;
+    for(let i in storedElementsKeys) {
+      this.set(storedElementsKeys[i], storedElements[storedElementsKeys[i]])
+    }
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  let location = hashCode(key, this.SIZE);
+  if(this.storage[location]) {
+    return this.storage[location][key];
+  }
+  return undefined;
+};
+
+HashTable.prototype.remove = function(key) {
+  let location = hashCode(key, this.SIZE);
+  if(!this.storage[location] || !this.storage[location][key]) {
+    return undefined;
+  }
+  let returnValue = this.storage[location][key];
+  delete this.storage[location][key];
+  this.stored--;
+  if(this.stored < this.SIZE * 1 / 4) {
+    let storedElements = {};
+    let storedElementsKeys = [];
+    for(let i = 0; i < this.SIZE; i++) {
+      if(this.storage[i]) {
+        let keys = Object.keys(this.storage[i]);
+        for(let x in keys) {
+          storedElements[keys[x]] = this.storage[i][keys[x]];
+          storedElementsKeys.push(keys[x]);
+        }
+      }
+      delete this.storage[i];
+    }
+    this.SIZE = this.SIZE / 2;
+    this.stored = 0;
+    this.storage = new Array(this.SIZE);
+    for(let i in storedElementsKeys) {
+      this.set(storedElementsKeys[i], storedElements[storedElementsKeys[i]])
+    }
+  }
+  return returnValue;
+};
 
 // YOUR CODE ABOVE
 
@@ -36,3 +110,4 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
