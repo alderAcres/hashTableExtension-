@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +23,33 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let hashResult = hashCode(key,this.SIZE);
+  let objInsert = {[key] : value}; 
+  let returnValue;
 
+  //if subarray does not exist, create it
+  if(this.storage[hashResult] === undefined){
+    this.storage[hashResult] = [];
+  }
+
+  //attempt to find existing keyvaluepair with same key
+  let index = -1;
+  for(let i = 0; i < this.storage[hashResult].length; i++){
+    if(Object.keys(this.storage[hashResult][i])[0] === key){
+      index = i;
+      break;
+    }
+  }
+
+  //splice or push new depending on index
+  if(index !== -1){
+    this.storage[hashResult].splice(index,1,objInsert);
+    returnValue = 0;
+  } else{
+    this.storage[hashResult].push(objInsert);
+    returnValue = 1;
+  }
+  return returnValue;
 };
 
 /**
@@ -38,7 +63,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let hashResult = hashCode(key,this.SIZE);
+  let returnResult = undefined;
+  if(this.storage[hashResult] !== undefined && this.storage[hashResult].length >0){
 
+    this.storage[hashResult].forEach(keyvaluepair => {
+
+      if(Object.keys(keyvaluepair)[0] === key){
+    
+        returnResult = keyvaluepair[key];
+      }
+    });
+  } 
+  return returnResult;
 };
 
 /**
@@ -50,7 +87,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let hashResult = hashCode(key,this.SIZE);
+  let returnResult = undefined;
 
+  //if the subarray has values in it
+  if(this.storage[hashResult] !== undefined && this.storage[hashResult].length >0){
+    for(let i = 0; i < this.storage[hashResult].length; i++){
+      if(Object.keys(this.storage[hashResult][i])[0] === key){
+        returnResult = this.storage[hashResult][i][key];
+        this.storage[hashResult].splice(i,1);
+      }
+    }
+  }
+  return returnResult;
 };
 
 
