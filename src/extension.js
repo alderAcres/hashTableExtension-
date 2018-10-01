@@ -15,7 +15,35 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+HashTable.prototype.set = function(key, value) {
+  let hash = hashCode(key, this.SIZE);
+  let keyName = `${key}`;
+  let bucketItem = [keyName, value];
 
+  if ( !Array.isArray(this.storage[hash]) ) {
+    this.storage[hash] = [ bucketItem ];
+  }
+  else {
+    this.storage[hash].push(bucketItem);
+  }
+};
+
+HashTable.prototype.remove = function(key) {
+  let hash = hashCode(key, this.SIZE);
+  let hashArray = this.storage[hash];
+  let removedItem;
+
+  if (hashArray.length) {
+    for (let i = 0; i < hashArray.length; i++) {
+      if (hashArray[i][0] === key) {
+        removedItem = hashArray[i][1];
+        hashArray.splice(i, 1);
+      }
+    }
+  }
+  
+  return removedItem;
+};
 
 // YOUR CODE ABOVE
 
