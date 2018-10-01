@@ -15,13 +15,78 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  this.length = 0
+}
+/**
+* set - Adds given value to the hash table with specified key.
+* - If the provided key has already been used to store another value, simply overwrite
+*   the existing value with the new value.
+* - If the hashed address already contains another key/value pair, you must handle
+*   the collision appropriately.
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+  let location = hashCode(string, this.SIZE);
+  if (this.storage[location] === undefined) {
+    this.storage[location] = {};
+    this.storage[location][key] = value;
+    length ++
+    }
+    if (length > .75*this.SIZE){
+      this.SIZE = this.SIZE * 2
+  }
+  this.storage[location][key] = value;
+  length ++
+}
+//If adding the new item will push the number of stored items to over 75% of
+        //the hash table's SIZE, then double the hash table's SIZE and rehash everything
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+* - If more than one value is stored at the key's hashed address, then you must retrieve
+*   the correct value that was originally stored with the provided key
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+  let location = hashCode(key, this.SIZE);
+  return this.storage[location][key];
+};
 
+//
+/**
+* remove - delete a key/value pair from the hash table
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  let location = hashCode(key, this.SIZE);
+  let el = this.storage[location][key];
+  if (this.storage[location] === undefined){
+    return undefined
+  } else {
+    length --
+    return el
+}
+  if (length < this.SIZE*.25){
+    this.SIZE = this.SIZE / 2
+  }
+}
 
+//If the hash table's SIZE is greater than 16 and the result of removing the
+//         item drops the number of stored items to be less than 25% of the hash table's SIZE
+//         (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
   'use strict';
-  
   let hash = 0;
   if (string.length === 0) return hash;
   
