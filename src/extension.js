@@ -15,6 +15,65 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  this.totalItems = 0;
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.set = function(key, value) {
+  const hashed = hashCode(key, this.SIZE);
+  if (!this.storage[hashed]) {
+    this.storage[hashed] = [];
+  }
+  this.storage[hashed][this.storage[hashed].length] = [key, value];
+  this.totalItems++;
+  if (this.totalItems / this.SIZE >= 0.75) {
+    this.doubleSize();
+  }
+  return this.totalItems;
+};
+
+HashTable.prototype.doubleSize = function() {
+  this.SIZE = this.SIZE * 2;
+  this.totalItems = 0;
+  this.storageOld = this.storage;
+  this.storage = [];
+  for (let i = 0; i < this.SIZE / 2; i++) {
+    if (this.storageOld[i]) {
+      this.storageOld[i].forEach((arr) => (this.set(arr[0], arr[1])));
+    }
+  }
+  delete this.storageOld;
+}
+
+HashTable.prototype.get = function(key) {
+  const hashed  = hashCode(key, this.SIZE);
+  if (!this.storage[hashed]) {
+    return undefined;
+  }
+  for (let i = 0; i < this.storage[hashed].length; i++) {
+    if (this.storage[hashed][i][0] === key) { return this.storage[hashed][i][1] }
+  }
+  return ('Error: Key Not Found');
+};
+
+HashTable.prototype.remove = function(key) {
+  const hashed = hashCode(key, this.SIZE);
+  if (!this.storage[hashed] || this.storage[hashed].length === 0) {
+    return undefined;
+  }
+  for (let i = 0; i < this.storage[hashed].length; i++) {
+    if (this.storage[hashed][i][0] === key) { 
+      const output = this.storage[hashed][i][1];
+      delete this.storage[hashed][i];
+      this.totalItems--;
+    }
+  }
+
+  if (output) { return output };
+  return undefined;
+};
 
 
 // YOUR CODE ABOVE
