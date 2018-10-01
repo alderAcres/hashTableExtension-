@@ -7,9 +7,10 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,7 +25,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+let index = hashCode(key, this.SIZE);
+  if(this.storage[index]) {
+  this.storage[index][key] === value;
+  } else {
+    this.storage[index] = {};
+    this.storage[index][key] = value;
+  }
 };
 
 /**
@@ -38,8 +45,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  console.log(this.storage[index][key]);
+  return this.storage[index][key];
 };
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -49,24 +59,33 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
 
+//for remove we sitll need to generate the index to determine the location. we set value equal to that key location and as we delete we also return deleted value.
+HashTable.prototype.remove = function(key) {
+  let index = hashCode(key, this.SIZE);
+  if(!this.storage[index]) {
+    return undefined;
+  } else {
+    let value = this.storage[index][key];
+    delete this.storage[index][key];
+    return value;
+  }
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
