@@ -1,0 +1,33 @@
+/*************** set mehtod ***************/ 
+-access the prototype object in HashTable and add a method named "set", and assign it a function with parameters: key and value.
+	-declare a variable named 'hash' and assign it the returned value of hashCode with the key parameter and the value of the size property in HashTable passed as arguments
+	-delcare a variable called 'keyName' and assign it the key parameter as a string
+	-declare a varible called 'bucketItem' assing it an array containing the keyName variable and the value parameter.
+
+	-if the value with the associated key named after the hash variable in the storage object of Hashtable is not an array then...
+		-assign an array containing the bucketItem variable to the property named after the hash variable in the storage object in the HashTable
+	-end of if statement
+	-else...
+		-push the bucketItem variable to the array value associated with the key named after the hash variable in the storage object of the HashTable
+	-end of else	
+-end of set method
+/*************** set mehtod ***************/
+
+/*************** remove method ***************/
+-access the prototype object in HashTable and add a method named "remove", and assign it a function with parameters: key
+	-declare a variable called 'hash' and assign it the returned value of hashCode with the key parameter, and the value of the 'size' property in HashTable passed as arguments
+	-declare a variable called 'hashArray' and assign it the array value, associated with the key named after the hash variable in the storage object of the HashTable.
+	-declare a variable called 'removeItem' and leave it undefined.
+
+	-if the hashArray has a length property then...
+		-iterate through the hashArray variable.
+			-if the first value in the current array being proccessed is equal to the key parameter then...
+				-reassign the removedItem variable to the second value in the current array being proccessed of the hasArray.
+				-remove the current array being proccessed of the hashArray
+			-end of if statement
+		-end of iteration for hashArray
+	-end of if statement.
+
+	-return the removedItem variable
+-end of remove method
+/*************** remove method ***************/
