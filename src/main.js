@@ -69,6 +69,9 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
   let index = hashCode(key, this.SIZE);
+  if (this.storage[index] === undefined){
+    return undefined;
+  }
   for (let i = 0; i < this.storage[index].length; i++){
     if (this.storage[index][i][0] === key){
       let temp = this.storage[index][i][1];
@@ -97,3 +100,9 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let dom = new HashTable();
+
+dom.set('a', 1);
+console.log(dom);
+console.log(dom.remove('a'));
