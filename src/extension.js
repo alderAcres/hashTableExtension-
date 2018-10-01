@@ -15,7 +15,64 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+/**
+* HashTable constructor
+*
+* construct a new hash table
+*
+* - You may modify this constructor as you need to achieve the challenges below.
+*/
+function HashTable() {
+  this.SIZE = 16;
 
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.set = function (key, value) {
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index]) {
+    this.storage[index] = [];
+  }
+  this.storage[index].push({ [key]: value });
+};
+
+HashTable.prototype.get = function (key) {
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index]) {
+    return undefined
+  }
+  let result;
+
+  this.storage[index].forEach(pair => {
+    console.log(pair);
+    console.log(Object.keys(pair)[0]);
+    console.log(pair[key]);
+    if (Object.keys(pair)[0] === key) {
+      result = pair[key];
+    }
+  })
+  return result;
+};
+
+HashTable.prototype.remove = function (key) {
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index]) {
+    return undefined
+  }
+  let result;
+
+  this.storage[index].forEach(pair => {
+    console.log(pair);
+    console.log(Object.keys(pair)[0]);
+    console.log(pair[key]);
+    if (Object.keys(pair)[0] === key) {
+      result = pair[key];
+      console.log('here', this.storage[index][0]);
+      delete this.storage[index][0];
+    }
+  })
+  return result;
+};
 
 // YOUR CODE ABOVE
 
