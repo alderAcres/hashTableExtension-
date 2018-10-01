@@ -14,23 +14,70 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.currentSize = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  let code = hashCode(key, this.SIZE);
+  if (!this.storage[code]) {
+    this.storage[code] = {};
+    this.storage[code][key] = value;
+    this.currentSize++;
+  } else {
+    this.storage[code][key] = value;
+    this.currentSize++;
+  }
+};
 
+HashTable.prototype.get = function(key) {
+  const code = hashCode(key, this.SIZE);
+  if (this.storage[code]) {
+    return this.storage[code][key];
+  } else {
+    return this.storage[code];
+  }
+};
+
+HashTable.prototype.remove = function(key) {
+  let code = hashCode(key, this.SIZE);
+  if (this.storage[code]) {
+    let removed = this.storage[code][key];
+    delete this.storage[code][key];
+    this.currentSize--;
+    return removed;
+  }
+  return null;
+};
+
+HashTable.prototype.resize = function() {
+  if (this.currentSize === .75 * this.SIZE) {
+    this.SIZE *= 2;
+    this.currentSize = 0;
+    let rehash = this.storage;
+    this.storage = new Array(this.SIZE)
+    //this won't work, but I need to iterate through each item in the hash table and run the .set method on them...
+    rehash.forEach()
+  
+  }
+};
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
+    hash = (hash << 5) - hash + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
