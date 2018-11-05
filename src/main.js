@@ -7,7 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  // added variable to track current number of Hashtable elements
+  this.storageLength = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +25,28 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // assume to handle collisions we will store all key/value pairs
+  // within an object.
 
+  // call hashCode to determine storage index
+  let storageIndex = hashCode(key, this.SIZE);
+
+  // create storageObject if not exist
+  if((this.storage[storageIndex] === undefined) || (this.storage[storageIndex] === null)) {
+    this.storage[storageIndex] = new Object();
+  }
+  // Insert Key/Value pair to this.storage[storageIndex][key] equals value
+  // if key exists overwrite the value.  Do not increment storageLength if exists
+  if((this.storage[storageIndex][key] === undefined) || (this.storage[storageIndex][key] === null)){
+    // increment the Hashtable size by 1 if not an overwrite
+    this.storageLength += 1;
+  }
+
+  // insert/overwrite value
+  this.storage[storageIndex][key] = value;
+
+  // return the current size of the Hashtable
+  return this.storageLength;
 };
 
 /**
@@ -39,6 +61,19 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+  let output;
+
+  // call hashCode to determine storage index
+  storageIndex = hashCode(key, this.SIZE);
+
+  // retrieve value from storage assuming an object at element position stores key/values
+  // read only if object is not null or undefined
+  if((this.storage[storageIndex] !== undefined) && (this.storage[storageIndex] !== null)) {
+    output = this.storage[storageIndex][key];
+  }
+
+  // return value
+  return output;
 };
 
 /**
@@ -51,22 +86,40 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
 
+  let output;
+
+  // call hashCode to determine storage index
+  storageIndex = hashCode(key, this.SIZE);
+
+  // retrieve value from storage assuming an object at element position stores key/values
+  // read only if object is not null or undefined
+  if((this.storage[storageIndex] !== undefined) && (this.storage[storageIndex] !== null)) {
+    output = this.storage[storageIndex][key];
+    delete this.storage[storageIndex][key];
+
+    // decrement this.storageLength
+    this.storageLength -= 1;
+  }
+
+  // return output
+  return output;
+
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
