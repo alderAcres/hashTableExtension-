@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // get the hash from the hashCode function
+  const hash = hashCode(key, this.SIZE);
+  // check to see what is already inside the storage using hash code
+  // check to see if it is an object
+  if (typeof this.storage[hash] !== 'object') {
+    // if it isnt, create a new object there
+    this.storage[hash] = {};
+  }
+  // then put the value inside an object with key value pair
+  this.storage[hash][key] = value;
+  // return the number of keys
+  return this.storage.keys.length;
 };
 
 /**
@@ -38,7 +49,20 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // get the hash from the hashCode function
+  const hash = hashCode(key, this.SIZE);
+  // check to see if an object exists at that hash
+  if (typeof this.storage[hash] === 'object') {
+    // check to see if the key exists
+    if (this.storage[hash][key]) {
+      // if it does, return the value at the key provided in arguments
+      return this.storage[hash][key];
+    }
+    // otherwise, return 'nothing found'
+    return 'Nothing was found at this key!';
+  }
+  // otherwise, return 'nothing found'
+  return 'Nothing was found at this key!';
 };
 
 /**
@@ -50,7 +74,23 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // get the hash from the hashCode function
+  const hash = hashCode(key, this.SIZE);
+  // check to see if there is an object at the hash
+  if (typeof this.storage[hash] === 'object') {
+    // check to see if the key exists
+    if (this.storage[hash][key]) {
+      // delete if found
+      // first store the value to delete
+      let temp = this.storage[hash][key];
+      // delete the key value pair;
+      delete this.storage[hash][key];
+      // return the deleted value
+      return temp;
+    }
+  }
+  // if nothing was found at hash, return 'nothing found'
+  return 'Nothing was found at this key';
 };
 
 
@@ -69,6 +109,27 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+// tests
+const hashTest = new HashTable();
+// hashTest.set('jim', 'yoon');
+// console.log('getting jim', hashTest.get('jim'));
+// hashTest.set('hydro', 'flask');
+// hashTest.get('hydro');
+// console.log('getting hydro', hashTest.get('hydro'));
+// hashTest.remove('hydro');
+// console.log('removed hydro', hashTest.get('hydro'));
+// hashTest.get('hydro');
+// console.log('getting hydro again after deleting', hashTest.get('hydro'));
+// console.log('the hash table now', hashTest);
+
+hashTest.set('jim', 'yoon');
+console.log('getting jim', hashTest.get('jim'));
+hashTest.set('james', 'yoon');
+console.log('getting james', hashTest.get('james'));
+console.log('the hashtable now', hashTest);
+
+
 
 // Do not remove!!
 module.exports = HashTable;
