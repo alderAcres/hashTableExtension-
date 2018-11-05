@@ -7,8 +7,10 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  for (let i = 0; i < this.storage.length; i++){
+    this.storage[i] = {}; 
+  }
 }
 
 /**
@@ -24,7 +26,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  if (!this.storage[hashCode(key)]){
+    this.storage[hashCode(key,this.SIZE)] = value;
+  }else{
+    this.storage[hashCode(key,this.SIZE)][key] = value;
+  }
 };
 
 /**
@@ -38,7 +44,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[hashCode(key, this.SIZE)];
 };
 
 /**
@@ -50,7 +56,7 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  delete this.storage[hashCode(key, this.SIZE)];
 };
 
 
@@ -66,9 +72,34 @@ function hashCode(string, size) {
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
   return Math.abs(hash) % size;
 }
 
 // Do not remove!!
 module.exports = HashTable;
+let myHashTable = new HashTable();
+
+
+//Running a few tests to check handling a collisions
+for (let i = 0; i <= 20; i++) {
+  const key = 'key ' + i;
+  const value = 'value ' + i;
+  myHashTable.set(key, value);
+  console.log((myHashTable.get(key) === value));
+}
+
+for (let i = 0; i < 20; i++) {
+  const key = 'key ' + i;
+  const value = 'value ' + i;
+  myHashTable.set(key, value);
+  console.log((myHashTable.get(key) === value ));
+}
+
+
+
+console.log(hashCode('key1',16));
+console.log(myHashTable.get('key1'))
+myHashTable.remove('key1');
+myHashTable.remove('key4');
+console.log(myHashTable.get('key1') === undefined);
+console.log(myHashTable.get('key4') === undefined);
