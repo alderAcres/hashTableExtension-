@@ -15,6 +15,31 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  for (let i = 0; i < this.storage.length; i++){
+    this.storage[i] = {}; 
+  }
+}
+
+HashTable.prototype.set = function(key, value) {
+  if (!this.storage[hashCode(key)]){
+    this.storage[hashCode(key,this.SIZE)] = value;
+  }else{
+    this.storage[hashCode(key,this.SIZE)][key] = value;
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  return this.storage[hashCode(key, this.SIZE)];
+};
+
+HashTable.prototype.remove = function(key) {
+  delete this.storage[hashCode(key, this.SIZE)];
+};
+
+
 
 
 // YOUR CODE ABOVE
