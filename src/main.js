@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,9 +23,24 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function set(key, value) {
+  // if key value pair doesn't exist, create new object and store key value in that object
+  const hashKey = hashCode(key, this.SIZE);
+  const objStore = this.storage[hashKey];
+  if (objStore) {
+    // if the object already exist, store key value pair
+    objStore[key] = value;
+    this.items += 1;
+    return this.items;
+  } else {
+    // if obj doesn't exist, create it and store pair
+    this.storage[hashKey] = {};
+    this.storage[hashKey][key] = value;
+    this.items += 1;
+    return this.items;
+  }
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -37,8 +52,13 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function get(key) {
+  const hashKey = hashCode(key, this.SIZE);
+  const objStore = this.storage[hashKey];
+  if (objStore) {
+    // if the object already exist, store key value pair
+    return objStore[key];
+  }
 };
 
 /**
@@ -49,10 +69,26 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
-
+HashTable.prototype.remove = function remove(key) {
+  const hashKey = hashCode(key, this.SIZE);
+  const objStore = this.storage[hashKey];
+  // first check if an object exist
+  if (objStore) {
+    // if the object already exist, check if key exist
+    if (objStore[key]) {
+      // if key exist, return and delete key
+      const value = objStore[key];
+      delete objStore[key];
+      this.items -= 1;
+      return value;
+    } else {
+      // if key doesn't exist return undefined;
+      return undefined;
+    }
+  }
+  // if object doesn't exist return undefined;
+  return undefined;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
@@ -69,6 +105,13 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+// const newHash = new HashTable();
+// newHash.set('hello', 2);
+// console.log(newHash.items);
+// console.log(newHash.storage);
+// console.log(newHash.remove('hello'))
+// console.log(newHash.items);
 
 // Do not remove!!
 module.exports = HashTable;
