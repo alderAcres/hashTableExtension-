@@ -14,7 +14,70 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.remaining = 16;
+  this.storage = new Array(this.SIZE);
+}
 
+
+HashTable.prototype.set = function (key, value) {
+  const index = hashCode(key, this.SIZE);
+  this.remaining -= 1;
+  if (!this.storage[index]) {
+    if (this.remaining > this.SIZE / 4) {
+      const obj = {};
+      obj[key] = value;
+      this.storage[index] = obj;
+    }
+    else {
+      let allEntries = [];
+      for (let i = 0; i < this.storage.length; i += 1) {
+        const entries = Object.entries(this.storage[i])
+        allEntries = allEntries.concat(entries);
+      }
+      this.SIZE = this.SIZE * 2;
+      this.remaining = this.SIZE;
+      this.storage = new Array(this.SIZE);
+      for (let i = 0; i < allEntries.length; i += 1) {
+        this.set(allEntries[i][0], allEntries[i][1]);
+      }
+    }
+  } else {
+    this.storage[index][key] = value;
+  }
+};
+
+
+HashTable.prototype.get = function (key) {
+  const index = hashCode(key, this.SIZE);
+  if (this.storage[index][key]) {return this.storage[index][key]}
+  else { return "This key hasn't been stored before" }
+};
+
+
+HashTable.prototype.remove = function (key) {
+  const index = hashCode(key, this.SIZE);
+  if (this.storage[index][key]) {
+    const value = this.storage[index][key];
+    delete this.storage[index][key];
+    this.remaining += 1;
+    if (this.SIZE > 16 && this.remaining > 3 * (this.SIZE) / 4) {
+      let allEntries = [];
+      for (let i = 0; i < this.storage.length; i += 1) {
+        const entries = Object.entries(this.storage[i]);
+        allEntries = allEntries.concat(entries);
+      }
+      this.SIZE = this.SIZE / 2;
+      this.remaining = this.SIZE;
+      this.storage = new Array(this.SIZE);
+      for (let i = 0; i < allEntries; i += 1) {
+        this.set(allEntries[i][0], allEntries[i][1]);
+      }
+    }
+    return value;
+  } else { return "This key hasn't been stored yet."}
+};
 
 
 // YOUR CODE ABOVE
