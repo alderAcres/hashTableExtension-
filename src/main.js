@@ -84,14 +84,3 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
-
-const myHash = new HashTable();
-myHash.set('apple', 2);
-myHash.set('apple', 20);
-myHash.set(2, 2);
-myHash.set(1, 2);
-
-myHash.remove('apple'); //?
-myHash.set('pear', 2);
-
-console.log(myHash);
