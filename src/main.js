@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,6 +24,25 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const index = hashCode(key, this.SIZE);
+    const arr = this.storage;
+    const node = new Node([key, value]);
+    const linkedlist = new LinkedList();
+
+    if(!arr[index]) {
+      linkedlist.head = node;
+      linkedlist.tail = linkedlist.head;
+      arr[index] = linkedlist;
+      arr[index].count ++;
+    } else {
+
+      let curr = arr[index].head;
+
+      while(curr.value[0] !== key) {
+        curr = curr.next;
+      }
+      curr.value[1] = value;
+     }
 
 };
 
@@ -38,7 +57,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  const arr = this.storage;
+  let curr = arr[index].head;
+  return curr.value[1]
 };
 
 /**
@@ -50,23 +72,42 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE);
+  const arr = this.storage;
+  let curr = arr[index].head;
+  let removed;
+  let prev;
 
+  while(curr.value[0] !== key) {
+    prev = curr;
+    curr = curr.next;
+  }
+  removed = curr.value[1]
+  if(curr === arr[index].head) {
+    curr = null;
+    return removed;
+  } else {
+    prev.next = curr.next;
+    return removed;
+  }
+
+    return undefined;
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
