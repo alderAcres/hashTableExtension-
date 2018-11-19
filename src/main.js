@@ -1,3 +1,52 @@
+function LinkedList() {
+  this.head = null;
+  this.tail = null;
+}
+function Node(value) {
+  this.value = value;
+  this.next = null;
+}
+
+LinkedList.prototype.push = function (node) {
+  if (this.head) {
+    this.tail.next = node;
+    this.tail = node;
+  } else {
+    this.head = node;
+    this.tail = node;
+  }
+}
+LinkedList.prototype.contains = function (key) {
+  if (this.head) {
+    let currentNode = this.head;
+    while (currentNode.next) {
+      if (currentNode.value[0] === key) {
+        return currentNode.value[0][1];
+      }
+      currentNode = currentNode.next;
+    }
+  }
+  return false;
+}
+LinkedList.prototype.delete = function (key) {
+  if (this.head) {
+    if (this.head.value[0] === key) {
+      this.head = this.head.next;
+    } else {
+      let currentNode = this.head.next;
+      let previousNode = this.head;
+      while (currentNode.next) {
+        if (currentNode.value[0] === key) {
+          previousNode.next = currentNode.next;
+        }
+        currentNode = currentNode.next;
+        previousNode = previousNode.next;
+      }
+    }
+  }
+  return false;
+}
+
 /**
 * HashTable costructor
 *
@@ -24,7 +73,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const index = hashCode(key);
+  const hashNode = new Node([key,value]);
+  let bucketLinkedList;
+  if (this.storage[index] !== undefined) {
+    bucketLinkedList = new LinkedList();
+  } else {
+    bucketLinkedList = this.storage[index];
+  }
+  bucketLinkedList.push(hashNode);
 };
 
 /**
@@ -38,7 +95,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const index = hashCode(key);
+  if (this.storage[index] !== undefined) {
+    return this.storage.contains(key);
+  }
+  return false;
 };
 
 /**
@@ -50,7 +111,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const index = hashCode(key);
+  if (this.storage[index] !== undefined) {
+    this.storage[index].delete(key);
+  } else {
+    return false;
+  }
 };
 
 
