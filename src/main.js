@@ -5,10 +5,12 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
-  this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
+function HashTable() {//constructor function for creating an instance of a hash table object
+  this.SIZE = 16;//assigns a "SIZE" property to the hash table and initializes it to 16 "buckets"
+
+  this.storage = new Array(this.SIZE);//assigns a storage property to the hash table object which will
+                                      //store an instance of an array of data or values to be stored in
+                                      //the hash table. the array has its own SIZE property 
 }
 
 /**
@@ -24,7 +26,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  for (let keys in this.storage) {
+    if (keys == key) {
+      this.storage.keys = value //this refers to the hash table instance, storage refers to the hash table's...
+                              //...storage key/property, key creates a key in the storage object and...
+                              // ...initializes its value to the value to be stored
+    }
+  }
 };
 
 /**
@@ -38,7 +46,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  for (let keys in this.storage) {
+    if (keys == key) {
+      return this.storage.keys
+    }
+  }
 };
 
 /**
@@ -50,23 +62,29 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  for (let keys in this.storage) {
+    if (keys == key) {
+      delete this.storage.keys
+    } else {
+      return undefined
+    }
+  }
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
