@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.many = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hashedValue = hashCode(key, this.SIZE);
+  if (this.storage[hashedValue] === undefined) {
+    this.storage[hashedValue] = {};
+    this.storage[hashedValue][key] = value;
+    this.many++;
+  } else if (this.storage[hashedValue][key]) {
+    this.storage[hashedValue][key] = value;
+  } else {
+    this.storage[hashedValue][key] = value;
+    this.many++;
+  }
+  return this.many
 };
 
 /**
@@ -38,6 +49,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  if (this.storage[hashCode(key, this.SIZE)][key] === undefined) {
+    return "This key is not in our database";
+  } else {
+    return this.storage[hashCode(key, this.SIZE)][key];
+  }
 
 };
 
@@ -50,23 +66,30 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  if (this.storage[hashCode(key, this.SIZE)][key] === undefined) {
+    return undefined;
+  } else {
+    let value = this.storage[hashCode(key, this.SIZE)][key]
+    delete this.storage[hashCode(key, this.SIZE)][key];
+    this.many--;
+    return value;
+  }
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
