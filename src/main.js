@@ -81,6 +81,7 @@ HashTable.prototype.remove = function(key) {
 
   if(this.storage[hashvalue]) {
     this.storage[hashvalue] = this.storage[hashvalue].next;
+    this.length--;
   }
 
   if(rv) {
