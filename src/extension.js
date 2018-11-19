@@ -14,23 +14,47 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) {
+  if (this.storage[this.index] === undefined) {
+    this.storage[key] = value;
+    this.index++;
+  } else {
+    this.storage[key] = value;
+  };
+  return this.index;
+}
 
+HashTable.prototype.get = function(key) {
+  if (this.storage[key] === undefined) {
+    return undefined;
+  } else return this.storage[key];
+};
+
+HashTable.prototype.remove = function(key) {
+  if (this.storage[key] === undefined) {
+    return undefined;
+  } else {
+    let returnValue = this.storage[key];
+    delete this.storage[key];
+  }
+  return returnValue;
+};
 
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
