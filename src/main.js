@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  console.log(this.storage[0])
 }
 
 /**
@@ -24,7 +25,40 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //create a hash function to find the proper index in 'this' for key.
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) {
+    hash = key.getCharCode(key[i]) + hash;
+  }
+  let index = Math.floor(hash % this.SIZE);
+  //if key/value already exists at that index, make a linked list to handle the collision.
+  function NewList() {
+    this.head = null;
+    
+  }
+  function NewNode (){
+    this.value = null;
+    this.next = null;
 
+  }
+    let NewList.prototype.addNode = function (value) {
+      let currNode = this.head;
+      if (currNode.next = null) {
+        currNode.next = new NewNode();
+        currNode.next.value = value;
+      } else {
+        currNode = currNode.next;
+        currNode.addNode(value);
+    }
+  }
+  
+  if (this.storage[index] === undefined) {
+    let list = new NewList();
+    this.storage[index] = list;
+    list.head = new NewNode();
+    list.head.value = value;
+  } else {
+    this.storage[index].addNode(value);
 };
 
 /**
@@ -38,7 +72,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+ 
 };
 
 /**
