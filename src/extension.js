@@ -18,7 +18,8 @@ APPROACH:
 // - To Add Property: Completed (pseudocode pasted below)
  - To Remove Property:
   - After removing element, decrement this.filled
-  - if (parseFloat(this.filled / this.SIZE))
+  - if (parseFloat(this.filled / this.SIZE) < 0.25)
+    - 
     // - if parseFloat(this.filled / this.SIZE) > 0.74
     // - then this.SIZE *= 2;
     // - let oldTable = this.storage 
@@ -52,7 +53,7 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   // - if parseFloat(this.filled / this.SIZE) > 0.74
-  if (parseFloat(this.filled / this.SIZE) > 0.74) {
+  if (Math.round(parseFloat(this.filled / this.SIZE)) > 0.74) {
     // - then this.SIZE *= 2;
     this.SIZE *= 2;
     // - let oldTable = this.storage 
@@ -123,6 +124,30 @@ HashTable.prototype.remove = function(key) {
   let deletedValue = this.storage[hashKey][key];
   // Delete property at this.storage[hashKey][key];
   delete this.storage[hashKey][key];
+  this.filled--;
+
+  // If hash table's SIZE > 16 && stored items less than 25% of hash table
+  if (this.SIZE > 16 && Math.round(parseFloat(this.filled / this.SIZE)) < 0.25) {
+    // - then this.SIZE /= 2;
+    this.SIZE /= 2;
+    // - let oldTable = this.storage 
+    let oldTable = this.storage;
+    // - let this.storage = new Array(this.Size)
+    this.storage = new Array(this.SIZE);
+    // - loop through oldTable:
+    for (let entry of oldTable) {
+    // - if (oldTable[i])
+      if (entry) {
+        // - for (let key in currentItem)
+        // - this.add(key, currentItem[key]
+        for (let key in entry) {
+          this.set(key, entry[key]);
+        }
+      }
+    }
+  }
+
+
   return deletedValue;
 };
 
@@ -158,12 +183,12 @@ hashtable.set("howdy", 8)
 hashtable.set("heyThere", 9)
 hashtable.set("HeyThere", 10)
 hashtable.set("HEYTHERE", 11)
-hashtable.set("HEYTHERE", 12)
-hashtable.set("HEYTHERE", 13)
-hashtable.set("HEYTHERE", 13)
 hashtable.set("SUP", 15)
 hashtable.set("BONJOURNO", 23)
-console.log(hashtable);
+hashtable.set("vannakam", 23)
+console.log(hashtable)
+hashtable.remove("HeyThere");
 console.log(hashtable.filled)
 console.log(hashtable.SIZE)
+console.log(hashtable);
 console.log(parseFloat(hashtable.filled / hashtable.SIZE))
