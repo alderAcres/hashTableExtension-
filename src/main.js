@@ -25,6 +25,21 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+//hash the key
+//add key-value pair to the array
+const hash = hashCode(key,this.SIZE);
+
+//if the index is empty, first create an object then add the keyvalue pair
+if(!this.storage[hash]){
+   this.storage[hash] = {};
+   this.storage[hash][key] = value;
+}
+
+//if we have a collision, just add key-value to the object
+else{
+  this.storage[hash][key] = value;
+}
+
 };
 
 /**
@@ -39,6 +54,10 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+  //create the hash of the key and access the hash to get the value at that location using that key
+  const hash = hashCode(key,this.SIZE);
+  return(this.storage[hash][key]);
+
 };
 
 /**
@@ -50,6 +69,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+
+  //get the hash
+  const hash = hashCode(key,this.SIZE);
+
+  //save the value to return
+  const ret = this.storage[hash][key];
+  //delete the key at that location
+  delete this.storage[hash][key];
+
+  //return the value
+  return ret;
 
 };
 
@@ -69,6 +99,26 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+/*
+hashtable = new HashTable;
+hashtable.set("one",1);
+hashtable.set("two",2);
+hashtable.set("three",3);
+hashtable.set("a",'a');
+hashtable.set("1234",1234);
+hashtable.set('one',100);
+
+console.log(hashtable.storage);*/
+
+/*
+console.log(hashtable.storage[6]);
+console.log("getting two");
+console.log(hashtable.get("one"));
+console.log(hashtable.remove('one'));
+console.log(hashtable.storage[6]);*/
+
+
 
 // Do not remove!!
 module.exports = HashTable;
