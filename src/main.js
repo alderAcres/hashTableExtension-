@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,9 +22,18 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+HashTable.prototype.set = function (key, value) {
+  this.storage.fill(0);
+  if (!this.storage[hashCode(key, this.SIZE)]) {
+    this.storage[hashCode(key, this.SIZE)] = [];
+  }
+  this.storage[hashCode(key, this.SIZE)].push([key, value]);
+  console.log(this.storage);
+  return this.storage.length;
 };
+const h = new HashTable();
+console.log(h.set(3, 4));
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -37,8 +45,18 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
+HashTable.prototype.get = function (key) {
+  if (!this.storage[hashCode(key, this.SIZE)]) {
+    return undefined;
+  }
 
+  let value1;
+  this.storage[hashCode(key, this.SIZE)].forEach((pair) => {
+    if (pair[0] === key) {
+      value1 = pair[1];
+    }
+    return value1;
+  });
 };
 
 /**
@@ -49,24 +67,32 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
-
+HashTable.prototype.remove = function (key) {
+  if (!this.storage[hashCode(key, this.SIZE)]) {
+    return undefined;
+  }
+  let temp;
+  this.storage[hashCode(key, this.SIZE)].forEach((pair, index) => {
+    if (pair[0] === key) {
+      temp = pair[1];
+      this.storage[hashCode(key, this.SIZE)].splice(index, 1);
+    }
+    return temp;
+  });
 };
 
 
 // Do not modify
 function hashCode(string, size) {
-  'use strict';
-  
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
+    hash &= hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
