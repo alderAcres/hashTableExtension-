@@ -96,7 +96,7 @@ function hashCode(string, size) {
 module.exports = HashTable;
 
 
-let testHash = new HashTable();
+// let testHash = new HashTable();
 // testHash.set('greed', 5);
 // console.log(testHash);
 // console.log(testHash.get('greed'));
