@@ -14,23 +14,56 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.itemCount = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash]) this.storage[hash] = {};
+  this.storage[hash][key] = value;
+  this.itemCount += 1;
+  console.log(this.itemCount);
+  if (this.itemCount / this.SIZE >= 0.75) this.SIZE *= 2;
+  console.log(this.SIZE);
+};
 
+HashTable.prototype.get = function(key) {
+  const hash = hashCode(key, this.SIZE);
+  return this.storage[hash]
+    ? this.storage[hash][key]
+    : "that key doesn't exist in this hash table";
+};
+
+HashTable.prototype.remove = function(key) {
+  const hash = hashCode(key, this.SIZE);
+  const deleted = this.storage[hash] ? this.storage[hash][key] : undefined;
+  if (deleted) {
+    delete this.storage[hash][key];
+    this.itemCount -= 1;
+  }
+  console.log(this.itemCount);
+  if (this.itemCount / (this.SIZE / 2) < 0.75 && this.SIZE > 16) this.SIZE /= 2;
+  console.log(this.SIZE);
+  return deleted;
+};
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
+    hash = (hash << 5) - hash + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
