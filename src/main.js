@@ -24,8 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // run the hashcode on the key to get the hash value
+  let hashedKey = hashCode(key, this.SIZE);
 
-};
+  // create an object at that hash value if there isnt one
+  if (this.storage[hashedKey] === undefined){
+    this.storage[hashedKey] = {};
+  } 
+  //create a key/value pair in the object 
+  this.storage[hashedKey][key] = value;
+
+}
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +49,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // run key param through hashCode to key hash value
+  let hashedKey = hashCode(key, this.SIZE);
+  // access that location in the object, and return the value of key in the object
+  return this.storage[hashedKey][key];
 };
 
 /**
@@ -50,7 +64,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+    // run the key through the hashcode to get the key hash value
+    let hashedKey = hashCode(key, this.SIZE);
+    if (this.storage[hashedKey] === undefined) return undefined;
+    // save that key/value pair as a variable
+    let removedValue = this.storage[hashedKey][key];
+    // use the delete to remove the key/value pair
+    delete this.storage[hashedKey][key];
+    // return the deleted value
+    return removedValue;
 };
 
 
@@ -72,3 +94,12 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+// let testHash = new HashTable();
+// testHash.set('greed', 5);
+// console.log(testHash);
+// console.log(testHash.get('greed'));
+// // testHash.remove('greed');
+// console.log(testHash.remove('greed'));
+// console.log(testHash.remove('greed'));
