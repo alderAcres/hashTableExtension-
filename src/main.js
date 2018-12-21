@@ -24,6 +24,23 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+//objective is to add the passed in value to the hash table by assigning it to the specifiied key
+//check if the key already holds a value, if yes, overwrite the existing value with the new value
+//check if hashed address is already holding a key/value pair; if yes, how to avoid collision? 
+//approach: 
+  //create var to hold value of key
+  //check if value for this key exists; if not, set values to empty obj; 
+  //if yes, increment values and set value to key
+  
+  if(!this.storage[key]) {
+    let hash = {}; 
+    hash[key] = value;
+    this.storage[hash] = hash;  
+  } else {
+    this.SIZE++; 
+    this.storage[hash][key] = value; 
+    
+  }
 
 };
 
@@ -38,7 +55,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //input: key
+  //output: expected return is the value associated with the passed in key
+  //approach: need to check if more than one value is stored at key's address
+  //if multiple values at key, how to figure out which is the correct value??? 
+  //this.SIZE-- 
 };
 
 /**
