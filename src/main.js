@@ -5,9 +5,11 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
+console.log('hi from main.js')
+
 function HashTable() {
   this.SIZE = 16;
-  
+  this.index = 0;  // added by me
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +26,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  for (let i = 0; i < this.storage.length; i++) {
+    if (this.storage[key] === void[0]) {
+      this.storage[key] = { key: value };
+    } else {
+      this.storage[key + 1] = { key: value };
+    }
+  }
+ 
+  //this.storage.push({ key: value });
+  // first set a key without worrying about collisions
+ // this.index += 1;
 };
 
 /**
@@ -38,7 +50,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[key];
 };
 
 /**
@@ -70,5 +82,7 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
+const hash = new HashTable();
+
 // Do not remove!!
-module.exports = HashTable;
+//module.exports = HashTable;
