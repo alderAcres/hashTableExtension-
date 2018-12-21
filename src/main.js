@@ -24,6 +24,21 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //Create a unique hashkey by passing the given key into the hash function
+  let hashkey = hashCode(key, this.SIZE);
+  //Create a new bin
+  let bin = {};
+  //Add the key:value pair to that bin object. 
+  bin[key] = value;
+  //If it doesn't exist, add our bin to the storage object (hashtable) at the hashkey location.
+  if(!this.storage[hashkey]){
+    this.storage[hashkey] = bin;
+  }
+  //If a bin already exists in that hashkey location, add the key:value pair to the existing bin.
+  else if(this.storage[hashkey]){
+    this.storage[hashkey][key] = value;
+  }
+
 
 };
 
@@ -38,7 +53,18 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //Find the hashkey where the value is stored by passing the given key into the hash function.
+  let hashkey = hashCode(key,this.SIZE);
+  //Use the hashkey to go to that spot in the hashtable.
+  //Use the given key to find the value we want.
+  //Return that value.
+  //If there is nothing in that spot of the hashtable, return a message "Nothing is here."
+  if(this.storage[hashkey]){
+    return this.storage[hashkey][key];
+  }else{
+    return "There is nothing here.";
+  }
+ 
 };
 
 /**
@@ -50,6 +76,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //Create the hashkey by passing the given key into the hash function.
+  let hashkey = hashCode(key,this.SIZE);
+  //Use the hashkey to go to the specific spot in the hash table.
+  //Identify the specific key:value pair by using key, then use delete to get rid of it.
+  //If the key doesn't exist there, return undefined.
+  if(this.storage[hashkey][key]){
+    delete this.storage[hashkey][key];
+  }else{
+    return undefined;
+  }
 
 };
 
@@ -72,3 +108,8 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let myTable = new HashTable();
+console.log(myTable.set("Adrian", "Diamond"));
+console.log(myTable.get("Adrian"))
+console.log(myTable.remove("Polly"))
