@@ -5,6 +5,7 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
+
 function HashTable() {
   this.SIZE = 16;
   
@@ -24,7 +25,7 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+	this.storage[hashCode(key)] = value;
 };
 
 /**
@@ -38,7 +39,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  this.storage[hashCode(key)];
 };
 
 /**
@@ -55,6 +56,7 @@ HashTable.prototype.remove = function(key) {
 
 
 // Do not modify
+
 function hashCode(string, size) {
   'use strict';
   
@@ -69,6 +71,14 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+// Test your code
+let array = new HashTable();
+
+array.set("Rob", 7);
+console.log(array.get(7));
+
 
 // Do not remove!!
 module.exports = HashTable;
