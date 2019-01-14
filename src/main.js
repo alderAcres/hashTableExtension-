@@ -7,6 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
+  this.used = 0
   
   this.storage = new Array(this.SIZE);
 }
@@ -24,7 +25,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index]) this.storage[index] = new Queue; 
+  if (!this.storage[index].head) this.used += 1;
+  this.storage[index].enquee(key, value);
+  return this.used;
 };
 
 /**
@@ -38,7 +43,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  let cell = this.storage[index];
+  return cell ? cell.get(key) : undefined;
 };
 
 /**
@@ -50,7 +57,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  let cell = this.storage[index];
+  if (cell) {
+    const removed = cell.dequeue(key);
+    if (!cell.head) this.used -= 1;
+    return removed;
+  }
 };
 
 
@@ -68,6 +81,71 @@ function hashCode(string, size) {
   }
   
   return Math.abs(hash) % size;
+}
+
+function Queue() {
+  this.head = null;
+  this.tail = null;
+}
+
+function SetQueueNode(key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+}
+
+Queue.prototype.enquee = function (key, value) {
+  node = new SetQueueNode(key, value);
+  if (!this.head) {
+    this.head = node;
+    this.tail = node;
+  } else {
+    let curr = this.head;
+    while (curr) {
+      if (curr.key === key) {
+        curr.value = value;
+        return this;
+      } 
+      curr = curr.next;
+    }
+    this.tail.next = node;
+    this.tail = node;
+  }
+  
+  return this;
+} 
+
+Queue.prototype.dequeue = function (key) {
+  if (!this.head) return;
+
+  let curr = this.head;
+  let previous;
+
+  while(curr) {
+    if (curr.key === key) {
+      const foundVal = curr.value;
+      if (curr === this.head) {
+        this.head = null;
+      }
+      if (curr === this.tail) {
+        this.tail = null;
+      }
+      if (previous) {
+        previous.next = curr.next;
+      }
+      delete curr;
+      return foundVal;
+    } 
+  }
+  previous = curr;
+  curr = curr.next;
+}
+
+Queue.prototype.get = function (key) {
+  let curr = this.head;
+  while (curr) {
+    if (curr.key === key) return curr.value;
+  }
 }
 
 // Do not remove!!
