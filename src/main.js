@@ -32,12 +32,6 @@ HashTable.prototype.set = function (key, value) {
   this.storage[code][key] = value;
 };
 
-// const hashTable = new HashTable();
-// hashTable.set('name', 'kia');
-// hashTable.set('name', 'john');
-// console.log(hashTable);
-// console.log(hashTable.SIZE);
-
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -50,7 +44,6 @@ HashTable.prototype.set = function (key, value) {
 */
 HashTable.prototype.get = function (key) {
   const code = hashCode(key, this.SIZE);
-  // if(Object.keys(this.storage[code]).length > 1)
   return this.storage[code][key];
 };
 /**
