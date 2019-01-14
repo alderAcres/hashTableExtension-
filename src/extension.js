@@ -82,7 +82,6 @@ HashTable.prototype.remove = function (key) {
 };
 
 HashTable.prototype.reHash = function (needIncrease) {
-  console.log('size before rehashed:', this.SIZE);
   let futureSize;
   if (needIncrease) futureSize = this.SIZE * 2;
   else futureSize = this.SIZE / 2;
@@ -92,18 +91,13 @@ HashTable.prototype.reHash = function (needIncrease) {
   for (let i = 0; i < this.SIZE; i++){
     let curr = this.storage[i];
     if (curr && curr.head) {
-      console.log(curr.head.key, futureSize)
       newIndex = hashCode(curr.head.key, futureSize);
-      console.log('old index', i, 'new index:', newIndex)
       let tempCell = this.storage[newIndex];
       this.storage[newIndex] = curr;
       this.storage[i] = tempCell;
     }
-    console.log('table After one iteration:', this)
   }
   this.SIZE = futureSize;
-
-  console.log('size after rehashed:', this.size);
 }
 
 
@@ -188,16 +182,6 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
-const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'V', 'X', 'Y', 'Z']
-
-const table = new HashTable();
-for (let i = 0; i < 12; i++) {
-  table.set(letters[i], letters[i]);
-}
-
-console.log('rehashed 1st time:', table)
-console.log('rehashed 1st time:', table)
-
 
 // Do not remove!!
 module.exports = HashTable;
