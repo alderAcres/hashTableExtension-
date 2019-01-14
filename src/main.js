@@ -5,12 +5,68 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
-  this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
+
+function MyLinkedList(...args) {
+  this.head = args.length > 0 ? new LLNode(args[0]) : null;
+  this.tail = this.head || null;
+  let index = 1;
+
+  while (args[index] !== undefined) {
+    
+    let node = new LLNode(args[index]);
+
+    if (index === 0) {
+      this.head = node;
+      this.tail = node;
+    } else {
+      this.tail.next = node;
+      node.back = this.tail;
+      this.tail = node;
+    }
+    index++;
+  }
 }
 
+MyLinkedList.prototype.push = function(value) {
+  let node = new LLNode(value);
+  if (this.head === null) {
+    this.head = node;
+    this.tail = node;
+  } else {
+    this.tail.next = node;
+    node.back = this.tail;
+    this.tail = node;
+  }
+};
+
+// returns true if value is present in the list
+MyLinkedList.prototype.containsKey = function(key) {
+  let current = this.head;
+  
+  do {
+    // console.log("key is " + key + " and the object's key is " + (current.value)[key])
+    if (Object.keys(current.value)[0] === key) {
+      return true;
+    }
+    current = current.next;
+  } 
+  while (current);
+  return false;
+};
+
+function LLNode(value) {
+  this.value = value;
+  this.next = null;
+  this.back = null;
+}
+
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+}
+// linked list of objects
+// key will be the original key, value will be the value.
+// set will go to the hashed index and check if there is already a linked list there.
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,9 +80,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hashIndex = hashCode(key, this.SIZE);
+  if (this.storage[hashIndex] !== undefined) {
+    if (!this.storage[hashIndex].containsKey(key)) this.storage[hashIndex].push({key});
+    //else do nothing instead of overwrite
+  } else {
+    this.storage[hashIndex] = new MyLinkedList();
+    this.storage[hashIndex].push({key, value});
+  }
 };
-
+// linked list of objects
+// key will be the original key, value will be the value.
+// get will use hash to get to the hashed index and iterate through and check if each key is equal to the key we will we are looking for, and return that value
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -38,7 +103,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hashIndex = hashCode(key, this.SIZE);
+  let current = this.storage[hashIndex].head;
+  while (current) {
+    if (Object.keys(current.value)[0] === key) return current.value[key];
+    current = current.next;
+  }
 };
 
 /**
@@ -50,7 +120,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let hashIndex = hashCode(key, this.SIZE);
+  if (this.storage[hashIndex] !== undefined && this.storage[hashIndex].containsKey(key)) {
+    let current = this.storage[hashIndex].head;
+    while (current) {
+      if (Object.keys(current.value)[0] === key) {
+        current.back.next = current.next;
+        current.next.back = current.back;
+      }
+      current = current.next;
+    }
+  }
+  return undefined;
 };
 
 
@@ -70,5 +151,11 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
+// let ht = new HashTable;
+
+// ht.set("hello", 5);
+// console.log(ht);
+// ht.set("hello", 5);
+// console.log(ht.storage[2]);
 // Do not remove!!
 module.exports = HashTable;
