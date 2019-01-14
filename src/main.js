@@ -25,6 +25,18 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+    //allocate storage for colliding values within each bucket 
+    for (let i = 0; i < this.SIZE; i++ ) {
+      this.storage[i] = {};
+    }
+    //calculate the address for the key to be stored via hash function
+    let hash = hashCode(key, this.SIZE);
+     
+    //overwrite key if key-value pair is already present
+    if (this.storage[hash][key]) this.storage[hash][key] = value;
+    //otherwise store the new key-value pair at the hash table address
+    this.storage[hash][key] = value;
+      
 };
 
 /**
@@ -38,6 +50,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+    //first calculate hash of key to get address of key if present
+    let hash = hashCode(key, this.SIZE);
+    //check if more than one key is stored within a bucket
+    if (Object.keys(this.storage[hash]).length > 1 ) {
+      if (this.storage[hash][key]) return this.storage[hash][key];
+    }
+    //just return the value of the key-value pair in the bucket
+    return this.storage[hash][key];
 
 };
 
@@ -49,7 +69,15 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+    //first calculate hash of key to get address of key if present
+    let hash = hashCode(key, this.SIZE);
+    let k = this.storage[hash];
+    //return undefined if key not found at hash table address
+    if (!this.storage[hash][key]) {
+      return undefined
+    };
+    //otherwise delete the key-value pair if it's present
+    delete this.storage[hash][key];
 
 };
 
@@ -72,3 +100,4 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
