@@ -15,7 +15,45 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  this.count = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  this.count++;
+  if (typeof this.storage[hashCode(key, this.SIZE)] !== 'object') {
+    this.storage[hashCode(key, this.SIZE)] = {};
+  };
+  this.storage[hashCode(key, this.SIZE)[key]] = value;
+  if (this.count/this.SIZE > .75) // resize this.SIZE x 2
+  return this.count;
+};
+
+HashTable.prototype.remove = function(key) {
+  if (!this.storage[hashCode(key, this.SIZE)][key]) return undefined;
+  let gone = this.set[hashCode(key, this.SIZE)][key];
+  delete this.storage[hashCode(key, this.SIZE)][key];  
+  this.count--;
+  if (this.SIZE > 16 && (this.count/this.SIZE < .25)) // resize this.SIZE /2
+  return gone;
+};
+
+HashTable.prototype.resize = function(newSize) {
+  let old = this.storage.slice();
+  this.SIZE = newSize;
+  this.storage = new Array(this.SIZE);
+  for (let i = 0; i < old.length; i++) {
+    // create array of the old (before resizing) object's property pairs 
+    let arr = Object.entries(old[i]);
+    // create an inner for loop iterating over each of the old object's key-value pairs
+    for (let j = 0; j < arr.length; j++) {
+      // use the hashtable's set method to resize;
+      this.set(arr[j][0], arr[j][1]);
+    }
+  }
+}
 
 // YOUR CODE ABOVE
 
