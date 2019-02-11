@@ -35,6 +35,7 @@ function HashTable() {
  */
 
 HashTable.prototype.rehash = function(newSize) {
+  newSize = Math.round(newSize);
   const newStorage = new Array(newSize);
   // need to rehash everything in the old storage
   this.storage.forEach(el => {
@@ -69,7 +70,7 @@ HashTable.prototype.findActiveNumberOfElements = function() {
 
 HashTable.prototype.set = function(key, value) {
   // check if adding 1 more will push it over the edge
-  if ((this.findActiveNumberOfElements() + 1) / this.SIZE >= 0.75) {
+  if ((this.items + 1) / this.SIZE >= 0.75) {
     // need to resize
     this.rehash(this.SIZE * 2);
   }
@@ -115,7 +116,7 @@ HashTable.prototype.get = function(key) {
 HashTable.prototype.remove = function(key) {
   // check if removing value will cause the active keys to be below 25%
   // console.log((this.findActiveNumberOfElements() - 1) / this.SIZE);
-  if ((this.findActiveNumberOfElements() - 1) / this.SIZE <= 0.25) {
+  if ((this.items - 1) / this.SIZE <= 0.25) {
     this.rehash(this.SIZE / 2);
   }
 
