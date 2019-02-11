@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.count = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hash = hashCode(key, this.SIZE);
+  // if there is collision
+  if (this.storage[hash]) {
+    this.storage[hash][key] = value;
+  // no collision, create new object and add
+  } else {
+    this.storage[hash] = {};
+    this.storage[hash][key] = value;
+  }
+  // add to and return value of stored items
+  return ++this.count;
 };
 
 /**
@@ -38,7 +48,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hash = hashCode(key, this.SIZE);
+  if (this.storage[hash] === undefined) return undefined;
+  else return this.storage[hash][key];
 };
 
 /**
@@ -50,7 +62,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let hash = hashCode(key, this.SIZE);
+  let value = this.get(key);
+  if (value === undefined) {
+    return value;
+  } else {
+    delete this.storage[hash][key];
+    this.count--;
+    return value;
+  }
 };
 
 
@@ -72,3 +92,34 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// tests
+
+// console.log(hashCode('ab', 16));  // hash of 'ab' should collide with hash of 'bc'
+// console.log(hashCode('bc', 16));
+// console.log(hashCode('c', 16));
+// console.log(hashCode('d', 16));
+
+// let hashtable = new HashTable;
+// hashtable.set('ab', 1);
+// hashtable.set('bc', 2);
+// hashtable.set('c', 3);
+// hashtable.set('d', 4);
+// hashtable.set('e', 5);
+// // hashtable.set('f', 6);
+// // hashtable.set('g', 7);
+// // hashtable.set('h', 8);
+// // hashtable.set('i', 9);
+
+// console.log('count: ', hashtable.count);
+// console.log(hashtable.get('ab'));
+// console.log(hashtable.get('bc'));
+// console.log(hashtable.get('c'));
+// console.log(hashtable.get('d'));
+// console.log(hashtable.get('e'));
+// console.log('removed value: ', hashtable.remove('d'));
+// console.log(hashtable.get('d'));
+// console.log('count: ', hashtable.count);
+// console.log('removed value: ', hashtable.remove('ab'));
+// console.log('count: ', hashtable.count);
+// console.log(hashtable.get('bc'));
