@@ -107,4 +107,4 @@ console.log(leHash.remove('SO'))
 
 
 // // Do not remove!!
-// module.exports = HashTable;
+module.exports = HashTable;
