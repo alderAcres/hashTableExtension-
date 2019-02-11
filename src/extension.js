@@ -104,6 +104,38 @@ HashTable.prototype.remove = function(key) {
    //if nothing exists in the storage at the key or in the object at key, return undefined
   if (!this.storage[hash] || !this.storage[hash][key]) return undefined;
   if (this.storage[hash][key]) delete this.storage[hash][key]; //if value exists at key, delete it
+
+  //calculate # of spaces filled in storage array
+  let spacesFilled = 0;
+  this.storage.forEach( slot => {
+    if (slot) spacesFilled++;
+  })
+
+  if (spacesFilled < this.SIZE * 0.25){
+    //half size
+    this.SIZE = Math.floor(this.SIZE / 2);
+    //create a new, bigger storage
+    let smallerStorage = new Array(this.SIZE);
+
+    //Rehash everything in old storage, place it in new storage, and change this.storage to new storage
+    //Iterate thru entire storage array. At each spot, check if something exists there. If it does,
+    // (it should be an object), iterate through all keys and values in that object. 
+    // For each of those keys, create a new hash and place it in the new storage.
+    this.storage.forEach( spot => {
+      if (spot !== undefined) {
+        Object.entries(spot).forEach( (kvPair) => {
+          let hash = hashCode(kvPair[0], this.SIZE);
+          if (!smallerStorage[hash]) {
+            smallerStorage[hash] = {};
+            smallerStorage[hash][kvPair[0]] = kvPair[1];
+          }else{
+            smallerStorage[hash][kvPair[0]] = kvPair[1];
+          }
+        })
+      } 
+    })
+   this.storage = [...smallerStorage];
+  }
 };
 
 
