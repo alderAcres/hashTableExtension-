@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.total = 0
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,6 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+      if(this.storage[hashCode(key, this.SIZE)] === undefined){
+        this.storage[hashCode(key, this.SIZE)] = {};
+      }
+      let aKey = hashCode(key, this.SIZE)
+      console.log(aKey)
+      
+      if (!this.storage[hashCode(key, this.SIZE)][key]){
+        this.total++ 
+      }
+      
+      this.storage[aKey][key] = value;
+
+      return this.total;
 
 };
 
@@ -39,6 +52,8 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+      let aKey = hashCode(key, this.SIZE);
+      return this.storage[aKey].value;
 };
 
 /**
@@ -50,7 +65,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+    
+    let aKey = hashCode(key, this.SIZE); 
+    if (this.storage[aKey] === undefined) {return undefined}
+    if (this.storage[aKey][key] === undefined) {return undefined}
+    returnValue = this.storage[aKey][key]
+    delete this.storage[aKey][key];
+    return returnValue;
 };
 
 
@@ -70,5 +91,20 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
-// Do not remove!!
+
+
+leHash = new HashTable;
+
+leHash.set('Ey', "Rolo T")
+leHash.set('Hello', "Samuel L")
+leHash.set('Hello', "tomatoes")
+leHash.set('Great', "toranados")
+// console.log(leHash.get('Great'))
+console.log(leHash.remove('SO'))
+// console.log(leHash.get('Great'))
+
+
+
+
+// // Do not remove!!
 module.exports = HashTable;
