@@ -103,7 +103,12 @@ HashTable.prototype.remove = function(key) {
 	let hash = hashCode(key, this.SIZE) //generate hashed key
    //if nothing exists in the storage at the key or in the object at key, return undefined
   if (!this.storage[hash] || !this.storage[hash][key]) return undefined;
-  if (this.storage[hash][key]) delete this.storage[hash][key]; //if value exists at key, delete it
+  if (this.storage[hash][key]) {
+  	//if last element in object, then remove obejct entirely
+    if (Object.keys(this.storage[hash]).length === 1) this.storage[hash] = undefined;
+    //else just delete the kv pair
+  	else delete this.storage[hash][key]; //if value exists at key, delete it
+  }
 
   //calculate # of spaces filled in storage array
   let spacesFilled = 0;
