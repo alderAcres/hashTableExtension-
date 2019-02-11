@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +23,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hash = hashCode(key,this.SIZE);
+  if (!this.storage[hash]){
+    this.storage[hash] = {};
+  }
+  this.storage[hash][key] = value;
 };
 
 /**
@@ -38,7 +41,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  if(this.storage[hash]){
+    return this.storage[hash][key];
+  }
+  return undefined;
 };
 
 /**
@@ -50,7 +57,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let val = undefined;
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash]){
+    val = this.storage[hash][key];
+    delete this.storage[hash][key];
+  }
+  return val;
 };
 
 
@@ -70,5 +83,14 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
+// tests
+/*
+const table = new HashTable();
+table.set('key','val');
+console.log('expect: val, got: ' + table.get('key'))
+table.remove('key');
+console.log('expect: undefined, got: ' + table.get('key'));
+console.log('expect: undefined, got: ' + table.get('asdf'));
+*/
 // Do not remove!!
 module.exports = HashTable;
