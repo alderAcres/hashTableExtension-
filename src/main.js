@@ -60,6 +60,13 @@ HashTable.prototype.get = function(key) {
   //approach: need to check if more than one value is stored at key's address
   //if multiple values at key, how to figure out which is the correct value??? 
   //this.SIZE-- 
+  let key = this.storage[key]; 
+  for (let i = 0; i < this.storage.length; i++) {  //this will access the array
+     for (let j = 0; j < this.storage.length; j++) {  //this will access the value inside the array
+
+     }
+  }
+
 };
 
 /**
@@ -71,7 +78,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  if (!this.storage[key]) return undefined; 
 
+  let key = this.storage.get(key); 
+  
+  for (let i = 0; i < this.storage.length; i++) {
+    if (this.storage[i] === key) {
+      delete key; 
+    }
+  } 
 };
 
 
