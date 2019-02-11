@@ -6,9 +6,11 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
+
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.totalItems = 0;
+
 }
 
 /**
@@ -25,6 +27,19 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+  let index = hashCode(key, this.SIZE);
+
+  // check for collisions
+  if(this.storage[index] === undefined){
+    this.storage[index] = {};
+    this.storage[index][key] = value;
+  } else {
+    this.storage[index][key] = value;
+  }
+
+  this.totalItems += 1;
+  return this.totalItems;
+
 };
 
 /**
@@ -39,6 +54,9 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+  let index = hashCode(key, this.SIZE);
+  return this.storage[index][key]
+
 };
 
 /**
@@ -50,6 +68,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+
+  // look for key
+  let output = undefined;
+  let index = hashCode(key, this.SIZE);
+
+  // case: key is defined
+  if(this.storage[index][key] !== undefined){
+    output = this.storage[index][key];
+    delete this.storage[index][key];
+  }
+  // case: key is undefined
+  this.totalItems -= 1;
+  return output;
 
 };
 
@@ -69,6 +100,25 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+// tests
+
+// let ht = new HashTable;
+
+// ht.set('lol', 'lmao')
+// ht.set('omg', 'wtf')
+// ht.set('incredible', 'outstanding')
+
+// console.log(ht.storage)
+
+// console.log(ht.get('lol'))
+// console.log(ht.get('omg'))
+// console.log(ht.get('incredible'))
+
+// console.log(ht.remove('omg'))
+// console.log(ht.remove('incredible'))
+
+// console.log(ht.storage)
 
 // Do not remove!!
 module.exports = HashTable;
