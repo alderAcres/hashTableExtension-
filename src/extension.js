@@ -62,7 +62,7 @@ HashTable.prototype.set = function(key, value) {
     this.storage.forEach( spot => {
       if (spot !== undefined) {
         Object.entries(spot).forEach( (kvPair) => {
-          let hash = hashCode(kvPair[0], biggerStorage.length);
+          let hash = hashCode(kvPair[0], this.SIZE);
           if (!biggerStorage[hash]) {
             biggerStorage[hash] = {};
             biggerStorage[hash][kvPair[0]] = kvPair[1];
@@ -74,7 +74,6 @@ HashTable.prototype.set = function(key, value) {
     })
    this.storage = [...biggerStorage];
   }
-  
 };
 
 /**
