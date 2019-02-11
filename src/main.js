@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.length = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,21 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // get hashed key
+  const hashedKey = hashCode(key, this.SIZE);
 
+  if (this.storage[hashedKey]) {
+    // collision detected. object exists. update object
+    if (!this.storage[hashedKey][key]) this.length++; // only update length if key doesn't exist
+    this.storage[hashedKey][key] = value;
+  } else {
+    // nothing here. Create new obj
+    const temp = {};
+    temp[key] = value;
+    this.storage[hashedKey] = temp;
+    this.length++;
+  }
+  return this.length;
 };
 
 /**
@@ -38,7 +52,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // get hashed key
+  const hashedKey = hashCode(key, this.SIZE);
 
+  if (this.storage[hashedKey])
+    // hash exists. check key
+    if (this.storage[hashedKey][key])
+      return this.storage[hashedKey][key]
+  return undefined;
 };
 
 /**
@@ -50,9 +71,36 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  // get hashed key
+  const hashedKey = hashCode(key, this.SIZE);
+  let output;
 
+  if (this.storage[hashedKey]) {
+    // hash exists. check key
+    if (this.storage[hashedKey][key]) {
+      // key exists. store it, delete it, decrement length
+      output = this.storage[hashedKey][key];
+      delete this.storage[hashedKey][key];
+      this.length -= 1;
+    }
+  }
+  return output;
 };
 
+const hash = new HashTable();
+hash.set('quoc', 11583)
+console.log('quoc', hash.length, hash.get('quoc'))
+hash.set('quoc', 11584)
+hash.set('turbo', 12345)
+console.log('turbo', hash.length, hash.get('turbo'))
+
+hash.set('charlie', 54321)
+console.log('charlie', hash.length, hash.get('charlie'))
+
+console.log('removing charlie', hash.length, hash.remove('charlie'))
+console.log('charlie', hash.length, hash.get('charlie'))
+console.log('christina', hash.length, hash.get('christina'))
+console.log('hashTable', hash.length, hash.storage)
 
 // Do not modify
 function hashCode(string, size) {
