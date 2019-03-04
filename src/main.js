@@ -11,6 +11,16 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+// function LinkedList(){
+//   this.head = null;
+//   this.tail = null;
+// }
+
+// function Node(value){
+//   this.value = value;
+//   this.next = null;
+// }
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,7 +34,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash]) {
+    this.storage[hash] = {};
+    // this.storage[hash] = new LinkedList;
+    this.storage[hash][key] = value;
+  }
+  else this.storage[hash][key] = value;
 };
 
 /**
@@ -38,7 +54,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hashIndex = hashCode(key, this.SIZE);
+  if (this.storage[hashIndex]) return this.storage[hashIndex][key];
+  return undefined;
 };
 
 /**
@@ -50,7 +68,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hashIndex = hashCode(key, this.SIZE);
+  if (this.storage[hashIndex]){
+    let deleted = this.storage[hashIndex][key];
+    delete this.storage[hashIndex][key];
+    return deleted;
+  }
+  return undefined;
 };
 
 
@@ -69,6 +93,17 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+let hashTable = new HashTable();
+hashTable.set('key 1', 'value 1');
+hashTable.set('key 2', 'value 2');
+hashTable.set('key 3', 'value 3');
+console.log('expect: "value 1"', hashTable.get('key 1'))
+hashTable.set('key 1', 'value 4');
+console.log('expect: "value 4"', hashTable.get('key 1'))
+console.log('expect: "value 3"', hashTable.get('key 3'))
+console.log('expect: ',hashTable.remove('key 2'), 'to be value 2')
+console.log('expect',hashTable.get('key 2'), 'to be undefinded')
 
 // Do not remove!!
 module.exports = HashTable;
