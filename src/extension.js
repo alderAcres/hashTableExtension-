@@ -13,24 +13,91 @@
         (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
 */
 
-// PASTE AND MODIFY YOUR CODE BELOW
+class HashTable {
+  constructor() {
+    this.SIZE = 16;
+    this.storage = new Array(this.SIZE);
+    this.numberOfItems = 0;
+  }
 
+  set(key, value) {
+    this.numberOfItems += 1;
 
+    if (this.numberOfItems >= this.SIZE * 0.75) {
+      this.SIZE *= 2;
+      this.rehash();
+    } else {
+      const hashIndex = hashCode(key, this.SIZE);
+      if (!this.storage[hashIndex]) {
+        this.storage[hashIndex] = {};
+      }
+      this.storage[hashIndex][key] = value;
+    }
 
-// YOUR CODE ABOVE
+    return this.numberOfItems;
+  }
+
+  get(key) {
+    const hashIndex = hashCode(key, this.SIZE);
+
+    if (this.storage[hashIndex][key]) {
+      return this.storage[hashIndex][key];
+    } else {
+      console.log("no such key exists.");
+      return undefined;
+    }
+  }
+
+  remove(key) {
+    const hashIndex = hashCode(key, this.SIZE);
+    if (this.storage[hashIndex][key]) {
+      const toDelete = this.storage[hashIndex][key];
+      delete this.storage[hashIndex][key];
+      this.numberOfItems -= 1;
+      if (
+        this.SIZE > 16 &&
+        this.numberOfItems <= Math.floor(this.SIZE * 0.25)
+      ) {
+        this.SIZE = this.SIZE / 2;
+        this.rehash();
+      }
+      return toDelete;
+    } else {
+      return undefined;
+    }
+  }
+
+  rehash() {
+    const copyOfHashTable = [];
+    this.storage.forEach(cell => {
+      for (let key in cell) {
+        const newHashIndex = hashCode(key, this.SIZE);
+        const prevHashIndex = hashCode(key, this.SIZE / 2);
+        if (!copyOfHashTable[newHashIndex]) {
+          copyOfHashTable[newHashIndex] = {};
+        }
+
+        copyOfHashTable[newHashIndex][key] = this.storage[prevHashIndex][key];
+      }
+    });
+    this.storage = copyOfHashTable;
+  }
+}
+
+// Do not modify
 
 function hashCode(string, size) {
-  'use strict';
-  
+  "use strict";
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
+    hash = (hash << 5) - hash + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
