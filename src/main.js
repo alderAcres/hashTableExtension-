@@ -72,3 +72,58 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+/*
+function hashCode(string, size) {
+  'use strict';
+  
+  let hash = 0;
+  if (string.length === 0) return hash;
+  
+  for (let i = 0; i < string.length; i++) {
+    const letter = string.charCodeAt(i);
+    hash = ((hash << 5) - hash) + letter;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  
+  return Math.abs(hash) % size;
+}
+
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+
+// declare Hash table to test... 
+ht = new HashTable(); 
+
+
+HashTable.prototype.set = function(key, value) { 
+
+    // Pass the key to Hash functio nand get the hash code 
+    let hKey = hashCode(key,16); 
+debugger;
+    // console.log(`hKey:${hKey} key:${key} value:${value} `); 
+
+    // following is  only the very first time we place a value 
+    // we create an empty array, add the key/value to it. 
+     if(this.storage[hKey] === undefined) { 
+        this.storage[hKey]  = [{[key] : value}]; 
+        return; 
+     } 
+    
+     // check if hCode exists in inner Array  
+     let mySpot =   this.storage[hKey].find( v => v[key] ) ;
+};
+
+
+ht.set('Shlomo',' Shlomo -as all beings- has a story.');
+// ht.set('Louis',' Louis has a long story ');
+// ht.set('Bryan',' Brian has a long story ');
+// ht.storage; 
+
+ht.storage[6]
+
+*/
