@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+	const hash = hashCode(key, this.SIZE);
+	this.items++;
+	if(!this.storage[hash]) { this.storage[hash] = {}; }
+	this.storage[hash][key] = value;
+	return this.items;
 };
 
 /**
@@ -38,7 +42,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+	const hash = hashCode(key, this.SIZE);
+	if(!this.storage[hash]) return undefined;
+	else return this.storage[hash][key];
 };
 
 /**
@@ -50,9 +56,33 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+	const hash = hashCode(key, this.SIZE);
+	if(!this.storage[hash]) return undefined;
+	const val = this.storage[hash][key];
+	if(val === undefined) return undefined;
+	else {
+		delete this.storage[hash][key];
+		this.items--;
+		return val;
+	}
 };
 
+// const ht = new HashTable();
+// ht.set('hello', 'there');
+// ht.set('food', 'apple');
+// ht.set('person', 'bo');
+// ht.set('school', 'codesmith');
+// ht.set('schools', 'nyu');
+// ht.set('facility', 'test');
+// ht.set('play', 'beer');
+// console.log(ht.set('work', 'plsss'));
+// console.log(ht.set('perosn', 'chris'));
+// console.log(ht);
+// console.log(ht.get('he'));
+// console.log(ht.get('perosn'));
+// console.log(ht.remove('person'));
+// console.log(ht.get('person'));
+// console.log(ht);
 
 // Do not modify
 function hashCode(string, size) {
