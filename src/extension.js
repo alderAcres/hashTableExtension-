@@ -15,22 +15,58 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash]) {
+    this.storage[hash][key] = value;
+  } else {
+    this.storage[hash] = {};
+    this.storage[hash][key] = value;
+    this.count++;
+    if ((this.SIZE / this.count) * 100 > 75) {
+      let newSize = (this.SIZE *= 2);
+      const hashString = JSON.stringify(this.storage);
+      hashCode(hashString, newSize);
+    }
+  }
+};
 
+HashTable.prototype.get = function(key) {
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash]) return this.storage[hash][key];
+  return undefined;
+};
+
+HashTable.prototype.remove = function(key) {
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash]) {
+    const toRemove = this.storage[hash][key];
+    delete this.storage[hash][key];
+    this.count--;
+    if (this.SIZE > 16 && Math.floor(this.SIZE / this.count) * 100 < 25) {
+      let newSize = (this.SIZE /= 2);
+      const hashString = JSON.stringify(this.storage);
+      hashCode(hashString, newSize);
+    }
+    return toRemove;
+  }
+  return undefined;
+};
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
-  'use strict';
-  
+  "use strict";
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
+    hash = (hash << 5) - hash + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
