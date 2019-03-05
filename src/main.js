@@ -24,7 +24,24 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+    // Pass the key to Hash functio nand get the hash code 
+    let index = hashCode(key,16); 
 
+    // following is  only the very first time we place a value 
+    // we create an empty array, add the key/value to it. 
+     if(this.storage[index] === undefined) { 
+        this.storage[index] = [{[key] : value}]; 
+        return; 
+     } 
+    
+     //check if this KEY exists in inner Array  
+     // if the index already contains some info 
+     let mySpot =   this.storage[index].find( v => v[key] ) ;
+     if(mySpot){ //if key exists 
+       mySpot[key] = value; 
+     } else {
+       this.storage[index].push({[key] : value});
+     } 
 };
 
 /**
@@ -38,7 +55,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let index = hashCode(key,16); 
 
+  // check this the inner array has a Object with this key 
+  let mySpot =  this.storage[index].find( v => v[key]);
+  // if found return the value 
+  if(mySpot) return mySpot[key];
+
+  // if key not found ;
+  return undefined; // not found 
 };
 
 /**
@@ -50,7 +75,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let index = hashCode(key,16); 
+  
+  // if that index is empty , return 
+  if(!this.storage[index]) return undefined; 
 
+  // find the index from the inner array 
+  let innerArrayIndex = this.storage[index].findIndex( v => v[key])
+  
+  //if not found 
+  if(innerArrayIndex === -1){
+    return undefined
+  } else {
+    this.storage[index].splice(innerArrayIndex,1); 
+    return true; 
+  }
 };
 
 
@@ -72,58 +111,3 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
-
-
-/*
-function hashCode(string, size) {
-  'use strict';
-  
-  let hash = 0;
-  if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
-    const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  
-  return Math.abs(hash) % size;
-}
-
-function HashTable() {
-  this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
-}
-
-// declare Hash table to test... 
-ht = new HashTable(); 
-
-
-HashTable.prototype.set = function(key, value) { 
-
-    // Pass the key to Hash functio nand get the hash code 
-    let hKey = hashCode(key,16); 
-debugger;
-    // console.log(`hKey:${hKey} key:${key} value:${value} `); 
-
-    // following is  only the very first time we place a value 
-    // we create an empty array, add the key/value to it. 
-     if(this.storage[hKey] === undefined) { 
-        this.storage[hKey]  = [{[key] : value}]; 
-        return; 
-     } 
-    
-     // check if hCode exists in inner Array  
-     let mySpot =   this.storage[hKey].find( v => v[key] ) ;
-};
-
-
-ht.set('Shlomo',' Shlomo -as all beings- has a story.');
-// ht.set('Louis',' Louis has a long story ');
-// ht.set('Bryan',' Brian has a long story ');
-// ht.storage; 
-
-ht.storage[6]
-
-*/
