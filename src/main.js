@@ -24,9 +24,38 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let hashkey = hashCode(key, this.SIZE);
+  let dataObj = this.storage[hashkey];
+
+  if(dataObj === undefined) {
+    dataObj = new dataObject(key, value);
+  } else {
+      dataObj = dataObj.next;
+    while(dataObj){
+      if(dataObj.next === null) dataObj.next = new dataObject(key, value);
+      else dataObj = dataObj.next
+    }
+  }
+  // else for handling collision. 
+  //Recursively check this.next until reach this.next === null, 
+  //then set new key value object pair
+
+  function dataObject(key, value){
+    this.key = key;
+    this.value = value;
+    this.next = null
+  }
+
 
 };
-
+console.log(hashCode('sam', 16))
+table = new HashTable();
+table.set('sam','silver');
+table.set('Aaron','Lunber');
+for( let i = 0; i < 32 ; i++){
+  table.set(i,i)
+}
+table
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -38,9 +67,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const hashkey = hashCode(key, this.SIZE);
+  dataObj = this.storage[hashkey]; // has key, value, next property
+
+  while(dataObj !== null){
+    //console.log(dataObj);
+    if(dataObj.key === key) return dataObj.value;
+    else dataObj = dataObj.next
+  }
 
 };
 
+table
+console.log(table.get('sam'))
 /**
 * remove - delete a key/value pair from the hash table
 *
