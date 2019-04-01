@@ -90,6 +90,5 @@ module.exports = HashTable;
 
 // let ht = new HashTable();
 // ht.set('apple', 5);
-// ht.set('apple', 15);
 // // ht.remove('apple')
 // console.log(ht)
