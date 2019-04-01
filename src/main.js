@@ -7,6 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
+  console.log(this.SIZE)
   
   this.storage = new Array(this.SIZE);
 }
