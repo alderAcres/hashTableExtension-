@@ -24,8 +24,42 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+    const newObj = {};
+    let index = hashCode(key, this.SIZE);
+    let result = this.storage[index];
+    if(!this.storage[index]) {
+      newObj[key] = value;
+      this.storage[index] = newObj;
+    } else {
+      result[key] = value;
+    }
+    return this.storage;
 };
+
+// let hash = new HashTable;
+// console.log(hash.set('j', 5));
+// console.log(hash.set('s', 8));
+// console.log(hash.set('f', 5));
+// console.log(hash.set('d', 5));
+// console.log(hash.set('e', 5));
+// console.log(hash.set('w', 5));
+// console.log(hash.set('js', 5));
+// console.log(hash.set('ja', 5));
+// console.log(hash.set('jm', 5));
+// console.log(hash.set('jn', 5));
+// console.log(hash.set('jb', 5));
+// console.log(hash.set('jv', 5));
+// console.log(hash.set('q', 5));
+// console.log(hash.set('r', 5));
+// console.log(hash.set('t', 5));
+// console.log(hash.set('y', 6));
+// console.log(hash.set('u', 5));
+// console.log(hash.set('i', 5));
+
+// console.log(hash)
+
+
+// console.log(hash.set('j', 7)); 
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +72,18 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+    const hashFunc = hashCode(key, this.SIZE);
+    let result = this.storage[hashFunc];
+    if(Object.keys(result).length > 1) {
+      return result[key];
+    }
+    return result[key];
 };
+
+// console.log(hash);
+// console.log(hash.get('s'))
+// console.log(hash.get('j'))
+// console.log(hash.get('y'))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +94,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+    const hashFunc = hashCode(key, this.SIZE);
+    let result = this.storage[hashFunc];
+    let deleteKey = result[key];
+    if(!result[key]) {
+      return undefined;
+    }
+    delete result[key];
 };
-
+// console.log(hash.remove('s'));
+// console.log(hash);
+// console.log(hash.set('s', 9));
+// console.log(hash.set('s', 10));
 
 // Do not modify
 function hashCode(string, size) {
