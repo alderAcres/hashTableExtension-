@@ -23,9 +23,16 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
-};
+HashTable.prototype.set = function (key, value) {
+  const hashKey = hashCode(key, this.SIZE);
+  const obj = {};
+  obj[key] = value
+  if (this.storage[hashKey] === undefined) {
+    this.storage[hashKey] = obj;
+  } else {
+    Object.assign(this.storage[hashKey], obj);
+  }
+}
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +45,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hashKey = hashCode (key, this.SIZE);
+  if(this.storage[hashKey]) {
+    return this.storage[hashKey][key];
+  } else {
+    return 'The value for this key is not stored in this HashTable.'
+  }
 };
 
 /**
@@ -50,8 +62,30 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hashKey = hashCode (key, this.SIZE);
+  const removedVal = this.storage[hashKey][key];
+  if (this.storage[hashKey][key]) {
+    delete this.storage[hashKey][key];
+    return removedVal;
+  } else {
+  return undefined;
+  }
 };
+
+
+const hashTable = new HashTable();
+console.log(hashTable);
+
+hashTable.set('age', 25);
+hashTable.set('number',34)
+console.log(hashTable);
+console.log(hashTable.get('age'));
+console.log(hashTable.get('name'));
+
+console.log(hashTable.remove('number'))
+console.log(hashTable);
+hashTable.set('name','Johnny' )
+console.log(hashTable);
 
 
 // Do not modify
