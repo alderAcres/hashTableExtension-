@@ -24,13 +24,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function (key, value) {
-  const hash = hashCode(key);
+  const hash = hashCode(key,this.SIZE);
+
+  hash
 
   if (!this.storage[hash]) this.storage[hash] = {}; // if hash table is empty for this entry - create empty object in that spot
 
-  this.storage
-  console.log('this.storage: ', this.storage);
-
+  if(this.storage[hash][key]) console.log("Value exists for Key already - overwriting");
   this.storage[hash][key] = value; //store key/value pair in the hash table object
 
   this.size++;
@@ -48,7 +48,7 @@ HashTable.prototype.set = function (key, value) {
 * hash table
 */
 HashTable.prototype.get = function (key) {
-  const hash = hashCode(key);
+  const hash = hashCode(key,this.SIZE);;
   if (!this.storage[hash]) console.error("Entry not found in hash table") //log error if hash table is empty (SHOULDN'T HAPPEN EVER)
   if (!this.storage[hash][key]) console.error("Key not found in Hashed Object") //log error if hash table is empty (SHOULDN'T HAPPEN EVER)
 
@@ -65,14 +65,14 @@ HashTable.prototype.get = function (key) {
  * @return {string|number|boolean} The value deleted from the hash table
  */
 HashTable.prototype.remove = function (key) {
-  const hash = hashCode(key);
+  const hash = hashCode(key,this.SIZE);;
   if (!this.storage[hash]) {
-    console.error("Entry not found in hash table") //log error if hash table is empty (SHOULDN'T HAPPEN EVER)
+    console.error(`"Entry not found in hash table" Hash:${hash}`) //log error if hash table is empty (SHOULDN'T HAPPEN EVER)
     return undefined;
   }
   if (!this.storage[hash][key]) {
-    console.error("Key not found in Hashed Object") //log error if hash table is empty (SHOULDN'T HAPPEN EVER)
-    return undefined;
+    console.error(`"Key not found in Hashed Object. Hash:${hash} Key:${key}`) //log error if hash table is empty (SHOULDN'T HAPPEN EVER)
+    return undefined; 
   }
   const retval = this.storage[hash][key];
   delete this.storage[hash][key];
@@ -100,19 +100,34 @@ function hashCode(string, size) {
 // Do not remove!!
 module.exports = HashTable;
 
-
+//infile quokka testing
 let meinHash = new HashTable();
 
 meinHash.set('bob',32);
 meinHash.set('bill',34);
+meinHash.set('bqrill',34);
+meinHash.set('brwill',34);
+meinHash.set('briell',34);
+meinHash.set('brilrl',34);
+meinHash.set('briltl',34);
+meinHash.set('tbrill',34);
+meinHash.set('btrill',34);
+meinHash.set('br4tittll',34);
+meinHash.set('brt5ittll',34);
+meinHash.set('brtigttll',34);
+meinHash.set('brtithtll',34);
+meinHash.set('brtitjtll',34);
+meinHash.set('brtithjtll',34);
+meinHash.set('brtiasdfttll',34);
+meinHash.set('britll',34);
 let totalSize = meinHash.set('Sam',35);
 totalSize
 let bobAge = meinHash.get('bob');
 bobAge;
 
-let out = meinHash.remove('bill');
-out = meinHash.remove('Sam');
-out = meinHash.remove('bob');
-out
 totalSize = meinHash.size;
 totalSize;
+
+// console.log(meinHash.storage)
+
+meinHash.remove("Hello there")
