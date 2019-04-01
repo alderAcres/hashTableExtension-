@@ -14,7 +14,59 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  const hashKey = hashCode(key, this.SIZE);
+  if (this.storage[hashKey] === undefined) this.storage[hashKey] = {};
+  this.storage[hashKey][key] = value;
+
+  if (this.storage.length > this.SIZE * 0.75) {
+    this.SIZE = this.SIZE * 2;
+  }
+  this.storage[hashKey][key] = value;
+};
+
+// let test = new HashTable();
+// test.set('a', 1);
+// test.set('b', 2);
+// test.set('c', 3);
+// test.set('d', 4);
+// test.set('e', 5);
+// test.set('f', 6);
+// test.set('g', 7);
+// test.set('h', 8);
+// test.set('i', 9);
+// test.set('j', 10);
+// test.set('k', 11);
+
+
+// console.log(test)
+// console.log(test.SIZE)
+
+HashTable.prototype.get = function(key) {
+  const hashKey = hashCode(key, this.SIZE);
+  return this.storage[hashKey][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  const hashKey = hashCode(key, this.SIZE);
+  const removedEl = this.storage[hashKey][key];
+  if (!hashKey) {
+    return undefined;
+  }
+  delete this.storage[hashKey][key];
+
+  if ((this.SIZE > 16) && (Math.floor(this.storage.length) < this.storage * 0.25)) {
+    this.SIZE = this.SIZE * 0.5;
+  }
+  this.storage[hashKey][key] = value;
+  return removedEl;
+};
 
 
 // YOUR CODE ABOVE
