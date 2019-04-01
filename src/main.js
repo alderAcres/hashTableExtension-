@@ -97,35 +97,3 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
-
-//infile quokka testing
-let meinHash = new HashTable();
-
-meinHash.set('bob',32);
-meinHash.set('bill',34);
-meinHash.set('bqrill',34);
-meinHash.set('brwill',34);
-meinHash.set('briell',34);
-meinHash.set('brilrl',34);
-meinHash.set('briltl',34);
-meinHash.set('tbrill',34);
-meinHash.set('btrill',34);
-meinHash.set('br4tittll',34);
-meinHash.set('brt5ittll',34);
-meinHash.set('brtigttll',34);
-meinHash.set('brtithtll',34);
-meinHash.set('brtitjtll',34);
-meinHash.set('brtithjtll',34);
-meinHash.set('brtiasdfttll',34);
-meinHash.set('britll',34);
-let totalSize = meinHash.set('Sam',35);
-totalSize
-let bobAge = meinHash.get('bob');
-bobAge;
-
-totalSize = meinHash.size;
-totalSize;
-
-// console.log(meinHash.storage)
-
-meinHash.remove("Hello there")
