@@ -25,6 +25,22 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+
+  //If the provided key has already been used to store another value, simply overwrite
+  // the existing value with the new value.
+
+  let i = hashCode(key, this.SIZE)
+
+  if (!this.storage[i]) {
+    this.storage[i] = [];
+    this.storage[i].push(key, value)
+  } else if (this.storage[i][0] === key) {
+    this.storage[i].pop()
+    this.storage[i].push(value)
+  } else if (!this.storage[i][0]) {
+    this.storage[i][1] = []
+    this.storage[i][1].push(key,value)
+
 };
 
 /**
@@ -39,6 +55,7 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+  
 };
 
 /**
