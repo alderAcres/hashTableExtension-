@@ -23,9 +23,28 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+let newHash = new HashTable;
+
+HashTable.prototype.set = function(key, value) {
+  //create hash key
+  let hashKey = hashCode(key, this.SIZE);
+  console.log(hashKey)
+  //if the hashkey exists
+  if (this.storage[hashKey]) {
+    //create an object within hashkey with a new value pair
+    this.storage[hashKey][key] = value;
+  } else {
+    //object to hold the collisions: if the hash key already holds another key value pair, the object will be added to the hash key with a key value pair
+    let hashObj = {}
+    //store the key value pairs in an object
+    hashObj[key] = value;
+    //else it just sets the hashkey equal to the object created storing the key value pairs 
+    this.storage[hashKey] = hashObj;
+  }
 };
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,9 +57,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hashKey = hashCode(key, this.SIZE);
+  if (this.storage[hashKey]) {
+    return this.storage[hashKey][key]
+  }
+  return undefined;
 };
 
+newHash.set("acd", "apple")
+newHash.set("bcc", "pineapple")
+newHash.set("cab", "orange")
+newHash.set("cab", "Blueberry")
+console.log(newHash.get("acd"))
+console.log(newHash)
 /**
 * remove - delete a key/value pair from the hash table
 *
