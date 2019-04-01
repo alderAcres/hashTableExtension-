@@ -24,22 +24,38 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash]) {
+    this.storage[hash] = {};
+  }
+  this.storage[hash][key] = value;
 };
+
+let test = new HashTable();
+test.set('a', 15);
+test.set('keith', 1);
+console.log(test);
+test.set('ab', true);
+console.log(test);
+test.set('ab', 'hi');
+console.log(test);
 
 /**
-* get - Retrieves a value stored in the hash table with a specified key
-*
-* - If more than one value is stored at the key's hashed address, then you must retrieve
-*   the correct value that was originally stored with the provided key
-*
-* @param {string} key - key to lookup in hash table
-* @return {string|number|boolean} The value stored with the specifed key in the
-* hash table
-*/
+ * get - Retrieves a value stored in the hash table with a specified key
+ *
+ * - If more than one value is stored at the key's hashed address, then you must retrieve
+ *   the correct value that was originally stored with the provided key
+ *
+ * @param {string} key - key to lookup in hash table
+ * @return {string|number|boolean} The value stored with the specifed key in the
+ * hash table
+ */
 HashTable.prototype.get = function(key) {
-
+  let hash = hashCode(key, this.SIZE);
+  return (!this.storage[hash] || !this.storage[hash][key]) ? 'Key does not exist in the hash table' : this.storage[hash][key];
 };
+console.log(test.get('ab'));
+console.log(test);
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +66,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
-};
-
+  let hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash] || !this.storage[hash][key]) {
+    return 'Key does not exist in the hash table';  
+  } 
+  let cache = this.storage[hash][key];
+  delete this.storage[hash][key];
+  return cache;
+}
+console.log(test.remove('ab'));
+console.log(test.remove('a'));
+console.log(test.remove('a'));
+console.log(test);
 
 // Do not modify
 function hashCode(string, size) {
