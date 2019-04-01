@@ -7,7 +7,7 @@
  */
 function HashTable() {
   this.SIZE = 16;
-  // this.slots = 0;
+  this.redirect = {};
   this.storage = new Array(this.SIZE);
 }
 /**
@@ -24,6 +24,15 @@ function HashTable() {
  */
 HashTable.prototype.set = function(key, value) {
   let hashVal = hashCode(key, this.SIZE);
+  if (this.storage[hashVal]) {
+    for (let slot = 1; slot < this.storage.length; slot++) {
+      let newSlot = hashCode(key, slot);
+      if (!this.storage[newSlot]) {
+        this.storage[newSlot] = value;
+        this.redirect[key] = newSlot;
+      }
+    }
+  }
   this.storage[hashVal] = value;
   // this.SIZE//?
   // if(this.slots > this.SIZE / 2)
@@ -40,7 +49,9 @@ HashTable.prototype.set = function(key, value) {
  * hash table
  */
 HashTable.prototype.get = function(key) {
-  return this.storage[hashCode(key, this.SIZE)];
+  let hashKey = hashCode(key, this.SIZE);
+  if (this.redirect[key]) return this.storage[this.redirect[key]];
+  return this.storage[hashKey];
 };
 
 /**
@@ -54,7 +65,7 @@ HashTable.prototype.get = function(key) {
 HashTable.prototype.remove = function(key) {
   let deletedVal = this.storage[hashCode(key, this.SIZE)];
   this.storage[hashCode(key, this.SIZE)] = undefined;
-  console.log(`Value associated with ${key}: ${deletedVal}, has been deleted.`);
+  console.log(`Table lookup: { ${key}: ${deletedVal} }, has been deleted.`);
   return deletedVal;
 };
 
@@ -75,7 +86,19 @@ function hashCode(string, size) {
 }
 
 let newTable = new HashTable();
-newTable.set("frank", true);
+newTable.set("frank", 1);
+newTable.set("mike", 2);
+newTable.set("eliott", 3);
+newTable.set("melissa", 4);
+newTable.set("ham", 5);
+newTable.set("gerry", 6);
+newTable.set("frank", 1);
+newTable.set("mike", 2);
+newTable.set("eliott", 3);
+newTable.set("melissa", 4);
+newTable.set("ham", 5);
+newTable.set("gerry", 6);
+newTable; //?
 newTable.storage;
 newTable.get("frank"); //?
 newTable.remove("frank");
