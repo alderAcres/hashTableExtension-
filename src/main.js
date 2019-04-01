@@ -26,8 +26,6 @@ function HashTable() {
 HashTable.prototype.set = function (key, value) {
   const hash = hashCode(key,this.SIZE);
 
-  hash
-
   if (!this.storage[hash]) this.storage[hash] = {}; // if hash table is empty for this entry - create empty object in that spot
 
   if(this.storage[hash][key]) console.log("Value exists for Key already - overwriting");
