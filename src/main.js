@@ -1,4 +1,9 @@
 /**
+ * You must implement the get, set, and remove functions on the HashTable prototype.
+Each function is commented with its specifications. 
+Implement the functions exactly as their documentation prescribes. 
+You may assume the functions will be called with the types listed in their documentation.
+
 * HashTable costructor
 *
 * construct a new hash table
@@ -7,9 +12,9 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,7 +29,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hashed = hashCode(key, this.SIZE);  // Invoke hash function on key arg and size of table
+  if(this.storage[hashed] === undefined) { // Check if generated hash is defined
+    this.storage[hashed] = {}; // If undefined, create new object and store key/value in it and push the object to storage
+  }
+  this.storage[hashed][key] = value; // At the hash key @ specified key set to value
 };
 
 /**
@@ -38,7 +47,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hashed = hashCode(key, this.SIZE); 
+  return this.storage[hashed][key];
 };
 
 /**
@@ -50,7 +60,10 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hashed = hashCode(key, this.SIZE);
+  let removed = this.storage[hashed][key];
+  delete this.storage[hashed][key];
+  return removed;
 };
 
 
@@ -69,6 +82,15 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+let newObj = new HashTable();
+newObj.set('steven', 'cool');
+newObj.set('john', 'lame');
+console.log(newObj);
+console.log(newObj.get('steven'));
+console.log(newObj.get('bob'));
+console.log(newObj.get('john'));
+newObj.remove('john');
+console.log(newObj);
 
 // Do not remove!!
 module.exports = HashTable;

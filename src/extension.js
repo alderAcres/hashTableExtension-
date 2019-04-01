@@ -14,7 +14,58 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.currentSize = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  const hashed = hashCode(key, this.SIZE);  // Invoke hash function on key arg and size of table
+  if(this.storage[hashed] === undefined) { 
+    this.storage[hashed] = {};
+    this.currentSize++;
+  }
+  else{
+    this.storage[hashed][key] = value;
+    this.currentSize++;
+  }
+
+  if(this.currentSize >= 0.75 * this.SIZE) {
+    this.SIZE = this.SIZE * 2;
+    this.currentSize = 0;
+    let newStorage = this.storage;
+    newStorage = new Array(this.SIZE);
+
+    for(let i = 0; i < newStorage.length; i++){
+      for(let keys in newStorage[i]){
+        let newHashed = hashCode(key, this.SIZE)
+        if(this.storage[newHashed] === undefined) { 
+          this.storage[newHashed] = {};
+          this.currentSize++;
+        }
+        else{
+          this.storage[newHashed][keys] = newStorage[i][keys];
+          this.currentSize++;
+        }
+
+    }
+  }
+};
+
+
+
+HashTable.prototype.get = function(key) {
+  const hashed = hashCode(key, this.SIZE); 
+  return this.storage[hashed][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  const hashed = hashCode(key, this.SIZE);
+  let removed = this.storage[hashed][key];
+  delete this.storage[hashed][key];
+  return removed;
+};
 
 
 // YOUR CODE ABOVE
