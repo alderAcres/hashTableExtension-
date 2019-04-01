@@ -24,8 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
-};
+  const address = hashCode(key, this.SIZE);
+    if (!this.storage[address]) this.storage[address] = {};
+    this.storage[address][key] = value;
+    let counter = 0; 
+    for (let i = 0 ; i < this.storage.length ; i++){
+      if (this.storage[i] !== undefined){
+        for (let items in this.storage[i]){
+          counter++;
+        }
+      } 
+    }
+    return counter;
+  }
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +49,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const address = hashCode(key, this.SIZE);
+  if (!this.storage[address] || !this.storage[address][key]) {
+    return 'This key is not in hashtable.';
+  } else {
+    return "The value of this key is: " + this.storage[address][key];
+  }
 };
 
 /**
@@ -49,8 +65,16 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
-
+HashTable.prototype.remove = function (key) {
+  const address = hashCode(key, this.SIZE);
+  let result;
+  if (!this.storage[address] || !this.storage[address][key]) {
+    return 'This key is not in hashtable.';
+  } else {
+    removedVal = this.storage[address][key];
+    delete this.storage[address][key]; 
+  }
+  return 'This value was removed from table: ' + removedVal;
 };
 
 
@@ -72,3 +96,10 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// const myTable = new HashTable()
+
+// console.log(myTable.set('nata', 1))
+// console.log(myTable.set('qu', 6))
+// console.log(myTable.set('nata', 3))
+// console.log(myTable.set('naq', 3))
