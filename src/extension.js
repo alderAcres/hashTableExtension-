@@ -15,6 +15,69 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {  
+  this.SIZE = 16;
+  this.currentSize = 0;
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.rehashUp = function () {
+  this.SIZE * 2;
+  let storage = this.storage;
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.rehashDown = function () {
+  Math.ceil(this.SIZE / 2);
+  let storage = this.storage;
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.reinput = function () {
+  this.storage.forEach((ele)=>{
+    for(let k in ele){
+      if(k !== undefined){
+        let hashKey = hashCode(ele[k], this.SIZE);
+        this.set(ele[k]);
+      }
+    }
+  })
+}
+
+HashTable.prototype.set = function(key, value) {
+  let hashKey = hashCode(key, this.SIZE);
+
+  if(!this.storage[hashKey]) {
+    this.storage[hashKey] = {};
+    this.storage[hashKey][key] = value;
+    this.currentSize++
+  } else {
+    this.storage[hashKey][key] = value; 
+    this.currentSize++;
+  }
+  if(this.currentSize > 0.75 * this.SIZE){
+    this.rehashUp();
+    this.set();
+    this.reinput();
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  let hashKey = hashCode(key, this.SIZE);
+  return this.storage[hashKey][key];
+ };
+
+ HashTable.prototype.remove = function(key) {
+  let hashKey = hashCode(key, this.SIZE);
+  let saved = this.storage[hashKey][key];
+  delete this.storage[hashKey][key];
+  this.currentSize--;
+  if(this.currentSize <= 0.25 * this.SIZE && this.SIZE > 16){
+    this.rehashDown();
+    this.reinput();
+  }
+  return saved;
+};
 
 
 // YOUR CODE ABOVE
