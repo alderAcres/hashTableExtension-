@@ -8,7 +8,7 @@
 function HashTable() {
   this.SIZE = 16;
   
-  this.storage = new Array(this.SIZE);
+  this.storage = new Array(this.SIZE); 
 }
 
 /**
@@ -24,8 +24,14 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hashIndex = hashCode(key, this.SIZE); //create a hash key which will be the index at which the value is stored
+  if(!this.storage[hashIndex]){ //check if the key value already exists in the storage
+    this.storage[hashIndex] = {}; //if does not exist, create an empty object
+  }
+  this.storage[hashIndex][key] = value; //store the key as the property, and the value as the value in KVP pair in the calculated hashIndex
+  console.log(this.storage);
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +44,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hashIndex = hashCode(key, this.SIZE);//calculate the hashIndex
+  
+  if(key in this.storage[hashIndex]) { //check if the key entered exists in the storage of the hashIndex 
+    return this.storage[hashIndex][key]; //if found, return the value stored at that key 
+  } else { //if the key is not found, return an error message
+    return 'The key you entered does not exist';
+  }
 };
 
 /**
@@ -50,6 +62,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let hashIndex = hashCode(key, this.SIZE); //calculate the hashIndex
+
+  if(key in this.storage[hashIndex]) { //check if the key entered exists in the storage of the hashIndex
+    delete this.storage[hashIndex][key]; //if found delete the key
+    return 'key has been deleted'; 
+  } else return undefined; //if not found, return undefined; 
 
 };
 
@@ -72,3 +90,12 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let newHash = new HashTable();
+newHash.set(1, 'alice'); //test to set a value
+newHash.set(1, 'cathy'); //test to overwrite a value if key is the same
+newHash.set(2, 'kevin'); //test to have multiple key/values in the same hashIndex
+console.log(newHash.get(1)); //test to get the an existing key
+console.log(newHash.get(3)); //test to get a key that does not exist
+console.log(newHash.remove(1)); //test to remove an existing key
+console.log(newHash.remove(1)); //test to remove a key that does not exist
