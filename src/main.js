@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.currSize = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,24 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  if (value === undefined || key === undefined) throw new Error ('Please provide both a key and a value using a string, number, or boolean');
+  console.log(key);
+  const index = hashCode(key, this.SIZE);
+  console.log(index);
+  const bucket = this.storage[index];
+  if (!bucket) {
+    this.storage[index] = {};
+    this.storage[index][key] = value;
+    this.currSize++;
+    return this.currSize;
+  }
+  if (!bucket[key]){
+    this.storage[index][key] = value;
+    this.currSize++;
+    return this.currSize;
+  }
+  bucket[key] = value
+  return this.currSize;
 };
 
 /**
@@ -38,8 +55,16 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  console.log(index);
+  if (this.storage[index] === undefined) throw new Error ('The key provided is not stored within the hash table')
+  console.log(this.storage[index][key])
+ if (this.storage[index][key] !== undefined) return this.storage[index][key];
 };
+
+const table = new HashTable();
+
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +75,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  console.log(index);
+  if (this.storage[index] === undefined || this.storage[index][key] === undefined) return undefined;
+  const output =  this.storage[index][key]
+  delete this.storage[index][key]
+  this.currSize--;
+  return output;
 };
+
+// console.log(table);
+// console.log(table.set('Jarred',5));
+// console.log(table);
+// console.log(table.get('Jarred'));
 
 
 // Do not modify
