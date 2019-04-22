@@ -15,6 +15,55 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+
+  this.itemCount = 0;
+}
+
+HashTable.prototype.set = function(key, value) {
+  const bucket = hashCode(key, this.SIZE);
+  if (!this.storage[bucket]) {          
+    if (this.itemCount + 1 > this.SIZE * 0.75) {
+      this.SIZE *= 2;
+      // traverse hash table to create an object containing entire hash table's key/value pairs
+      // run HashTable.add on these pairs to recreate hashtable with new size
+    }
+    
+    this.storage[bucket] = {};
+    this.storage[bucket][key] = value;  
+    this.itemCount += 1;
+  } else {                                
+    if (this.storage[bucket][key] !== undefined) this.itemCount += 1;  
+    this.storage[bucket][key] = value;
+  }
+
+  return this.itemCount;
+};
+
+HashTable.prototype.get = function(key) {
+  const bucket = hashCode(key, this.SIZE);
+  if (this.storage[bucket][key] === undefined) return "Key not found"
+  return this.storage[bucket][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  const bucket = hashCode(key, this.SIZE);
+  if (!this.storage[bucket] || this.storage[bucket][key] === undefined) return undefined;
+  const removed = this.storage[bucket][key];
+  delete this.storage[bucket][key];
+  this.itemCount -= 1;
+
+  if (this.itemCount < Math.floor(this.SIZE * 0.25) && this.SIZE > 16) {
+    this.SIZE /= 2;
+    // traverse hash table to compile an object containing entire hash table's key/value pairs
+    // run HashTable.add on these pairs to recreate hashtable with new size
+  }
+
+  return removed;
+};
 
 
 // YOUR CODE ABOVE
