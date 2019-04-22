@@ -21,31 +21,34 @@ function HashTable() {
 }
 
 HashTable.prototype.reHash = function(newSize) {
-  // create an object for storing key: value pairs
-  const tempStorage = {};
+  console.log(newSize)
+  // create an array for storing objects;
+  const newStorage = new Array(newSize);
+  const masterStorageObject = {};
   // loop through storage arr
   for (let i = 0; i < this.storage.length; i++) {
-    // let contents = this.storage[i]
-    // for each spot in storage
-      // if it doesn't === undefined or an empty obj
-      // grab every key: value pair in the obj into the array
+    // if it doesn't === undefined or an empty obj
+    if (this.storage[i] != undefined || this.storage[i] !== {}) {
+    // store the bucketObj at each place
+      let bucketObj = this.storage[i];
+      // for each k/v pair in each bucket add it to one master obj
+      for (let key in bucketObj) {
+        masterStorageObject[key] = bucketObj[key];
+      }
+    }
   }
-  // set this.storage = new Array(newSize)
-  // set this.SIZE = newSize;
+  // reset this storage to a new empty array of the newSize
+  this.storage = new Array(newSize);
+  // reset the size, as well
+  this.SIZE = newSize;
   // loop through key:value pairs in the obj and rehash (SET) with the new size
+  for (let key in masterStorageObject) {
+    this.set(key, masterStorageObject[key]);
+  }
+  this.amount = this.amount/2;
 }
 
-const ht = new HashTable();
 
-console.log( ht.set('hello2', 'jake') )
-console.log( ht.set('hello6', 'jake') )
-console.log( ht.get('hello2'))
-console.log(ht.amount)
-console.log(ht)
-console.log( ht.remove('hello2'))
-console.log(ht.amount)
-console.log(ht)
-console.log( ht.get('hello2'))
 
 
 /**
@@ -63,7 +66,7 @@ console.log( ht.get('hello2'))
 HashTable.prototype.set = function(key, value) {
   // if the value ADDED will push to the amount over 75% of the storage
   // double the size of the storage and re-hash everything (reHash helper function?)
-  if ((this.amount + 1)/this.SIZE > 0.75) {
+  if ( (this.amount + 1)/this.SIZE > 0.75) {
     this.reHash(this.SIZE * 2);
   }
   
@@ -117,6 +120,31 @@ HashTable.prototype.remove = function(key) {
   return storedVal;
 };
 
+
+const ht = new HashTable();
+
+console.log( ht.set('hello2', 'jake') )
+console.log( ht.set('hello3', 'jake') )
+console.log( ht.set('hello4', 'jake') )
+console.log( ht.set('hello5', 'jake') )
+console.log( ht.set('hello6', 'jake') )
+console.log( ht.set('hello7', 'jake') )
+console.log( ht.set('hello8', 'jake') )
+console.log( ht.set('hello9', 'jake') )
+console.log( ht.set('hello10', 'jake') )
+console.log(ht.storage)
+console.log( ht.set('hello11', 'jake') )
+console.log( ht.set('hello12', 'jake') )
+console.log( ht.set('hello13', 'jake') )
+console.log( ht.set('hello14', 'jake') )
+console.log(ht.amount)
+console.log( ht.set('hello15', 'jake') )
+console.log(ht.amount)
+console.log(ht)
+console.log( ht.remove('hello2'))
+console.log(ht.amount)
+console.log(ht)
+console.log( ht.get('hello2'))
 
 // YOUR CODE ABOVE
 
