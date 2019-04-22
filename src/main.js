@@ -62,26 +62,11 @@ HashTable.prototype.get = function(key) {
 HashTable.prototype.remove = function(key) {
   const hashedKey = hashCode(key, this.SIZE);
   const storedVal = this.storage[hashedKey][key];
-  console.log( this.storage[hashedKey] );
   delete this.storage[hashedKey][key]
   this.amount--;
   // leaves an empty object, but still works with all the logic because it's falsy
   return storedVal;
 };
-
-const ht = new HashTable();
-
-console.log( ht.set('hello2', 'jake') )
-console.log( ht.set('hello6', 'jake') )
-console.log( ht.get('hello2'))
-console.log(ht.amount)
-console.log(ht)
-console.log( ht.remove('hello2'))
-console.log(ht.amount)
-console.log(ht)
-console.log( ht.get('hello2'))
-
-
 
 // Do not modify
 function hashCode(string, size) {
