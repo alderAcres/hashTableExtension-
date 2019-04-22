@@ -24,7 +24,14 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const index = hashCode(key, this.SIZE);
+  // Hash table will be array of objects to handle collisions
+  // Initialize the object with key-value pair if object hasn't been initialized yet
+  if (typeof this.storage[index] !== 'object') {
+    this.storage[index] = {};
+  }
+  // Add / overwrite the key-value pair to the object
+  this.storage[index][key] = value;
 };
 
 /**
@@ -38,7 +45,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  // If no object has been initialized at this index or this object does not contain the key...
+  if (typeof this.storage[index] !== 'object' || !this.storage[index].hasOwnProperty(key)) { 
+    throw new Error('Key does not exist'); 
+  } else {
+    return this.storage[index][key];
+  }
 };
 
 /**
@@ -50,9 +63,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  // If no object has been initialized at this index or this object does not contain the key...
+  if (typeof this.storage[index] !== 'object' || !this.storage[index].hasOwnProperty(key)) {
+    return undefined; 
+  }
+  const removed = this.storage[index][key];
+  delete this.storage[index][key];
+  return removed;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
@@ -72,3 +91,20 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+// TEST CASES:
+const hashTable = new HashTable();
+// hashTable.set('hi', 5);
+// hashTable.set('hello', 10);
+// const test = hashTable.get('hello');
+// console.log(test);
+// console.log(hashTable.remove('hi'));
+// console.log(hashTable.get('hello'));
+// console.log(hashTable.get('hi'));
+
+// Collision test case
+// for (let i = 0; i < 20; i++) {
+//   hashTable.set(i + '', i);
+//   console.log(hashTable.get(i + ''));
+// }
