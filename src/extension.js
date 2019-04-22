@@ -15,22 +15,81 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
 
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.set = function(key, value) {
+  if (Object.keys(this.storage).length > this.SIZE * 0.25) {
+    this.SIZE *= 2;
+    let keys = Object.keys(this.storage);
+    this.storage = new Array(this.SIZE);
+    keys.forEach(each => HashTable.set(each));
+  }
+  if (this.storage[hashCode(key, this.SIZE)] === undefined) {
+    this.storage[hashCode(key, this.SIZE)] = { key: value };
+  } else {
+    this.storage[hashCode(key, this.SIZE)][key] = value;
+  }
+  console.log(table.SIZE);
+};
+
+HashTable.prototype.get = function(key) {
+  // if (hashCode(key, this.SIZE))
+  let array = this.storage[hashCode(key, this.SIZE)];
+  return array[key];
+};
+
+HashTable.prototype.remove = function(key) {
+  if (
+    this.SIZE > 16 &&
+    Math.floor(Object.keys(table.storage).length - 1) < this.SIZE * 0.25
+  ) {
+    this.SIZE /= 2;
+    let keys = Object.keys(this.storage);
+    this.storage = new Array(this.SIZE);
+    keys.forEach(each => HashTable.set(each));
+  }
+  if (this.storage[hashCode(key, this.SIZE)]) {
+    delete this.storage[hashCode(key, this.SIZE)][key];
+  } else {
+    return undefined;
+  }
+};
+
+function hashCode(string, size) {
+  'use strict';
+
+  let hash = 0;
+  if (string.length === 0) return hash;
+
+  for (let i = 0; i < string.length; i++) {
+    const letter = string.charCodeAt(i);
+    hash = (hash << 5) - hash + letter;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+
+  return Math.abs(hash) % size;
+}
+
+module.exports = HashTable;
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
+    hash = (hash << 5) - hash + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
