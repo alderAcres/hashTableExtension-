@@ -5,9 +5,9 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
+function HashTable () {
   this.SIZE = 16;
-  
+  this.numberStored = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,22 +23,27 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  const HASHED_KEY = hashCode(key, this.SIZE);
+  if (this.storage[HASHED_KEY] === undefined) this.storage[HASHED_KEY] = {};
+  this.storage[HASHED_KEY][key] = value;
+  this.numberStored += 1;
+  return this.numberStored;
 };
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
-* - If more than one value is stored at the key's hashed address, then you must retrieve
-*   the correct value that was originally stored with the provided key
+* - If more than one value is stored at the key's hashed address, then you must
+*   retrieve the correct value that was originally stored with the provided key
 *
 * @param {string} key - key to lookup in hash table
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function (key) {
+  const HASHED_KEY = hashCode(key, this.SIZE);
+  return this.storage[HASHED_KEY][key];
 };
 
 /**
@@ -49,24 +54,29 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
-
+HashTable.prototype.remove = function (key) {
+  const HASHED_KEY = hashCode(key, this.SIZE);
+  if (this.storage[HASHED_KEY] === undefined || Object.keys(this.storage[HASHED_KEY]).length === 0) return undefined;
+  const TO_BE_RETURNED = this.storage[HASHED_KEY][key];
+  delete this.storage[HASHED_KEY][key];
+  this.numberStored -= 1;
+  return TO_BE_RETURNED;
 };
 
 
 // Do not modify
-function hashCode(string, size) {
+function hashCode (string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
