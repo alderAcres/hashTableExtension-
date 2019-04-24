@@ -7,8 +7,14 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.head = null;
+  this.tail = null; 
+}
+
+function Node (val){
+  this.value = val;
+  this.next = null;
 }
 
 /**
@@ -23,8 +29,27 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+HashTable.prototype.set = function(key, value) {
+  let newNode = new Node(key);
+  //these nodes will go into the this.storage of the hashtable
+  if (this.head === null){
+    this.head = newNode;
+    this.tail = newNode;
+    this.storage.push([0, value]);
+  }
+
+  // if (this.head !== null && this.tail !== null){
+  //   this.key = value;
+  // }
+  // if (this.key !== undefined && this.key.length === 1){
+  //   this.key = value;
+  // }
+  // if (this.key.length > 1){
+
+  // }
+
+  this.number++;
 };
 
 /**
