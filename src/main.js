@@ -6,8 +6,8 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
-  
+  this.SIZE = 0;
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +23,11 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  const newPair = { key, value }
+  this.storage.push(newPair)
+  this.SIZE++
+  return this.SIZE;
 };
 
 /**
@@ -37,7 +40,18 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
+HashTable.prototype.get = function (key) {
+  console.log(key)
+  console.log(this.storage);
+
+  keys = Object.keys(this.storage);
+  console.log(keys)
+  keys.filter(k => {
+    if (k === key) {
+      console.log(this.storage);
+      // return this.storage[key];
+    }
+  })
 
 };
 
@@ -49,26 +63,46 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function (key) {
+  for (let key of this.storage) {
+    console.log(this.storage)
+    if (key === key) {
+      delete this.storage[key];
+      this.SIZE--
+    }
+  }
 
+  console.log(this.SIZE)
+  return this.storage;
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
+
+
+
+hash1 = new HashTable();
+console.log(hash1);
+
+console.log(hash1.set("first", 1));
+
+console.log(hash1.get("first"));
+
+console.log(hash1.remove("first"));
 
 // Do not remove!!
 module.exports = HashTable;
