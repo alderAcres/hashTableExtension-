@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +23,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hashIndex = hashCode(key, this.SIZE);
+  if (this.storage[hashIndex] === undefined) {
+    this.storage[hashIndex] = {};
+  }
+  this.storage[hashIndex][key] = value;
 };
 
 /**
@@ -38,7 +41,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hashIndex = hashCode(key, this.SIZE);
+  return this.storage[hashIndex][key];
 };
 
 /**
@@ -50,7 +54,11 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hashIndex = hashCode(key, this.SIZE);
+  if (!this.storage[hashIndex].hasOwnProperty(key)) {
+    return undefined;
+  }
+  delete this.storage[hashIndex][key];
 };
 
 
@@ -72,3 +80,32 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// adding a lot of stuff to table to check and see if collisions are properly handled
+const table = new HashTable();
+table.set('name', 'max');
+table.set('lastname', 'gonzalez');
+table.set('pet', 'olive');
+table.set('petspecies', 'dog');
+table.set('brother', 'henry');
+table.set('futurecareer', 'software engineer');
+table.set('commute', 'long af');
+table.set('proud', 'very');
+table.set('degrees', 'english & spanish');
+table.set('graduated', 'UCI');
+table.remove('graduated');
+// making sure using an existing key name will overwrite previous property
+table.set('petspecies', 'doggy');
+// making sure using the remove method with a nonexistent property will return undefined
+console.log('should return undefined', table.remove('nonexistent'));
+console.log('lastname', table.get('lastname'));
+console.log('name', table.get('name'));
+console.log('pet', table.get('pet'));
+console.log('petspecies', table.get('petspecies'));
+console.log('brother', table.get('brother'));
+console.log('futurecareer', table.get('futurecareer'));
+console.log('commute', table.get('commute'));
+console.log('proud', table.get('proud'));
+console.log('degrees', table.get('degrees'));
+console.log('graduated', table.get('graduated'));
+console.log(table.storage);
