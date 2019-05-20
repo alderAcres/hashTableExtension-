@@ -98,10 +98,10 @@ module.exports = HashTable;
 
 //tests:
 
-const testTable = new HashTable;
-console.log(testTable.set('apple', 10));
-console.log(testTable.set('apple', 12));
-console.log(testTable);
-console.log(testTable.get('apple'));
-testTable.remove('apple');
-console.log(testTable);
+// const testTable = new HashTable;
+// console.log(testTable.set('apple', 10));
+// console.log(testTable.set('apple', 12));
+// console.log(testTable);
+// console.log(testTable.get('apple'));
+// testTable.remove('apple');
+// console.log(testTable);

@@ -51,7 +51,7 @@ HashTable.prototype.set = function(key, value) {
   }
   //return the number of items stored
   return this.stored;
-};
+}
 
 HashTable.prototype.rehash = function(){
   for(let i = 0; i < this.storage.length; i++){
@@ -59,7 +59,7 @@ HashTable.prototype.rehash = function(){
       this.set(item, this.storage[i][item]);
     };
   };
-};
+}
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -77,7 +77,7 @@ HashTable.prototype.get = function(key) {
   //search for the hash code with specific key stored
   //to avoid conflicting with other keys that have the same code
   return this.storage[hashed][key];
-};
+}
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -101,9 +101,9 @@ HashTable.prototype.remove = function(key) {
     this.SIZE = this.SIZE/2;
     this.rehash();
     this.storage.length = this.storage.length/2;
-    };
+  };
   return this.stored;
-};
+}
 
 // YOUR CODE ABOVE
 
@@ -126,17 +126,17 @@ function hashCode(string, size) {
 module.exports = HashTable;
 
 //tests
-const testTable = new HashTable;
-for(let i = 0; i < 12; i++){
-  testTable.set('apple' + i, i)
-};
-console.log(testTable);
-testTable.set('appleX', 75);
-console.log(testTable);
+// const testTable = new HashTable;
+// for(let i = 0; i < 12; i++){
+//   testTable.set('apple' + i, i)
+// };
+// console.log(testTable);
+// testTable.set('appleX', 75);
+// console.log(testTable);
 
-for(let i = 0; i < 6; i++){
-  testTable.remove('apple' + i, i)
-};
-console.log(testTable);
-testTable.remove('appleX', 75);
-console.log(testTable);
+// for(let i = 0; i < 6; i++){
+//   testTable.remove('apple' + i, i)
+// };
+// console.log(testTable);
+// testTable.remove('appleX', 75);
+// console.log(testTable);
