@@ -105,6 +105,7 @@ HashTable.prototype.remove = function(key) {
   if (Object.keys(this.storage[hash]).length === 0) this.storage[hash] = null;
   // return value in temp
   this.stored -= 1;
+  if (this.SIZE * 0.25 > this.stored) this.resize(0.5);
   return value;
 };
 
