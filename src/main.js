@@ -6,9 +6,8 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
+	this.SIZE = 16;
+	this.storage = new Array(this.SIZE);
 }
 
 /**
@@ -24,7 +23,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+	let index = hashCode(key, this.SIZE);
+	if (this.storage[index]) this.storage[index][key] = value;
+	else {
+		const obj = {};
+		obj[key] = value;
+		this.storage[index] = obj;
+	}
 };
 
 /**
@@ -38,7 +43,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+	let index = hashCode(key, this.SIZE);
+	return this.storage[index][key];
 };
 
 /**
@@ -50,25 +56,48 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+	const index = hashCode(key, this.SIZE);
+	if (!this.storage[index].hasOwnProperty(key)) return undefined;
+	if (Object.keys(this.storage[index]).length === 1) delete this.storage[index];
+	else delete this.storage[index][key];
 };
-
 
 // Do not modify
 function hashCode(string, size) {
-  'use strict';
-  
-  let hash = 0;
-  if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
-    const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  
-  return Math.abs(hash) % size;
+	'use strict';
+	let hash = 0;
+	if (string.length === 0) return hash;
+
+	for (let i = 0; i < string.length; i++) {
+		const letter = string.charCodeAt(i);
+		hash = (hash << 5) - hash + letter;
+		hash = hash & hash; // Convert to 32bit integer
+	}
+
+	return Math.abs(hash) % size;
 }
 
 // Do not remove!!
 module.exports = HashTable;
+
+// const hashTable = new HashTable();
+// console.log(hashTable);
+
+// hashTable.set('hello', 123); //sets 123
+// console.log(hashTable);
+
+// hashTable.set('hello', 111); //rewrites 111
+// console.log(hashTable);
+
+// hashTable.set('hi', 777); //handles collisions
+// console.log(hashTable);
+
+// // console.log(hashTable.get('hi')); //handles get
+
+// console.log(hashTable.remove('asdfkjasd;flkj')); //should return undefined
+
+// console.log('*****************************');
+// console.log('*****************************');
+
+// hashTable.remove('hi');
+// console.log(hashTable); // should not have hi anymore
