@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.fill = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hashedkey = hashCode(key, this.SIZE);
+  if (this.storage[hashedkey]) return -1;
+  this.fill += 1;
+  this.storage[hashedkey] = value;
+  return this.fill;
 };
 
 /**
@@ -38,7 +42,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hashedkey = hashCode(key, this.SIZE);
+  if (this.storage[hashedkey]) return this.storage[hashedkey];
+  return undefined;
 };
 
 /**
@@ -50,23 +56,32 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  if (!key) return undefined;
+  let removed;
+  let hashedkey = hashCode(key, this.SIZE);
+  if (this.storage[hashedkey]) {
+    removed = this.storage[hashedkey];
+    this.storage[hashedkey] = undefined;
+    this.fill -= 1;
+  } else {
+    removed = undefined;
+  }
+  return removed;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
