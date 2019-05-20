@@ -5,10 +5,12 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
+'use strict'
 function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.items = 0;
 }
 
 /**
@@ -24,9 +26,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hKey = hashCode(key);
+  if(!this.storage[hKey]) {
+    this.storage[hKey] = {};
+    this.storage[hKey][key] = value;
+    console.log('new object')
+    this.items++;
+  }  else this.storage[hKey][key] = value;
+  return this.items;
 };
-
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -38,7 +46,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  if(this.storage[hashCode(key)]){
+    if(this.storage[hashCode(key)].hasOwnProperty(key)){
+    return this.storage[hashCode(key)][key]
+    }
+  }
+  return -1;
 };
 
 /**
@@ -50,7 +63,9 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  if(this.storage[hashCode(key)]){
+    delete this.storage[hashCode(key)][key];
+  } else return undefined;
 };
 
 
@@ -72,3 +87,12 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let hash = new HashTable;
+hash.set('stupid', 'function')
+hash.set('keeps', 'hashing')
+hash.set('numbers', 'as')
+hash.set('NAN', 'dammit')
+console.log(hash.get('NAN'))
+hash.remove('NAN');
+console.log(hash.storage)
