@@ -55,7 +55,7 @@ HashTable.prototype.set = function(key, value) {
     if (!this.storage[hash].hasOwnProperty(key)) this.stored += 1;
   }
   if (this.SIZE * 0.75 < this.stored) {
-    this.resize();
+    this.resize(2);
     this.set(key, value)
   } 
   else {
@@ -109,10 +109,10 @@ HashTable.prototype.remove = function(key) {
 };
 
 
-HashTable.prototype.resize = function() {
+HashTable.prototype.resize = function(newSizeFactor) {
   const entries = this.getAllEntries();
   this.stored = 0;
-  this.SIZE = this.SIZE * 2;
+  this.SIZE *= newSizeFactor;
   this.storage = new Array(this.SIZE);
   for (let o = 0; o < this.SIZE; o++) {
     this.storage[o] = null;
@@ -161,7 +161,7 @@ ht.set('i', 4);
 // ht.set('aj', 10);
 ht.set('n', 7);
 console.log('all entries:', ht.getAllEntries());
-ht.resize();
+ht.resize(2);
 console.log(ht);
 console.log(ht.get('n'), 'this.stored:', ht.stored); // 7, // 3
 console.log(ht.get('y') === 8); // 8
