@@ -14,7 +14,37 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key, this.SIZE);
+  if(typeof this.storage[index] !== 'object'){
+    this.storage[index] = {};
+  }
+  this.storage[index][key] = value;
+  const limit = this.storage.length * 0.75;
+  if(Object.keys(this.storage).length === limit){
+      this.SIZE * 2;
+      for(let keys in Object.keys(this.storage)){
+          index = hashCode(keys, value);
+          this.storage[index][keys] = value;
+      }
+  }
+};
 
+
+HashTable.prototype.remove = function(key) {
+  let index = hashCode(key, value);
+  const value = this.storage[index][key];
+  if(this.storage[index][key] === undefined){
+    return undefined;
+  }
+  delete this.storage[index][key];
+  const limit = Object.keys(this.storage).length * 0.25
+  const numbers = Object.keys(this.storage).length
+  if(this.SIZE > 16 && numbers < limit){
+      
+  }
+  return value;
+};
 
 
 // YOUR CODE ABOVE
