@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  //console.log(this);
 }
 
 /**
@@ -24,8 +25,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+    let index = hashCode(value,this.SIZE);
+    if (!this.storage[index]){
+      this.storage[index] = {key:value};
+    }
+    else {
+      this.storage[index][key]=value;
+    }
 };
+HashTable.set(1,'hello');
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
