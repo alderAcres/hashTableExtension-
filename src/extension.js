@@ -14,23 +14,53 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.numItems = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+//modify code below
+HashTable.prototype.set = function(key, value) {
+  const index = hashCode(key, this.SIZE);
+  if (this.storage[index]) {
+    this.storage[index][key] = value;
+  } else {
+    this.storage[index] = {};
+    this.storage[index][key] = value;
+  }
+};
 
+HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE);
+  if (Array.isArray(this.storage[index][0])) {
+    for (let i = 0; i < this.storage[index].length; i += 1) {
+      if (key === this.storage[index][i][0]) {
+        const removeCollisionKey = this.storage[index][i];
+        delete this.storage[index][i];
+        return removeCollisionKey;
+      }
+    }
+  }
+  const removeKey = this.storage[index];
+  delete this.storage[index];
+  return removeKey[1];
+};
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
-  'use strict';
-  
+  "use strict";
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
+    hash = (hash << 5) - hash + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
