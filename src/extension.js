@@ -15,6 +15,49 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+HashTable.prototype.set = function(key, value) {
+
+  // check if more than 75% of the indexes in the array exist, then call the resize function
+    if( ) {
+      // call the 
+      reHash();
+      hashCode(key, this.SIZE);
+    }
+    let address = hashCode(key, this.SIZE);
+    this.storage[address][key] = value;
+  // if not store the key value pair at its hashed Key 
+  
+  // if(this.storage[address] === undefined) {
+  //   // let the index of storage = {}
+  //   this.storage[address] = {};
+  //   this.storage[address][key] = value;
+  // }
+  //   else {
+  //     this.storage[address][key] = value;
+  //   }
+  // }
+}
+  
+  // create a function that will resize the Hash Table
+  function reHash () {
+    // reset the size
+    this.SIZE = this.SIZE * 2;
+    
+  }  
+
+  HashTable.prototype.set = function(key, value) {
+    if(this.SIZE > 16 && ...) {
+      reduceHashTable();
+    }
+    // otherwise just remove the key value pair
+    let val = this.storage[index][key];
+    delete this.storage[index][key];
+    return val;
+  }
+
+function reduceHashTable () {
+  this.SIZE = this.SIZE / 2;
+}
 
 
 // YOUR CODE ABOVE
