@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.stored = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //create hashcode;
+  let hashed = hashCode(key, this.SIZE);
+  // check if key has already been saved;
+  if(!this.storage[hashed]) this.storage[hashed] = {};
+  // hold original object length to check new number of items stored
+  let ogStored = Object.keys(this.storage[hashed]).length;
+  //store new key/value pair
+  this.storage[hashed][key] = value;
+  //check if there was a new item or if it was a subtitution
+  if(Object.keys(this.storage[hashed]).length > ogStored) this.stored ++;
+  //return the number of items stored
+  return this.stored;
 };
 
 /**
@@ -38,7 +49,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //save hash code
+  let hashed = hashCode(key, this.SIZE);
+  //search for the hash code with specific key stored
+  //to avoid conflicting with other keys that have the same code
+  return this.storage[hashed][key];
 };
 
 /**
@@ -50,9 +65,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //save hashcode
+  let hashed = hashCode(key, this.SIZE);
+  //check if the item is in storage
+  if(!(this.storage[hashed][key])) return undefined;
+  //delete if item is in storage
+  else {
+  delete this.storage[hashed][key];
+  this.stored --;
+  return this.stored;
+  };
 };
-
 
 // Do not modify
 function hashCode(string, size) {
@@ -72,3 +95,13 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+//tests:
+
+const testTable = new HashTable;
+console.log(testTable.set('apple', 10));
+console.log(testTable.set('apple', 12));
+console.log(testTable);
+console.log(testTable.get('apple'));
+testTable.remove('apple');
+console.log(testTable);
