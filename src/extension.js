@@ -24,13 +24,21 @@ HashTable.prototype.set = function(key, value) {
   };
   const valueIndex = hashCode(key, this.SIZE);
   this.storage[valueIndex] = {[key]: value};
-  //create a count ever
+  //create a count everytime we set something new
   this.count += 1;
 };
 //remove counter everytime we delete 
-//did not finish this part of extension
 HashTable.prototype.remove = function(key) {
-  if(this.SIZE  < this.SIZE / 4)
+  if(this.SIZE > 16 && this.SIZE  < Math.floor(this.SIZE / 4)){
+    this.SIZE =  thiss.SIZE / 2;
+    //rehash everything 
+    //find the buckets with things with filter and then rehash every element
+    //find all active keys
+    const filtedArr = Object.keys(this.storage).filter((el) => el);
+    
+    //find all active values
+    //rehash those key value pairs
+  };
   const valueIndex = hashCode(key, this.SIZE);
   if(!this.storage[valueIndex]){
     return undefined;
