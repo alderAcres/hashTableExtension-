@@ -24,7 +24,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // hash the key
+  const hash = hashCode(key, this.SIZE);
+  // console.log('key',key, 'hash', hash);
+  // look for hashed pos
+  // if key didn't exist before, crete it
+  if (!this.storage[hash]) this.storage[hash] = {};
+  // add the value at specified key
+  this.storage[hash][key] = value;
+  // output: undefined
 };
 
 /**
@@ -38,7 +46,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // hash
+  const hash = hashCode(key, this.SIZE);
+  // look for object, if not return undefined
+  if (!this.storage[hash]) return;
+  // if object, look for key. If not, return undefined
+  if (!this.storage[hash].hasOwnProperty(key)) return;
+  return this.storage[hash][key]
 };
 
 /**
@@ -50,7 +64,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  // check if obj in hash. if not -> undefined
+  // check if key in hash. if not -> undefined
+  if (!this.storage[hash] || !this.storage[hash].hasOwnProperty(key)) return;
+  // if key, delete entry and store value in temp variable
+  const value = this.storage[hash][key];
+  delete this.storage[hash][key];
+  // if obj now empty, reset position to null
+  if (Object.keys(this.storage[hash]).length === 0) this.storage[hash] = null;
+  // return value in temp
+  return value;
 };
 
 
@@ -69,6 +93,25 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+const ht = new HashTable();
+ht.set('y', 5)
+ht.set('y', 8);
+ht.set('i', 4);
+// ht.set('aj', 10);
+ht.set('n', 7);
+console.log(ht.get('n')); // 7
+console.log(ht.get('y')); // 8
+console.log(ht.get('i')); // 4
+console.log(ht.get('aj')); // undefined
+console.log(ht.get('a')); // undefined
+console.log(JSON.stringify(ht.storage));
+console.log(ht.remove('y')) // 8
+console.log(JSON.stringify(ht.storage)); // storage still contains obj with 'i' key at hash 10
+console.log(ht.remove('y')) // undefined
+console.log(JSON.stringify(ht.storage)); //storage still contains obj with 'i' key at hash 10
+console.log(ht.remove('i')) // 4
+console.log(JSON.stringify(ht.storage)); // storage now has null at hash 10
 
 // Do not remove!!
 module.exports = HashTable;
