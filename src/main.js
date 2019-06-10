@@ -1,3 +1,7 @@
+const LinkedList = require('./LinkedList.js');
+
+//TODO : refactor in a way that call the print from the linked list inside the hashtable
+
 /**
 * HashTable costructor
 *
@@ -24,8 +28,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
-};
+  const hashedKey = hashCode(key,value)
+  //console.log('\u001b[' + 32 + 'm' + 'hello stack' + '\u001b[0m')
+    if(key === hashedKey && !this.storage[hashedKey]){
+    this.storage[hashedKey] = new LinkedList(value)
+  } else {
+    this.storage[hashedKey].push(value)
+  }
+    this.storage[hashedKey].print()
+  };
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +49,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hashedKey = hashCode(key,this.SIZE);
+  this.storage[hashedKey].toString()
+  return this.storage[hashedKey].get(key).value
 };
 
 /**
@@ -50,9 +63,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const temp = this.storage[hashCode(key, this.SIZE)];
+  delete this.storage[hashCode(key, this.SIZE)];
+  return temp;
 };
 
+HashTable.prototype.print = function(){
+  this.storage.forEach(el => console.log(el)) // should call the print from the ll
+}
 
 // Do not modify
 function hashCode(string, size) {
@@ -72,3 +90,10 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+const ht = new HashTable()
+ht.set(0,3)
+ht.set(0,4)
+ht.set(1,10)
+ht.print()
