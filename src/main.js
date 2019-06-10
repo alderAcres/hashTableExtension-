@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /**
 * HashTable costructor
 *
@@ -7,8 +8,16 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
+}
+
+class Node {
+  constructor(key, value) {
+    this.key = key;
+    this.value = value;
+    this.next = null;
+  }
 }
 
 /**
@@ -23,8 +32,24 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+HashTable.prototype.set = function (key, value) {
+  const index = hashCode(key, this.SIZE);
 
+  // table entry is undefined or null
+  if (!this.storage[index]) {
+    this.storage[index] = new Node(key, value);
+  } else {
+  // table entry is linked list
+    let current = this.storage[index];
+    // move down list until reach tail
+    while (current !== null) {
+      if (current.key === key) {
+        current.value = value;
+        return;
+      }
+      current = current.next;
+    }
+  }
 };
 
 /**
@@ -38,7 +63,22 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const index = hashCode(key, this.SIZE);
 
+  // table entry is undefined or null
+  if (!this.storage[index]) {
+    return undefined;
+  }
+  // table entry is linked list
+  let current = this.storage[index];
+  // move down list until reach desired key
+  while (current !== null) {
+    if (current.key === key) {
+      return current.value;
+    }
+    current = current.next;
+  }
+  return undefined;
 };
 
 /**
@@ -50,23 +90,47 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE);
 
+  // table entry is undefined or null
+  if (!this.storage[index]) {
+    return undefined;
+  }
+  // table entry is linked list
+  let prev = null;
+  let current = this.storage[index];
+  // move down list until reach desired key
+  while (current !== null) {
+    if (current.key === key) {
+      const res = current.value;
+      // check if the previous node exists
+      if (prev) prev.next = current.next;
+      // if not, then at head
+      else {
+        this.storage[index] = current.next;
+      }
+      return res;
+    }
+    prev = current;
+    current = current.next;
+  }
+  return undefined;
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
