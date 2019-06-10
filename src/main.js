@@ -8,8 +8,13 @@
 function HashTable() {
   this.SIZE = 16;
   
-  this.storage = new Array(this.SIZE);
+  // this.storage = new Array(this.SIZE);
+  // this.storage =[]
+  console.log(typeof this.storage)
+  this.storage = {}
 }
+// ----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,8 +29,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hashedIndex = hashCode(key,this.SIZE)
+  console.log(this.storage[hashedIndex] = value)
 };
+// ----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +46,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hashedIndex = hashCode(key,this.SIZE)
+  return this.storage[hashedIndex]
 };
+// ----------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +61,9 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hashedIndex = hashCode(key,this.SIZE)
+  delete this.storage[hashedIndex]
 };
-
 
 // Do not modify
 function hashCode(string, size) {
@@ -69,6 +80,29 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+// ----------------------------------------------------------------------------------------------------------
+//create an instance of a hastable
+// ----------------------------------------------------------------------------------------------------------
 
+let entry1 = new HashTable
+
+console.log(hashCode('username', 16))
+// ----------------------------------------------------------------------------------------------------------
+//place data in table with set method
+// ----------------------------------------------------------------------------------------------------------
+entry1.set('username', "password")
+entry1.set('wowethan', "greatmoves")
+entry1.set('charles', "barkely")
+// ----------------------------------------------------------------------------------------------------------
+//retrieve data from table with get method
+// ----------------------------------------------------------------------------------------------------------
+console.log(entry1.get('username'))
+console.log(entry1.get('greatmoves'))
+console.log(entry1.get('barkely'))
+
+// ----------------------------------------------------------------------------------------------------------
+//the full hash table
+// ----------------------------------------------------------------------------------------------------------
+console.log(entry1.storage)
 // Do not remove!!
 module.exports = HashTable;
