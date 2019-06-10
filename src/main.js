@@ -6,8 +6,8 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
-  
+  // size is defiend in the data object
+  this.SIZE = 16; 
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,8 +24,9 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // create hash code
   const new_hash = hashCode(key, this.SIZE);
- 
+   
   if (this.storage[new_hash]== undefined){
     this.storage[new_hash] ={}
   }
@@ -52,11 +53,12 @@ HashTable.prototype.set = function(key, value) {
 HashTable.prototype.get = function(key) {
   const new_hash = hashCode(key, this.SIZE);
   if (this.storage[new_hash]== undefined){
+    //assigns nempty object in the cache    
     this.storage[new_hash] ={}
   }
   return  this.storage[new_hash][key] = value
 };
-// this function does not check whether the 
+// this function does not check for the collision. 
 
 /**
 * remove - delete a key/value pair from the hash table
