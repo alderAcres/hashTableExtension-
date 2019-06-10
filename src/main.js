@@ -79,7 +79,6 @@ HashTable.prototype.get = function(key) {
     }
     current = current.next;
   }
-  current.next = new Node(key);
 };
 
 /**
