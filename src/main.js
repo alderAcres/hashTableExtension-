@@ -79,6 +79,7 @@ HashTable.prototype.get = function(key) {
     }
     current = current.next;
   }
+  return undefined;
 };
 
 /**
@@ -114,7 +115,7 @@ HashTable.prototype.remove = function(key) {
     prev = current;
     current = current.next;
   }
-  current.next = new Node(key);
+  return undefined;
 };
 
 
