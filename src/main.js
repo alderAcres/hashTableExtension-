@@ -11,6 +11,12 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+function Node (val, key) {
+  this.val = val;
+  this.key = key;
+  this.next = null;
+}
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -23,7 +29,20 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+HashTable.prototype.set = function set(key, value) {
+  let newKey = hashCode(key, this.SIZE);
+
+  // check if undefined...
+  if (this.storage[newKey] === undefined) {
+    this.storage[newKey] = new Node(value, key);
+    return;
+  }
+  let linkedNode = this.storage[newKey];
+  while (linkedNode.next) {
+    linkedNode = linkedNode.next;
+  }
+  linkedNode.next = new Node(value, key);
+  return;
 
 };
 
@@ -37,8 +56,19 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function get(key) {
+  let newKey = hashCode(key, this.SIZE);
+  if (typeof this.storage[newKey] !== 'object') {
+    return this.storage[newKey];
+  }
+  let linkedNode = this.storage[newKey];
+  while (linkedNode) {
+    if (linkedNode.key === key) {
+      return linkedNode.val;
+    }
+    linkedNode = linkedNode.next;
+  }
+  return undefined;
 };
 
 /**
@@ -49,10 +79,38 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
-
+HashTable.prototype.remove = function remove(key) {
+  let newKey = hashCode(key, this.SIZE);
+  if (this.storage[newKey] === undefined) {
+    return undefined;
+  }
+  let linkedNode = this.storage[newKey];
+  if (!linkedNode.next) {
+    this.storage[newKey] = undefined;
+  }
+  while (linkedNode) {
+    if (linkedNode.key === key) {
+      linkedNode.key = undefined;
+    }
+    linkedNode = linkedNode.next;
+  }
+  return undefined;
 };
 
+// let myHash = new HashTable();
+// for (let i = 0; i < 30; i++) {
+//   myHash.set(`${i}`,`string${i}`)
+// }
+// myHash.set('lance',7)
+// console.log(myHash.get('lance'))
+// console.log(myHash.get('8'))
+// console.log(myHash.remove('8'))
+// console.log(myHash.get('8'))
+// myHash.remove('lance');
+// console.log(myHash.get('lance'))
+// console.log(myHash.set('lance', 5))
+// console.log(myHash.get('lance'))
+// console.log(myHash);
 
 // Do not modify
 function hashCode(string, size) {
