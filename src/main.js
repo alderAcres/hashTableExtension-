@@ -11,6 +11,28 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+function LinkedListCopy() {
+  this.head = null;
+  this.tail = null;
+}
+
+function NodeCopy(k, val) {
+  this.value = val;
+  this.key = k;
+  this.next = null;
+}
+
+// adds node to end of list
+LinkedListCopy.prototype.push = function(k, val) {
+    let newNode = new NodeCopy(k, val);
+    if (this.head === null) {
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+      this.tail.next = newNode;
+      this.tail = newNode;
+    }
+};
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,8 +46,23 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // create a linked list inside the index of the hash table
+  let bucket = new hashCode(key, this.SIZE);
+  if (this.storage[bucket] === undefined) {
+    this.storage[bucket] = new LinkedListCopy();
+    this.storage[bucket].push(key, value);
+  }
+  while (this.storage[bucket].head.next !== null) {
+    if (this.storage[bucket].head.next.key) {
+      this.storage[bucket].head.next.value = value;
+    }
+  }
 
 };
+let test = new HashTable();
+test.set("key", "value");
+console.log(test);
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +75,23 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  for (let bucket of this.storage) {
+    if (bucket instanceof LinkedListCopy) {
+      if (bucket.head === null) {
+        return undefined;
+      }
+      if (bucket.head.key === k) {
+        return bucket.head.value;
+      }
+    }
+    let currentNode = bucket.head;
+    while (currentNode.next !== null) {
+      if (currentNode.next.key === k) {
+        return currentNode.next.value;
+      }
+      currentNode = currentNode.next;
+    }
+  }
 };
 
 /**
@@ -50,7 +103,32 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  for (let bucket of this.storage) {
+    if (bucket instanceof LinkedListCopy) {
+      if (bucket.head.key == k) { //if we find the key in the HEAD
+        let result = bucket.head.value ;
+        //if we find key in the head and there is another node after
+        if (bucket.head.next !== null) {
+          bucket.head = bucket.head.next ;
+        }
+        else {
+          bucket.head = null ;
+          bucket.tail = null ;
+        }
+        return result ;
+      }
+      let currentNode = bucket.head ;
+      while (currentNode.next !== null) {
+        if (currentNode.next.key == k) {
+          let result = currentNode.next.value ;
+          if (currentNode.next.next !== null) {
+            currentNode.next = currentNode.next.next ;
+          }
+          return result ;
+        }
+      }      
+    }
+  }
 };
 
 
