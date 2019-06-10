@@ -8,7 +8,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -35,8 +35,8 @@ class Node {
 HashTable.prototype.set = function (key, value) {
   const index = hashCode(key, this.SIZE);
 
-  // table entry is undefined
-  if (this.storage[index] === undefined) {
+  // table entry is undefined or null
+  if (!this.storage[index]) {
     this.storage[index] = new Node(key, value);
   } else {
   // table entry is linked list
@@ -62,8 +62,8 @@ HashTable.prototype.set = function (key, value) {
 HashTable.prototype.get = function(key) {
   const index = hashCode(key, this.SIZE);
 
-  // table entry is undefined
-  if (this.storage[index] === undefined) {
+  // table entry is undefined or null
+  if (!this.storage[index]) {
     return undefined;
   }
   // table entry is linked list
@@ -89,8 +89,8 @@ HashTable.prototype.get = function(key) {
 HashTable.prototype.remove = function(key) {
   const index = hashCode(key, this.SIZE);
 
-  // table entry is undefined
-  if (this.storage[index] === undefined) {
+  // table entry is undefined or null
+  if (!this.storage[index]) {
     return undefined;
   }
   // table entry is linked list
@@ -118,16 +118,16 @@ HashTable.prototype.remove = function(key) {
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
