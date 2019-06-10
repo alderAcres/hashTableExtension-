@@ -43,6 +43,10 @@ HashTable.prototype.set = function (key, value) {
     let current = this.storage[index];
     // move down list until reach tail
     while (current.next !== null) {
+      if (current.key === key) {
+        current.value = value;
+        return;
+      }
       current = current.next;
     }
     current.next = new Node(key, value);
