@@ -89,17 +89,3 @@ module.exports = HashTable;
 
 
 const hashTable = new HashTable();
-
-hashTable.set('232', 'e432342');
-hashTable.set('321', '43243243242');
-hashTable.set('95', '876876868');
-hashTable.set('23232', '876864');
-hashTable.set('23132', '864848484');
-
-console.log(hashTable.get('321'));
-
-console.log(hashTable.storage);
-
-console.log(hashTable.remove('321'));
-
-console.log(hashTable.storage);
