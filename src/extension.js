@@ -39,6 +39,43 @@ class Node {
   }
 }
 
+HashTable.prototype.update = function() {
+  const used = this.count / this.SIZE;
+  let newSize = this.SIZE;
+  if (used > 0.75) {
+    newSize *= 2;
+  } else if (this.SIZE > 16 && used < 0.25) {
+    newSize /= 2;
+  } else return;
+
+  const newStorage = new Array(newSize);
+  Object.keys(this.storage).forEach((index) => {
+    // check if index at storage exists
+    if (!this.storage[index]) {
+      let current = this.storage[index];
+      while (current !== null) {
+        const newIndex = hashCode(current.key);
+        // check if new storage index exists
+        if (!newStorage[newIndex]) {
+          newStorage[newIndex] = new Node(current.key, current.value);
+        } else {
+          // add to new storage by looping through linked list
+          let newCurrent = newStorage[newIndex];
+          while (newCurrent !== null) {
+            if (newCurrent.key === current.key) {
+              newCurrent.value = current.value;
+              newCurrent = null;
+            }
+            newCurrent = newCurrent.next;
+          }
+        }
+        current = current.next;
+      }
+    }
+  });
+  this.storage = newStorage;
+};
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -57,15 +94,22 @@ HashTable.prototype.set = function (key, value) {
   // table entry is undefined or null
   if (!this.storage[index]) {
     this.storage[index] = new Node(key, value);
+    this.count += 1;
+    this.update();
   } else {
   // table entry is linked list
     let current = this.storage[index];
     // move down list until reached key
     while (current.next !== null) {
-      if (current.key === key) current.value = value;
+      if (current.key === key) {
+        current.value = value;
+        return;
+      }
       current = current.next;
     }
     current.next = new Node(key, value);
+    this.count += 1;
+    this.update();
   }
 };
 
@@ -95,7 +139,7 @@ HashTable.prototype.get = function(key) {
     }
     current = current.next;
   }
-  current.next = new Node(key);
+  return undefined;
 };
 
 /**
@@ -126,12 +170,14 @@ HashTable.prototype.remove = function(key) {
       else {
         this.storage[index] = current.next;
       }
+      this.count -= 1;
+      this.update();
       return res;
     }
     prev = current;
     current = current.next;
   }
-  current.next = new Node(key);
+  return undefined;
 };
 
 // YOUR CODE ABOVE
