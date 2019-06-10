@@ -5,10 +5,12 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
-  this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
+function HashTable(size = 16) {
+  this.SIZE = size;
+  this.storage = [];
+  for (let i = 0; i < size; i += 1) {
+    this.storage.push({});
+  }
 }
 
 /**
@@ -24,7 +26,14 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  this.storage[hashCode(key, this.SIZE)][key] = value;
+  return this.storage.reduce((total, indexObj) => {
+    let collisions = 0;
+    for (let indexKey in indexObj) {
+      collisions += 1;
+    }
+    return total + collisions;
+  }, 0)
 };
 
 /**
@@ -38,7 +47,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[hashCode(key, this.SIZE)][key];
 };
 
 /**
@@ -50,9 +59,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const result = this.storage[hashCode(key, this.SIZE)][key];
+  delete this.storage[hashCode(key, this.SIZE)][key];
+  return result;
 };
 
+const ht = new HashTable(128);
+ht.set('91929', 500);
+ht.set('03', 600);
+ht.set('ieied', 700);
+ht.set('lsod', 800);
+ht.set('mcish', {a: 99});
+console.log(ht)
+console.log(ht.set('[e]d;eo', {a: {k: '58'}}));
+console.log(ht.get('03'))
+console.log(ht.remove('mcish'));
 
 // Do not modify
 function hashCode(string, size) {
