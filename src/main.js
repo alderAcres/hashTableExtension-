@@ -8,10 +8,12 @@
 function HashTable() {
   this.SIZE = 16;
   
-  // this.storage = new Array(this.SIZE);
+  this.storage = new Array(this.SIZE);
+  for(let i = 0 ; i< this.storage.length; i++){
+    this.storage[i] ={}
+  }
   // this.storage =[]
-  console.log(typeof this.storage)
-  this.storage = {}
+  console.log(this.storage)
 }
 // ----------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------
@@ -30,7 +32,8 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   const hashedIndex = hashCode(key,this.SIZE)
-  console.log(this.storage[hashedIndex] = value)
+  console.log(this.storage[hashedIndex][key] = value)
+  console.log(this.storage)
 };
 // ----------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------
@@ -47,7 +50,7 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
   const hashedIndex = hashCode(key,this.SIZE)
-  return this.storage[hashedIndex]
+  return this.storage[hashedIndex][key]
 };
 // ----------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------
@@ -62,7 +65,7 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
   const hashedIndex = hashCode(key,this.SIZE)
-  delete this.storage[hashedIndex]
+  delete this.storage[hashedIndex][key]
 };
 
 // Do not modify
@@ -86,13 +89,16 @@ function hashCode(string, size) {
 
 let entry1 = new HashTable
 
-console.log(hashCode('username', 16))
+console.log(hashCode('use43esqrgc', 16))
+console.log(hashCode('use43esqrgda', 16))
 // ----------------------------------------------------------------------------------------------------------
 //place data in table with set method
 // ----------------------------------------------------------------------------------------------------------
 entry1.set('username', "password")
 entry1.set('wowethan', "greatmoves")
 entry1.set('charles', "barkely")
+entry1.set('use43esqrgc', "banter")
+entry1.set('use43esqrgda', "banter")
 // ----------------------------------------------------------------------------------------------------------
 //retrieve data from table with get method
 // ----------------------------------------------------------------------------------------------------------
