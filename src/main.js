@@ -50,6 +50,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  //EDGE CASE: if this.storage(hasOwnProperty(!key)) return undefined
+  //create address
+  //address = this.storage(hashCode)??
+  //search address for the key
+    //this.storage(hasOwnProperty(key))
+    //if the key exists more than once, make sure the key/value pair matches
+        //i.e. this.storage[key] = value;
 
 };
 
@@ -62,6 +69,9 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //if this.stoarge(hasOwnProperty(!key)) return undefined
+  //create address
+    //if address = this.storage(hasOwnProperty[key]) delete this.storage[key]
 
 };
 
