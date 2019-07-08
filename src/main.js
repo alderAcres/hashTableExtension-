@@ -24,8 +24,21 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let hashedKey = hashCode(key,16);
+  console.log(hashedKey)
+  this.storage[hashedKey] = {}
+
+  let storageObject = this.storage[hashedKey]
+  storageObject[key] = value
+
+  console.log(storageObject)
 
 };
+
+let myDankHash = new HashTable()
+myDankHash.set('hello','bitch')
+myDankHash.set('andrew', 2319)
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +51,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let hashedKey = hashCode(key,16)
+  let hashObj = (this.storage[hashedKey])
+  for (eachKey in hashObj){
+    if (eachKey === key){
+      return hashObj[eachKey]
+    }
+  }
+
+  return false
 
 };
+
+console.log(myDankHash.get('hello'))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +74,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let hashedKey = hashCode(key,16)
+  let hashObj = (this.storage[hashedKey])
+  for (eachKey in hashObj){
+    if (eachKey === key){
+      delete hashObj[eachKey]
+      return
+    }
+  }
 
+  return false
 };
+
 
 
 // Do not modify
@@ -70,5 +104,6 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
+console.log(myDankHash.storage)
 // Do not remove!!
 module.exports = HashTable;

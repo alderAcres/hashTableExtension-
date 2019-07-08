@@ -18,7 +18,120 @@
 
 
 // YOUR CODE ABOVE
+function HashTable() {
+  this.SIZE = 16;
+  this.filled = 0;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+/**
+* set - Adds given value to the hash table with specified key.
+*
+* - If the provided key has already been used to store another value, simply overwrite
+*   the existing value with the new value.
+* - If the hashed address already contains another key/value pair, you must handle
+*   the collision appropriately.
+*
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+  let hashedKey = hashCode(key,16);
+  // console.log(hashedKey)
+
+  
+  if (!this.storage[hashedKey]) { // if we haven't created an object at our hashtable location
+    // check to see if our size will be over 70%..
+
+    if ((this.filled+1)/this.SIZE >= 0.7){
+      let hashTableIncreasedSize = new Array(this.SIZE * 2)
+      // for each key ..re-hash the values and reorganize the hash table. 
+      // loop through the array, and nested loop through the objects keys.
+      let newlyHashed; hashedObject
+      this.storage.forEach((object)=>{
+        if (object){
+          for (oldkey in object){
+            newlyHashed = hashCode(key,this.SIZE * 2)
+            hashedObject = hashTableIncreasedSize[newlyHashed]
+            hashedObject[oldkey] = object[oldkey]
+          }
+        }
+      })
+
+    }
+
+    this.storage[hashedKey] = {} // creating object to store key/value 
+    this.filled++
+  } else { // we've already got something stored at that object location. 
+    let storageObject = this.storage[hashedKey]
+    storageObject[key] = value
+  }
+ 
+
+
+  // console.log(storageObject)
+
+};
+
+let myDankHash = new HashTable()
+myDankHash.set('hello','bitch')
+myDankHash.set('andrew', 2319)
+
+console.log(myDankHash)
+
+
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+*
+* - If more than one value is stored at the key's hashed address, then you must retrieve
+*   the correct value that was originally stored with the provided key
+*
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+  let hashedKey = hashCode(key,16)
+  let hashObj = (this.storage[hashedKey])
+  for (eachKey in hashObj){
+    if (eachKey === key){
+      return hashObj[eachKey]
+    }
+  }
+
+  return false
+
+};
+
+// console.log(myDankHash.get('hello'))
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  let hashedKey = hashCode(key,16)
+  let hashObj = (this.storage[hashedKey])
+  for (eachKey in hashObj){
+    if (eachKey === key){
+      this.filled--
+      delete hashObj[eachKey]
+      return
+    }
+  }
+
+  return false
+};
+
+
+
+// Do not modify
 function hashCode(string, size) {
   'use strict';
   
@@ -33,6 +146,13 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
-
 // Do not remove!!
 module.exports = HashTable;
+
+
+
+let myobj = {name:'hello'}
+
+if (!myobj['bitch']){
+  console.log('exists')
+}
