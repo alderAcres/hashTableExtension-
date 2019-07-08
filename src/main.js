@@ -24,6 +24,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //assign a var to the output of running hashcode
+  //this will be the key on our storage object where we want to place value
+  const hashedKey = hashCode(key, this.size); 
+  //place value at hashed key on our storage object
+  this.storage[hashedKey] = value; 
+  //increment this.size and return
+  return this.SIZE++; 
 
 };
 
@@ -38,7 +45,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  //assign a var to the output of running hashcode
+  //this will be the key on our storage object where we want to retrieve a value
+  const hashedKey = hashCode(key, this.size);
 
+  //return the value from the storage object at "hashedKey"
+  return this.storge[hashedKey];
+  //I don't think I am accounting for if there is more than 1 value at given key
+  //the original instance will be the first value given key
+  //this.storage[hashedKey][0]?
 };
 
 /**
@@ -50,7 +65,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //assign a var to the output of running hashcode
+  //this will be the key on our storage object where we want to delet a value
+  const hashedKey = hashCode(key, this.size);
 
+  //check if there is a value there, if not return undefined
+  if(!this.storage[hashedKey]) return undefined;
+  //otherwise there is a value assosicated to that key, and we delete it
+  const deletedVal = this.storage[hashedKey];
+  delete this.storage[hashedKey];
+  
+  return deletedVal;
+  
 };
 
 
