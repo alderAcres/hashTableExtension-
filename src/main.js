@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +22,27 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+HashTable.prototype.set = function set(key, value) {
+  const hashedKey = hashCode(key, this.SIZE);
+  console.log(hashedKey);
 
+  // no value stored there yet, just set it
+  if (!this.storage[hashedKey]) {
+    this.storage[hashedKey] = value;
+    // if we've already had a collision here before, then just add new prop
+  } else if (typeof this.storage[hashedKey] === 'object') {
+    this.storage[hashedKey][key] = value;
+  } else {
+    // get the previous value stored there
+    const prevValue = this.storage[hashedKey];
+    // make this space in the array an object and set a default property name
+    // for the previous value
+    this.storage[hashedKey] = {
+      naught: prevValue,
+    };
+    // add another property for the key we're trying to add;
+    this.storage[hashedKey] = value;
+  }
 };
 
 /**
@@ -37,8 +55,18 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function get(key) {
+  // get the hashed key
+  // if value at hKey is an object, ask if key is in the Object.keys
+  // if it's not, then it must have been the naught property, so return it
+  // if it is, then acess this.storage[hKey][key];
+  // else, return the value stored there
+  const hKey = hashCode(key, this.SIZE);
+  if (typeof this.storage[hKey] === 'object') {
+    if (this.storage[hKey][key]) return this.storage[hKey][key];
+    return this.storage[hKey].naught;
+  }
+  return this.storage[hKey];
 };
 
 /**
@@ -49,8 +77,33 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function remove(key) {
+  // get hKey
+  // if value at hKey is an object, check if the key is a property
+  // if it is, then delete it
+  // else delete the naught
+  // set the value at hKey to be undefined
+  const hKey = hashCode(key, this.SIZE);
+  let val = undefined;
 
+  if (typeof this.storage[hKey] === 'object') {
+    if (this.storage[hKey][key]) {
+      val = this.storage[hKey][key];
+      delete this.storage[hKey][key];
+    } else { // it was the naught value;
+      val = this.storage[hKey].naught;
+      delete this.storage[hKey].naught;
+    } // if there are no more things stored in this object, delete it
+    if (Object.keys(this.storage[hKey]).length === 0) {
+      this.storage[hKey] = undefined;
+    }
+    // if there wasn't a collision but the key exists, get it and return
+  } if (this.storage[hKey]) {
+    val = this.storage[hKey];
+    this.storage[hKey] = undefined;
+  }
+
+  return val;
 };
 
 
@@ -72,3 +125,7 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+const hashT = new HashTable();
+hashT.set('doodle', 1);
+console.log(hashT.storage);
