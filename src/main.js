@@ -24,7 +24,20 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //iterate through storage.
+  //if this.storage.key already exists then reassign value with new value.
+  //if this.storage.key does not exist then add key/value to storage.
+  //if the hashed address already has a key/value pair, execute collision solution. 
+  for(let i = 0; i < this.storage.length; i++){
+    if(!this.storage.key) this.storage.key = value;
+    if(this.storage.key === this.storage[i]) this.storage[i] = value;
+    else if(this.storage[i] !== this.storage.key && this.storage[i] !== 'undefined'){
+      let mySet = new Set();
+        // this.storage[i] = [new Set(...args + concat(value))]
+        this.storage[i] = mySet.add(this.stroage[i], value);
+    }
+    
+  }
 };
 
 /**
