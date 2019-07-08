@@ -17,6 +17,10 @@ Again, I could be way off course.
 9:58am You know what? I may have been completely demolished by this assessment, but instead of panicking or 
 spending the entire hour looking at MDN and never even writing out logic, I at least wrote out what I think is happening.
 
+10:00am- I realize that I have 15 more minutes to keep writing what I think the logic is, so I'll do that isntead of giving up. 
+
+10:13am- I'm going to push this now. I'm glad I wrote out my thought process instead of staring at the computer and doing nothing. At
+least then, a fellow/senior can see my train of thought and help me get back on track. lol train pun. 
 
 */
 
@@ -117,8 +121,22 @@ Again, I'm probably way off base here, but the juices are flowing.
 * hash table
 */
 HashTable.prototype.get = function(key) {
+// the first step would be to check if <this.storage[key]> has a value attached to it, and if not, return undefined. 
+if (!this.storage[key]){return undefined};
 
+//if <this.storage[key] DOES exist, and is a value and not an object containing multiple values, then return that value. 
+//10:07am of course, I would have to go back to my SET method and add a conditional for if <this.storage[key]> exists- 
+// my idea being that if it does, I would turn it into an object with a next property that points to an alternate value at the same <this.storage[key]> address. 
+
+if(this.storage[key] && !this.storage[key].next){
+  return this.storage[key];
+}
 };
+
+// 10:10am - my logic for DELETE would be to see if <this.storage[key]> exists, and if it doesn't, return undefined.
+// If it does exist, I am torn between reassigning the value to undefined or trying the DELETE keyword. 
+// We learned Friday that the delete keyword works on key/value pairs in objects, and not variables by themselves, so I am unsure if 
+//  it could be used to delete a specific element from an array. 
 
 /**
 * remove - delete a key/value pair from the hash table
