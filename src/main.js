@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  //this.length = 0; - may need length property later
 }
 
 /**
@@ -24,7 +25,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let previous = null;
+  if (this.storage.hasOwnProperty(!key)){ //check if key exists, and if it does not
+      //create it and assign value
+    this.storage[key] = value;
+  } else if (this.storage.hasOwnProperty(key)){ //if the key does exist, re-write the value
+    let address = hasCode(value, this.SIZE); //creating hash address
+    if (address[key] !== null){ //checking to see if the hash adress is NOT empty
+      previous = this.storage[key - 1];  //assing previous the key/value at teh address
+      address[key - 1] = previous; //assigning previous address the pre-existin key
+      address[key] = value;
+    }
+  } //avoid collissions by re-assigning the addresses?
 };
 
 /**
@@ -38,6 +50,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  //EDGE CASE: if this.storage(hasOwnProperty(!key)) return undefined
+  //create address
+  //address = this.storage(hashCode)??
+  //search address for the key
+    //this.storage(hasOwnProperty(key))
+    //if the key exists more than once, make sure the key/value pair matches
+        //i.e. this.storage[key] = value;
 
 };
 
@@ -50,6 +69,9 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //if this.stoarge(hasOwnProperty(!key)) return undefined
+  //create address
+    //if address = this.storage(hasOwnProperty[key]) delete this.storage[key]
 
 };
 
@@ -72,3 +94,6 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+//console.log(hashCode("this is a string", 16))
