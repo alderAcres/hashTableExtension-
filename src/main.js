@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //find result num in hash table to store key/value in storage
+  let hashedResult = hashCode(key, this.SIZE);
+  //check to see if the hash table already has a value at hashedResult index
+  if(this.storage[hashedResult]){
+    //if table has value at hashedResult, create a new key value pair at hashedResult containing key and value
+    this.storage[hashedResult][key] = value;
+  } else {
+    //if not, create an object at hashedResult with key/value pair
+    this.storage[hashedResult] = {
+      [key] : value
+    };
+  }
 };
 
 /**
@@ -38,7 +49,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //find key's hashed index
+  let hashedResult = hashCode(key, this.SIZE);
+  //if index exists, find and return value that matches key
+  if(this.storage[hashedResult][key]){
+    let value = this.storage[hashedResult][key];
+    return value;
+  } else return console.log("Key not found")
 };
 
 /**
@@ -50,7 +67,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+    //find hashed index of key
+    let hashedResult = hashCode(key, this.SIZE);
+    //if key exists at hashed index, delete key/value pair
+    if(this.storage[hashedResult][key]){
+      delete this.storage[hashedResult][key]
+      //if key doesn't exist at hashed index, return undefined
+    } else return undefined;
 };
 
 
@@ -72,3 +95,12 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+//TESTING
+// let table = new HashTable();
+// table.set("hello",111)
+// table.set("world",222)
+// table.set("goodbye",333)
+// console.log(table.get('goodbye'))
+// table.remove('world');
+// console.log(table)
