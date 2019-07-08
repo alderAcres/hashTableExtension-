@@ -9,7 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
-  this.storage.next = null;
+
 }
 
 /**
@@ -33,7 +33,8 @@ HashTable.prototype.set = function(key, value) {
     //if hashed address already contains another key/value pair, handle collision "appropriately"
   } else if (this.storage[index]){
     // if a collision, store in a next address
-    this.storage.next = {[key] : value};
+    let cache = this.storage[index];
+    this.storage[index] = {[cache] , [key] : value};
   } else {
     //else store key : value pair
     this.storage[index] = {[key] : value};
@@ -53,6 +54,7 @@ HashTable.prototype.set = function(key, value) {
 HashTable.prototype.get = function(key) {
   //get haschode for lookup
   let index = hashCode(key, this.SIZE);
+  console.log(index);
   // declare a result
   let result;
   for(let prop in this.storage[index])
@@ -76,7 +78,7 @@ HashTable.prototype.remove = function(key) {
   if(!this.storage[index]) return undefined;
   //else grab the key out of the hash table and store in a result variable
   let result = this.storage[index];
-  //depete the index
+  //delete the index
   delete this.storage[index];
   //return result
   return result;
@@ -86,7 +88,8 @@ const myTable = new HashTable();
 myTable.set('dog','woof');
 myTable.set('cat','meow');
 console.log(myTable.storage);
-myTable.get('cat')
+myTable.remove('cat')
+// myTable.get('cat')
 // console.log(myTable.storage);
 
 // Do not modify
