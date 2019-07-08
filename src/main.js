@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +23,20 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+// to avoid the collsion, created a linked list out of the indexes.
+HashTable.prototype.set = function(key, value) {
+  const code = hashCode(key, this.SIZE);
+  let list;
+
+  if (this.storage[code] === undefined) {
+    list = new LinkedList();
+  } else {
+    list = this.storage[code];
+  }
+  list.add(key, val);
+  this.storage[code] = list;
+  return ++this.items;
 };
 
 /**
@@ -38,7 +50,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const code = hashCode(key, this.SIZE);
+  if (this.storage[code] === undefined) return -1;
+  const list = this.storage[code];
 
+  return list.get(key);
 };
 
 /**
@@ -50,7 +66,11 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const code = hashCode(key, this.SIZE);
+  if (this.storage[code] === undefined) return -1;
+  const list = this.storage[code];
+  this.items--;
+  return list.remove(key)
 };
 
 
