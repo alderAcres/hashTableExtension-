@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+
 }
 
 /**
@@ -24,7 +25,20 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let index = hashCode(key, this.SIZE);
+  //if provided key already used to store another value
+  if(this.storage[index]){
+    //overwrite the existing value with new value
+    this.storage[index] = {[key] : value};
+    //if hashed address already contains another key/value pair, handle collision "appropriately"
+  } else if (this.storage[index]){
+    // if a collision, store in a next address
+    let cache = this.storage[index];
+    this.storage[index] = {[cache] , [key] : value};
+  } else {
+    //else store key : value pair
+    this.storage[index] = {[key] : value};
+  }
 };
 
 /**
@@ -38,7 +52,16 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //get haschode for lookup
+  let index = hashCode(key, this.SIZE);
+  console.log(index);
+  // declare a result
+  let result;
+  for(let prop in this.storage[index])
+    if(this.storage[index].hasOwnProperty(key)){
+       result = this.storage[index][prop];
+    }
+    return result;    
 };
 
 /**
@@ -50,9 +73,24 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  // If the key does not exist in the hash table, return undefined
+  if(!this.storage[index]) return undefined;
+  //else grab the key out of the hash table and store in a result variable
+  let result = this.storage[index];
+  //delete the index
+  delete this.storage[index];
+  //return result
+  return result;
 };
 
+const myTable = new HashTable();
+myTable.set('dog','woof');
+myTable.set('cat','meow');
+console.log(myTable.storage);
+myTable.remove('cat')
+// myTable.get('cat')
+// console.log(myTable.storage);
 
 // Do not modify
 function hashCode(string, size) {
