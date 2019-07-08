@@ -51,7 +51,17 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+//iterate thr this.storage.
+//check for key and return the value for key.
+//if an array exists for the key's value iterate thr array to find correct key.
+for(let i = 0; i < this.storage.length; i++){
+  if(i === key) return this.storage[i];
+  if(Array.isArray(this.storage[i])){
+    for(let x = 0; x < this.storage[i].length; x++){
+      if(this.storage[i][x] === key) return this.storage[i][x];
+    }
+  }
+}
 };
 
 /**
