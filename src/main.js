@@ -23,7 +23,8 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function set(key, value) {
-  const hashedKey = hashCode(key);
+  const hashedKey = hashCode(key, this.SIZE);
+  console.log(hashedKey);
 
   // no value stored there yet, just set it
   if (!this.storage[hashedKey]) {
@@ -40,7 +41,7 @@ HashTable.prototype.set = function set(key, value) {
       naught: prevValue,
     };
     // add another property for the key we're trying to add;
-    this.storage[hashedKey][key] = value;
+    this.storage[hashedKey] = value;
   }
 };
 
@@ -60,7 +61,7 @@ HashTable.prototype.get = function get(key) {
   // if it's not, then it must have been the naught property, so return it
   // if it is, then acess this.storage[hKey][key];
   // else, return the value stored there
-  const hKey = hashCode(key);
+  const hKey = hashCode(key, this.SIZE);
   if (typeof this.storage[hKey] === 'object') {
     if (this.storage[hKey][key]) return this.storage[hKey][key];
     return this.storage[hKey].naught;
@@ -82,7 +83,7 @@ HashTable.prototype.remove = function remove(key) {
   // if it is, then delete it
   // else delete the naught
   // set the value at hKey to be undefined
-  const hKey = hashCode(key);
+  const hKey = hashCode(key, this.SIZE);
   let val = undefined;
 
   if (typeof this.storage[hKey] === 'object') {
@@ -125,4 +126,6 @@ function hashCode(string, size) {
 // Do not remove!!
 module.exports = HashTable;
 
-console.log(13/16);
+const hashT = new HashTable();
+hashT.set('doodle', 1);
+console.log(hashT.storage);
