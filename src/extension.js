@@ -107,25 +107,25 @@ function hashCode(string, size) {
 // Do not remove!!
 module.exports = HashTable;
 
-let table = new HashTable();
-table.set('value1', 1);
-console.log(table.get('value1'));
-table.set('value2', 2);
-console.log(table.get('value2'));
-table.set('value3', 3);
-console.log(table.get('value3'));
+// let table = new HashTable();
+// table.set('value1', 1);
+// console.log(table.get('value1'));
+// table.set('value2', 2);
+// console.log(table.get('value2'));
+// table.set('value3', 3);
+// console.log(table.get('value3'));
 
-console.log(table.get('value1'));
-console.log(table.get('value2'));
-console.log(table.get('value3'));
+// console.log(table.get('value1'));
+// console.log(table.get('value2'));
+// console.log(table.get('value3'));
 
-console.log(table.storage);
-table.remove('value1');
-console.log(table.storage);
-console.log(table.get('value1'));
-table.remove('value2');
-console.log(table.storage);
-console.log(table.get('value2'));
-table.remove('value3');
-console.log(table.storage);
-console.log(table.get('value3'));
+// console.log(table.storage);
+// table.remove('value1');
+// console.log(table.storage);
+// console.log(table.get('value1'));
+// table.remove('value2');
+// console.log(table.storage);
+// console.log(table.get('value2'));
+// table.remove('value3');
+// console.log(table.storage);
+// console.log(table.get('value3'));

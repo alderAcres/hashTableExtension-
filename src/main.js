@@ -97,3 +97,4 @@ module.exports = HashTable;
 // table.remove('value3');
 // console.log(table.storage);
 // console.log(table.get('value3'));
+// end tests
