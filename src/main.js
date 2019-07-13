@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -25,7 +24,10 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   const address = hashCode(key, this.SIZE);
-  this.storage[address] = value;
+  if(!this.storage[address]) {
+    this.storage[address] = {};
+  }
+  this.storage[address][key] = value;
 };
 
 /**
@@ -39,7 +41,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-  return this.storage[hashCode(key, this.SIZE)];
+  return this.storage[hashCode(key, this.SIZE)][key];
 };
 
 /**
@@ -52,7 +54,10 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
   const address = hashCode(key, this.SIZE);
-  delete this.storage[address];
+  if(!this.storage[address][key]) {
+    return undefined;
+  }
+  delete this.storage[address][key];
 };
 
 
@@ -77,18 +82,51 @@ module.exports = HashTable;
 
 // let table = new HashTable();
 // table.set('value1', 1);
-// console.log(table.get('value1'));
 // table.set('value2', 2);
-// console.log(table.get('value2'));
 // table.set('value3', 3);
-// console.log(table.get('value3'));
-
+// table.set('value4', 4);
+// table.set('value5', 5);
+// table.set('value6', 6);
+// table.set('value7', 7);
+// table.set('value8', 8);
+// table.set('value9', 9);
+// table.set('value10', 10);
+// table.set('value11', 11);
+// table.set('value12', 12);
+// table.set('value13', 13);
+// table.set('value14', 14);
+// table.set('value15', 15);
+// table.set('value16', 16);
+// table.set('value17', 17);
+// table.set('value18', 18);
+// table.set('value19', 19);
+// table.set('value20', 20);
 // console.log(table.get('value1'));
 // console.log(table.get('value2'));
 // console.log(table.get('value3'));
+// console.log(table.get('value4'));
+// console.log(table.get('value5'));
+// console.log(table.get('value6'));
+// console.log(table.get('value7'));
+// console.log(table.get('value8'));
+// console.log(table.get('value9'));
+// console.log(table.get('value10'));
+// console.log(table.get('value11'));
+// console.log(table.get('value12'));
+// console.log(table.get('value13'));
+// console.log(table.get('value14'));
+// console.log(table.get('value15'));
+// console.log(table.get('value16'));
+// console.log(table.get('value17'));
+// console.log(table.get('value18'));
+// console.log(table.get('value19'));
+// console.log(table.get('value20'));
+
+// console.log(table.storage)
 
 // console.log(table.storage);
 // table.remove('value1');
+// console.log(table.remove('value1'));
 // console.log(table.storage);
 // console.log(table.get('value1'));
 // table.remove('value2');
@@ -97,4 +135,4 @@ module.exports = HashTable;
 // table.remove('value3');
 // console.log(table.storage);
 // console.log(table.get('value3'));
-// end tests
+// // end tests
