@@ -5,9 +5,9 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
+function HashTable() { //*creates a hash table of size 16
   this.SIZE = 16;
-  
+  this.numValues = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,14 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hash = hashCode(key);
+  if (!this.storage.hasOwnProperty(hash) && this.numValues < this.SIZE) {
+    this.storage[hash] = {};
+    if (!this.storage[hash].hasOwnProperty(key)) {
+      this.numValues++;
+      this.storage[hash][key] = value;
+    }
+  }
 };
 
 /**
@@ -38,7 +45,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hash = hashCode(key);
+  if (this.storage.hasOwnProperty(hash)) {
+    if (this.storage[hash].hasOwnProperty(key)) { 
+      return this.storage[hash][key];
+    }
+  } else {
+    return 'Value does not exist with specified key in hash table';
+  }
 };
 
 /**
@@ -50,7 +64,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hash = hashCode(key);
+  if (this.storage.hasOwnProperty(hash)) {
+    if (this.storage[hash].hasOwnProperty(key)) {
+      delete this.storage[hash][key]
+      this.numValues--;
+    }
+  } else {
+    return undefined;
+  }
 };
 
 
