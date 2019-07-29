@@ -70,11 +70,8 @@ HashTable.prototype.get = function(key) {
   //if there is a value there, then start looking through the list until the next property is null
   let currentNode = this.storage[location];
   //at each step compare the value of the key to the key given
-  if (currentNode.key === key) {
-    return currentNode.value;
-  } 
 
-  while (currentNode.next !== null) {
+  while (currentNode !== null) {
     //when the key matches, return the value of that node.
     if (currentNode.key === key) {
       return currentNode.value;
@@ -111,13 +108,18 @@ HashTable.prototype.remove = function(key) {
     return returnValue;
   }
 
-  while (currentNode.next !== null) {
-    if (currentNode.key === key) {
-      let returnValue = currentNode.value;
-      delete this.storage[location];
-      return returnValue;
+  while (currentNode.next.key !== key && currentNode.next !== null) {
+    if (currentNode.next.next === null) {
+      return;
     }
     currentNode = currentNode.next;
+  }
+
+  //if the key matches then set the value of the current.next to the one after it
+  if (currentNode.next.key === key) {
+    let returnValue = currentNode.next.value;
+    currentNode.next = currentNode.next.next;
+    return returnValue;
   }
 
   //if nothing is found, return undefined.
