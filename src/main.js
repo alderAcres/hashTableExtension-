@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.count = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,31 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  
+  // TODO: handle duplicate key with overwrite
 
+  let bucketIndex = hashCode(key, this.SIZE);
+  let bucket = this.storage[bucketIndex];
+
+  if (!bucket) {
+    bucket = [];
+    this.storage[bucketIndex] = bucket;
+  }
+
+  let overWrite = false;
+  // iterate through bucket looking for conflict to overWrite
+  for (var i = 0; i < bucket.length; i++) {
+    if (bucket[i][0] === key) {
+      bucket[i][1] = value;
+      overWrite = true;
+    }
+  }
+  // if we don't overWrite, make a new tuple in the bucket.
+  if (!overWrite) {
+    bucket.push([key, value]);
+    this._count++
+  }
+  return this.count;
 };
 
 /**
@@ -38,7 +62,20 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let bucketIndex = hashCode(key, this.SIZE);
+  let bucket = this.storage[bucketIndex];
+  if (bucket.length === 1) {/*there is only one tuple*/
+    // return tuple
+    return this.storage[bucketIndex][0][1];
+  } else if (bucket.length > 1) {/*there are many tuples*/
+    // loop through bucket to find tuple with our key
+    for (var i = 0; i < bucket.length; i++) {
+      if(bucket[i][0] === key){return bucket[i][1];}
+    }
+  }
+  /*I don't feel so good...*/
+  console.log("Argument Error: Key is either invalid, or does not exist in hash")
+  return undefined;
 };
 
 /**
@@ -50,7 +87,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let bucketIndex = hashCode(key, this.SIZE);
+  let bucket = this.storage[bucketIndex];
+  if (bucket) {
+    for (var i = 0; i < bucket.length; i++) {
+      if(bucket[i][0] === key){
+        let removedBucket = bucket.splice(i, 1);
+        return removedBucket[0][1];
+      }
+    }
+  }
+  return undefined;
 };
 
 
