@@ -24,7 +24,16 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let index = hashCode(key, this.SIZE);
+  // stash values in objects for O(1) retrieval and search
+  // I know that linked lists and arrays are typically used to handle collisions, but is there any reason not to use an object?
+  let obj = { [key]: value };
+  if (this.storage[index] !== undefined) {
+      this.storage[index][key] = value;
+  } else {
+    this.storage[index] = obj;
+  }
+  return 1;
 };
 
 /**
@@ -38,7 +47,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  return this.storage[index][key];
 };
 
 /**
@@ -50,7 +60,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  let returnValue = undefined;
+  // check that key exists
+  if (this.storage[index] !== undefined) {
+    // if more than one value at index, just delete desired key-value pair - not entire object
+    let indexLength = Object.keys(this.storage[index]).length;
+    returnValue = this.storage[index][key];
+    if (indexLength > 1) {
+      delete this.storage[index][key];
+    }
+    else {
+      delete this.storage[index];
+    }
+  } 
+  return returnValue;
 };
 
 
