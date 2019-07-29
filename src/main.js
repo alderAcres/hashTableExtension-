@@ -101,15 +101,21 @@ HashTable.prototype.remove = function(key) {
   //if there is something there, then start comparing they key in that node to the given key
   let currentNode = this.storage[location];
   //compare the first item first to see if it matches and delete the whole space if there is only one node
+
   if (currentNode.key === key && currentNode.next === null) {
     //set a vlue to hold the value for return
     let returnValue = currentNode.value;
     delete this.storage[location];
     return returnValue;
   }
-
+//otherwise look through the rest
   while (currentNode.next.key !== key && currentNode.next !== null) {
-    if (currentNode.next.next === null) {
+    if (currentNode.key === key) {
+      let returnValue = currentNode.value;
+      this.storage[location] = currentNode.next;
+      return returnValue;
+    }
+    else if (currentNode.next.next === null) {
       return;
     }
     currentNode = currentNode.next;
