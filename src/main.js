@@ -1,3 +1,67 @@
+/* Linked List to handle collisions
+  
+*/
+function LinkedList() {
+  this.head = null;
+  this.tail = null;
+}
+function Node(key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+  this.prev = null;
+}
+LinkedList.prototype.add = function (key, value) {
+  let newNode = new Node(key, value);
+  if (this.head === null) {
+    this.head = newNode;
+    this.tail = newNode;
+  }
+  else {
+    let currNode = this.head;
+    while (currNode !== null) {
+      if (currNode.key === key){
+        currNode.value = value;
+        return;
+      }
+      currNode = currNode.next;
+    }
+    this.tail.next = newNode;
+    newNode.prev = this.tail;
+    this.tail = newNode;
+  }
+}
+LinkedList.prototype.get = function (key) {
+  let currNode = this.head;
+  while (currNode !== null) {
+    if (currNode.key === key) return currNode;
+    currNode = currNode.next;
+  }
+  return undefined;
+}
+LinkedList.prototype.remove = function (key) {
+  let node = this.get(key);
+  if (node === undefined) return undefined;
+  let value = node.value;
+  if (node === this.head && node === this.tail) {
+    this.head = null;
+    this.tail = null;
+  }
+  else if (node === this.head) {
+    this.head = node.next;
+  }
+  else if (node === this.tail) {
+    this.tail = node.prev;
+    this.tail.next = null;
+  }
+  else {
+    node.prev.next = node.next;
+    node.next.prev = node.prev;
+  }
+  return value;
+}
+
+
 /**
 * HashTable costructor
 *
@@ -24,7 +88,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let addr = hashCode(key);
+  let list = this.storage[addr];
+  if (list === undefined){
+    list = new LinkedList();
+    this.storage[addr] = list;
+  }
+  list.add(key, value);
+  this.size++;
+  return this.size;
 };
 
 /**
@@ -38,7 +110,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let addr = hashCode(key);
+  let list = this.storage[addr];
+  if (list === undefined) return undefined;
+  return list.get(key) ? list.get(key).value : undefined;
 };
 
 /**
@@ -50,7 +125,10 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let addr = hashCode(key);
+  let list = this.storage[addr];
+  if (list === undefined) return undefined;
+  return list.remove(key);
 };
 
 
