@@ -11,6 +11,12 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+function Node(value, key) {
+  this.key = key
+  this.value = value;
+  this.next = null;
+}
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,7 +30,25 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //use the hash function to get the location in the array
+  let location = hashCode(key, this.SIZE);
+  //create a new node with the key and value given
+  let newNode = new Node(value, key);
+  //if the location is currently empty just set the value of that location to the newly created node
+  if(!this.storage[location]) {
+    this.storage[location] = newNode;
+  }else {
+    //create a value to keep track of where you are in the list
+    let currentNode = this.storage[location];
+    //find the end point of the linked list and insert a new node
+      //while the next property is not null move on to the next node to move through the list by reassigning current to the next node
+    while (currentNode.next !== null) {
+      currentNode = currentNode.next;
+    }
+    //now you are at the end of the list
+    //set the next property of the last node to your new node
+    currentNode.next = newNode;
+  }
 };
 
 /**
@@ -38,7 +62,25 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let location = hashCode(key, this.SIZE);
+  //first check if there is a value in that location. if not then just return
+  if (!this.storage[location]) {
+    return;
+  }
+  //if there is a value there, then start looking through the list until the next property is null
+  let currentNode = this.storage[location];
+  //at each step compare the value of the key to the key given
 
+  while (currentNode !== null) {
+    //when the key matches, return the value of that node.
+    if (currentNode.key === key) {
+      return currentNode.value;
+    }
+    //otherwise move on
+    currentNode = currentNode.next;
+  }
+  //if nothing matches then return undefined
+  return;
 };
 
 /**
@@ -50,6 +92,44 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //find the location in the array using the hashCode function
+  let location = hashCode(key, this.SIZE);
+  //if there is nothing in that location, return undefined
+  if (!this.storage[location]) {
+    return;
+  }
+  //if there is something there, then start comparing they key in that node to the given key
+  let currentNode = this.storage[location];
+  //compare the first item first to see if it matches and delete the whole space if there is only one node
+
+  if (currentNode.key === key && currentNode.next === null) {
+    //set a vlue to hold the value for return
+    let returnValue = currentNode.value;
+    delete this.storage[location];
+    return returnValue;
+  }
+//otherwise look through the rest
+  while (currentNode.next.key !== key && currentNode.next !== null) {
+    if (currentNode.key === key) {
+      let returnValue = currentNode.value;
+      this.storage[location] = currentNode.next;
+      return returnValue;
+    }
+    else if (currentNode.next.next === null) {
+      return;
+    }
+    currentNode = currentNode.next;
+  }
+
+  //if the key matches then set the value of the current.next to the one after it
+  if (currentNode.next.key === key) {
+    let returnValue = currentNode.next.value;
+    currentNode.next = currentNode.next.next;
+    return returnValue;
+  }
+
+  //if nothing is found, return undefined.
+  return;
 
 };
 
