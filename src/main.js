@@ -30,7 +30,7 @@ HashTable.prototype.set = function (key, value) {
   //console.log(index);
   // create a storage container if none exists at index
   if (this.storage[index] === undefined) this.storage.splice(index, 0, {});
-  console.log(this.storage[index]);
+  //console.log(this.storage[index]);
   // Add new key if it does not already exist/update existing keys
   this.storage[index][key] = value;
   //console.log(container);
