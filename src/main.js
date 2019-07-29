@@ -50,7 +50,9 @@ while (i < this.keys.length && j < this.values.length) {
   // check if the key in the keys array is equal to the key parameter
     if (this.keys[i] === key){
       // if it is, return that key's value
-      return this.values[i]
+      return this.values[j]
+      i++;
+      j++;
     }
   }
 
