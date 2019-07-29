@@ -7,10 +7,15 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
+HashTable.prototype.Node = function (key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+};
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -23,8 +28,17 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+HashTable.prototype.set = function (key, value) {
+  let index = hashCode(key, this.storage.length);
 
+  let newNode = new this.Node(key, value);
+
+  if (!this.storage[index]) this.storage[index] = newNode;
+  else this.storage[index].next = newNode;
+  this.items++;
+  return this.items;
+
+  //return the new number of items stored in the hash table
 };
 
 /**
@@ -37,8 +51,16 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function (key) {
+  let index = hashCode(key, this.storage.length);
+  let current = this.storage[index];
+  if (current.key === key) return this.storage[index].value;
+  else {
+    while (current.next) {
+      if (current.next.key === key) return current.next.value;
+      current = current.next;
+    }
+  }
 };
 
 /**
@@ -49,26 +71,51 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
-
+HashTable.prototype.remove = function (key) {
+  let index = hashCode(key, this.storage.length);
+  let current = this.storage[index];
+  if (current.key === key) {
+    let deleted= current.value
+    current= current.next;
+    this.items--;
+    return deleted;
+  }
+  else {
+    while (current.next) {
+      if (current.next.key === key) {
+        let deleted= current.next.value;
+        current.next=current.next.next;
+        this.items--;
+        return deleted;
+    }
+  }
+  return undefined;
 };
-
+}
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
 // Do not remove!!
 module.exports = HashTable;
+let hasht = new HashTable;
+
+hasht.set(2, "cat");
+hasht.set(8, "dog");
+hasht.set(4,"son");
+console.table(hasht);
+console.log(hasht.remove(5))
+console.table(hasht)
