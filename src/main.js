@@ -70,16 +70,6 @@ HashTable.prototype.get = function(key) {
   return value;
 };
 
-// tests
-const ht = new HashTable();
-// //test for collision
-// ht.set("billy", 01);
-// both these keys result in the same index
-// ht.set("kate", 44);
-// ht.set("lkph", 52);
-
-// console.log(ht.get("lkph"));
-
 /**
  * remove - delete a key/value pair from the hash table
  *
@@ -88,7 +78,43 @@ const ht = new HashTable();
  * @param {string} key - key to be found and deleted in hash table
  * @return {string|number|boolean} The value deleted from the hash table
  */
-HashTable.prototype.remove = function(key) {};
+HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE);
+  // if bucket is empty
+  if (this.storage[index] === undefined) return undefined;
+  // else array exists at bucket and we traverse for the key
+  const arr = this.storage[index];
+  console.log("arr at index before remove: ", this.storage[index]);
+  // get index of el to remove
+  let startingIndex;
+
+  for (let i = 0; i < arr.length; i += 1) {
+    if (arr[i][0] === key) {
+      startingIndex = i;
+    }
+  }
+  console.log("startingIndex: ", startingIndex);
+
+  // iterate through from starting index to before last el and reassign itself and all following indices
+  for (let i = startingIndex; i < arr.length - 1; i += 1) {
+    arr[i] = arr[i + 1];
+  }
+  // delete the last extra key
+  delete arr[--arr.length];
+  console.log("arr at index after remove: ", this.storage[index]);
+};
+
+// tests
+// const ht = new HashTable();
+// //test for collision
+// ht.set("billy", 01);
+// both these keys result in the same index
+// ht.set("kate", 44);
+// ht.set("lkph", 52);
+
+// ht.remove("lkph");
+// ht.remove("kate");
+// console.log(ht.remove("john"));
 
 // Do not modify
 function hashCode(string, size) {
