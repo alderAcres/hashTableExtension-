@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  
 }
 
 /**
@@ -24,8 +25,16 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // - If the provided key has already been used to store another value, simply overwrite
+//the existing value with the new value.
+  if (key in this.storage) {
+    this.storage[key] = value;
+  }
 
-};
+//   If the hashed address already contains another key/value pair, you must handle
+// *   the collision appropriately.
+  if (this.storage[key]) {}
+}
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,6 +47,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  //Retrieves a value stored in the hash table with a specified key
+  return this.storage[key];
+  //If more than one value is stored at the key's hashed address, then you must retrieve
+// *   the correct value that was originally stored with the provided key
+//using a linked list? 
 
 };
 
@@ -50,7 +64,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // * remove - delete a key/value pair from the hash table
+if (Array.includes(key)) {
+  delete Array[key];
+} else {
+// If the key does not exist in the hash table, return undefined
+return undefined; 
+}
 };
 
 
