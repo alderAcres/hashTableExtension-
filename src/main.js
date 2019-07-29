@@ -9,6 +9,15 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.storage.size = 0;
+}
+
+function Node(value) {
+  this.value = value;
+  this.head = null;
+  this.tail = null;
+  this.back = null;
+  this.next = null;
 }
 
 /**
@@ -24,8 +33,44 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let hashIndex = hashCode(value, this.SIZE); //generated location from hashing function 
+  if (this.storage[hashIndex] === 'undefined') {
+    this.storage[hashIndex] = value;
+    this.storage.size = 1; // no collision case
+  } else {
+    let newNode = new Node(value); 
+    // in case of collisions, create linkedlist at the given location
+    // reassigning node values; make nodes and connect them and reassign props
+    
+    //checking how to assign head property for our new Node
+    if (this.storage[hashIndex - 1] === 'undefined') {
+      newNode.head = true;
+    } else {
+      newNode.head = null;
+    };
 
+    //checking how to assign tail property for our new Node
+    if (this.storage[hashIndex + 1] === 'undefined') {
+      newNode.tail = true;
+    } else {
+      newNode.tail = null;
+    }
+
+    //checking how to assign head property for our new Node
+    if (newNode.tail === true) {
+      newNode.next = null;
+    } else {
+      newNode.next = [hashIndex + 1];
+    }
+    // needs to refer to stuff before and after the place we're setting the node at
+    newNode.tail = this.storage[this.storage.size]; //
+    this.storage.size += 1;
+  }
+  return this.storage.size;
 };
+
+const run = HashTable.prototype.set();
+run(2, 3)
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +83,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hashIndex = hashCode(key, this.SIZE) //nothing there
+  let lookingFor = key;
+  if (this.storage[key] === null) {
+    return 'empty';
+  } else if (this.storage[key].length === 1) { //one value at the given index
+    return this.storage[key];
+  } else { //more than one value at the given index, only return head
+    return this.storage.key[head];
+  }
 };
 
 /**
@@ -50,6 +103,25 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  if (this.storage[key] === 'undefined') {
+    return 'undefined';
+  } 
+  if (this.storage.key.head === true) {
+    this.storage[key -1].head === true && this.storage[key].head === false; //reassinging head in case the deleted node was the head
+  } 
+  if (this.storage.key.tail === true) {
+    this.storage[key +1].tail === true && this.storage[key].tail === false;//reassinging tail in case the deleted node was the tail
+  } 
+  if (true) {
+    let before = this.storage.key.back; //nodes before and after current node. 
+    let after = this.storage.key.next; //connect these using back and next.
+    
+    //connect the nodes before and after the node we're deleting
+    before.next = after; 
+    after.back = before;
+
+    delete this.storage.key;
+  }
 
 };
 
