@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /**
 * HashTable costructor
 *
@@ -7,7 +8,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,8 +24,49 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // pass in the keys to the hash function - get a location
+  let location = hashCode(key, this.SIZE);
+  let counter = 0;
+  // if has has collision, handle collision appropriately
+  // slot is taken, find the spot open and reassign location
+  if (this.storage[location]) {
+    for (let i = this.SIZE - 1; i >= 0; i--) {
+      if (!this.storage[i]) {
+        location = i;
+      } else {
+        // just to keep track of how many spots were already filled
+        counter++;
+      }
+    }
+  } 
+  else {
+    // if location is open, push the key value pair in the location
+    if (!this.storage[location]) {
+      this.storage[location] = [];
+      this.storage[location].push(key, value);
+      // update the counter
+      counter ++;
+    } 
+    // if keys have been already used to store a value, overwrite the value
+    else {
+      if (this.storage[location][0] === key) {
+        this.storage[location][1] = value;
+      }
+    }
+  }
+  return counter;
 };
+
+
+// test cases:
+
+const hashExample =  new HashTable();
+console.log(hashExample);
+console.log(hashExample.storage.length)
+console.log(hashCode("key1", 16));
+console.log(hashExample.set("key1", 55));
+console.log(hashExample);
+console.log(hashExample.storage[2]);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +79,28 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // search for that key location
+  let location = hashCode(key, this.SIZE);
+  // if key found in that location, return value
+  if (!this.storage[location]) return false;
 
+  if (this.storage[location][0] === key) {
+    return this.storage[location][1];
+  }
+  // if key is not in that location, loop around the hash table to find the key
+  else {
+    for (let i = 0; i < this.SIZE; i++) {
+      if (this.storage[i][0] === key) {
+        return this.storage[i][1];
+      }
+    }
+  }
+  // return false if not found
+  return false;
 };
+console.log(hashCode('key2', 16));
+console.log(hashExample.get('key2'))
+console.log(hashExample.get('key1'))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +111,42 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  // find the location through hash function passing in key and size
+  const location = hashCode(key, this.SIZE);
+  let valueOfKey;
 
+  if (!this.storage[location]) return undefined;
+
+  // if key matches the key in the location, 
+  if (this.storage[location][0] === key) {
+    // save the value in a variable,
+    valueOfKey = this.storage[location][1];
+    // remove the key, value in that location
+    this.storage.splice(location, 1, undefined);
+    return valueOfKey;
+  }
+  // else if key doesnt match the key in the location
+  else {
+    // loop around from the beginning and find if key exists
+    for (let i = 0; i < this.SIZE; i++) {
+      // if storage is not empty and if key exists
+      if (this.storage[i] && this.storage[i][0] === key) {
+        // save the value in a variable
+        valueOfKey = this.storage[i][1];
+        // remove the key and value in that location
+        this.storage.splice(i, 1, undefined);
+        return valueOfKey;
+      }
+    }
+  }
+  // return undefined if key not found
+  return undefined;
 };
 
+console.log(hashCode('ke24152345678908-123444456', 16));
+console.log(hashExample.remove('ke24152345678908-123444456'))
+console.log(hashExample.remove('key2'))
+console.log(hashExample.remove('key1'))
 
 // Do not modify
 function hashCode(string, size) {
