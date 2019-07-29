@@ -133,7 +133,7 @@ HashTable.prototype.remove = function(key) {
     if (temp.next === this.storage[hashVal].tail) {
       let nodeVal = this.storage[hashVal].tail.value;
       this.storage[hashVal].tail = temp;
-
+      return nodeVal;
     } 
     else {
       let nodeVal = temp.next.value;
