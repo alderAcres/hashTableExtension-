@@ -7,6 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
+  this.keys = [];
+  this.values = [];
   
   this.storage = new Array(this.SIZE);
 }
@@ -24,7 +26,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  
+  // store key parameter into key array
+  this.keys.push(key);
+  // store key value into value array
+  this.value.push(value);
 };
 
 /**
@@ -38,8 +44,18 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let i = 0, j = 0;
+// iterate over the keys and values arrays using a while loop
+while (i < this.keys.length && j < this.values.length) {
+  // check if the key in the keys array is equal to the key parameter
+    if (this.keys[i] === key){
+      // if it is, return that key's value
+      return this.values[i]
+    }
+  }
 
-};
+}
+// iterate over values array
 
 /**
 * remove - delete a key/value pair from the hash table
