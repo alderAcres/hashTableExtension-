@@ -30,7 +30,7 @@ HashTable.prototype.set = function(key, value) {
   // store key parameter into key array
   this.keys.push(key);
   // store key value into value array
-  this.value.push(value);
+  this.values.push(value);
 };
 
 /**
