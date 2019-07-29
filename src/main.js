@@ -94,16 +94,5 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
-const hash = new HashTable();
-hash.set('five', 'six');
-hash.set('five', 'seven');
-hash.set('six', 'twentyeleven');
-hash.set('eithg', 'seventeenes');
-hash.get('five');
-hash.remove('six');
-hash.remove('three');
-console.log(hash.storage);
-
-
 // Do not remove!!
 module.exports = HashTable;
