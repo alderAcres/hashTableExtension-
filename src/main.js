@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.count = 0; 
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,29 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+    const index = hashCode(key, this.SIZE); 
+    const item = [key, value]; 
+    const bucket = this.storage[index]; 
+  // If the given bucket exists, check to see if it should override the current key 
+  // If not, push the item to the bucket
+    if (bucket) {
+      for (let i = 0; i < bucket.length; i += 1) {
+        if (bucket[i][0] === key) {
+        bucket[i][1] = value; 
+        break; 
+        } 
+      }
+       // If the key does not exist, push the item and incremenent the count
+       bucket.push(item); 
+       this.count += 1;   
+    } else {
+      // If the bucket does not exist, 
+      // add the pair to the corresponding index and increment the count
+      this.storage[index] = [item];
+      this.count += 1; 
+    }
+    // Return the updated number of items in hash table
+    return this.count; 
 };
 
 /**
@@ -38,7 +60,17 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+    const index = hashCode(key, this.SIZE); 
+    const bucket = this.storage[index]; 
+    // If the bucket already exists, 
+    // iterate through the bucket and return the corresponding value
+    if (bucket) {
+      for (let i = 0; i < bucket.length; i += 1) {
+        if (bucket[i][0] === key) return bucket[i][1]; 
+      }  
+    } 
+    // If the bucket or key does not exist, return undefined.
+    return undefined; 
 };
 
 /**
@@ -50,8 +82,24 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
-};
+    const index = hashCode(key, this.SIZE); 
+    const bucket = this.storage[index]; 
+    // If the bucket exists, iterate through the bucket and check each key 
+    if (bucket) {
+      for (let i = 0; i < bucket.length; i += 1) {
+        // If the key in bucket matches the key arg, remove the pair from the bucket
+        // Decremenet the count and return the deleted value 
+        if (bucket[i][0] === key) {
+            const deletedValue = bucket[i][1]; 
+            bucket.splice(i, 1); 
+            this.count -= 1; 
+            return deletedValue; 
+        }
+      }
+    }
+    // If the key does not exist, return undefined; 
+    return undefined; 
+};  
 
 
 // Do not modify
