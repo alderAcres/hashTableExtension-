@@ -70,6 +70,10 @@ HashTable.prototype.get = function(key) {
   //if there is a value there, then start looking through the list until the next property is null
   let currentNode = this.storage[location];
   //at each step compare the value of the key to the key given
+  if (currentNode.key === key) {
+    return currentNode.value;
+  } 
+
   while (currentNode.next !== null) {
     //when the key matches, return the value of that node.
     if (currentNode.key === key) {
@@ -91,6 +95,33 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //find the location in the array using the hashCode function
+  let location = hashCode(key, this.SIZE);
+  //if there is nothing in that location, return undefined
+  if (!this.storage[location]) {
+    return;
+  }
+  //if there is something there, then start comparing they key in that node to the given key
+  let currentNode = this.storage[location];
+  //compare the first item first to see if it matches and delete the whole space if there is only one node
+  if (currentNode.key === key && currentNode.next === null) {
+    //set a vlue to hold the value for return
+    let returnValue = currentNode.value;
+    delete this.storage[location];
+    return returnValue;
+  }
+
+  while (currentNode.next !== null) {
+    if (currentNode.key === key) {
+      let returnValue = currentNode.value;
+      delete this.storage[location];
+      return returnValue;
+    }
+    currentNode = currentNode.next;
+  }
+
+  //if nothing is found, return undefined.
+  return;
 
 };
 
