@@ -24,7 +24,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let index = hashCode(key,this.SIZE)
+  if(!this.storage[index]){
+    this.storage[index] = []
+  }
+  this.storage[index].push([key, value])
+  //console.log(this.storage[index])
+  return index
 };
 
 /**
@@ -38,7 +44,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let index = hashCode(key, this.SIZE)
+  //if there is no bucket
+  if(!this.storage[index]) return null
+  for(let bucket of this.storage[index]){
+    //if key is found
+    if(bucket[0] === key){
+      return bucket [1]
+    }
+  }
 };
 
 /**
@@ -50,7 +64,24 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key, this.SIZE)
+  //if key does not exists return undefined
+  if(!this.storage[index]) return undefined
+  //two options:
+  //if we have only one element in bucket
+  //if my bucket is an array of key/value pairs
+  if(this.storage[index].length === 1){
+    delete this.storage[index]
+  }else{
+    //iterate over the bucket 
+    for(let bucket of this.storage[index]){
+    //if key is found
+    if(bucket[0] === key){
+      delete bucket [1]
+      }
+    }
+  }
+  console.log('after', this.storage)
 };
 
 
