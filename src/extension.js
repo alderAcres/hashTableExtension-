@@ -41,7 +41,7 @@ function HashTable() {
  * @return {number} The new number of items stored in the hash table
  */
 HashTable.prototype.set = function(key, value) {
-  if(this.counter / this.SIZE > 0.75) { // if more than 75% storage, update
+  if(this.length / this.SIZE > 0.75) { // if more than 75% storage, update
     this.SIZE *= 2; // double the size
     const oldStorage = this.storage; // get reference to the storage
     this.storage = new Array(this.SIZE); // create new storage with this.SIZE
@@ -67,7 +67,7 @@ HashTable.prototype.set = function(key, value) {
     // and assign it to storage at the hashcode index
     this.storage[index] = {[key]: value};
   }
-  if(!sameKey) this.counter++; // if input key is new to the storage, then increment the counter
+  if(!sameKey) this.length++; // if input key is new to the storage, then increment the counter
   return this.counter;
 };
 
@@ -104,11 +104,11 @@ HashTable.prototype.remove = function(key) {
       // copy *primitive type* the value stored at the object with key matching
       value = this.storage[index][key];
       delete this.storage[index][key]; // remove the key and value pair from the object
-      this.counter--;
+      this.length--;
     }
   }
   // if less than 25% storage and SIZE is greater than 16, update hash table
-  if(this.counter / this.SIZE < 0.25 && this.SIZE > 16) {
+  if(this.length / this.SIZE < 0.25 && this.SIZE > 16) {
     this.SIZE /= 2; // the size divided by 2
     const oldStorage = this.storage; // get reference to the storage
     this.storage = new Array(this.SIZE); // create new storage with this.SIZE
