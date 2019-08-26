@@ -45,7 +45,7 @@ HashTable.prototype.set = function(key, value) {
     this.SIZE *= 2; // double the size
     const oldStorage = this.storage; // get reference to the storage
     this.storage = new Array(this.SIZE); // create new storage with this.SIZE
-    this.counter = 0; // set counter to zero
+    this.length = 0; // set counter to zero
     for(let i = 0; i < oldStorage.length; i++) { // iterate through old storage and set
       for(let oldKey in oldStorage[i]) { // iterate through the key and value pair stored in the old storage and call set (recursion)
         this.set(oldKey, oldStorage[i][oldKey]);
@@ -112,7 +112,7 @@ HashTable.prototype.remove = function(key) {
     this.SIZE /= 2; // the size divided by 2
     const oldStorage = this.storage; // get reference to the storage
     this.storage = new Array(this.SIZE); // create new storage with this.SIZE
-    this.counter = 0; // set counter to zero
+    this.length = 0; // set counter to zero
     for(let i = 0; i < oldStorage.length; i++) { // iterate through old storage and set
       for(let oldKey in oldStorage[i]) { // iterate through the key and value pair stored in the old storage and call set (recursion)
         this.set(oldKey, oldStorage[i][oldKey]);
