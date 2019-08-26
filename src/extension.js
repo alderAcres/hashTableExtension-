@@ -14,6 +14,69 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.usedSlots = 0;
+  
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.set = function(key, value) {
+  const hashKey = hashCode(key, this.SIZE);
+  if (!this.storage[hashKey]) {
+    this.storage[hashKey] = {[key]: value};
+    this.usedSlots++;
+  } else {
+    this.storage[hashKey][key] = value;
+  }
+  if((this.usedSlots/this.SIZE) > 0.75) {
+    let hashArr = [];
+    for(let hashes in this.storage) {
+      hashArr.push(this.storage[hashes]);
+    }
+    this.SIZE = (2 * this.SIZE);
+    this.storage = new Array(this.size);
+    hashArr.forEach(obj => {
+      for(let key in obj) {
+        this.set(key, obj[key]);
+      }
+    });
+  }
+  return this.usedSlots;
+};
+
+HashTable.prototype.get = function(key) {
+  const hashKey = hashCode (key, this.SIZE);
+  if (this.storage[hashKey]) {
+    return this.storage[hashKey][key];
+  } else {
+    return 'item is not located in hashTable';
+  }
+};
+
+HashTable.prototype.remove = function(key) {
+  const hashKey = hashCode (key, this.SIZE);
+  if (this.storage[hashKey]) {
+    delete this.storage[hashKey][key];
+    this.usedSlots--;
+  } else {
+    return undefined;
+  }
+  if(this.SIZE > 16 && (this.usedSlots/this.SIZE) < 0.25) {
+    let hashArr = [];
+    for(let hashes in this.storage) {
+      hashArr.push(this.storage[hashes]);
+    }
+    this.SIZE = (1/2 * this.SIZE);
+    this.storage = new Array(this.size);
+    hashArr.forEach(obj => {
+      for(let key in obj) {
+        this.set(key, obj[key]);
+      }
+    });
+  }
+};
+
 
 
 
