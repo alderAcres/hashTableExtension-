@@ -14,8 +14,33 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  // this.entries = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  const index = hashCode(key, this.SIZE);
+  if (this.storage[index] === undefined) {
+    // initialize 'buckets'
+    const buckets = {};
+    buckets[key] = value;
+    this.storage[index] = buckets;
+    this.storage[index][key];
+    // this.entries++;
+  }
+  // handle collisions 
+  this.storage[index][key] = value;
+  this.storage[index][key];
+  // this.entries++;
+  // console.log(this.entries);
+};
 
+HashTable.prototype.get = function(key) {
+  const index = hashCode(key, this.SIZE);
+  return this.storage[index][key];
+};
 
 // YOUR CODE ABOVE
 
