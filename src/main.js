@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /**
 * HashTable costructor
 *
@@ -7,9 +8,9 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,7 +25,9 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const index = hashCode(key, this.SIZE);
+  if (this.storage[index] === undefined) this.storage[index] = [[key, value]];
+  else this.storage[index].push([key, value]);
 };
 
 /**
@@ -38,7 +41,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  if (this.storage[index] === undefined) return undefined;
+  for (let i = 0; i !== this.storage[index].length; i += 1) {
+    if (this.storage[index][i][0] === key) return this.storage[index][i][1];
+  }
 };
 
 /**
@@ -50,7 +57,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  if (this.storage[index] === undefined) return undefined;
+  for (let i = 0; i !== this.storage[index].length; i += 1) {
+    if (this.storage[index][i][0] === key) {
+      const toBeRemoved = this.storage[index].splice(i, 1);
+      if (this.storage[index].length === 0) this.storage[index] = undefined;
+      this.numKeys -= 1;
+      return toBeRemoved[0][1];
+    }
+  }
 };
 
 
