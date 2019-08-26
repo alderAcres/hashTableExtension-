@@ -7,7 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.count = 0;
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +24,27 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+// 1) HashTable
+// 2) Bucket
+// 3) Objects
+// 4) Keys
+
+HashTable.prototype.set = function(key, value) {
+    // hash passed-in-key to create an bucket in the HashTable
+    let index = hashCode(key, this.SIZE)
+    //  if thre is no bucket in storage of hash create new bucket
+    if(!this.storage[index]){
+        // assigning hahsed key to a an empty object bucket and assing key / value to it
+        let newObj = {};
+        newObj[key] = value ;
+        this.storage[index] = newObj;
+        // increase the count size of the bucket
+        this.count++;
+    } else {
+        // the additional value is stored as a node like linked list
+        this.storage[index][key] = value ;
+    }
 };
 
 /**
@@ -38,7 +58,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+    // get index via hash function
+    let index = hashCode(key, this.SIZE)
 };
 
 /**
@@ -57,16 +78,16 @@ HashTable.prototype.remove = function(key) {
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
