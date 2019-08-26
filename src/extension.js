@@ -41,9 +41,22 @@ HashTable.prototype.set = function (key, value) {
     this.SIZE *= 2;
     this.resize();
   }
-  const index = hashCode (key, this.SIZE);
-  if (this.storage[index] === undefined) this.storage[index] = [[key, value]];
-  else this.storage[index].push([key, value]);
+  const index = hashCode(key, this.SIZE);
+  // Bucket was empty
+  if (this.storage[index] === undefined) {
+    this.storage[index] = [[key, value]];
+    this.numKeys += 1;
+    return this.numKeys;
+  }
+  // Checking if key was present -- if so, overwrite value
+  for (let i = 0; i !== this.storage[index].length; i += 1) {
+    if (this.storage[index][i][0] === key) {
+      this.storage[index][i][1] = value;
+      return this.numKeys;
+    }
+  }
+  // Bucket was not empty, key was not present--push new key/value pair
+  this.storage[index].push([key, value]);
   this.numKeys += 1;
   return this.numKeys;
 };

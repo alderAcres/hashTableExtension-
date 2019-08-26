@@ -9,6 +9,7 @@
 function HashTable() {
   this.SIZE = 16;
   this.storage = new Array(this.SIZE);
+  this.numKeys = 0;
 }
 
 
@@ -26,8 +27,20 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   const index = hashCode(key, this.SIZE);
-  if (this.storage[index] === undefined) this.storage[index] = [[key, value]];
-  else this.storage[index].push([key, value]);
+  if (this.storage[index] === undefined) {
+    this.storage[index] = [[key, value]];
+    this.numKeys += 1;
+    return this.numKeys;
+  }
+  for (let i = 0; i !== this.storage[index].length; i += 1) {
+    if (this.storage[index][i][0] === key) {
+      this.storage[index][i][1] = value;
+      return this.numKeys;
+    }
+  }
+  this.storage[index].push([key, value]);
+  this.numKeys += 1;
+  return this.numKeys;
 };
 
 /**
