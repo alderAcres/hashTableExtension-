@@ -33,11 +33,11 @@ HashTable.prototype.set = function(key, value) {
 };
 
 // My own tests:
-const testHashTable = new HashTable();
-testHashTable.set('testKey', 'test value');
-testHashTable.set('testKey2', 'test value2');
-console.log(testHashTable.set('testKey', 'test value collision 1'));
-console.log(testHashTable);
+// const testHashTable = new HashTable();
+// testHashTable.set('testKey', 'test value');
+// testHashTable.set('testKey2', 'test value2');
+// console.log(testHashTable.set('testKey', 'test value collision 1'));
+// console.log(testHashTable);
 
 /**
  * get - Retrieves a value stored in the hash table with a specified key
