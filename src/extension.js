@@ -68,7 +68,7 @@ HashTable.prototype.set = function(key, value) {
     this.storage[index] = {[key]: value};
   }
   if(!sameKey) this.length++; // if input key is new to the storage, then increment the counter
-  return this.counter;
+  return this.length;
 };
 
 /**
