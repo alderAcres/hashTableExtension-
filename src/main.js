@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.index = 0;
 }
 
 /**
@@ -24,35 +25,51 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hashed = hashCode(key, this.SIZE);
+  if(this.storage[hashed] === undefined) this.storage[hashed] = {[key] : value};
+  if(this.storage[hashed][key] === undefined) {
+  this.storage[hashed][key] = value;
+  this.index++;
+  }
+  return this.index;
 };
 
 /**
-* get - Retrieves a value stored in the hash table with a specified key
-*
-* - If more than one value is stored at the key's hashed address, then you must retrieve
-*   the correct value that was originally stored with the provided key
-*
-* @param {string} key - key to lookup in hash table
-* @return {string|number|boolean} The value stored with the specifed key in the
-* hash table
-*/
+ * get - Retrieves a value stored in the hash table with a specified key
+ *
+ * - If more than one value is stored at the key's hashed address, then you must retrieve
+ *   the correct value that was originally stored with the provided key
+ *
+ * @param {string} key - key to lookup in hash table
+ * @return {string|number|boolean} The value stored with the specifed key in the
+ * hash table
+ */
 HashTable.prototype.get = function(key) {
-
+  let hashed = hashCode(key, this.SIZE);
+  return this.storage[hashed][key];
 };
 
 /**
-* remove - delete a key/value pair from the hash table
-*
-* - If the key does not exist in the hash table, return undefined
-*
-* @param {string} key - key to be found and deleted in hash table
-* @return {string|number|boolean} The value deleted from the hash table
-*/
+ * remove - delete a key/value pair from the hash table
+ *
+ * - If the key does not exist in the hash table, return undefined
+ *
+ * @param {string} key - key to be found and deleted in hash table
+ * @return {string|number|boolean} The value deleted from the hash table
+ */
 HashTable.prototype.remove = function(key) {
-
+  let hashed = hashCode(key, this.SIZE);
+  delete this.storage[hashed][key];
+  this.index--;
 };
 
+let hased = new HashTable();
+hased.set(8,'d');
+console.log(hased.set(7,'b'))
+console.log(hased);
+console.log(hased.get(7));
+console.log(hased.remove(7))
+console.log(hased)
 
 // Do not modify
 function hashCode(string, size) {
