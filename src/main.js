@@ -45,7 +45,7 @@ console.log(newHashTable.set("secondkey", "secondValue"));
 console.log(newHashTable);
 
 /**
- * get - Retrieves a value stored in the hash table with a specified key
+ * get - Retrieves a value stored in the hash table with a specified key.
  *
  * - If more than one value is stored at the key's hashed address, then you must retrieve
  *   the correct value that was originally stored with the provided key

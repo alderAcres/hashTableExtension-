@@ -119,7 +119,7 @@ HashTable.prototype.remove = function(key) {
   if (this.storage[getIndex][key] === null) {
     return undefined;
   }
-  // create a variable to save the passing value that will be deleted later.
+  // create a variable to save the passing value that will be deleted later..
   let removedEle = this.storage[getIndex][key];
 
   // remove this ele from this.storage first
