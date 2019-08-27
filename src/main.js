@@ -6,8 +6,8 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
-  
+  this.SIZE = 16; 
+  this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hashedIndex = hashCode(key, this.SIZE);
+ 
+  if (!this.storage[hashedIndex]){
+    this.storage[hashedIndex] = {};
+    this.storage[hashedIndex][key] = value;
+    this.items+=1;
+  } else if (this.storage[hashedIndex][key]){
+    delete this.storage[hashedIndex][key];
+    this.storage[hashedIndex][key] = value;
+    this.items-=1
+  } 
+  return this.items
 };
 
 /**
@@ -38,8 +49,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
-};
+  let lookupIndex = hashCode(key, this.SIZE);
+  if (this.storage[lookupIndex]){
+    return this.storage[lookupIndex][key];
+  } 
+    return false;
+};  
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,10 +65,27 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let lookupIndex = hashCode(key, this.SIZE);
+  if (!this.storage[lookupIndex]){
+    return;
+  }
+  if (Object.entries(this.storage[lookupIndex]).length > 1){
+    delete this.storage[lookupIndex][key];
+    this.items-=1;
+    return;
+  }
+  let tempStorageForDeletedValue = this.storage[lookupIndex][key];
+  delete this.storage[lookupIndex];
+  this.items-=1;
+  return tempStorageForDeletedValue;
 };
 
-
+const hashtable = new HashTable();
+console.log(hashtable.set('123', 23));
+console.log(hashtable.set('hi', 44));
+console.log(hashtable.remove('123'));
+console.log(hashtable.set('asdasdasdasd', true));
+console.log( hashtable);
 // Do not modify
 function hashCode(string, size) {
   'use strict';
