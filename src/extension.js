@@ -14,8 +14,103 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+/**
+* HashTable costructor
+*
+* construct a new hash table
+*
+* - You may modify this constructor as you need to achieve the challenges below.
+*/
+function HashTable() {
+  this.SIZE = 16;
+  this.elem = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+/**
+* set - Adds given value to the hash table with specified key.
+*
+* - If the provided key has already been used to store another value, simply overwrite
+*   the existing value with the new value.
+* - If the hashed address already contains another key/value pair, you must handle
+*   the collision appropriately.
+*
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+  if(this.elem + 1 > this.SIZE * 3/4) {
+    this.SIZE = this.SIZE * 2;
+    this.reHash(this.SIZE);
+  }
 
+  let hash = hashCode(key, this.SIZE);
+  if(!this.storage[hash]) {
+    this.storage[hash] = {};
+  }
+  if(this.storage[hash][key] === undefined) {
+    this.elem++;
+  }
+  this.storage[hash][key] = value;
+  return this.elem;
+};
+
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+*
+* - If more than one value is stored at the key's hashed address, then you must retrieve
+*   the correct value that was originally stored with the provided key
+*
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+  let hash = hashCode(key, this.SIZE);
+  if(this.storage[hash]) {
+    return this.storage[hash][key];
+  }
+  else {
+    return undefined;
+  }
+};
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  if(this.SIZE > 16 && this.elem - 1 < this.SIZE/4) {
+    this.SIZE = this.SIZE/2;
+    this.reHash(this.SIZE);
+  }
+
+  let hash = hashCode(key, this.SIZE);
+  let deleted = undefined;
+  if(this.storage[hash]) {
+    if(this.storage[hash][key]) {
+      deleted = this.storage[hash][key];
+      delete this.storage[hash][key];
+      this.elem--;
+    }
+  }
+  return deleted;
+};
+
+HashTable.prototype.reHash = function(newSize) {
+  const newArr = new Array[newSize];
+  let hash;
+  for(let x in this.storage) {
+    hash = hashCode(x, newSize);
+    this.set(x, this.storage[x]);
+  }
+  this.storage = newArr;
+};
 
 // YOUR CODE ABOVE
 
