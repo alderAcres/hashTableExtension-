@@ -44,6 +44,7 @@ HashTable.prototype.set = function(key, value) {
   
 }
 
+
 let parentObj = new HashTable()
 console.log(parentObj)
 console.log(parentObj.set('Diane', 15 ))
