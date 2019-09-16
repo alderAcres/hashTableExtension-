@@ -6,6 +6,7 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
+  this.items = 0;
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
@@ -24,7 +25,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hashed = hashCode(key, this.storage.length);
+  if (this.storage[hashed] === undefined){
+    this.storage[hashed] = {};
+  }
+  this.storage[hashed][key] = value;
+  this.items++;
+  return this.items;
 };
 
 /**
@@ -38,8 +45,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[hashCode(key, this.storage.length)][key];
 };
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +58,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const removed = this.storage[hashCode(key, this.storage.length)][key];
+  if (removed === undefined) {return undefined};
+  delete this.storage[hashCode(key, this.storage.length)][key];
+  this.items--;
+  return removed;
 };
+
+// let tom = new HashTable();
+// console.log(tom.set('four',4));
+// console.log(tom.set('five',5));
+// console.log(tom.get('five'));
+// console.log(tom.get('four'));
+// console.log(tom.set('six', 6));
+// console.log(tom.remove('five'));
+// console.log(tom.get('five'));
 
 
 // Do not modify
