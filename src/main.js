@@ -35,7 +35,8 @@ HashTable.prototype.set = function(key, value) {
   // storing the key/value pairs within objects allows for easy collision handling
   this.storage[hashCode(key, this.SIZE)][key] = value;
   this.NUM += 1;
-  return ('hash was set! Num is now: ' + this.NUM);
+  // return ('hash was set! Num is now: ' + this.NUM);
+  return this.NUM;
 };
 
 /**
@@ -62,11 +63,11 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
   if (this.storage[hashCode(key, this.SIZE)][key] === undefined) return undefined;
-
+  const priorVal = this.storage[hashCode(key, this.SIZE)][key]; 
   delete this.storage[hashCode(key, this.SIZE)][key];
   this.NUM -= 1;
-  return ('hash deleted! Num is now: ' + this.NUM);
-
+  // return ('hash deleted! Num is now: ' + this.NUM);
+  return priorVal;
 
 };
 
