@@ -7,8 +7,15 @@
 */
 function HashTable() {
   this.SIZE = 16;
+  this.NUM = 0;
   
   this.storage = new Array(this.SIZE);
+
+  // initialize each slot in the hash array as an empty object
+  // takes up a bit more memory up-front, but improves program run-time
+  for (let i = 0; i < this.SIZE; i += 1) {
+    this.storage[i] = {};
+  }
 }
 
 /**
@@ -24,7 +31,12 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // store unique key/value pairs within object at the corresponding bucket in the hash table's storage array
+  // storing the key/value pairs within objects allows for easy collision handling
+  this.storage[hashCode(key, this.SIZE)][key] = value;
+  this.NUM += 1;
+  // return ('hash was set! Num is now: ' + this.NUM);
+  return this.NUM;
 };
 
 /**
@@ -38,7 +50,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[hashCode(key, this.SIZE)][key];
 };
 
 /**
@@ -50,6 +62,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  if (this.storage[hashCode(key, this.SIZE)][key] === undefined) return undefined;
+  const priorVal = this.storage[hashCode(key, this.SIZE)][key]; 
+  delete this.storage[hashCode(key, this.SIZE)][key];
+  this.NUM -= 1;
+  // return ('hash deleted! Num is now: ' + this.NUM);
+  return priorVal;
 
 };
 
@@ -72,3 +90,36 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+const hash = new HashTable;
+
+//* TESTING
+console.log('CHECK HASH CODES');
+console.log('aba', hashCode('aba', 16));
+console.log('lbqasdsa', hashCode('lbqasdsa', 16));
+console.log('lbq', hashCode('lbq', 16));
+console.log('')
+
+console.log('CHECK HASH SETTING');
+console.log(hash);
+console.log(hash.set('lbqasdsa', 5));
+console.log(hash);
+console.log(hash.set('lbq', 9));
+console.log(hash);
+console.log(hash.set('aba', 'a'));
+console.log(hash);
+console.log('');
+
+console.log('CHECK HASH GETTING');
+console.log('lbq', hash.get('lbq'));
+console.log('lbqasdsa', hash.get('lbqasdsa'));
+console.log(hash);
+console.log('');
+
+console.log('CHECK HASH REMOVAL');
+console.log(hash.remove('lbq'));
+console.log(hash);
+console.log(hash.remove('lbqasdsa'));
+console.log(hash);
+console.log(hash.remove('hyu'));
+console.log(hash.remove('lbq'));
