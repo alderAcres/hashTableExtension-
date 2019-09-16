@@ -40,8 +40,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-  const hashKey = hashCode(key)
-  return this.storage[hashKey][key]
+  const hashKey = hashCode(key, this.SIZE)
+  if(this.storage[hashKey]){
+    return this.storage[hashKey][key]
+  }
 };
 
 /**
