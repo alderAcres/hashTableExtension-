@@ -24,7 +24,12 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+let address = hashCode(key, this.SIZE);
+console.log(address);
+if(!this.storage[key]){
+  this.storage[address] = {};
+  this.storage[address][key] = value;
+}
 };
 
 /**
@@ -69,6 +74,8 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
-
+let container = new HashTable;
+container.set('password', {})
+console.log(container);
 // Do not remove!!
 module.exports = HashTable;
