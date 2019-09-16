@@ -24,8 +24,33 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const newPair = {};
+  newPair[key] = value;
+  // for(let key of this.storage){
+    if(this.key === undefined){
+      this.storage[hashCode(key,this.SIZE)] = value
+    }
+    else if (this.storage[hashCode(key,this.SIZE)]) {
+      //if this key/value pair already exists at the key
+      //create a new object
+      let removedPair = this.storage[hashCode(key,this.SIZE)];
+      let newObj = new this.storage[hashCode(key,this.SIZE)];;
+      newObj.key = value;
+      newObj[key++] = removePair
+      console.log(newObj)
+      // this.storage[hashCode(key,this.SIZE)] = value
+      // this.storage[(hashCode(key,this.SIZE)) + 1] = removedPair
+    }
+  
+}
 
-};
+
+let parentObj = new HashTable()
+console.log(parentObj)
+console.log(parentObj.set('Diane', 15 ))
+console.log(parentObj)
+console.log(parentObj.set('Diane', 17))
+console.log(parentObj)
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +63,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  for(let key of this.storage){
+    if(this.storage[hashCode(key,this.SIZE)]){
+      return this.storage[hashCode(key,this.SIZE)]
+    }
+  }
 };
 
 /**
@@ -50,7 +79,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  for(let key in this.storage){
+    if(this.key === undefined){
+      return undefined
+    }
+    else if( this.storage[hashCode(key,this.SIZE)]){
+      delete this.storage[hashCode(key,this.SIZE)]
+    }
+  }
 };
 
 
