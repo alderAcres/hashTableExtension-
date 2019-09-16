@@ -85,7 +85,14 @@ const testTable = new HashTable();
 testTable.set('one', 1);
 testTable.set('one', 3);
 testTable.set('two', 3);
+testTable.set('four', 'testString');
+testTable.set('five', [])
+console.log(testTable)
 console.log(testTable.get('two'))
+console.log(testTable.get('one'))
+console.log(testTable.get('four'))
+console.log(testTable.get('five'))
+console.log(testTable.remove('five'))
 console.log(testTable.remove('two'))
 console.log(testTable.remove('two'))
 testTable.set('three', 3);
