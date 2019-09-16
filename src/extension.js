@@ -14,6 +14,56 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.get = function(key) {
+  const hashKey = hashCode(key, this.SIZE)
+  if(this.storage[hashKey]){
+    return this.storage[hashKey][key]
+  }
+};
+
+HashTable.prototype.set = function(key, value) {
+  const hashKey = hashCode(key, this.SIZE)
+  if(!this.storage[hashKey]) this.storage[hashKey] = {}
+  this.storage[hashKey][key] = value
+  let count = 0
+  for(let ele of this.storage){
+    if(ele !== undefined){
+      count += 1
+    }
+  }
+  console.log("COUNT", count)
+  if(count >= this.SIZE * .75) {
+    const newArr = new Array(this.SIZE).concat(this.storage)
+    this.SIZE *= 2
+    console.log("newArr", newArr)
+    this.storage = newArr
+  }
+};
+
+
+HashTable.prototype.remove = function(key) {
+  const hashKey = hashCode(key, this.SIZE)
+
+  if(this.storage[hashKey]) {
+    const copy = this.storage[hashKey][key]
+    delete this.storage[hashKey][key]
+
+    let count = 0
+    for(let ele of this.storage){
+      if(ele !== undefined){
+        count += 1
+      }
+    }
+    if(this.SIZE > 16 && count <= this.SIZE * .25) {
+      const newArr = new Array(this.SIZE/2).concat(this.storage)
+      this.SIZE /= 2
+      console.log("newArr", newArr)
+      this.storage = newArr
+    }
+    
+    return copy
+  } 
+};
 
 
 
