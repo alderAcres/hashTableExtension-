@@ -41,7 +41,7 @@ HashTable.prototype.set = function(key, value) {
   }
   this.storage[hashCode(key, this.SIZE)][key] = value;
   // checking if hashTable needs to be resized
-  if (this.numItems / this.SIZE >= .75){
+  if (this.numItems / this.SIZE > .75){
     const newTable = new HashTable;
     newTable.SIZE = this.SIZE * 2;
     for(let i = 0; i < this.SIZE; i++){
@@ -87,7 +87,7 @@ HashTable.prototype.remove = function(key) {
   if (this.numItems / this.SIZE < .25 && this.SIZE > 16){
     const newTable = new HashTable;
     newTable.SIZE = this.SIZE / 2;
-    for(let i = 0; i < this.SIZE; i++){
+    for(let i = 0; i < this.SIZE; i++) {
       let keys = Object.keys(this.storage[i]);
       for(let key of keys){
         newTable.set(key, this.get(key));
@@ -103,11 +103,11 @@ HashTable.prototype.remove = function(key) {
 const hash = new HashTable;
 // console.log(hash);
 // hash.set('hi world', 7);
-// hash.set('hi world', 8);
+// hash.set('hi worlda', 8);
+// // for(let i = 0; i < 100; i++){
+// //   hash.set(i.toString(), i);
+// // }
 // console.log(hash);
-
-// Do not remove!!
-module.exports = HashTable;
 
 
 // YOUR CODE ABOVE
