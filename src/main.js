@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.length = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+    if(key!== null){
+      this.storage[key] = value;
+      this.length+=1;
+    } 
+    else{
+      
+      const newElementIndex = hashCode(value,this.SIZE)
+      this.storage[newElementIndex] = value;
+      this.length+=1;
 
+    }
+    return this.length;
 };
 
 /**
@@ -38,7 +49,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[key];
 };
 
 /**
@@ -50,7 +61,9 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  if( key > this.SIZE) return undefined;
+  this.storage.splice(key,1);
+  if(this.length > 0) this.length -=1
 };
 
 
@@ -72,3 +85,21 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+console.log(hashCode('apple',16))
+// hello index = 2
+
+const newHashTable = new HashTable;
+console.log(newHashTable.set(0,'hello')) // returns length of array after using the set method to get with provided index
+console.log(newHashTable.set(3,'orange')) 
+console.log(newHashTable.set(null,'apple')) // null is place holder for keys without specified index. ran out of time to make it more robust
+console.log(newHashTable.get(0))// returns hello
+console.log(newHashTable.get(10))//returns apple
+console.log(newHashTable.length)
+console.log(newHashTable.remove(3))
+console.log(newHashTable.length)
+console.log(newHashTable.remove(20))
+console.log(newHashTable.set(0,'hello')) // returns undefined for index that doesnt exist.
+console.log(newHashTable.storage[1])
+
+console.log(newHashTable)
