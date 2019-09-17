@@ -133,9 +133,8 @@ HashTable.prototype.remove = function(key) {
     for (let i = 0; i < this.SIZE; i++) {
       // rehash entire table based on first key of object at a give index
       const indexObject = this.storage[i];
-      console.log(indexObject);
       if (indexObject !== undefined) {
-        const newHashIdx = hashCode(Object.keys(indexObject)[0], this.SIZE);
+        const newHashIdx = hashCode(Object.keys(indexObject)[0] || indexObject, this.SIZE);
         this.storage[newHashIdx] = indexObject;
       }
     }
