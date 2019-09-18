@@ -14,6 +14,73 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+/**
+* HashTable costructor
+*
+* construct a new hash table
+*
+* - You may modify this constructor as you need to achieve the challenges below.
+*/
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+
+/**
+* set - Adds given value to the hash table with specified key.
+*
+* - If the provided key has already been used to store another value, simply overwrite
+*   the existing value with the new value.
+* - If the hashed address already contains another key/value pair, you must handle
+*   the collision appropriately.
+*
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+
+  if( this.storage.length >= 0.75*this.SIZE) {
+    console.log("resizing")
+    this.makeHashBigger();
+  }
+
+  for( let keys in this.storage) {
+    
+  }
+
+  const hashedIndex = hashCode(key, this.SIZE);
+  if (this.storage[hashedIndex]) {
+    this.storage[hashedIndex][key] = value;
+  } else {
+    this.storage[hashedIndex] = {};
+    this.storage[hashedIndex][key] = value;
+  }
+};
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+
+  if( this.SIZE > 16 && this.storage.length <= 0.25*this.SIZE) {
+    this.makeHashSmaller();
+  }
+
+  const hashedIndex = hashCode(key, this.SIZE);
+  const tempKey = key;
+  if (this.storage[hashedIndex][key]){
+    delete this.storage[hashedIndex]
+    return tempKey;
+  }
+  return undefined;
+};
 
 
 
@@ -35,4 +102,4 @@ function hashCode(string, size) {
 }
 
 // Do not remove!!
-module.exports = HashTable;
+// module.exports = HashTable;
