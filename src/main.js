@@ -24,8 +24,28 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // find where to put the obj = index
+  let index = hashCode(key, this.SIZE)
+  console.log(index)
+  // if obj alrdy exist, make another property
+  if (this.storage[index]) {
+    this.storage[index][key] = value
+  } else {
+    // if not, make a new obj and put that in the array
+    let obj = {}
+    obj[key] = value
+    this.storage[index] = obj
+  }
+
 
 };
+
+let test = new HashTable()
+console.log(test)
+test.set('hi000', 'value')
+test.set('key', 'hello')
+test.set('a', 'yi')
+console.log(test)
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +58,27 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // get index
+  let index = hashCode(key, this.SIZE)
+  console.log(index)
+  // loop the obj in the index
+  for (let eachKey in this.storage[index]) {
+    console.log(eachKey)
+    if (eachKey === key) {
+      console.log('key found')
+      console.log(this.storage[index][eachKey])
+      return this.storage[index][eachKey]
+    } else {
+      return undefined
+    }
+  }
 };
+
+console.log(test)
+console.log(test.get('hi000'))
+console.log(test.get('a'))
+
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +89,20 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key, this.SIZE)
+  console.log(index)
+  console.log(this.storage[index])
+  if (!this.storage[index][key]) {
+    return undefined
+  } else {
+    let result = this.storage[index][key]
+    delete this.storage[index][key]
+    return result
+  }
 };
 
+console.log(test)
+console.log(test.remove('a'))
 
 // Do not modify
 function hashCode(string, size) {
@@ -69,6 +119,8 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+console.log(hashCode('name', 16))
 
 // Do not remove!!
 module.exports = HashTable;
