@@ -15,7 +15,64 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key, this.SIZE);
 
+  if ((this.items + 1) > (.75 * this.SIZE)) {
+    this.increaseHashSize();
+  }
+
+  if (this.storage[index] === undefined) {
+    this.storage[index] = {};
+  }
+
+  this.storage[index][key] = value;
+  this.items += 1;
+  return this.items;
+};
+
+HashTable.prototype.increaseHashSize = function() {
+  this.SIZE *= 2;
+  this.items = 0;
+  keyPairs = {};
+
+  this.storage.forEach( hashSpace => {
+    if (hashSpace != undefined) {
+      for (let key in hashSpace) {
+        keyPairs[key] = hashSpace[key];
+      }
+    }
+  });
+
+  for (let newKey in keyPairs) {
+    this.set(newKey, keyPairs[newKey]);
+  }
+}
+
+HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
+
+  return this.storage[index][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  let index = hashCode(key, this.SIZE);
+  let returnValue = undefined;
+
+  if(this.items - 1 < .25 * this.SIZE) {
+    this.decreaseHashSize();
+  }
+
+  returnValue = this.storage[index][key];
+
+  delete this.storage[index][key];
+
+  return returnValue;
+};
+
+HashTable.prototype.decreaseHashSize() {
+
+}
 
 // YOUR CODE ABOVE
 
