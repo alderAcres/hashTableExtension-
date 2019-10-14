@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,20 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const code = hashCode(key, this.SIZE);
+  // console.log(code)
+  if (!this.storage[code]) {
+    this.storage[code] = {};
+    this.storage[code][key] = value;
+    return ++this.items;
+  } else if (this.storage[code][key]) {
+    this.storage[code][key] = value;
+    return this.items;
+  }
+  else if (this.storage[code] && !this.storage[code][key]) {
+    this.storage[code][key] = value;
+    return ++this.items;
+  } 
 };
 
 /**
@@ -38,7 +51,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const code = hashCode(key, this.SIZE);
+  // console.log(code)
+  // console.log(this.storage[code][key])
+  if (this.storage[code][key]) {
+    return this.storage[code][key]
+  } else {
+    return undefined;
+  }
 };
 
 /**
@@ -50,7 +70,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const code = hashCode(key, this.SIZE);
+  if (this.storage[code][key]) {
+    const temp = this.storage[code][key];
+    this.items--;
+    delete this.storage[code][key];
+    return temp;
+  } else {
+    return undefined;
+  }
 };
 
 
@@ -72,3 +100,18 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+const hash = new HashTable();
+console.log(hash);
+console.log(hash.set('Steph', 100));
+console.log(hash);
+console.log(hash.set('Steph', 101));
+console.log(hash.set('codesmith', 200))
+console.log(hash)
+console.log(hash.get('Steph'));
+console.log(hash.get('codesmith'))
+console.log(hash.remove('codesmith'))
+console.log(hash.items)
+console.log(hash.remove('Steph'))
+console.log(hash.items)
+// console.log(hash.get('hello'));
