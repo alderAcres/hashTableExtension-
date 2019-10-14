@@ -35,7 +35,7 @@ HashTable.prototype.set = function(key, value) {
     this.storage[potentialKey][key]=value;
    }
   else{
-    this.storage[potentialKey]={}; //always encapsulate in map within the array.
+    this.storage[potentialKey]={}; //always encapsulate in map within the array., when no object empty array there yet...
     this.storage[potentialKey][key]=value;
   }
 
@@ -92,12 +92,3 @@ function hashCode(string, size) {
 module.exports = HashTable;
 
 
-const myHashTable = new HashTable();
-myHashTable.set("hello", "world"); // key is hello, value is world
-myHashTable.set("fizz", "buzz"); // collision with prev
-myHashTable.set("foo", "bar");
-console.log(myHashTable.get("hello")); // prints world
-console.log(myHashTable.get("fizz")); // prints foo
-console.log(myHashTable.get("foo"));
-myHashTable.remove("foo");
-console.log(myHashTable.get("foo"));
