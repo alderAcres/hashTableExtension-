@@ -24,8 +24,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let index = hashCode(key, this.SIZE);
+  // console.log("This is the", index)
+  if (this.storage[index] === undefined) {
+    this.storage[index] = {};
+  }
+  this.storage[index][key] = value;
+  // console.log('storage with result', this.storage);
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +45,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+let index = hashCode(key, this.SIZE);
+// console.log('I am testing what I get', this.storage[index][key])
+return this.storage[index][key]
 };
 
 /**
@@ -50,7 +59,9 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  if (!this.storage[index][key]) return undefined;
+  delete this.storage[index][key]
 };
 
 
@@ -70,5 +81,22 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
+
+
 // Do not remove!!
 module.exports = HashTable;
+
+const newHash = new HashTable();
+newHash.set('My first Test', "Some value here");
+newHash.set('My Second Test', 16);
+console.log('Before deleting', newHash)
+newHash.remove('My first Test');
+console.log('After 1 deleting', newHash)
+newHash.remove('My first Test');
+console.log('After 2 deleting', newHash)
+
+console.log('The last test performed', newHash.remove('My first Test'))
+
+
+
+
