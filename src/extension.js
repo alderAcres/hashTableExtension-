@@ -14,7 +14,59 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.count = 0;
+  this.slots = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  let hash = hashCode(key, this.SIZE);
+  if(this.storage[hash]){
+    this.storage[hash][key] = value
+  }
+  else{
+    this.storage[hash] = {}
+    this.storage[hash][key] = value;
+    this.slots++;
+    if(this.slots >= this.SIZE * 0.75){
+        this.SIZE *= 2;
+        this.count = 0;
+        this.slots = 0;
+        let tempArr = this.storage;
+        this.storage = new Array(this.SIZE);
+        for(let i = 0; i < tempArr.length; i++){
+            for(var x in tempArr[i]){
+                this.set(x, tempArr[i][x])
+            }
+        }
+    }
+  }
+  return ++this.count;
+};
+
+HashTable.prototype.remove = function(key) {
+  let output = this.storage[hashCode(key, this.SIZE)][key];
+  delete this.storage[hashCode(key, this.SIZE)][key];
+
+  //RAN OUT OF TIME BEFORE FIGURING OUT HOW TO REMOVE EMPTY OBJECTS
+  if(this.slots <= this.SIZE * 0.25){
+    this.SIZE /= 2;
+    this.count = 0;
+    this.slots = 0;
+    let tempArr = this.storage;
+    this.storage = new Array(this.SIZE);
+    for(let i = 0; i < tempArr.length; i++){
+        for(var x in tempArr[i]){
+            this.set(x, tempArr[i][x])
+        }
+    }
+  }
+
+  if(output) return output
+  else return undefined;
+};
 
 
 // YOUR CODE ABOVE

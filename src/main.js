@@ -7,7 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.count = 0;
+  this.slots = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +24,18 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
+//UNSURE IF ASKING FOR NUMBER OF SLOTS FILLED, OR NUMBER OF KEY:VALUE PAIRS. WENT WITH KEYS, BUT COULD EASILY RETURN THE 'SLOTS' VALUE
 HashTable.prototype.set = function(key, value) {
-
+  let hash = hashCode(key, this.SIZE);
+  if(this.storage[hash]){
+    this.storage[hash][key] = value
+  }
+  else{
+    this.storage[hash] = {}
+    this.storage[hash][key] = value;
+    this.slots++;
+  }
+  return ++this.count;
 };
 
 /**
@@ -38,7 +49,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  if(this.storage[hashCode(key, this.SIZE)]) return this.storage[hashCode(key, this.SIZE)][key]
+  else return undefined;
 };
 
 /**
@@ -50,7 +62,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let output = this.storage[hashCode(key, this.SIZE)][key];
+  delete this.storage[hashCode(key, this.SIZE)][key];
+  this.count--;
+  //NEEDED TO DELETE EMPTY OBJECTS :/
+  if(output) return output
+  else return undefined;
 };
 
 
