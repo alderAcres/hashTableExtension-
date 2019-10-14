@@ -7,8 +7,10 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  //the hasthable is an array...
   this.storage = new Array(this.SIZE);
+  //why would you use an array????
+  //this.storage={};
 }
 
 /**
@@ -24,6 +26,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //set is to add
+  if(key===undefined){
+    return;
+  }
+  let potentialKey=hashCode(key,this.SIZE);
+  if(this.storage[potentialKey]!==undefined){//if not undefined, we override by value. collision resolution
+    this.storage[potentialKey][key]=value;
+   }
+  else{
+    this.storage[potentialKey]={}; //always encapsulate in map within the array.
+    this.storage[potentialKey][key]=value;
+  }
 
 };
 
@@ -38,7 +52,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hashedKey=hashCode(key,this.SIZE);
+  return this.storage[hashedKey];
 };
 
 /**
@@ -49,8 +64,11 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function(key) {//removing an element is the same as swapping an element with null or undefined
+  let temp=this.storage[hashCode(key,this.SIZE)];
+this.storage[hashCode(key,this.SIZE)]=undefined;
 
+  return temp;
 };
 
 
@@ -72,3 +90,14 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+const myHashTable = new HashTable();
+myHashTable.set("hello", "world"); // key is hello, value is world
+myHashTable.set("fizz", "buzz"); // collision with prev
+myHashTable.set("foo", "bar");
+console.log(myHashTable.get("hello")); // prints world
+console.log(myHashTable.get("fizz")); // prints foo
+console.log(myHashTable.get("foo"));
+myHashTable.remove("foo");
+console.log(myHashTable.get("foo"));
