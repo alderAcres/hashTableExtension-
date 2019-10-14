@@ -32,7 +32,7 @@ HashTable.prototype.set = function(key, value) {
     }
     let returnValue = 0
     for(let i = 0; i < this.length; i++){
-      if(this.storage[i] !== undefined){
+      if(this.storage[hash][i] !== undefined){
         returnValue = returnValue + 1
       }
     }
@@ -107,27 +107,3 @@ function hashCode(string, size) {
 module.exports = HashTable;
 
 
-const newTable = new HashTable();
-console.log(newTable);
-newTable.set('a', 0);
-newTable.set('b', 1);
-newTable.set('c', 2);
-newTable.set('d', 3);
-newTable.set('e', 4);
-newTable.set('f', 5);
-newTable.set('g', 6);
-newTable.set('h', 7);
-newTable.set('i', 8);
-newTable.set('j', 9);
-newTable.set('k', 10);
-newTable.set('l', 11);
-newTable.set('m', 12);
-newTable.set('n', 13);
-newTable.set('o', 14);
-newTable.set('p', 15);
-console.log('1. set: ', newTable);
-newTable.set('p', 16);
-console.log(`2. set - overwrite 'p'(15) to 16: `, newTable.get('p'))
-console.log(`3. get: value at 'b' to equal 1: `, newTable.get('b')) // true
-console.log('4. remove: expect removed value to be 2:', newTable.remove('c'));
-console.log('5. remove nonexistent key = undefined: ', newTable.remove('z'));
