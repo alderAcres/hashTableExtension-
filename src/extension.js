@@ -14,8 +14,48 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+}
 
+// Did not finish
+HashTable.prototype.set = function(key, value) {
+  let counter = 0;
+  for (let i = 0; i < this.storage; i += 1) {
+    if (this.storage[i] !== undefined) {
+      counter += 1;
+    }
+  }
 
+  if (counter >= (this.SIZE / 4) * 3) {
+    this.SIZE *= 2;
+  }
+
+  if (this.storage[hashCode(key, this.SIZE)]) {
+    this.storage[hashCode(key, this.SIZE)][key] = value;
+  } else {
+    this.storage[hashCode(key, this.SIZE)] = {};
+    this.storage[hashCode(key, this.SIZE)][key] = value;
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  if (this.storage[hashCode(key, this.SIZE)]) {
+    return this.storage[hashCode(key, this.SIZE)][key]
+  } else {
+    return undefined;
+  }
+};
+
+HashTable.prototype.remove = function(key) {
+  if (!this.storage[hashCode(key, this.SIZE)][key]) {
+    return undefined;
+  }
+  let temp = this.storage[hashCode(key, this.SIZE)][key];
+  delete this.storage[hashCode(key, this.SIZE)][key];
+  return temp;
+};
 
 // YOUR CODE ABOVE
 
