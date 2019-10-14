@@ -15,22 +15,43 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
-
+HashTable.prototype.set = function (key, value) {
+  let i = hashCode(key, this.SIZE); // address
+  /// if key hasn't been used to store another value
+  if (this.storage[i] === undefined) {
+    const obj = {};
+    obj[key] = value;
+    this.storage[i] = obj;
+  }
+  else {// overwrite previous value
+    this.storage[i][key] = value;
+  }
+};
+HashTable.prototype.remove = function (key) {
+  let address = hashCode(key, this.SIZE);
+  if (this.storage[address][key] !== undefined) {
+    deletedVal = this.storage[address][key];
+    delete this.storage[address][key];
+    this.SIZE--;
+    return deletedVal;
+  }
+  if (!this.storage[address]) return undefined;
+};
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
