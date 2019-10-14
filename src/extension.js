@@ -6,6 +6,7 @@
   1. set:
       - If adding the new item will push the number of stored items to over 75% of
         the hash table's SIZE, then double the hash table's SIZE and rehash everything
+        
 
   2. remove:
       - If the hash table's SIZE is greater than 16 and the result of removing the
@@ -14,7 +15,71 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  const hashKey = hashCode(key);
+  
+  if (this.SIZE <= this.SIZE + this.SIZE * .75) {
+    if (this.storage.every(el => el !== undefined)) {
+      this.storage.push(hashKey);
+      this.SIZE++;
+    }
+    for (let key in this.storage) {
+      if (!this.storage[hashKey]) {
+        this.storage[hashKey] = {};
+        this.storage[hashKey][key] = value;
+      } else {
+        this.storage[hashKey][key] = value;
+      }
+    }
+  }
+
+  else if (this.SIZE > this.SIZE + this.SIZE * .75) {
+    this.SIZE = this.SIZE * 2;
+    for (let key in this.storage) {
+      if (!this.storage[hashKey]) {
+        this.storage[hashKey] = {};
+        this.storage[hashKey][key] = value;
+      } else {
+        this.storage[hashKey][key] = value;
+      }
+    }
+  }
+}
+
+// 2. remove:
+// - If the hash table's SIZE is greater than 16 and the result of removing the
+//   item drops the number of stored items to be less than 25% of the hash table's SIZE
+//   (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
+
+HashTable.prototype.remove = function(key) {
+  if (this.storage[hashKey] === undefined) return undefined;
+  
+  const hashKey = hashCode(key);
+  
+  if (this.SIZE > 16 && removed.length > Math.round(this.SIZE * .75)) {
+    this.SIZE = this.SIZE / 2;
+    const temp = {};
+    for (let key in this.storage) {
+      if (!temp[hashKey]) {
+        temp[hashKey] = {};
+        temp[hashKey][key] = value;
+        this.storage[hashKey][key] = temp[hashKey][key]
+      } else {
+        temp[hashKey][key] = value;
+        this.storage[hashKey][key] = temp[hashKey][key]
+      }
+    }
+  }
+  const removed = this.storage[hashKey][key]
+  delete this.storage[hashKey][key];
+  return removed;
+};
 
 
 // YOUR CODE ABOVE
