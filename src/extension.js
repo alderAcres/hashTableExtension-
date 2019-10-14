@@ -43,7 +43,7 @@ HashTable.prototype.set = function(key, value) {
   this.storage[index][key] = value;
   if(this.occupiedSpace > (this.SIZE * 3 / 4)){
     this.reIndex(this.SIZE * 2);
-    console.log("size increased!");
+    //console.log("size increased!");
   }
   return this.occupiedSpace;
 };
@@ -105,9 +105,9 @@ HashTable.prototype.remove = function(key) {
     returnVal = this.storage[index][key];
     delete this.storage[index][key];
   }
-  if(this.occupiedSpace < (this.SIZE * 3 / 4) && this.SIZE > 16){
+  if(this.occupiedSpace < (this.SIZE * 1 / 4) && this.SIZE > 16){
     this.reIndex(this.SIZE / 2);
-    console.log("size decreased!");
+    //console.log("size decreased!");
   }
   return returnVal;
 };
