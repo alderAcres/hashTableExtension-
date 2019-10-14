@@ -19,7 +19,19 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+// Did not finish
 HashTable.prototype.set = function(key, value) {
+  let counter = 0;
+  for (let i = 0; i < this.storage; i += 1) {
+    if (this.storage[i] !== undefined) {
+      counter += 1;
+    }
+  }
+
+  if (counter >= (this.SIZE / 4) * 3) {
+    this.SIZE *= 2;
+  }
+
   if (this.storage[hashCode(key, this.SIZE)]) {
     this.storage[hashCode(key, this.SIZE)][key] = value;
   } else {
@@ -44,20 +56,6 @@ HashTable.prototype.remove = function(key) {
   delete this.storage[hashCode(key, this.SIZE)][key];
   return temp;
 };
-
-HashTable.prototype.set = function(key) {
-  let counter = 0;
-  for (let i = 0; i < this.storage; i += 1) {
-    if (this.storage[i] !== undefined) {
-      counter += 1;
-    }
-  }
-  if (counter >= (this.SIZE / 4) * 3) {
-    this.SIZE *= 2;
-  }
-
-  // Did not have time to rehash everything
-}
 
 // YOUR CODE ABOVE
 
