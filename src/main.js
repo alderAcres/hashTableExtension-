@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,9 +24,10 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
-};
-
+  const hashedKey = hashCode(key, this.SIZE);
+  if (!this.storage[hashedKey]) this.storage[hashedKey] = {};
+  this.storage[hashedKey][key] = value;
+}
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -38,7 +39,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const hashedKey = hashCode(key, this.SIZE);
+  if (!this.storage[hashedKey]) return undefined;
 
+  const valueToReturn = this.storage[hashedKey][key];
+  return valueToReturn;
 };
 
 /**
@@ -50,8 +55,23 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const hashedKey = hashCode(key, this.SIZE);
+  if (!this.storage[hashedKey]) return undefined;
 
+  const deletedValue = this.storage[hashedKey][key];
+  delete this.storage[hashedKey][key];
+  return deletedValue;
 };
+
+const newHashTable = new HashTable();
+newHashTable.set('alpha', 1);
+newHashTable.set('beta', 2);
+newHashTable.set('gamma', 3);
+newHashTable.set('alpha', 4);
+console.log('OUTPUT: newHashTable ', newHashTable);
+console.log('GET ', newHashTable.get('gamma'));
+console.log('REMOVE ', newHashTable.remove('gamma'));
+console.log('OUTPUT: newHashTable ', newHashTable);
 
 
 // Do not modify
