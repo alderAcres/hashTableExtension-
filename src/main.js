@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.occupiedSpace = 0;
 }
 
 /**
@@ -24,7 +25,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let index = hashCode(key, this.SIZE);
+  if(!this.storage[index]){
+    this.storage[index] = {};
+  }
+  if(!this.storage[index][key]){
+    this.occupiedSpace++;
+  }
+  this.storage[index][key] = value;
+  return this.occupiedSpace;
 };
 
 /**
@@ -38,6 +47,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
+  if(!this.storage[index] || !this.storage[index][key])
+    return;
+  else
+    return this.storage[index][key];
 
 };
 
@@ -50,7 +64,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key,this.SIZE);
+  let returnVal;
+  if(!this.storage[index] || !this.storage[index][key])
+    return;
+  else {
+    this.occupiedSpace --;
+    returnVal = this.storage[index][key];
+    delete this.storage[index][key];
+  }
+  return returnVal;
 };
 
 
@@ -69,6 +92,22 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+let temp = new HashTable();
+console.log(temp.set("name", "tim"));
+console.log(temp.set("name2", "justin"));
+console.log(temp.get("name3"));
+console.log(temp.get("name"));
+console.log(temp.get("name2"));
+console.log(temp.set("name2", "justinnnn"));
+console.log(temp.get("name2"));
+console.log(temp.remove("name2"));
+console.log(temp.remove("name2"));
+console.log(temp.get("name2"));
+console.log(temp.set("name", "timmmm"));
+console.log(temp.get("name"));
+console.log(temp.set("name2", true));
+console.log(temp.set("name3", true));
 
 // Do not remove!!
 module.exports = HashTable;
