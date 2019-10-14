@@ -26,15 +26,21 @@ console.log(newTable);
 */
 HashTable.prototype.set = function (key, value) {
   let i = hashCode(key, this.SIZE); // address
+
   /// if key hasn't been used to store another value
   if (this.storage[i] === undefined) {
     const obj = {};
     obj[key] = value;
     this.storage[i] = obj;
+    let count = this.SIZE++;
+
+    console.log('count: ', count);
+    return count;
   }
   else {// overwrite previous value
     this.storage[i][key] = value;
   }
+
 };
 
 newTable.set('a', 0);
@@ -54,7 +60,7 @@ newTable.set('n', 13);
 newTable.set('o', 14);
 newTable.set('p', 15);
 console.log('1. set: ', newTable);
-newTable.set('p', 16);
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -70,7 +76,9 @@ HashTable.prototype.get = function (key) {
   let address = hashCode(key, this.SIZE);
   return this.storage[address][key];
 };
-console.log(`2. set - overwrite 'p'(15) to 16: `, newTable.get('p'))
+console.log(`prev value at 'p' is: 15 - `, newTable.get('p'));
+newTable.set('p', 20);
+console.log(`2. set - overwrite 'p'(15) to 20: `, newTable.get('p'))
 console.log(`3. get: value at 'b' to equal 1: `, newTable.get('b')) // true
 
 /**
