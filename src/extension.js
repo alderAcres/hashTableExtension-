@@ -14,7 +14,63 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.sizeCap = Math.floor((this.SIZE * 75) / 100);
+  this.storage = new Array(this.SIZE);
+  this.index = 0;
+}
 
+const myHash = new HashTable;
+
+
+HashTable.prototype.set = function(key, value) {
+  const hashKey = hashCode(key, this.SIZE);
+  console.log(this.index);
+  if (this.index === this.sizeCap - 1) {
+    this.SIZE *= 2;
+    const toRehash = [];
+    for (let i = 0; i < this.storage.length; i += 1) {
+      if (Object.keys(this.storage[i]).length !== 0) {
+        toRehash.push(Object.entries(this.storage[i]));
+      }
+    }
+    for (let i = 0; i < toRehash.length; i += 1) {
+      this.set(this.storage[i][0], this.storage[i][1]);
+    }
+  }
+  if (this.storage[hashKey] === undefined) this.storage[hashKey] = {};
+  this.storage[hashKey][key] = value;
+  this.index = this.index + 1;
+  return this.index;
+};
+
+myHash.set('sonic', 'thehedgehog');
+myHash.set('Kal', 'El');
+myHash.set('Pizza', 'Hut');
+myHash.set('thisis', 'tedious');
+myHash.set('gordon', 'gecko');
+myHash.set('Spiral', 'Notebook');
+myHash.set('key', 'chain');
+myHash.set('filling', 'buckets');
+myHash.set('sup', 'bro');
+myHash.set('coding', 'isfun');
+myHash.set('moment', 'oftruth');
+
+
+
+HashTable.prototype.get = function(key) {
+  const hashKey = hashCode(key, this.SIZE);
+  const output = this.storage[hashKey][key];
+  return output;
+};
+
+HashTable.prototype.remove = function(key) {
+  const hashKey = hashCode(key, this.SIZE);
+  const savedValue = this.storage[hashKey][key];
+  delete this.storage[hashKey][key];
+  return savedValue;
+};
 
 
 // YOUR CODE ABOVE
