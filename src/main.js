@@ -23,10 +23,23 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
+//hascode
 HashTable.prototype.set = function(key, value) {
-
+  const newHash = new HashTable();  //creating new Hash Table
+  const index = hashCode(key,this.SIZE)
+  if (!this.storage[index]){
+    this.storage[index] ={};
+    this.storage[index][key] = value;
+  }else{
+    this.storage[index][key] = value;
+  }
 };
-
+const set = new HashTable();
+console.log(set.set('hi', 4))
+console.log(set.set('hello', 5))
+console.log(set.set('goodday', 6))
+console.log(set.set('hi', 4))
+console.log(set)
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -38,9 +51,22 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const index = hashCode(key,this.SIZE)
+  if(!this.storage[index]){
+    return undefined
+  }else{
+    return this.storage[index][key]
+  }
 };
-
+const get = new HashTable();
+console.log(get.set('hi',4))
+console.log(get.set('hello',5))
+console.log(get.set('hi',5))
+console.log(get.get('hi'))
+console.log(get.get('hello'))
+console.log(get.get('goodday'))
+// console.log(set.get('hi'))
+console.log(get)
 /**
 * remove - delete a key/value pair from the hash table
 *
@@ -50,10 +76,24 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  if (!this.storage[hashCode(key, this.SIZE)]){
+    return undefined;
+  }
+  else{
+    const removed = this.storage[hashCode(key, this.SIZE)][key]
+    delete this.storage[hashCode(key, this.SIZE)][key]
+    return removed;
+  }
 };
 
-
+const remove = new HashTable();
+console.log(remove.set('hi',4))
+console.log(remove.set('hello',5))
+console.log(remove.set('hi',5))
+console.log(remove.get('hi'))
+console.log(remove.get('hello'))
+console.log(remove.remove('hi'))
+console.log(remove)
 // Do not modify
 function hashCode(string, size) {
   'use strict';

@@ -14,7 +14,47 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+//- If adding the new item will push the number of stored items to over 75% of
+// the hash table's SIZE, then double the hash table's SIZE and rehash everything
 
+HashTable.prototype.set = function(key, value) {
+  const newHash = new HashTable();  //creating new Hash Table
+  const index = hashCode(key,this.SIZE)
+  let unde = 0;
+  let define = 0;
+    for(let i=0; i<this.SIZE; i++){
+      
+    }
+
+  if (!this.storage[index]){
+    this.storage[index] ={};
+    this.storage[index][key] = value;
+  }else{
+    this.storage[index][key] = value;
+  }
+};
+
+//- If the hash table's SIZE is greater than 16 and the result of removing the
+//        item drops the number of stored items to be less than 25% of the hash table's SIZE
+//        (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
+
+HashTable.prototype.remove = function(key) {
+  if (!this.storage[hashCode(key, this.SIZE)]){
+    return undefined;
+  }
+  else{
+    const removed = this.storage[hashCode(key, this.SIZE)][key]
+    delete this.storage[hashCode(key, this.SIZE)][key]
+    return removed;
+  }
+};
+
+module.exports = HashTable;
 
 
 // YOUR CODE ABOVE
