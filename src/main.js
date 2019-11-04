@@ -24,8 +24,38 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //first we grab a hashcode from the hash function to be used in the bucket
+  let code = hashCode(key, this.SIZE);
+  
+  //check to see if the bucket at the specified hashcode index exists
+  if (this.storage[code] === undefined) {
+    this.storage[code] = [key,value];
+  } else {
+    let insert = false;
+    //if a key value pair already exists at the specified index, then loop through the 
+    //bucket at that index and reassign values;
+    for (let i = 0; i < this.storage[code].length; i++) {
 
+        let currBucket = this.storage[code][i];
+        //console.log(currBucket)
+        if (currBucket[0] === key) {
+          currBucket[1] = value;
+          insert = true;
+        }
+     }
+     //if 
+     if (insert === false) {
+       this.storage[code].push([key, value]);
+     }
+  } 
 };
+let table = new HashTable();
+table.set(0, 'Tim');
+table.set(1, 'Dan');
+table.set(2, 'Chris');
+table.set(5, 'Paul');
+
+console.log(table);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +68,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let code = hashCode(key, this.SIZE);
+  if (this.storage[code].length === 1) {
+    return this.storage[code];
+  } else {
+    for (let i = 0; i < this.storage[code].length; i++) {
+      if (this.storage[code][i] === key) {
+        return this.storage[code][i];
+      }
+    }
+  }
 };
+
+console.log(table.get(5))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,14 +91,33 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let code = hashCode(key, this.SIZE);
+  let removed;
+  //check to see if there are multiple values stored at the specified code
+  if (this.storage[code].length === 1 && this.storage[code][0][0] === key) {
+    removed = this.storage[code];
+    delete this.storage[code];
+    return removed;
 
+  }
+  //if there are multiple values at the specified code, loop through values and find the right key
+  else {
+    for (let i = 0; i < this.storage[code].length; i++) {
+      if (this.storage[code][i] === key) {
+        removed = this.storage[code][i];
+        return removed;
+      }
+    }
+  }
+  return undefined;
 };
+console.log(table.remove())
+
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
   let hash = 0;
   if (string.length === 0) return hash;
   
