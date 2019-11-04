@@ -7,9 +7,13 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
+
+
+const hash = new HashTable()
+console.log(hash)
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -23,7 +27,16 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
+
+console.log( hashCode("hello")
 HashTable.prototype.set = function(key, value) {
+
+
+
+  //to set a property first access whether or not a value exists for the particular index
+  //if it goes add on the value into that particular index with your key, if there is a key overrwrite it
+
+  //if there is no key/value pairing at the index you are accessing then you create a new object and add it onto that index
 
 };
 
