@@ -15,6 +15,47 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  this.currentSIze = 0;
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.set = function(key, value) {
+  let address = hashCode(key, this.SIZE);
+  if (!this.storage[address]) {
+    this.storage[address] = {};
+    this.currentSIze += 1
+  }
+  // if (this.storage[address] === key) this.storage[address][key] = value; // this is rewriting the value @ given key--don't need to resize the table for this
+  else {
+    this.storage[address][key] = value;
+    this.currentSIze += 1;
+  }
+  if (this.currentSIze  >= 0.75 * this.SIZE) {
+    this.rehash();
+  }
+};
+
+HashTable.prototype.remove = function(key) {
+  let address = hashCode(key, this.SIZE);
+  if (!this.storage[address]) return undefined;
+  else {
+    delete this.storage[address][key]; 
+    this.currentSIze -= 1;
+  }
+  if (this.currentSize <= 0.25 * this.SIZE && this.SIZE > 16) {
+    this.rehash();
+  }
+};
+
+
+HashTable.prototype.rehash = function(size) {
+
+  //will rehash the key/value pairs and distribute them in ne sized table
+
+}
+
 
 
 // YOUR CODE ABOVE
