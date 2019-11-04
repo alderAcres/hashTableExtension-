@@ -23,9 +23,42 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+
+//create a variable to access size in storage 
+//if its not there, assign it key/value in storage 
+
+//see if key exists at this idx
+//if it does, overwrite the value
+//state that its in storage by setting it to true 
+ //if its not in storage 
+  //add a new item at the end of this index
+
+HashTable.prototype.set = function(key, value) {
+  let idx = hashObj(key,this.SIZE);
+  if(this.storage[idx] === undefined) {
+    this.storage[idx] = ([[key,value]]);
+  } 
+  else {
+    let storageBox = false;
+    for(let i = 0; i < this.storage[idx].length; i++) {
+      if (storageBox === false) {
+        this.storageBox[idx].push([[key,value]]);
+      }
+    } 
+    
+    if (this.storageBox[idx][i][0] === key){
+      this.storageBox[idx][i][1] = value;
+      storageBox = true;
+    } 
+  }
 };
+
+
+
+
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -37,8 +70,9 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
+//
 HashTable.prototype.get = function(key) {
-
+    
 };
 
 /**
@@ -50,7 +84,9 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+      if (this.storage[key] === undefined){
+        return undefined;
+      }
 };
 
 
