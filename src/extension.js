@@ -15,7 +15,111 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+/**
+* HashTable costructor
+*
+* construct a new hash table
+*
+* - You may modify this constructor as you need to achieve the challenges below.
+*/
+// function HashTable(size = 16) {
+//   this.SIZE = size;
+//   this.COUNT = 0;
+  
+//   this.storage = new Array(this.SIZE);
+//   console.log('maybe here');
+//   for (let i = 0; i < this.SIZE; i++) {
+//     this.storage[i] = {};
+//   }
+// }
 
+// /**
+// * set - Adds given value to the hash table with specified key.
+// *
+// * - If the provided key has already been used to store another value, simply overwrite
+// *   the existing value with the new value.
+// * - If the hashed address already contains another key/value pair, you must handle
+// *   the collision appropriately.
+// *
+// * @param {string} key - key to be used to create hashed address
+// * @param {string|number|boolean} value - value to be stored in hash table
+// * @return {number} The new number of items stored in the hash table
+// */
+// HashTable.prototype.set = function(key, value) {
+//   let checkSize = Math.round(this.Size / 4 * 3);
+//   if (this.COUNT < checkSize) {
+
+//     console.log('here');
+//     this.storage[hashCode(key, this.SIZE)][key] = value;
+//     return ++this.COUNT;
+
+//   } else {
+
+//     console.log('HERE');
+//     let newHashTable = new HashTable(this.SIZE * 2);
+//     let index = 0;
+//     while (this.COUNT > 0) {
+//       for (let keys in this.storage[i]) {
+//         newHashTable.set(keys, this.remove(keys));
+//       }
+//       index++;
+//     }
+//     this.SIZE = newHashTable.SIZE;
+//     this.COUNT = newHashTable.COUNT;
+//     this.storage = newHashTable.storage;
+//     return this.set(key, value);
+
+//   }
+// };
+
+// /**
+// * get - Retrieves a value stored in the hash table with a specified key
+// *
+// * - If more than one value is stored at the key's hashed address, then you must retrieve
+// *   the correct value that was originally stored with the provided key
+// *
+// * @param {string} key - key to lookup in hash table
+// * @return {string|number|boolean} The value stored with the specifed key in the
+// * hash table
+// */
+// HashTable.prototype.get = function(key) {
+//   return this.storage[hashCode(key, this.SIZE)][key];
+// };
+
+// /**
+// * remove - delete a key/value pair from the hash table
+// *
+// * - If the key does not exist in the hash table, return undefined
+// *
+// * @param {string} key - key to be found and deleted in hash table
+// * @return {string|number|boolean} The value deleted from the hash table
+// */
+// HashTable.prototype.remove = function(key) {
+//   let checkSize = Math.round(this.Size / 4);
+//   if (this.COUNT < checkSize && this.SIZE > 16) {
+
+//     let newHashTable = new HashTable(Math.round(this.SIZE / 2));
+//     let index = 0;
+//     while (this.COUNT > 0) {
+//       for (let keys in this.storage[i]) {
+//         newHashTable.set(keys, this.remove(keys));
+//       }
+//       index++;
+//     }
+//     this.SIZE = newHashTable.SIZE;
+//     this.COUNT = newHashTable.COUNT;
+//     this.storage = newHashTable.storage;
+//     return this.remove(key);
+
+//   } else {
+
+//     let temp = this.storage[hashCode(key, this.SIZE)][key];
+//     delete this.storage[hashCode(key, this.SIZE)][key];
+//     this.count--;
+//     return temp;
+
+//   }
+// };
 
 // YOUR CODE ABOVE
 
@@ -33,6 +137,8 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
 
 // Do not remove!!
 module.exports = HashTable;
