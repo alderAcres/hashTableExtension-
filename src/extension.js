@@ -15,7 +15,67 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 4;
+  this.counter = 0
+  this.rehashed = false
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+
+  let ratio = (this.counter/this.SIZE)
+  if (ratio >= 0.75 && this.rehashed ===false){
+    
+    this.SIZE = this.SIZE*2;
+    console.log(this.storage)
+    for (let keys in this.storage){
+      console.log(this.storage[keys])
+    }
+
+
+    this.storage = new Array(this.SIZE)
+    console.log(this.storage)
+    this.rehashed = true
+
+
+  }
+
+
+  let hashKey = hashCode(key, this.SIZE)
+
+  if (this.storage[hashKey] === undefined) {
+    let hashKeyObj = {};
+    this.counter ++;
+    this.storage[hashKey] = hashKeyObj
+    this.storage[hashKey][key] = value
+  }
+  else {
+    this.storage[hashKey][key] = value;
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  let hashKey = hashCode(key, this.SIZE)
+  for (let keys in this.storage[hashKey]) {
+
+    if (keys === key) {
+      return this.storage[hashKey][key]
+    }
+  }
+  return "no value found with that given key";
+};
+
+HashTable.prototype.remove = function(key) {
+  let hashKey = hashCode(key, this.SIZE)
+  for (let keys in this.storage[hashKey]) {
+    if (keys === key) {
+      delete this.storage[hashKey][key];
+      return "item deleted";
+    }
+  }
+  return "no value found with that given key AKA undefined";
+};
 
 // YOUR CODE ABOVE
 
@@ -33,6 +93,24 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+let HT = new HashTable();
+
+HT.set("key1", "value1")
+HT.set("key2", "value1")
+HT.set("key3", "value1")
+HT.set("key3", "value1")
+console.log(HT.storage)
+
+
+
+
+
+
+console.log(HT)
+
+
 
 // Do not remove!!
 module.exports = HashTable;

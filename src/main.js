@@ -24,8 +24,27 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hashKey = hashCode(key, this.SIZE)
+  if (this.storage[hashKey] === undefined) {
+    let hashKeyObj = {};
+    this.storage[hashKey] = hashKeyObj
+    this.storage[hashKey][key] = value
+  }
+  else {
+    this.storage[hashKey][key] = value;
+  }
 };
+
+let HT = new HashTable;
+HT.set("pw1", "helloworld")
+HT.set("pw0", "helloworld2")
+HT.set("pw2", "helloworld3")
+HT.set("pw3", "helloworld4")
+HT.set("pw9000", "helloworld9000")
+HT.set("pw9001", "helloworld9001")
+HT.set("pw9002", "helloworld9002")
+HT.set("pw9998", "helloworld9998")
+console.log(HT.storage)
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,9 +57,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hashKey = hashCode(key, this.SIZE)
+  for (let keys in this.storage[hashKey]) {
+    console.log(keys)
+    if (keys === key) {
+      return this.storage[hashKey][key]
+    }
+  }
+  return "no value found with that given key";
 };
-
+console.log(HT.get("pw9998"))
+console.log(HT.get("pw1"))
+console.log(HT.get("pw9000"))
+console.log(HT.get("nokeyhere"))
 /**
 * remove - delete a key/value pair from the hash table
 *
@@ -50,9 +79,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let hashKey = hashCode(key, this.SIZE)
+  for (let keys in this.storage[hashKey]) {
+    if (keys === key) {
+      delete this.storage[hashKey][key];
+      return "item deleted";
+    }
+  }
+  return "no value found with that given key AKA undefined";
 };
 
+console.log(HT.remove("pw9998"))
+console.log(HT.remove("pw9998"))
+console.log(HT.storage)
 
 // Do not modify
 function hashCode(string, size) {
