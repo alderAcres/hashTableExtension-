@@ -14,9 +14,75 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  this.index = 0
+}
 
+HashTable.prototype.set = function(key, value) {
+  //if index exceeds 12, expand this.SIZE to 32
+  if (this.index === 2){
+    this.SIZE = this.SIZE * 2
+    let reHashObj = {}
+    reHashObj[key] = value
+    for (let i = 0; i < this.storage.length; i++){
+      if (this.storage[i]){
+        for(let [key,value] of Object.entries(this.storage[i])){
+          reHashObj[key] = value
+        }
+      }
+    }
+    for(let [key,value] of Object.entries(reHashObj)){
+      let bucketNum = hashCode(key, this.SIZE)
+      if (this.storage[bucketNum] && this.storage[bucketNum][key]) this.storage[bucketNum][key] = value
+      else if (this.storage[bucketNum]) {
+        this.index += 1
+        this.storage[bucketNum][key] = value
+      }
+      else {
+        this.index += 1
+        this.storage[bucketNum] = {}
+        this.storage[bucketNum][key] = value
+      }
+    }
+  } else {
+    let bucketNum = hashCode(key, this.SIZE)
+    if (this.storage[bucketNum] && this.storage[bucketNum][key]) this.storage[bucketNum][key] = value
+    else if (this.storage[bucketNum]) {
+      this.index += 1
+      this.storage[bucketNum][key] = value
+    }
+    else {
+      this.index += 1
+      this.storage[bucketNum] = {}
+      this.storage[bucketNum][key] = value
+    }
+  }
+};
+myTable = new HashTable
+myTable.set('full', 'stack')
+myTable.set('ape', 'shit')
+myTable.set('wt', 'f')
+console.log(myTable.index)
+console.log(myTable.storage)
 
+HashTable.prototype.get = function(key) {
+  let bucketNum = hashCode(key, this.SIZE)
+  return this.storage[bucketNum][key]
+};
 
+HashTable.prototype.remove = function(key) {
+  let bucketNum = hashCode(key, this.SIZE)
+  if (!this.storage[bucketNum][key]) return undefined
+  else {
+    delete this.storage[bucketNum][key]
+    this.index -= 1
+  }
+
+};
+myTable.remove('full')
+console.log(myTable.index)
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
