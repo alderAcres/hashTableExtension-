@@ -15,6 +15,78 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+// */
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.set = function(key, value) {
+
+    let hashKey = hashCode(key, this.SIZE)
+    let capacity
+
+    if (!this.storage[hashKey]) {
+      this.storage[hashKey] = {}
+      this.storage[hashKey][key] = value
+    }
+    let count = 0
+    for (let val of this.storage) {
+      if (val) count += 1
+    }
+    capacity = count / this.storage.length
+  
+    if (capacity > 0.75) {
+      let oldArray = JSON.parse(JSON.stringify(this.storage))
+      this.SIZE *= 2
+      for (let bucket of oldArray) {
+        if (bucket) {
+          for (let key in bucket) {
+            hashKey = hashCode(key, this.SIZE)
+            this.storage[hashKey] = {}
+            this.storage[hashKey][key] = bucket[key]
+          }
+        }
+      }
+    }
+};
+
+
+HashTable.prototype.get = function(key) {
+      hashKey = hashCode(key, this.SIZE)
+      return this.storage[hashKey][key]
+};
+
+
+HashTable.prototype.remove = function(key) {
+
+  hashKey = hashCode(key, this.SIZE)
+  let toDelete = this.storage[hashKey][key]
+  delete this.storage[hashKey][key]
+
+  let count = 0
+  for (let val of this.storage) {
+    if (val) count += 1
+  }
+  capacity = count / this.storage.length
+
+  if (capacity < 0.25) {
+    let oldArray = JSON.parse(JSON.stringify(this.storage))
+    this.SIZE /= 2
+    for (let bucket of oldArray) {
+      if (bucket) {
+        for (let key in bucket) {
+          hashKey = hashCode(key, this.SIZE)
+          this.storage[hashKey] = {}
+          this.storage[hashKey][key] = bucket[key]
+        }
+      }
+    }
+  }
+  return toDelete
+
+};
 
 
 // YOUR CODE ABOVE
@@ -33,6 +105,20 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+let HT = new HashTable()
+console.log(HT.storage)
+console.log(HT.set('testKey', 'testValue'))
+console.log(HT.set('test2', 'testVal'))
+console.log(HT.storage)
+
+
+
+
+
+
+
 
 // Do not remove!!
 module.exports = HashTable;
