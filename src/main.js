@@ -47,6 +47,7 @@ HashTable.prototype.set = function(key, value) {
  * hash table
  */
 HashTable.prototype.get = function(key) {
+  console.log("Getting...");
   let index = this.hash(key);
   if (!this.storage[index]) return null;
   for (let entry of this.storage[index]) {
@@ -56,21 +57,34 @@ HashTable.prototype.get = function(key) {
   }
 };
 
-const myTable = new HashTable();
-console.log(myTable);
-myTable.set("Test String", 5);
-console.log(myTable);
-console.log(myTable.get("Test String"));
-
 /**
  * remove - delete a key/value pair from the hash table
- *
  * - If the key does not exist in the hash table, return undefined
- *
  * @param {string} key - key to be found and deleted in hash table
  * @return {string|number|boolean} The value deleted from the hash table
  */
-HashTable.prototype.remove = function(key) {};
+HashTable.prototype.remove = function(key) {
+  let index = this.hash(key);
+  for (let entry of this.storage[index]) {
+    console.log("Checking hash table...", entry, this.storage[index]);
+    if (entry[0] === key) {
+      console.log("deleting...", entry);
+      this.storage[index].pop();
+    }
+  }
+  return key + " deleted";
+};
+
+const myTable = new HashTable();
+// console.log(myTable);
+myTable.set("Test String", 5);
+myTable.set("Other String", 1);
+myTable.set("Still Another String", 7);
+myTable.set("Still Another String", -999);
+// console.log(myTable);
+// console.log(myTable.get("Test String"));
+console.log(myTable.remove("Test String"));
+console.log("Removed?", myTable.storage);
 
 // Do not modify
 function hashCode(string, size) {
