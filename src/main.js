@@ -42,15 +42,17 @@ HashTable.prototype.set = function(key, value) {
   else {
     let storageBox = false;
     for(let i = 0; i < this.storage[idx].length; i++) {
-      if (storageBox === false) {
-        this.storageBox[idx].push([[key,value]]);
-      }
+      if (this.storageBox[idx][i][0] === key){
+        this.storageBox[idx][i][1] = value;
+        storageBox = true;
+      } 
     } 
     
-    if (this.storageBox[idx][i][0] === key){
-      this.storageBox[idx][i][1] = value;
-      storageBox = true;
-    } 
+    
+    if (storageBox === false) {
+      this.storageBox[idx].push([[key,value]]);
+    }
+
   }
 };
 
