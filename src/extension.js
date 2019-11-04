@@ -14,7 +14,157 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+/**
+* HashTable costructor
+*
+* construct a new hash table
+*
+* - You may modify this constructor as you need to achieve the challenges below.
+*/
+function HashTable() {
+  this.SIZE = 16;
+  this.count = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+/**
+* set - Adds given value to the hash table with specified key.
+*
+* - If the provided key has already been used to store another value, simply overwrite the existing value with the new value. aka add a kv pair
+* - If the hashed address already contains another key/value pair, you must handle the collision appropriately.
+*
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+  // 1. set:
+  //    - If adding the new item will push the number of stored items to over 75% of
+  //      the hash table's SIZE, then double the hash table's SIZE and rehash everything
+  if (++this.count / this.SIZE > 0.75) {
+    // first we double size
+    this.SIZE *= 2;
+    let newHash = hashCode(key, this.SIZE);
+    let oldHash = hashCode(key, this.SIZE/2);
+    // put the old value in the new slot:
+  }
+  console.log(key, value);
+  // first we need to hash the key
+  let hash = hashCode(key, this.SIZE);
+  // we want to create an object to store our kv pairs
+  let obj = {}
+  // if the storage doesn't have the hash: false;
+  if (!this.storage.hasOwnProperty(hash)) {
+    // we add our kv pair to the object
+    obj[key] = value;
+    // we want to add the object as the value of our hash in storage
+    this.storage[hash] = obj;
+    // increase the count
+    this.count++;
+    // return
+    console.log(this.count);
+    return this.count;
+  } else {
+    // If the hashed address already contains the hash,
+    // add the kv pair to the hash value;
+    this.storage[hash] = obj[key];
+    // increase the count:
+    this.count++;
+    // return
+    return this.count;
+  }
+};
+
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+*
+* - If more than one value is stored at the key's hashed address, then you must retrieve
+*   the correct value that was originally stored with the provided key
+*
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+  console.log(key);
+  // check to see if the hash table has the hashed key
+  // get the hash of the key
+  let hash = hashCode(key, this.SIZE);
+  // now that we have the hash we need to get to the stored object
+  let valueObj = this.storage[hash];
+  // now that we have the object value we need to see if the passed in key either exists or doesn't.
+  if (valueObj.hasOwnProperty(key)) {
+    // if it has our key then return the value
+    console.log(valueObj);
+    return valueObj[key];
+    // if it doesn't 
+  } else {
+    // false;
+    return false;
+  }
+};
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  // 2. remove:
+  // - If the hash table's SIZE is greater than 16 and the result of removing the
+  // item drops the number of stored items to be less than 25% of the hash table's SIZE
+  // (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
+  if (this.SIZE > 16 && (Math.floor((this.count - 1) / this.SIZE)) < 0.25) {
+    // then we reduce the table's size and rehash everything
+    // but how? 
+    // first you rehash all the properties by making a copy
+  }
+  // get our hash:
+  let hash = hashCode(key, this.SIZE);
+  // does this hash exist:
+  if (this.storage.hasOwnProperty(hash)) {
+    // get the object in the value of that index of the hash table:
+    let obj = this.storage[hash];
+    // now check to see if the key is in the hashTable
+    if (obj.hasOwnProperty(key)) {
+      delete obj[key];
+    } else{
+      return undefined;
+    }
+  } else {
+    return undefined;
+  }
+};
+
+
+// Do not modify
+function hashCode(string, size) {
+  'use strict';
+  
+  let hash = 0;
+  if (string.length === 0) return hash;
+  
+  for (let i = 0; i < string.length; i++) {
+    const letter = string.charCodeAt(i);
+    hash = ((hash << 5) - hash) + letter;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  
+  return Math.abs(hash) % size;
+}
+
+
+var myHash = new HashTable();
+console.log(myHash, myHash.set('A', 'Apple'))
+console.log(myHash,myHash.get('A'))
+console.log(myHash.remove('A'), myHash)
+
+
+// Do not remove!!
+module.exports = HashTable;
 
 
 // YOUR CODE ABOVE
