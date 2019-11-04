@@ -14,10 +14,85 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
 
+  // the array will be instantiated as [undefined, undefined....]
+  // pop() and push() shouldn't be used on the storage
+  this.storage = new Array(this.SIZE);
+}
 
+// stores a value in the storage array
+// hint: use the hash function to determine where in the array to store the value
+HashTable.prototype.set = function(key, value) {
 
-// YOUR CODE ABOVE
+  const array = this.storage; // 16 buckets
+  // hash the key
+  let hash = hashCode(key, this.SIZE);
+  let currentLength = this.SIZE;
+
+  
+  // if the index is empty 
+  if (!array[hash]) {
+    // we create a new object
+    const myObj = {};
+    // assign key value into the new object
+    myObj[key] = value;
+    // we set myObject kv pair as the value of the index in array. 
+    array[hash] = myObj[key];
+    
+    currentLength += 1;
+
+    if(currentLength > Math.floor((0.75 * this.SIZE) + this.SIZE)){
+      delete array[hash][key]; // remove previously set key
+      this.SIZE *= 2
+      hash = hashCode(key, this.SIZE);
+      if (!array[hash]) {
+        // we create a new object
+        //const myObj = {};
+        // assign key value into the new object
+        myObj[key] = value;
+        // we set myObject kv pair as the value of the index in array. 
+        array[hash] = myObj[key];
+        
+        currentLength += 1;
+    }
+
+  } else {
+      if (array[hash].hasOwnProperty(key)){
+          array[hash][key] = value
+          return;
+      } else {
+        array[hash][key] = value
+        return;
+      }
+  }
+  return array;
+};
+
+// return a previously stored value
+HashTable.prototype.get = function(key) {
+  const array =  this.storage;
+  const indexToGet = hashCode(key, this.SIZE);
+
+  return array[indexToGet]; 
+};
+
+// returns and removes a key from the hash table
+HashTable.prototype.remove = function(key) {
+  const myStorage = this.storage;
+  const indexToRemove = hashCode(key, this.SIZE);
+
+  const valueToReturn = myStorage[indexToRemove];
+
+  // valueToReturn !== key
+
+  delete myStorage[indexToRemove];
+
+  return valueToReturn;
+};
+
+// returns a number between 0 and size that is unique* and generated from the the inputted string
 
 function hashCode(string, size) {
   'use strict';
