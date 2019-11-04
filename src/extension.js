@@ -41,6 +41,10 @@ function HashTable() {
  * @param {string|number|boolean} value - value to be stored in hash table
  * @return {number} The new number of items stored in the hash table
  */
+
+// edgecase might be if you add a new value to the same index, the length is still incremented.
+// is the prompt defining the number of objects stored as buckets with existing elements or just items in buckets?
+// the difference is that some items will not be stored in the same buckets when we shift the size, since the hash function uses size as an input parameter.
 HashTable.prototype.set = function (key, value) {
   if (!this.storage[hashCode(key, this.SIZE)]) {
     this.storage[hashCode(key, this.SIZE)] = {};
