@@ -28,9 +28,12 @@ HashTable.prototype.set = function(key, value) {
   const index = hashCode(key, this.SIZE);
 
   //use coded index to assign the value to proper position
-  this.storage[index] = value;
-
+  // this.storage[index] = {value};
+  
   // -- handle collison -- 
+  this.storage[index] = {};
+  this.storage[index][key] = value;
+
 };
 
 /**
@@ -70,8 +73,8 @@ HashTable.prototype.remove = function(key) {
   //remove the object --- delete a property
 
   //if element is in object delete key value pair
-  if (this.storage[index === Object]) {
-    delete this.storage[index].key;
+  if (this.storage[index].constructor === Object) {
+    delete this.storage[index][key];
   } else {
     //else set to undefined
     this.storage[index] = undefined;
@@ -79,8 +82,6 @@ HashTable.prototype.remove = function(key) {
 };
 
 const hashBrown = new HashTable;
-hashBrown.set('Mr', 'World')
-hashBrown.remove('Mr');
 
 
 console.log(hashBrown)
