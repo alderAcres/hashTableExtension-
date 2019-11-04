@@ -87,19 +87,3 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
-
-let test = new HashTable();
-console.log(test);
-test.set("rod", 24);
-test.set("bill", 33);
-test.set("val1", 33);
-console.log(test.storage);
-console.log("---");
-console.log(test.get("rod"));
-console.log(test.get("bill"));
-//test.get("val1");
-console.log(test.storage);
-test.remove("bill");
-test.remove("rod");
-console.log(test.remove("rod"));
-console.log(test.storage);
