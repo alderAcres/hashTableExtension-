@@ -40,8 +40,9 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-  if ((this.len/this.SIZE) 0.75) {
-    const newSize = this.SIZE * 2
+  console.log(this.len/this.SIZE)
+  if ((this.len/this.SIZE) > 0.75) {
+    let newSize = this.SIZE * 2
     for (bucket of this.storage) {
       for (previousEntry of Object.entires(bucket)) {
         let index = hashCode(previousEntry[0], newSize);
@@ -53,8 +54,8 @@ HashTable.prototype.set = function(key, value) {
         }
       }
     }
+    this.SIZE = this.SIZE * 2
   }
-  this.SIZE = this.SIZE * 2
   let index = hashCode(key, this.SIZE);
   let newObj = { [key]: value }
   if (!this.storage[index]) {
