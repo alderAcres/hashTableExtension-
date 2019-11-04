@@ -96,17 +96,5 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
-// const testHash = new HashTable();
-// console.log(testHash.set(1, 4));
-// testHash.set(0, 0);
-// console.log(testHash.length)
-// console.log(testHash.set('hello', 5));
-// console.log(testHash.remove(1));
-// console.log(testHash);
-// console.log(testHash.length);
-// console.log(testHash.remove('hello'));
-// console.log(testHash.length)
-// console.log(testHash);
-
 // Do not remove!!
 module.exports = HashTable;
