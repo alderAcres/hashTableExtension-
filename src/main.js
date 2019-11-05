@@ -24,7 +24,24 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // this is to store values in our new Arr aka this.storage
+  // the key is coming from whatever fancy math stuff the hashCode func is spitting out
+  // the value is the size of the new Arr aka this.SIZE
+  // this set func adds the data, inserts the values in the arr
+  // store it into the arr
+  // think about obj as a container instead later on in case of collisions..
 
+  let address = this.hashCode(key, this.SIZE);
+  // this is to check if nothing is inside the storage, put this biddie in there!
+  if(!this.storage[address]){
+    this.storage[address] = []; //---> [[][][]] --> basically nested arrs but prob needs to be an obj if we get more stuff involved
+  }
+
+  // VESION 1: confusing AF for me so we will try this again
+  // this version confuses me so i will store the value of hashcode into a new label called address
+  // if(!this.storage[hashCode(key, this.SIZE)]){
+  //   this.storage[hashCode(key, this.SIZE)] = [];
+  // }
 };
 
 /**
@@ -38,7 +55,22 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // this is so we have a way to access values by their key
+  // aka that fancy math func address we get from the hashCode func
+  // the hashCode func will give us this address that points to this.storage
+  // aka the array that holds the index and val of the fun stuff we wanna access
 
+  // create a var to store the index or address
+  let address = this.hashCode(key);
+  // return this bad biddie out into the HashTable obj
+  // set the address inside the storage Arr
+  // find a way to check if the key spitted out already exists
+  if(this.storage[address] === address){
+    // totally unsure if it finds the same address should i just create a new
+    // because this way if it finds it, its totally going to overrride the previous val
+
+  }
+  return this.storage[address];
 };
 
 /**
@@ -50,7 +82,9 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // like before, run the hashCod key func to get the address
+  let address = this.hashCode(key);
+  // if the key does not exist in the hash table, return undefined 
 };
 
 
