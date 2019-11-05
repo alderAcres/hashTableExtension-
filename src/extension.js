@@ -14,6 +14,57 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  for (let index in this.storage){
+    this.storage[index] = {};
+  }
+  this.items = 0;
+}
+
+HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(key, this.SIZE);
+  const threshold = this.SIZE*.75;
+
+  if (!this.storage[hash][key] && this.items < threshold - 1){
+    this.storage[hash][key] = value;
+    this.items++;
+    return this.items;
+  } else if (!this.storage[hash][key]){
+    for (let hash of this.storage){
+      if (this.storage[hash]){
+        let tempKey = this.storage.hash
+      this.SIZE = this.SIZE *
+    
+    return "This key is unacceptable."
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  const hash = hashCode(key, this.SIZE);
+  for (let i = 0; i < this.storage.length; i++){
+    if (this.storage[hash][key]){
+      return this.storage[hash][key];
+    } else {
+      return undefined;
+    }
+  }
+};
+
+HashTable.prototype.remove = function(key) {
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash][key]){
+    let temp = this.storage[hash][key];
+    delete this.storage[hash][key];
+    this.items--;
+    return temp;
+  } else {
+    return "Please ensure your key is correct and try again.";
+  }
+};
+
+
 
 
 
