@@ -6,9 +6,27 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
+  this.bucketCount = 10000;
   this.SIZE = 16;
-  
+  this.buckets = [];
   this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.hashFunction = function(key) {
+   let hash = 0;
+   for (let i = 0; i < key.length; i += 1) {
+     hash += key.charCodeAt(i);
+   }
+
+   return hash;
+}
+
+HashTable.prototype.getBucketIndex = function (key) {
+  return this.hashFunction(key) % this.bucketCount;
+}
+
+HashTable.prototype.getBucket = function(key) {
+  return this.buckets[this.getBucketIndex(key)];
 }
 
 /**
@@ -24,7 +42,8 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // this.getBucket(key).set(key, value);
+  this.buckets.push()
 };
 
 /**
@@ -38,8 +57,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.getBucket(key).get(key);
 };
+
+const myHash = new HashTable();
+console.log(myHash);
+myHash.set('name', 'Rex');
+console.log(myHash);
 
 /**
 * remove - delete a key/value pair from the hash table
