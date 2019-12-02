@@ -11,6 +11,12 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+// At certain key, modulo by hash of key in order to get position at index
+
+HashTable.prototype.getHash = function(string, size) {
+  return this.storage[this.hashCode(string, size)]
+}
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,7 +30,8 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hash = this.getHash(key);
+  this.storage[hash][key] = value;
 };
 
 /**
@@ -38,7 +45,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.getHash(key);
 };
 
 /**
@@ -50,6 +57,9 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  if (this.storage[this.key])
+  const temp = this.getHash(key);
+
 
 };
 
