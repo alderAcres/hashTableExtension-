@@ -7,8 +7,9 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
+  this.count = 0;
 }
 
 /**
@@ -24,7 +25,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let keyhash = hashCode(key,this.size);
+  if (this.storage[keyhash] !== undefined) {
+    this.storage[keyhash][key] = value;
+  } else {
+    this.storage[keyhash] = {};
+    this.storage[keyhash][key] = value;
+  }
+  this.count++
+  return this.count;
 };
 
 /**
@@ -38,7 +47,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let keyhash = hashCode(key,this.size);
+  return this.storage[keyhash][key];
 };
 
 /**
@@ -50,6 +60,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let keyhash = hashCode(key,this.size);
+  if(!this.storage[keyhash][key]) {
+    return undefined;
+  }
+  let removed = this.storage[keyhash][key];
+  delete this.storage[keyhash][key];
+  this.count--;
+  return removed;
 
 };
 
@@ -57,18 +75,37 @@ HashTable.prototype.remove = function(key) {
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
 // Do not remove!!
 module.exports = HashTable;
+
+// const counter = (object, count = 0) => {
+//   let result = Object.entries(myobj).forEach(([key, value]) => {
+//     if (value === typeof 'object') {
+//       counter(value, count);
+//     }
+//     if(value) {
+//       count++
+//     }
+//   })
+//   return count
+// }
+// const myobj = {'hi':{'lvl2':'exists'}, 'hello': 'lvl1'};
+// console.log(counter(myobj));
+
+let hash = new HashTable();
+console.log(hash.set('toy', 'ball'));
+console.log(hash.get('toy'));
+console.log(hash.remove('toy'));
