@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,26 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // get hash of key
+  const hash = hashCode(key, this.SIZE);
+  // check table for hash
+  // if doesn't exist, create an object and add the key/value pair
+  if (this.storage[hash] === undefined) {
+    this.storage[hash] = { [key]: value };
+    // if exists, add key/value pair to object at that location
+  } else {
+    this.storage[hash][key] = value;
+  }
+  // declare a variable to store item count
+  let itemCount = 0;
+  // determine number of items in hash table
+  this.storage.forEach((slot) => {
+    if (slot !== undefined) {
+      itemCount += 1;
+    }
+  });
+  // return number of items in hash table
+  return itemCount;
 };
 
 /**
@@ -38,7 +57,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // get hash of input key
+  const hash = hashCode(key, this.SIZE);
+  // return the value that corresponds to the key
+  return this.storage[hash][key];
 };
 
 /**
@@ -50,7 +72,24 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // get hash of input key
+  const hash = hashCode(key, this.SIZE);
+  // check if an entry exists
+  if (this.storage[hash][key] !== undefined) {
+    // if yes, store the value
+    const removedValue = this.storage[hash][key];
+    // once stored, delete the key/value from the table
+    delete this.storage[hash][key];
+    // check if object contains any other values
+    if (Object.keys(this.storage[hash]).length === 0) {
+      // if no, set hash location in table to undefined
+      this.storage[hash] = undefined;
+    }
+    // return the deleted value
+    return removedValue;
+  }
+  // if no, return undefined
+  return undefined;
 };
 
 
