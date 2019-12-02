@@ -9,6 +9,10 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.counter = 0; //creating counter for total elements within storage
+
+  this.collided = new Array(); //storage for collided elements
+  this.collidedcounter = 0; //counter for collided elements
 }
 
 /**
@@ -24,8 +28,30 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //if key does not exist, then create new key value pair within storage
+  if (!this.storage[key]) {
+    this.storage[key] = value;
+    this.counter++; 
+    return this.counter;
+  }
+
+  //if key exists, overwrite the existing key with a new value
+  //account for collisions properly by creating a new link within speciifc key
+  //increment counter to illustrate that collision has happened, push collided element into collided storage
+  if (this.storage[key]) {
+   this.collided.push([key,this.storage[key]]);
+   this.storage[key] = value;
+   this.collidedcounter++;
+   return this.counter;
+  }
 
 };
+
+const test = new HashTable();
+console.log(test.set(1, 18));
+console.log(test.set(2, 24));
+console.log(test.set(1, 13));
+// console.log(test);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +64,21 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  if (this.collided) {
+    for (let i = 0; i < this.collided.length; i++) {
+      if (this.collided[i][0] === key) {
+        return this.collided[i][1];
+      } else {
+        return this.storage[key];
+      }
+    }
+  } else {
+    return this.storage[key];
+    }
+}
 
-};
+// console.log(test.get(2));
+// console.log(test.storage[2]);
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +89,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  if (this.storage[key]) {
+    let deleted = this.storage[key];
+    delete this.storage[key];
+    return deleted;
+  } else {
+    return undefined;
+  }
 };
 
+console.log(test.remove(1));
 
 // Do not modify
 function hashCode(string, size) {
