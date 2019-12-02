@@ -14,7 +14,42 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  let count = 0;
+  for (let i = 0; i < key.length; i += 1) {
+    if (this.storage[key[i]]) {
+      let obj = this.storage[key[i]];
+      obj[key[i]] = value[i];
+      count += 1;
+    } else {
+        this.storage[key[i]] = {[key[i]]: value[i]};
+        count += 1;
+      }
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  if(this.storage[key]) {
+    const obj = this.storage[key];
+    return obj[key];
+  }
+  return undefined;
+};
+
+HashTable.prototype.remove = function(key) {
+  if (this.storage[key]) {
+    const obj = this.storage[key];
+    delete this.storage[key];
+    return obj;
+  }
+  return undefined;
+};
 
 
 // YOUR CODE ABOVE
