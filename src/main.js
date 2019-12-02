@@ -7,7 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  //added below number prop for first problem (set) wherein we have to return number of items stored in table
+  this.number = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,8 +25,25 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //find hash address / index using hashcode func
+  const index = hashCode(key, this.SIZE)
+  //if index stores a pair already, given by the number of items stored in hash table being bigger than 0, set the additional new key/value pair
+  //on second thought i don't think the below code works because number being bigger than 0 just means that new items were stored in the hash table in general, not at specific index lol
+    // if (this.number > 0) {
+    //   this.storage[index] = {[key]: value};
+    // }
+  //if index at storage has same key, overwrite existing value w new value
+  if (this.storage[index].hasOwnProperty(key)) {
+    this.storage[index][key] = value;
+  } else {
+    //so instead just set new key / value pair at the index
+    this.storage[index] = {[key]: value};
+  }
+  //increment number and return number
+  this.number++;
+  return this.number;
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +56,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //find hash address / index using hashcode func
+  const index = hashCode(key, this.SIZE);
+  //if at index's key is stored multiple values, retrieve value stored with provided key
+  //else, return value at key at index
+  // else {
+    return this.storage[index][key];
+  // }
 };
 
 /**
@@ -50,7 +74,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //find hash address / index using hashcode func
+  const index = hashCode(key, this.SIZE);
+  //if key does not exist at index, return undefined
+  if (!this.storage[index].hasOwnProperty(key)) {
+    return undefined;
+  }
+  //store key/value pair at index in variable, then delete
+  const result = this.storage[index];
+  delete this.storage[index];
+  //decrement number
+  this.number--;
+  //return variable
+  return result;
 };
 
 
