@@ -6,9 +6,9 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
+  this.SIZE = 16;                         // Total size of the storage
+  this.capacity = 0;                      // Number of items in storage
+  this.storage = new Array(this.SIZE);    // Storage
 }
 
 /**
@@ -24,8 +24,16 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  
+  let idx = hashCode(key,this.SIZE);    // Process param key with hashCode function to get coded index
+  // let obj = this.storage[idx];
+  this.storage[idx] = {[key]:value};    // Use processed key to get access to the index of the storage
+                                        // and set corresponding [key]:value
 
+  this.capacity++;                      // Increment the number of items in the hash table
+  return this.capacity;                 // return current number items in the table.
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +46,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let idx = hashCode(key,this.SIZE);      // Process param key with hashCode function to get coded index
+  let obj = this.storage[idx];            // Access the index of the target with processed code.
+  return obj[key];                        // Return the value that corresponds with the key.
 };
 
 /**
@@ -50,7 +60,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let idx = hashCode(key,this.SIZE);      // Process param key with hashCode function to get coded index
+  let obj = this.storage[idx];            // Access the index of the target with processed code.
+  let objVal = obj[key];                  // Save value before deleting
+  delete this.storage[idx];               // delete object
+  this.capacity--;                        // decrement capacity
+  return objVal;                          // Return value deleted
 };
 
 
@@ -72,3 +87,21 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+
+
+// TEST=========================================================================================================================================================================================================================================================================================================================================================================================================================================
+let test = new HashTable;
+
+test.set("goodbye", 5);
+test.set("hellodd", 22);
+test.set("return",677);
+test.set("returny",627);
+test.set("returnss",122);
+
+console.log(test.capacity);
+// console.log(test.remove("goodbye"))
+console.log(test.storage)
+console.log(test.SIZE)
+console.log(test.capacity)
