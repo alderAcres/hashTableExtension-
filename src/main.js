@@ -24,8 +24,28 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //add the value the the key at the address
+  //if the key has a value already, reassign  the value
+  //if the address already constains another object, overwrite the object to the new object
 
+  //find the address using the hash function and assign it to a new variable
+  const address = hashCode(key, this.Size)
+  //at this address, if the key has a value (if not undefined), reassign this key to the new value
+  if (this.storage[address] !== undefined){
+    this.storage[address][key] = value
+  }
+  //at this address, if there is an object whose value is not our value, replace with the new key value pair
+  if (this.storage[address][key] !== value){
+    //declare a new object for the new key value pair
+    //put that new obj in the address
+    const newObj = this.storage[address][key] 
+    newObj = value
+  }
 };
+
+
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +58,22 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // search for a value at the address
+  // if more than one value is there, find the correct one?
 
+  //find the address using the hashfunction
+  const address = hashCode(key, this.Size)
+  //search that address for the value
+  if(this.storage[address][key] === value){
+    return value
+  } else {
+    console.log( "not found here")
+  }
 };
+
+
+
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +84,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //remove a key value pair from the address
+  //if no key at that address, return undefined
 
+  //find the address
+  const address = hashCode(key, this.Size)
+  //if key is there, delete it
+  //if no key is there, undefined
+  if (this.storage[address] !== undefined){
+    delete this.storage[address][key]
+  } else {
+    return undefined
+  }
+  
 };
+
 
 
 // Do not modify
