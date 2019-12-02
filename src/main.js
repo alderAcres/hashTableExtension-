@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //create an index variable and set hashCode with key, size
+  let index = hashCode(key, this.SIZE);
+  //check if this.storage already has the index and it exists,
+  if (this.storage[index]) {
+    //if it does, then create and store the object in a variable to dig in to later to deal with collision
+    const newObj = this.storage[index];
+    //reference the object that we created to set its own key/value pair (so there can be multiple) - if there is already a key, then overwrite it with the new value
+    newObj[key] = value;
+    //if it doesn't, then create a new obj at the hashCode index with its own, new key/value pair
+  } else {
+    this.storage[index] = {[key] : value};
+  }
 };
 
 /**
@@ -38,7 +49,18 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //create an index variable that will store the hashCode 
+  let index = hashCode(key,this.SIZE);
+  //check if the storage contains a key value pair at key:index
+  if (this.storage[index]) {
+    //if yes, store in a constant
+    const newObj = this.storage[index];
+    //retrieve the constant at the desired key and return
+    return newObj[key];
+    //if it doesn't exist, then return undefined.
+  } else {
+    return undefined;
+  }
 };
 
 /**
@@ -50,7 +72,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //create a constant named index to run and store the hashCode
+  let index = hashCode(key,this.SIZE);
+  const newObj = this.storage[index];
+  //check if the storage contains at index
+  if (newObj[key]) {
+    //if yes, store in constant so we can access it's key/value pair
+    //delete the key/value pair inside of the obj
+    delete newObj[key];
+    //if the key doesn't exist, then return undefined.
+  } else {
+    return undefined;
+  }
 };
 
 
