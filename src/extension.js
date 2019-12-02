@@ -14,9 +14,28 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) {
+  let hashIndex = new hashCode(key, this.SIZE);
+  //recalculate the index in hashTable
+  let initialIndex = value.hashIndex();
+  if (this.storage[hashIndex]){
+    //if the storage length is doubled, recalculate the hashtable index
+    if (this.storage.length * 2){
+      this.storage[initialIndex][key] = value;
+    }this.storage[hashIndex][key] = value;
+  }
+  this.storage[hashIndex][key] = {};
+  this.storage[hashIndex][key] = value;
+};
 
-
-
+HashTable.prototype.remove = function(key) {
+  let hashIndex = new hashCode(key,this.SIZE);
+  if (this.storage[hashIndex][key]){
+    let pop = this.storage[hashIndex][key];
+    delete this.storage[hashIndex][key];
+    return pop;
+  }
+};
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
