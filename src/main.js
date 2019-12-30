@@ -7,9 +7,13 @@
 */
 function HashTable() {
   this.SIZE = 16;
+  this.STORED = 0;
   
   this.storage = new Array(this.SIZE);
 }
+
+const alexTest = new HashTable;
+console.log(alexTest);
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,8 +28,24 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  index = hashCode(key, this.SIZE);
+  console.log(index);
 
+  if (this.storage[index] === undefined) this.storage[index] = {};
+  if (this.storage[index][key] === undefined) this.STORED += 1;
+
+  this.storage[index][key] = value;
+  
+  return this.STORED;
 };
+
+console.log(alexTest);
+console.log(alexTest.set ('alex', 123));
+console.log(alexTest);
+console.log(alexTest.set ('alex', 789));
+console.log(alexTest);
+console.log(alexTest.set ('jzq', 456));
+console.log(alexTest);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +58,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  index = hashCode(key, this.SIZE);
+  console.log(index);
 
+  return this.storage[index][key];
 };
+
+console.log(alexTest);
+console.log(alexTest.get('alex'));
+console.log(alexTest.get('jzq'));
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +77,28 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  index = hashCode(key, this.SIZE);
+  console.log(index);
 
+  if (this.storage[index] === undefined) return undefined;
+  const removedValue =  this.storage[index][key];
+  if (removedValue === undefined) return undefined;
+
+  delete this.storage[index][key];
+  if (Object.keys(this.storage[index]).length === 0) delete this.storage[index];
+
+  this.STORED -= 1;
+
+  return removedValue;
 };
 
+console.log(alexTest);
+console.log(alexTest.remove('alex'));
+console.log(alexTest);
+console.log(alexTest.remove('jzq'));
+console.log(alexTest);
+console.log(alexTest.remove('jzq'));
+console.log(alexTest);
 
 // Do not modify
 function hashCode(string, size) {
