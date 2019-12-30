@@ -82,24 +82,35 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-  const index = hashCode(key, this.SIZE);
-  let current = this.storage[index]
-  //if key exists in current index
-  if (current.hasOwnProperty(key)) {
-    const output = current[key]
-    //if there is no linked node, set the index to an empty string
-    if (current.next === null) {
-      current = '';
-    }
-    // if there is a linked node, set index to linked node
-    if (current.next !== null) {
-      current = current.next;
-    }
-    // return stored value
-    return output;
-  }
 
-  
+  const index = hashCode(key, this.SIZE);
+  let current = this.storage[index];
+// helper function to recursively call down linked list
+  function findKey(key, node) {
+    // base case to end recursion 
+    if (!current.hasOwnProperty(key) && current.next === null) {
+      return undefined;
+    }
+    if (current.hasOwnProperty(key)) {
+      const output = current[key]
+      //if there is no linked node, set the index to an empty string
+      if (current.next === null) {
+        current = '';
+      }
+      // if there is a linked node, set index to linked node
+      if (current.next !== null) {
+        current = current.next;
+      }
+      // return stored value
+      this.storageAmount -= 1;
+      return output;
+      
+    }
+    return findKey(key, current.next);
+}
+  // if it isn't in the first node, check the next
+  const result = findKey(key, current)
+  return result;
 };
 
 
