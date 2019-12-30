@@ -24,6 +24,30 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+//create index by running it through hashcode
+let index = hashCode(key, this.SIZE);
+
+//check if object at index is undefined
+  if(this.storage[index] === undefined){
+    let storeObj = {};
+    this.storage[index] = storeObj;
+    storeObj[key] = value;
+  } else {
+  //if object is undefined
+    //set key value pair
+    if(this.storage[index][key]){
+      this.storage[index][key] = value;
+    }
+      else {
+        this.storage[index][key] = value;
+      };
+  //else if not undefined
+    //check if key already exists in object,
+      //if it does replace value,
+
+  }
+
+      //if it doesnt add new key/value pair
 
 };
 
@@ -38,7 +62,27 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+let index = hashCode(key, this.SIZE)
+ //create index by running through key through hash code
 
+ //check if item at index is undefined
+ //if no item return undefined
+  if(!this.storage[index]){
+     return undefined;
+  } else {
+     if(this.storage[index][key]){
+        return this.storage[index][key];
+     } else {
+       return undefined;
+     }
+
+  }
+
+ //if not undefined 
+   //check if key exists
+    //if key exists then return its value
+
+    //if key doesnt exist return undefined
 };
 
 /**
@@ -50,7 +94,20 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //get index by running key and this.Size through hashCode
+  let index = hashCode(key, this.SIZE);
 
+  //check to see if key exists, if it does, add a variable to whats to be deleted, delete item
+  //then return variable
+   if(this.storage[index][key]){
+     let removed = this.storage[index][key];
+     delete this.storage[index][key];
+     return removed;
+   } else {
+     return undefined;
+   }
+
+  //if key doesnt exist return undefined
 };
 
 
