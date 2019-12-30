@@ -47,7 +47,7 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
   const index = hashCode(key,this.SIZE);
-  if (this.storage[index]) {
+  if (this.storage[index] && this.storage[index].key) {
     return this.storage[index].key;
   } else return 'No Stored Value';
 

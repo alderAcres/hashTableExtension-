@@ -14,8 +14,55 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.contents = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  if (this.contents+1 > this.SIZE * 3/4) {
 
+  } else {
+    const index = hashCode(key,this.SIZE);
+    if (this.storage[index] === undefined) {
+      this.storage[index] = {key:value};
+      this.contents +=1;
+    }  else {
+        if (!this.storage[index].key) this.contents += 1;
+        this.storage[index].key = value;
+    }
+    return this.contents;
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  const index = hashCode(key,this.SIZE);
+  if (this.storage[index] && this.storage[index].key) {
+    return this.storage[index].key;
+  } else return 'No Stored Value';
+
+};
+
+HashTable.prototype.remove = function(key) {
+  const index = hashCode(key,this.SIZE);
+  let result;
+  if (this.storage[index].key) {
+    result = this.storage[index].key;
+    this.contents -=1;
+    if (Object.keys(this.storage[index]).length > 1) {
+      delete this.storage[index].key;
+    } else this.storage[index] = undefined;
+  }
+  if (this.SIZE > 16 && this.contents < Math.floor(this.SIZE/4)) {
+    this.SIZE /=2;
+    const temp = new Array(this.SIZE);
+    for (let i=0;i<this.storage.length;i++) {
+      
+    }
+  } 
+  return result;
+};
 
 // YOUR CODE ABOVE
 
