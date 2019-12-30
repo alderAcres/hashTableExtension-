@@ -14,8 +14,35 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+HashTable.prototype.set = function(key, value) {
+  const index = hashCode(key, this.SIZE)
+  if (this.storage[index] === undefined){
+    this.storage[index] = []
+  }
+  this.storage[index].push([key, value])
+  if (Object.keys(this.storage).length > this.SIZE * 0.75){
+    this.SIZE *=  2
+  }
+  return this
+};
 
-
+HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE) 
+  if (!this.storage[index][key]){
+    return undefined
+  }
+  let removed = this.storage[index][key]
+  delete this.storage[index][key]
+  if(Object.keys(this.storage).length < this.SIZE * 0.25 && this.SIZE >= 32){
+   this.SIZE /= 2
+  }
+  return removed 
+};
 
 // YOUR CODE ABOVE
 
