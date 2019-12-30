@@ -14,7 +14,51 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+//create a condition: if pusshing value takes over 75% of this.SIZE
+  //create variable over75 assign value of SIZE * 0.25
+  //if value is greater than over75 varuiable,
+  //this.SIZE = SIZE * 2
+  //rehash -> invoke hashCode func (key, new this.SIZE)
+    //reassign all this.storage[hashKey][key](index) = value
+
+HashTable.prototype.set = function(key, value) {
+  const hashKey = hashCode(key, this.SIZE); 
+  const over75 = this.SIZE * 0.25; 
+  if (!this.storage[hashKey]) {
+    this.storage[hashKey] = {};
+  }
+  if (value > over75) {
+    this.SIZE = this.SIZE * 2;
+    const hashKey = hashCode(key, this.SIZE)
+    this.storage[hashKey][key] = value;
+  }
+  this.storage[hashKey][key] = value;
+};
+
+
+
+HashTable.prototype.remove = function(key) {
+  //create variable, assign return value of hashCode
+  const hashKey = hashCode(key, this.SIZE);
+  //if obj(this.storage is empty, return undefined)
+  if (!this.storage[hashKey][key]) return undefined;
+  //if there is value in the obj,
+  if (this.storage[hashKey][key]) {
+    //assign remove value into variable
+    const removeValue = this.storage[hashKey][key];
+    //delete removing value
+    delete this.storage[hashKey][Key];
+    //return removing value
+    return removedValue;
+    
+  }
+};
 
 
 // YOUR CODE ABOVE
