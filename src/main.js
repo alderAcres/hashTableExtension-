@@ -7,8 +7,10 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
+
+  this.size = 0;
 }
 
 /**
@@ -24,7 +26,23 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // conditional for collision
+  const newHashCode = hashCode(key, this.SIZE);
 
+  if (this.storage[newHashCode] === undefined) {
+    this.storage[newHashCode] = value;
+  } else if (Array.isArray(this.storage[newHashCode])) {
+    this.storage[newHashCode].push(value);
+  } else {
+    // code for collision --  should have made it an object instead of array for key/value pairs..
+    const temp = this.storage[newHashCode];
+    delete this.storage[newHashCode];
+    this.storage[newHashCode] = [];
+    this.storage[newHashCode].push(temp);
+    this.storage[newHashCode].push(value);
+  }
+  this.size += 1;
+  return this.size;
 };
 
 /**
@@ -38,7 +56,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const getCode = hashCode(key, this.SIZE);
 
+  if (!Array.isArray(this.storage[getCode])) {
+    return this.storage[getCode];
+  } else { // for collisions -- should have made an object for key value pairs
+    return this.storage[getCode];
+  }
 };
 
 /**
@@ -50,9 +74,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const hashRemove = hashCode(key, this.SIZE);
+  let returnedValue;
 
+  if (this.storage[hashRemove] === undefined) {
+    return undefined;
+  }
+  returnedValue = this.storage[hashRemove];
+  this.size -= 1;
+  delete this.storage[hashRemove];
+  return returnedValue;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
@@ -69,6 +101,27 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+// Tests
+const hashTable = new HashTable();
+
+console.log(hashTable.set('tell', 0));
+console.log(hashTable.set('me', 1));
+console.log(hashTable.set('me', 2));
+console.log(hashTable.set('how', 3));
+
+console.log(hashTable);
+
+console.log(hashTable.get('tell'));
+console.log(hashTable.get('me'));
+console.log(hashTable.get('how'));
+
+console.log(hashTable.remove('tell'));
+console.log(hashTable.remove('me'));
+console.log(hashTable.remove('how'));
+console.log(hashTable.remove('not'));
+
+console.log(hashTable);
 
 // Do not remove!!
 module.exports = HashTable;
