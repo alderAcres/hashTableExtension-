@@ -7,8 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.storageAmount = 0;
 }
 
 /**
@@ -24,8 +24,25 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index]) {
+    this.storage[index] = {[key]: value, next: null};
+    this.storageAmount += 1;
+  }
+  else if (this.storage[index].hasOwnProperty(key)) {
+    this.storage[index][key] = value;
+  }
+  else {
+    this.storage[index].next = {[key]: value, next: null};
+    this.storageAmount += 1;
+  }
+ return this.storageAmount;
 };
+
+const table = new HashTable();
+for (let i = 0; i < 18; i++) {
+  table.set(`key ${i}`, i);
+}
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
