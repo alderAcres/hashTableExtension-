@@ -13,8 +13,67 @@
         (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
 */
 
-// PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  this.length = 0;
+}
 
+// PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) 
+{
+  let index = hashCode(key, this.SIZE);
+  let obj = {key, value};
+  if(!(this.storage[index] instanceof Object)){
+    this.storage[index] = {};
+  }
+  this.storage[index][key] = value;
+  this.length += 1;
+
+  if(this.length >= this.SIZE * .75){
+    this.SIZE *= 2;
+    for(let i = 0; i < this.storage.length; i++){
+      if(this.storage[i] instanceof Object){
+        for(prop in this.storage[i]){
+          let val = this.remove(prop, this.SIZE * .5);
+          this.set(prop, val);
+        }
+      }
+    }
+  } 
+
+};
+
+HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
+  return this.storage[index][key];
+};
+
+HashTable.prototype.remove = function(key, newSize = this.SIZE) {
+  let index = hashCode(key, newSize);
+  if(!(this.storage[index] instanceof Object) || !this.storage[index].hasOwnProperty(key)){
+    return undefined;
+  }
+
+  let val = this.storage[index][key];
+  delete this.storage[index][key];
+  this.length -= 1;
+
+  if(this.SIZE > 16 && this.length <= this.SIZE * .25){
+    this.SIZE *= .5;
+    for(let i = 0; i < this.storage.length; i++){
+      if(this.storage[i] instanceof Object){
+        for(prop in this.storage[i]){
+          let val = this.remove(prop, this.SIZE * 2);
+          this.set(prop, val);
+        }
+      }
+    }
+  } 
+
+
+  return val;
+};
 
 
 // YOUR CODE ABOVE
@@ -36,3 +95,24 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let hasher = new HashTable();
+hasher.set("hi", 23);
+hasher.set("a", 27);
+hasher.set("b", 26);
+hasher.set("c", 28);
+hasher.set("d", 28);
+hasher.set("e", 28);
+hasher.set("f", 28);
+hasher.set("g", 28);
+hasher.set("h", 28);
+hasher.set("i", 28);
+hasher.set("j", 28);
+hasher.set("k", 28);
+hasher.remove("k");
+hasher.remove("j");
+hasher.remove("i");
+hasher.remove("h");
+hasher.remove("g");
+hasher.remove("f");
+console.log(hasher);
