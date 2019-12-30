@@ -39,6 +39,7 @@ HashTable.prototype.set = function(key, value) {
   return this.STORED;
 };
 
+console.log(alexTest);
 console.log(alexTest.set ('alex', 123));
 console.log(alexTest);
 console.log(alexTest.set ('alex', 789));
@@ -63,6 +64,7 @@ HashTable.prototype.get = function(key) {
   return this.storage[index][key];
 };
 
+console.log(alexTest);
 console.log(alexTest.get('alex'));
 console.log(alexTest.get('jzq'));
 
@@ -90,10 +92,12 @@ HashTable.prototype.remove = function(key) {
   return removedValue;
 };
 
+console.log(alexTest);
 console.log(alexTest.remove('alex'));
+console.log(alexTest);
 console.log(alexTest.remove('jzq'));
+console.log(alexTest);
 console.log(alexTest.remove('jzq'));
-
 console.log(alexTest);
 
 // Do not modify
