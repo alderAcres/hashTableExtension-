@@ -23,8 +23,17 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+//push in new value
 
+HashTable.prototype.set = function(key, value) {
+  //create variable, assign return value of hashCode func
+  const hashKey = hashCode(key, this.SIZE); 
+  //if there is not any hashKey before, assign empty object 
+  if (!this.storage[hashKey]) {
+    this.storage[hashKey] = {};
+  }
+  //assign obj hashKey[key] : value
+  this.storage[hashKey][key] = value;
 };
 
 /**
@@ -37,8 +46,13 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
+//
 
+HashTable.prototype.get = function(key) {
+  //assign return value of hashCode func into variable
+  const hashKey = hashCode(key, this.SIZE);
+  //access to object [key] property
+  return this.storage[hashKey][key];
 };
 
 /**
@@ -50,7 +64,20 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //create variable, assign return value of hashCode
+  const hashKey = hashCode(key, this.SIZE);
+  //if obj(this.storage is empty, return undefined)
+  if (!this.storage[hashKey][key]) return undefined;
+  //if there is value in the obj,
+  if (this.storage[hashKey][key]) {
+    //assign remove value into variable
+    const removeValue = this.storage[hashKey][key];
+    //delete removing value
+    delete this.storage[hashKey][Key];
+    //return removing value
+    return removedValue;
+    
+  }
 };
 
 
