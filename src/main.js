@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.filled = 0;  // new property that will track number of items 
   this.storage = new Array(this.SIZE);
 }
 
@@ -25,6 +25,25 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+  // where key, value pair is stored through hashcode address
+  const location = hashCode(key, this.SIZE);
+
+  // if there is already an object at address, then add key, value pair 
+  // into object 
+  if (typeof this.storage[location] === 'object') {
+    this.storage[location][key] = value;
+  }
+
+  // otherwise, create an object to add the key, value pair into 
+  else {
+    const obj = {};
+    this.storage[location] = obj;
+    obj[key] = value;
+  }
+
+  this.filled += 1;
+  return this.filled;
+
 };
 
 /**
@@ -39,6 +58,17 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+  // where key, value pair is stored through hashcode address
+  const location = hashCode(key, this.SIZE);
+
+  // at that address, there is either an object or nothing stored 
+  if (typeof this.storage[location] === 'object') {
+    // if object, find the key, value in the object 
+    return this.storage[location][key];
+  }
+  // else return 'nothing' (either '' or undefined)
+  return this.storage[location];
+
 };
 
 /**
@@ -50,6 +80,20 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+
+  // where key, value pair is stored through hashcode address
+  const location = hashCode(key, this.SIZE);
+
+  // store value before deleting from hash table 
+  let temp = this.get(key);
+  
+  // temp is either undefined (because no key, value exists) or a value 
+  if (temp !== undefined) {
+    // if key, value exists, then delete it
+    delete this.storage[location][key];
+    this.filled -=1;  // one less item is in hashtable 
+  }
+  return temp;      // return value deleted 
 
 };
 
@@ -72,3 +116,29 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+
+// FOR TESTING
+ht = new HashTable();
+console.log(ht.set(1, 2));
+console.log(ht.set(3, 4));
+console.log(ht.set('ab', 'cd'));
+console.log(ht.set('hi', 'bye'));
+console.log(ht.set('hello', 'world'));
+console.log(ht.storage);
+console.log(ht.get(1));
+console.log(ht.get(3));
+console.log(ht.get('ab'));
+console.log(ht.get('hi'));
+console.log(ht.get('hello'));
+console.log(ht.get('test'));
+
+console.log(ht.filled);
+console.log(ht.remove(1));
+console.log(ht.storage);
+console.log(ht.remove(2));
+console.log(ht.storage);
+console.log(ht.remove(3));
+console.log(ht.storage);
+console.log(ht.filled);
