@@ -88,31 +88,36 @@ HashTable.prototype.remove = function(key) {
 // helper function to recursively call down linked list
   function findKey(key, node) {
     // base case to end recursion 
-    if (!current.hasOwnProperty(key) && current.next === null) {
+    if (node === null || (!node.hasOwnProperty(key) && node.next === null)) {
       return undefined;
     }
-    if (current.hasOwnProperty(key)) {
-      const output = current[key]
+    if (node.hasOwnProperty(key)) {
+      const output = node[key]
       //if there is no linked node, set the index to an empty string
-      if (current.next === null) {
-        current = '';
+      if (node.next === null) {
+        node = '';
       }
       // if there is a linked node, set index to linked node
-      if (current.next !== null) {
-        current = current.next;
+      if (node.next !== null) {
+        node = node.next;
       }
       // return stored value
       this.storageAmount -= 1;
       return output;
-      
     }
     return findKey(key, current.next);
 }
   // if it isn't in the first node, check the next
   const result = findKey(key, current)
+  console.log(result)
   return result;
 };
-
+const table = new HashTable();
+for (let i = 0; i < 18; i+= 1){
+  table.set(`key ${i}`, i);
+}
+console.log(table.remove('key'));
+console.log(table)
 
 // Do not modify
 function hashCode(string, size) {
