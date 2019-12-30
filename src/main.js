@@ -27,15 +27,8 @@ HashTable.prototype.set = function (key, value) {
   const hashObj = { [key]: value };
   if (this.storage[location] === undefined) {
     this.storage[location] = [hashObj];
-    console.log(this.storage[location]);
   } else {
     this.storage[location] = [hashObj];
-    console.log(this.storage[location]);
-    // if (this.storage[location]) {
-    //   this.storage[location][key] = hashObj;
-    // }
-    // this.storage[location].push(hashObj);
-    // console.log(this.storage[location])
   }
 };
 
