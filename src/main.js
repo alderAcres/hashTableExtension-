@@ -25,24 +25,24 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   const index = hashCode(key, this.SIZE);
+  console.log(`${index}, ${key}`)
+  //if there is nothing at the hashed index, add key value pair
   if (!this.storage[index]) {
     this.storage[index] = {[key]: value, next: null};
     this.storageAmount += 1;
   }
+  //if the key passed in already exists in the hash table, replace value with given value
   else if (this.storage[index].hasOwnProperty(key)) {
     this.storage[index][key] = value;
   }
+  //else, create a linked list to store multiple values at the same key
   else {
     this.storage[index].next = {[key]: value, next: null};
     this.storageAmount += 1;
   }
+  // return storage counter that incrememnts whenever a key value pair is stored
  return this.storageAmount;
 };
-
-const table = new HashTable();
-for (let i = 0; i < 18; i++) {
-  table.set(`key ${i}`, i);
-}
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -55,8 +55,23 @@ for (let i = 0; i < 18; i++) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //find hashed index
+  const index = hashCode(key, this.SIZE);
+  let current = this.storage[index]
+  //check current node on linked list
+  while (current !== null) {
+    //if the key exists, return the value
+    if (current.hasOwnProperty(key)) {
+      return current[key];
+    }
+    // else look down the linked list
+    curent = current.next;
+  }
+  //if it's never found, return undefined;
+  return undefined;
 };
+
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -67,7 +82,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  let current = this.storage[index]
+  //check current node on linked list
+  while (current !== null) {
+    //if the key exists, return the value
+    if (current.hasOwnProperty(key)) {
+      current[key];
+      
+      return 
+    }
+  return undefined;
+  }
 };
 
 
