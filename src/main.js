@@ -84,16 +84,22 @@ HashTable.prototype.get = function(key) {
 HashTable.prototype.remove = function(key) {
   const index = hashCode(key, this.SIZE);
   let current = this.storage[index]
-  //check current node on linked list
-  while (current !== null) {
-    //if the key exists, return the value
-    if (current.hasOwnProperty(key)) {
-      current[key];
-      
-      return 
+  //if key exists in current index
+  if (current.hasOwnProperty(key)) {
+    const output = current[key]
+    //if there is no linked node, set the index to an empty string
+    if (current.next === null) {
+      current = '';
     }
-  return undefined;
+    // if there is a linked node, set index to linked node
+    if (current.next !== null) {
+      current = current.next;
+    }
+    // return stored value
+    return output;
   }
+
+  
 };
 
 
