@@ -88,6 +88,7 @@ HashTable.prototype.set = function(key, value) {
   return this.STORED;
 };
 
+// set tests
 console.log(alexTest);
 alexTest.set ('z', 123);
 alexTest.set ('a', 123);
@@ -181,12 +182,12 @@ HashTable.prototype.remove = function(key) {
   return removedValue;
 };
 
-
-console.log(alexTest);
+// revmoe tests
+// console.log(alexTest);
 console.log(alexTest.remove('alex'));
-console.log(alexTest);
+// console.log(alexTest);
 console.log(alexTest.remove('jzq'));
-console.log(alexTest);
+// console.log(alexTest);
 console.log(alexTest.remove('jzq'));
 alexTest.remove ('z');
 alexTest.remove ('a');
