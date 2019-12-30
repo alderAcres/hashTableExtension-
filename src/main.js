@@ -24,7 +24,21 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+// use rest parameter to accept unknown number of "value" parameters
 
+  if (this.key[value] !== undefined || this.key[value] !== null) {
+    this.key[value] = key;
+  }
+
+  if (this.key[value].next !== null ){
+    this.key[value].next = value;
+  } 
+  else {
+    this.key[value].next.next = value;
+  }
+
+  const numOfItems = Object.keys(this);
+  return numOfItems;
 };
 
 /**
@@ -39,6 +53,8 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+  const elem = this[key][0];
+  return elem;
 };
 
 /**
@@ -51,6 +67,18 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
 
+  let oldValue = ;
+
+  for (let i = 0; i < this.length; i+= 1) {
+    if (this[key] !== undefined) {
+      oldValue = this.splice(i , 1);
+    }
+  };
+
+  if (oldValue !== undefined) {
+    return oldValue;
+  }
+  return undefined;
 };
 
 
