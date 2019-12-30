@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+
 }
 
 /**
@@ -24,6 +25,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key, this.SIZE);
+  for(let i = 0; i < this.storage.length; i++) {
+    if(this.storage[index] === undefined) {
+      this.storage.splice(index, 1, value); 
+    }
+      else if (this.storage.hasOwnProperty(key)) this.storage[index][key] = value;
+      
+
+  }
+
+
 
 };
 
@@ -38,6 +50,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
+return this.storage[index];
+
 
 };
 
@@ -50,6 +65,11 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let index = hashCode(key, this.SIZE);
+  if (this.storage[index] === undefined) return undefined;
+  for (let i = 0; i < this.storage.length; i++) {
+    if (this.storage[index] === key) this.storage.splice(index, 1, undefined);
+  }
 
 };
 
@@ -72,3 +92,11 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+let hash = new HashTable();
+hash.set('olena', true)
+hash.set('olena', false)
+
+// console.log(hash.get('olena'))
+console.log(hash.storage)
