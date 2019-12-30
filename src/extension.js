@@ -148,8 +148,39 @@ HashTable.prototype.remove = function(key) {
 
   this.STORED -= 1;
 
+  // half the size of the table if the num items is less than 25% of it's size and the size is greater than 16
+  if (this.STORED < this.SIZE * .25 && this.SIZE > 16) {
+    // store the old hash table to populate new hash table
+    oldStorage = this.storage;
+    // console.log(oldStorage)
+    // half hash table size
+    this.SIZE /= 2;
+    // console.log(this.SIZE);
+
+    this.storage = new Array(this.SIZE); 
+    // console.log(oldStorage);
+    // console.log(this.storage);
+
+    // iterate across the old hash table addresses;
+    oldStorage.forEach(el => {
+      // console.log(el);
+      // only rehash for address where items were store
+      if (el) {
+        // console.log(Object.keys(el));
+        // iterate across keys at each hash table address
+        Object.keys(el).forEach(key => {
+          // set key value pair in new hash table
+          this.set(key, el[key]);
+          // offset for the fact that the item was already accounted for in the old table
+          this.STORED -= 1;
+        });
+      }
+    });
+  }
+
   return removedValue;
 };
+
 
 console.log(alexTest);
 console.log(alexTest.remove('alex'));
@@ -157,6 +188,16 @@ console.log(alexTest);
 console.log(alexTest.remove('jzq'));
 console.log(alexTest);
 console.log(alexTest.remove('jzq'));
+alexTest.remove ('z');
+alexTest.remove ('a');
+alexTest.remove ('b');
+console.log(alexTest);
+alexTest.remove ('c');
+console.log(alexTest);
+alexTest.remove ('d');
+console.log(alexTest);
+alexTest.remove ('e');
+alexTest.remove ('f');
 console.log(alexTest);
 
 
