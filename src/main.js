@@ -23,9 +23,17 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+// add given value to the hash table with specified key
+HashTable.prototype.set = function(key, value) {
+  let num = hashCode(key, this.SIZE);
+  if (!this.storage[num]) this.storage[num] = {[key]: value};
+  else this.storage[num][key] = value; 
 };
+
+// let hasher = new HashTable;
+// hasher.set('hi', 'bye');
+// console.log(hasher.storage); // {[hi]: 'bye'}
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -37,9 +45,16 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
 
+// retrieve a value stored in the hash table with a specified key
+HashTable.prototype.get = function(key) {
+  const hashtag = this.storage[hashCode(key, this.SIZE)];
+  if (!hashtag) return undefined;
+  return hashtag[key];
 };
+
+// hasher.get('hi');
+// console.log(hasher.get('hi')); // 'bye'
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -49,10 +64,23 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
 
+// delete a key/value pair from the hash table 
+// if the key doesn't exist in the hash table, return undefined
+HashTable.prototype.remove = function(key) {
+  const hashtag = this.storage[hashCode(key, this.SIZE)];
+  let remover = hashtag[key];
+  delete hashtag[key];
+  if (Object.entries(hashtag).length === 0) {
+    this.storage[hashCode(key, this.SIZE)] = undefined;
+  }
+  return remover;
 };
 
+// const hasher = new HashTable;
+// hasher.set('hi', 'bye');
+// console.log(hasher.remove('hi')); // 'bye'
+// console.log(hasher.get('hi')); // undefined
 
 // Do not modify
 function hashCode(string, size) {
