@@ -14,23 +14,44 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function (key, value) {
+  const address = hashCode(key, this.SIZE);
+  //count keeps track how many elements in this.storage is present;
+  let count = 0;
+  const maxSizePoint = this.Size * .75;
+  console.log(maxSizePoint);
+  if (this.storage[address] === undefined) {
+    this.storage[address] = {};
+  }
+  this.storage[address][key] = value;
+  for (let x in this.storage) {
+    if (this.storage[x]) {
+      count++;
+    }
+  }
+  if (count > maxSizePoint) {
+    this.SIZE = this.SIZE * 2;
+    for (let x in this.storage) {
 
+    }
+  }
+};
 
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
