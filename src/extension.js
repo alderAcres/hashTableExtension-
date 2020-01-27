@@ -44,7 +44,7 @@ function HashTable() {
 HashTable.prototype.rehash = function(newSize, oldSize) {
   this.SIZE = newSize;
   const arrCopy = [...this.storage];
-  this.storage = new Array(this.SIZE);
+  this.storage = new Array(newSize);
   arrCopy.forEach(el => {
     if (el) {
       Object.keys(el).forEach(storedKey => {
