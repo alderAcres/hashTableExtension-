@@ -24,7 +24,12 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let hashObj = {};
+  hashObj[key] = value;
 
+  this.storage[hashCode(key, this.SIZE)] ? this.storage[hashCode(key, this.SIZE)][key] = value :  this.storage[hashCode(key, this.SIZE)] = hashObj;
+
+  
 };
 
 /**
@@ -38,7 +43,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[hashCode(key, this.SIZE)][key];
 };
 
 /**
@@ -50,7 +55,10 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  if(this.storage[hashCode(key, this.SIZE)] === undefined){return undefined;}
+  const val = this.storage[hashCode(key, this.SIZE)][key];
+  delete this.storage[hashCode(key, this.SIZE)][key];
+  return val;
 };
 
 
@@ -69,6 +77,18 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+const hash = new HashTable();
+hash.set('kermit','frog');
+hash.set('mspiggy','pig');
+hash.set('rudolph','reindeer');
+
+console.log(hash);
+console.log('this is stored at kermit: ' + hash.get('kermit'))
+hash.remove('kermit');
+console.log('this is removed hash: ' + hash);
+
+
 
 // Do not remove!!
 module.exports = HashTable;
