@@ -38,11 +38,11 @@ HashTable.prototype.set = function (key, value) {
   return this.amount++;
 };
 
-const hasher = new HashTable();
-hasher.set('hi', 0);
-hasher.set('bye', 1);
-hasher.set(0, 'hello');
-console.log(hasher);
+// const hasher = new HashTable();
+// hasher.set('hi', 0);
+// hasher.set('bye', 1);
+// hasher.set(0, 'hello');
+// console.log(hasher);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -64,8 +64,8 @@ HashTable.prototype.get = function (key) {
   return this.storage[hash][key];
 };
 
-console.log(hasher.get('hi'));
-console.log(hasher.get(0));
+// console.log(hasher.get('hi'));
+// console.log(hasher.get(0));
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -91,9 +91,9 @@ HashTable.prototype.remove = function (key) {
   return deleted;
 };
 
-console.log(hasher.remove('hi'));
-console.log(hasher);
-console.log(hasher.get('hi'));
+// console.log(hasher.remove('hi'));
+// console.log(hasher);
+// console.log(hasher.get('hi'));
 
 // Do not modify
 function hashCode(string, size) {
