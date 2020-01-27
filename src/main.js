@@ -11,6 +11,8 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,8 +26,29 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+//declare a constant variable for a hashed version of the input key
+const hashedKey = hashCode(key, this.SIZE);
+let cache = [];
+let count = 0;
+//conditional: if index = hashedKey is empty, then create a new object literal with original key/value pair
+if (!this.storage[hashedKey]) {
+  this.storage[hashedKey] = {}; 
+  this.storage[hashedKey][key] = value;
+}
+//else, store key/value pair at existing object at specified index, 
+//or if key already exists, replace existing key value pair with new value of that key
+else this.storage[hashedKey][key] = value;
+//return the new number of items stored in the hash table
+//make sure all keys are counted within each index, not just the number of elements in the hash table 
+for (value of this.storage) {
+  if (typeof value === 'object') {
+  cache = Object.keys(value);
+  count += cache.length;
+  }
+}
+return count;
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +61,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //declare a constant variable for a hashed version of the input key
+  const hashedKey = hashCode(key, this.SIZE);
+  //return the value of the input key in the object stored at the index = hashedKey
+  return this.storage[hashedKey][key];
 };
 
 /**
@@ -50,9 +76,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //declare a constant variable for a hashed version of the input key
+  const hashedKey = hashCode(key, this.SIZE);
+  //declare constant variable for value of input key stored at index hashedKey
+  const hashedValue = this.storage[hashedKey][key];
+  //If the key does not exist in the hash table, return undefined
+  if (!hashedValue) return undefined;
+  //else, if the key exists in the object literal at hashedKey index, remove key/value pair
+  else delete this.storage[hashedKey][key];
+  //return the value deleted from the hash table
+  return hashedValue;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
