@@ -14,8 +14,41 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) {
+  const hashAddress = hashCode(key, this.SIZE);
+  if (!this.storage[hashAddress]) this.storage[hashAddress] = {}; 
+  if (!this.storage[hashAddress][key]) this.count++;
+  this.storage[hashAddress][key] = value;
+  if (this.count > (this.SIZE * 0.75)){
+    this.rehash(this.SIZE*2);
+  }
+  return this.count;
+};
 
-
+HashTable.prototype.rehash = function(newSize){
+  const newTable = new Array(newSize);
+  let hashAddress;
+  for (let obj of this.storage){
+    for (let key in obj){
+      hashAddress = hashCode(key, newSize);
+      if (!newTable[hashAddress]) newTable[hashAddress] = {};
+      newTable[hashAddress][key] = obj[key];
+    }
+  }
+  this.storage = newTable;
+  this.SIZE = newSize;
+}
+HashTable.prototype.remove = function(key) {
+  const hashAddress = hashCode(key, this.SIZE);
+  if (!this.storage[hashAddress]) return undefined;
+  const value = this.storage[hashAddress][key];
+  delete this.storage[hashAddress][key];
+  this.count--;
+  if ((this.SIZE > 16) && (this.count < (this.SIZE*0.25))){
+    this.rehash(this.SIZE*0.5);
+  }
+  return value;
+  };
 
 // YOUR CODE ABOVE
 
