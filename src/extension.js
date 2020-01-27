@@ -15,7 +15,27 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+HashTable.prototype.set = function(key, value) {
+  let num = hashCode(key, this.SIZE);
+  if (this.storage[num] === .75 * this.SIZE) this.storage[2 * num] = {[key]: value};
+  else this.storage[num][key] = value; 
+};
 
+HashTable.prototype.get = function(key) {
+  const hashtag = this.storage[hashCode(key, this.SIZE)];
+  if (!hashtag) return undefined;
+  return hashtag[key];
+};
+
+HashTable.prototype.remove = function(key) {
+  const hashtag = this.storage[hashCode(key, this.SIZE)];
+  let remover = hashtag[key];
+  delete hashtag[key];
+  if (Object.entries(hashtag).length === 0) {
+    this.storage[hashCode(key, this.SIZE)] = undefined;
+  }
+  return remover;
+};
 
 // YOUR CODE ABOVE
 
