@@ -76,7 +76,8 @@ HashTable.prototype.remove = function(key) {
   if (!this.storage[hashKey]){
     return undefined
   }
-  return this.storage[hashKey][key]
+  this.currSize--
+  delete this.storage[hashKey][key]
 };
 
 
