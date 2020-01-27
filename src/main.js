@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.number = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //find corresponding index
+  const index = hashCode(key, this.SIZE);
 
+  //if empty, make a new obj and assign it in array
+  if(this.storage[index] === undefined) {
+    const obj = {};
+    this.storage[index] = obj;
+  }
+
+  //if same key already exists, overwrite
+  //if collision, make another key-value pair
+  this.storage[index][key] = value;
+  this.number++;
 };
 
 /**
@@ -38,7 +50,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  return this.storage[index][key];
 };
 
 /**
@@ -50,6 +63,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE);
+
+  //if key does not exist in index
+  if(this.storage[index] == undefined || this.storage[index][key == undefined]) return undefined;
+
+  const deleted = this.storage[index][key];
+  delete this.storage[index][key];
+  return deleted;
 
 };
 
@@ -72,3 +93,20 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+//////////test
+const ex = new HashTable();
+ex.set("name", "SB"); console.log(ex.storage[11]);
+ex.set("name", "Saemin"); 
+console.log(ex.get("name"));
+
+console.log(ex.remove("class"));
+console.log(ex.remove("name"));
+console.log(ex.get("name"));
+
+ex.set("hel", "first"); console.log(ex.storage[15]);
+ex.set("key", "collision"); console.log(ex.storage[15]);
+console.log(ex.get("key"));
+console.log(ex.remove("key"));
+console.log(ex.storage[15]);
