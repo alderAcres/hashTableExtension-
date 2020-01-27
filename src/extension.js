@@ -16,7 +16,6 @@
 // PASTE AND MODIFY YOUR CODE BELOW
 
 
-
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
