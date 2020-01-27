@@ -55,9 +55,11 @@ return this.storage[hashKey][key];
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-if (!this.storage[(hashCode(key,this.SIZE))]) return undefined;
- return this.storage[(hashCode(key,this.storage))][key];
+if (!this.storage[(hashKey)]) return undefined;
+ return this.storage[hashKey][key];
 };
+
+//BARELY SOLVED, NEED HELP TO SOLIDIFY CONCEPTS
 
 
 // Do not modify
