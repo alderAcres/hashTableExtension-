@@ -7,8 +7,9 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
+  this.stored = 0;
 }
 
 /**
@@ -23,50 +24,85 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+HashTable.prototype.set = function (key, value) {
+  //set index to calling hashCode() func with given key. 
+  let index = hashCode(key, this.SIZE);
+  // Store the key/value pair as an object and store to this.storage at correct index
+  //if this.storage at index is defined, set new key val pair
+  if (this.storage[index]) {
+    this.storage[index][key] = value;
+  } else {
+    this.storage[index] = {};
+    this.storage[index][key] = value
+  }
+  this.stored++
+  return this.stored
+};
+
+
+
+/**
+ * get - Retrieves a value stored in the hash table with a specified key
+ *
+ * - If more than one value is stored at the key's hashed address, then you must retrieve
+ *   the correct value that was originally stored with the provided key
+ *
+ * @param {string} key - key to lookup in hash table
+ * @return {string|number|boolean} The value stored with the specifed key in the
+ * hash table
+ */
+HashTable.prototype.get = function (key) {
+  //set index
+  let index = hashCode(key, this.SIZE);
+  //return value
+  return this.storage[index][key];
 
 };
 
 /**
-* get - Retrieves a value stored in the hash table with a specified key
-*
-* - If more than one value is stored at the key's hashed address, then you must retrieve
-*   the correct value that was originally stored with the provided key
-*
-* @param {string} key - key to lookup in hash table
-* @return {string|number|boolean} The value stored with the specifed key in the
-* hash table
-*/
-HashTable.prototype.get = function(key) {
+ * remove - delete a key/value pair from the hash table
+ *
+ * - If the key does not exist in the hash table, return undefined
+ *
+ * @param {string} key - key to be found and deleted in hash table
+ * @return {string|number|boolean} The value deleted from the hash table
+ */
+HashTable.prototype.remove = function (key) {
+  //set index
+  let index = hashCode(key, this.SIZE);
+  //check if undefined
+  if (!this.storage[index]) {
+    return undefined
+  } else {
+    delete this.storage[index][key]
+    this.stored--
+  }
 
 };
 
-/**
-* remove - delete a key/value pair from the hash table
-*
-* - If the key does not exist in the hash table, return undefined
-*
-* @param {string} key - key to be found and deleted in hash table
-* @return {string|number|boolean} The value deleted from the hash table
-*/
-HashTable.prototype.remove = function(key) {
+const newHash = new HashTable()
+console.log(newHash.set('ten', '10'), newHash.storage[13])
+console.log(newHash.set('seven', '7'), newHash.stored)
+//console.log(hashCode('ten', 16))
+console.log(newHash.get('ten'))
+console.log(newHash.storage, newHash.stored)
 
-};
-
+console.log(newHash.remove('seven'))
+console.log(newHash.storage, newHash.stored)
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
