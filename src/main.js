@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hash = hashCode(key, this.SIZE)
+  //check to see if the key already has another value 
+  if (this.storage[hash]) {
+    // if true, then we will overwrite with another value
+    this.storage[hash][key] = value
+  } else {
+    // otherwise we are going to create another object to store the-
+    // -key and value into so we dont have a collision. 
+    this.storage[hash] = {}
+    // store the value into the created obj
+    this.storage[hash][key] = value
+  }
 };
 
 /**
@@ -38,7 +49,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // creating a hashcode
+  const hash = hashCode(key, this.SIZE)
+  if (this.storage[hash][key])
+  // returning the value
+  return this.storage[hash][key]
 };
 
 /**
@@ -50,7 +65,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hash = hashCode(key, this.SIZE)
+  // saving the key to a variable
+  const deleted = this.storage[hash][key]
+  // detele the original key and val
+  delete this.storage[hash][key]
+  // return the variable with the stored value 
+  return deleted
 };
 
 
@@ -72,3 +93,13 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+// const hTable = new HashTable
+// hTable.set('key', 1)
+// hTable.get('key')
+// hTable.remove('key')
+
+// console.log(hTable)
+// console.log(hTable.get('key'))
+// console.log(hTable.remove('key'))
