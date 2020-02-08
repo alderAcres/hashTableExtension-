@@ -198,6 +198,7 @@ ht.set('thoseKey', 69);
 ht.set('roseKey', 69);
 ht.set('poseKey', 69);
 ht.set('toesKey', 69);
+ht.set('toesKey', 70);
 
 console.dir(ht);
 console.log(ht.count)

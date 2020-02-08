@@ -174,6 +174,7 @@ ht.set('redKey', 68);
 ht.set('blackKey', 68);
 ht.set('whiteKey', 68);
 ht.set('whatKey', 69);
+ht.set('whatKey', 70);
 
 console.log(ht.get('thisKey'));
 
