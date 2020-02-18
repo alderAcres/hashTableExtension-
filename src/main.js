@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.count = 0; // total count of items stored in the hash table
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,8 +24,30 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // determine hash to use
+  let bucket = hashCode(key,this.SIZE);
+  // save into the hash table
+    // if nothing currently in bucket
+  if (!this.storage[bucket]) {
+    this.storage[bucket] = {[key] : value};
+    this.count += 1;
+  }
+    // if the key is already in bucket
+  else if (this.storage[bucket][key]) { this.storage[bucket][key] = value }
+    // if the key is not already in bucket
+  else {
+    this.storage[bucket][key] = value;
+    this.count += 1;
+  }
+  // return count
+  return this.count;
 };
+
+// var test = new HashTable;
+// console.log(test.set('soobin',1))
+// console.log(test.set('soobin',1))
+// console.log(test.set('james',1))
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,9 +60,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // identify bucket where key would be located
+  let bucket = hashCode(key,this.SIZE);
+  // if unable to access, then return undefined
+  if (!this.storage[bucket] || !this.storage[bucket][key]) return undefined;
+  else return this.storage[bucket][key];
 };
 
+// console.log(test.get('soobin'))
+// console.log(test.get('jason'))
 /**
 * remove - delete a key/value pair from the hash table
 *
@@ -50,8 +78,24 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // identify bucket where key would be located
+  let bucket = hashCode(key,this.SIZE);
+  // check if the key exists in the bucket
+  if (!this.storage[bucket] || !this.storage[bucket][key]) return undefined;
+  // if key exists, remove
+  // store the removed value, to be returned later
+  const result = this.storage[bucket][key];
+  delete this.storage[bucket][key];
+  // upon deletion, decrement count
+  this.count -= 1;
+  // if object is empty after removing, reset to "undefined"
+  if (Object.keys(this.storage[bucket]).length === 0) {this.storage[bucket] = undefined;}
+return result;
 };
+
+// console.log(test.remove('soobin'))
+// console.log(test)
+// console.log(test)
 
 
 // Do not modify
