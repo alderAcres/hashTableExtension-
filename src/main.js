@@ -7,14 +7,14 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.hashIndex = testIndex;
   this.storage = new Array(this.SIZE);
 }
 
 /**
 * set - Adds given value to the hash table with specified key.
 *
-* - If the provided key has already been used to store another value, simply overwrite
+* - // confused on this If the provided key has already been used to store another value, simply overwrite
 *   the existing value with the new value.
 * - If the hashed address already contains another key/value pair, you must handle
 *   the collision appropriately.
@@ -24,7 +24,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  if (!this.storage[this.hashIndex]) { // conditional statement if the key exists then overwrite
+    this.storage[this.hashIndex] = { key : value, next : null };
+  } else { this.storage[this.hashIndex].next = {key : value, next : null}
+    // how do i set the next property in the annoymous object that is at this.storage[this.hashIndex]
+    // to the current this.storage[this.hashIndex]
+    
 
+
+  }
 };
 
 /**
@@ -69,6 +77,14 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+
+const testIndex = hashCode('Hello World', 16)
+console.log(testIndex);
+const test = new HashTable();
+console.log(test.SIZE;)
+console.log(test.hashIndex);
 
 // Do not remove!!
 module.exports = HashTable;
