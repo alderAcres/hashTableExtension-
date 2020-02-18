@@ -24,7 +24,25 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hashedKey = hashCode(key, this.SIZE);
+  if (this.storage[hashedKey]) {
+    // collision. we will use an object for sake of ease
+    const cellStorage = {};
+    let arrayedCellStorage = Object.keys(this.storage[hashedKey]);
+    for (let i = 0; i < arrayedCellStorage.length; i ++) {
+      let cellKey = arrayedCellStorage[i];
+      let cellVal = this.storage[hashedKey][cellKey];
+      cellStorage[cellKey] = cellVal;
+    }
+     cellStorage[key] = value;
+     this.storage[hashedKey] = cellStorage;
+  }
+  else {
+    // no collision
+    const cellStorage = {};
+    cellStorage[key] = value;
+    this.storage[hashedKey] = cellStorage;
+  }
 };
 
 /**
@@ -38,7 +56,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hashedKey = hashCode(key, this.SIZE);
+  const cellStorage = this.storage[hashedKey];
+  //given our previous implementation cellStorage should be an object
+  let arrayedCellStorage = Object.keys(this.storage[hashedKey]);
+  console.log(arrayedCellStorage)
+  for (let i = 0; i < arrayedCellStorage.length; i++) {
+    let cellKey = arrayedCellStorage[i];
+    if (String(key) === cellKey) {
+      return this.storage[hashedKey][cellKey];
+    }
+  }
+  // if we get to this point, the key is not in storage;
+  return null;
 };
 
 /**
@@ -50,7 +80,20 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  
+  if (!this.get(key)) return undefined;
+  // if we hit this point, we know the hashtable contains our key
+  const hashedKey = hashCode(key, this.SIZE);
+  let arrayedCellStorage = Object.keys(this.storage[hashedKey]);
+  const cellStorage = {};
+  for (let i = 0; i < arrayedCellStorage.length; i ++) {
+    let cellKey = arrayedCellStorage[i];
+    let cellVal = this.storage[hashedKey][cellKey];
+    if (cellKey === String(key)) continue;
+    cellStorage[cellKey] = cellVal;
+  }
+  this.storage[hashedKey] = cellStorage;
+  return true; // just returning something that is not undefined to confirm removal
 };
 
 
@@ -72,3 +115,13 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+
+let hash = new HashTable;
+console.log(hash.set(3,2))
+console.log(hash.set("key 1",3))
+console.log(hash.get("key 1"))
+console.log(hash.get(3))
+console.log(hash.remove("key 1"))
+console.log(hash)
