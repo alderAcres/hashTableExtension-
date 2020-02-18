@@ -25,7 +25,32 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+  // use the key as input for our hashcode to find the index on our array that we want to insert this value into
+    // we should be inserting an object with the key for our key/value pair should be the actual key & value parameters
+
+    // check if there's an object at index yet
+    let index = hashCode(key, this.SIZE);
+    if (this.storage[index]){  // if exists, just add in new property. and as per specs, this will overwrite something if has the same key
+      this.storage[index][key] = value; 
+    } 
+    else {this.storage[index] = {}; // undefined so create new object here
+    // couldn't use string literal here to intiate the obj, need to look into this later
+    this.storage[index][key] = value;
+         }         
+
+      // a fancier alternative would be to create a linkedlist at each index array 
+        // this would be better performance for very large hash tables
+          // but I'm feeling lazy
 };
+
+// tests:
+// let newHashTable = new HashTable();
+// newHashTable.set("password", "hi");
+// console.log(newHashTable.storage);
+// newHashTable.set('password', 'bye');
+// console.log(newHashTable.storage);
+// let index = hashCode('password', 16);
+// console.log(newHashTable.storage[index]); // this replaces the key, but its fine since they used the same key
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -39,7 +64,21 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+   // check if there's an object at index yet
+   let obj = this.storage[hashCode(key, this.SIZE)];
+   if (typeof(obj) === 'object'){  // something exists, let's make sure there's an element with the same key
+    if (obj.hasOwnProperty(key)) // has this key, return value
+     return obj[key];
+   } 
+  return null; // could also have this return a string like "No such key exists"
 };
+
+// tests:
+// let newHashTable = new HashTable();
+// newHashTable.set("password", "hi");
+// console.log(newHashTable.storage);
+// console.log(newHashTable.get('password'))
+// console.log(newHashTable.get('blah'))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +89,25 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  // we can use our previous function to make sure that the key exists, and then 
+  // we can then remove the key if exists
 
+  if (this.get(key) === null) return undefined; // no such key exists
+  
+  // question didn't specify what the output should be
+  // I will make this return the value if it exists
+    // although I can see this being not optimal for security reasons IRL
+  let obj = this.storage[hashCode(key, this.SIZE)];
+  let result = this.storage[hashCode(key, this.SIZE)][key];
+  delete obj[key]; // now this method will leave empty objects, but it seems okay for this exercise, otherwise I'd have to completely remove the obj
+  return result;
 };
 
+// tests:
+// let newHashTable = new HashTable();
+// newHashTable.set("password", "hi");
+// console.log(newHashTable.storage);
+// console.log(newHashTable.remove('password'))
 
 // Do not modify
 function hashCode(string, size) {
