@@ -116,14 +116,14 @@ function hashCode(string, size) {
 // Do not remove!!
 module.exports = HashTable;
 
-const hashT = new HashTable();
-for(let i = 0 ; i < 13 ; i++) hashT.set(`key:${i}`,i);
-//for(let i = 0 ; i < 6 ; i++) hashT.remove(`key:${i}`);
+// const hashT = new HashTable();
+// for(let i = 0 ; i < 13 ; i++) hashT.set(`key:${i}`,i);
+// //for(let i = 0 ; i < 6 ; i++) hashT.remove(`key:${i}`);
 
-console.log(hashT);
+// console.log(hashT);
 
-const hashT2 = new HashTable();
+// const hashT2 = new HashTable();
 
-for(let i = 6 ; i < 13 ; i++) hashT2.set(`key:${i}`,i);
+// for(let i = 6 ; i < 13 ; i++) hashT2.set(`key:${i}`,i);
 
-console.log(hashT2);
+// console.log(hashT2);
