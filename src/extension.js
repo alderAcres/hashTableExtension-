@@ -14,7 +14,23 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) {
+  let hashStorageNum = hashCode(key, this.SIZE);
+  if (this.storage[hashStorageNum] === undefined) { this.storage[hashStorageNum] = { }; }
+  //NEW CODE BELOW
+  let definedTableElements = 
+  if 
+  //NEW CODE ABOVE... NOT ENOUGH TIME 
+  this.storage[hashStorageNum][key] = value;
+  console.log(this.storage[hashStorageNum][key]);
+};
 
+HashTable.prototype.remove = function(key) {
+  let hashStorageNum = hashCode(key, this.SIZE);
+  const returnVal= this.storage[hashStorageNum][key];
+  delete this.storage[hashStorageNum][key];
+  return returnVal;
+};
 
 
 // YOUR CODE ABOVE
