@@ -60,21 +60,31 @@ HashTable.prototype.set = function(key, value) {
     cellStorage[key] = value;
     this.storage[hashedKey] = cellStorage;
   }
-
+  console.log(this.storage)
   // need to check if >= 0.75 usage
-  if ((this.storage.length/this.SIZE) >= 0.75) {
+  let usedCells = 0;
+  for (let i = 0; i < this.storage.length; i ++) {
+    if (this.storage[i]) usedCells++;
+  }
+  if ((usedCells/this.SIZE) >= 0.75) {
     //resize required
     let tempStorage = {};
     tempStorage = Object.assign(tempStorage, this.storage);
     // we probably need to deep copy this otherwise we are pointing to the same item
-
+    console.log(tempStorage)
     this.SIZE = (this.SIZE * 2);
     this.storage = new Array(this.SIZE);
-    for (let i = 0; i < tempStorage.length; i += 1) {
-      let cellStorage = Object.keys(tempStorage[i]);
+    for (let i = 0; i < Object.keys(tempStorage).length; i += 1) {
+      let tempKey = Object.keys(tempStorage)[i];
+      // console.log(tempStorage[i])
+      if (!tempStorage[tempKey]) continue;
+      let cellStorage = Object.keys(tempStorage[tempKey]);
+      // console.log(cellStorage)
       // this is an array of the keys in the object in that cell
       for (let j = 0; j < cellStorage.length; j ++) {
-        this.set(cellStorage[j],tempStorage[cellStorage[j]]);
+        // console.log(cellStorage)
+        // console.log(cellStorage[j],tempStorage[i][cellStorage[j]])
+        this.set(cellStorage[j],tempStorage[tempKey][cellStorage[j]]);
       }
     }
   }
@@ -96,7 +106,6 @@ HashTable.prototype.get = function(key) {
   const cellStorage = this.storage[hashedKey];
   //given our previous implementation cellStorage should be an object
   let arrayedCellStorage = Object.keys(this.storage[hashedKey]);
-  console.log(arrayedCellStorage)
   for (let i = 0; i < arrayedCellStorage.length; i++) {
     let cellKey = arrayedCellStorage[i];
     if (String(key) === cellKey) {
@@ -129,6 +138,33 @@ HashTable.prototype.remove = function(key) {
     cellStorage[cellKey] = cellVal;
   }
   this.storage[hashedKey] = cellStorage;
+
+  let usedCells = 0;
+  for (let i = 0; i < this.storage.length; i ++) {
+    if (this.storage[i]) usedCells++;
+  }
+  if ((usedCells/this.SIZE) <= 0.75) {
+    //resize required
+    let tempStorage = {};
+    tempStorage = Object.assign(tempStorage, this.storage);
+    // we probably need to deep copy this otherwise we are pointing to the same item
+    console.log(tempStorage)
+    this.SIZE = (this.SIZE/2 >= 16) ? (this.SIZE/2) : 16;
+    this.storage = new Array(this.SIZE);
+    for (let i = 0; i < Object.keys(tempStorage).length; i += 1) {
+      let tempKey = Object.keys(tempStorage)[i];
+      // console.log(tempStorage[i])
+      if (!tempStorage[tempKey]) continue;
+      let cellStorage = Object.keys(tempStorage[tempKey]);
+      // console.log(cellStorage)
+      // this is an array of the keys in the object in that cell
+      for (let j = 0; j < cellStorage.length; j ++) {
+        // console.log(cellStorage)
+        // console.log(cellStorage[j],tempStorage[i][cellStorage[j]])
+        this.set(cellStorage[j],tempStorage[tempKey][cellStorage[j]]);
+      }
+    }
+  }
   return true; // just returning something that is not undefined to confirm removal
 };
 
@@ -154,3 +190,28 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let hash = new HashTable;
+hash.set(3,2)
+hash.set("help",1)
+hash.set("ayuda",1)
+hash.set("raphael",4)
+hash.set("egon11",0)
+hash.set("besoismyfriend",32)
+hash.set("kaldsjhflksahfd",42)
+hash.set("kashdkflahdkfla",13)
+hash.set('askjfdhakhrwqeoiuryqoi',41)
+hash.set("akjdshfoiewqo",13)
+hash.set("iyioqewyroiuyoo",14)
+hash.set("armageddon",14)
+hash.set("pleasehashtoanewcell",32)
+console.log(hash);
+let used = 0;
+for (let i = 0; i < hash.storage.length; i += 1) {
+  if (hash.storage[i]) {
+    used += 1;
+  }
+}
+console.log(used);
+console.log(hash)
+console.log(hash.SIZE);
