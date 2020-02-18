@@ -15,6 +15,9 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+// I put in the extension when coding the main, because it seemed logical based on the extension in the unit 2 assignment
+// For an obsessively commented version, please see the main.js file. For a cleaner version, stick with this.
+
 function HashTable() {
   this.SIZE = 16;
   this.storage = new Array(this.SIZE);
