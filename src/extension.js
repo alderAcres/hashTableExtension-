@@ -15,7 +15,63 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 6;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  let bucket = hashCode(key, this.SIZE) 
+  if (this.storage[bucket] === undefined) this.storage[bucket] = {[key]: value,}
+  else {
+    this.storage[bucket][key] = value
+  }
+
+  let counter = 0;
+  for (let i = 0; i < this.SIZE; i++) {
+    // iterate through the hashtable and increment the counter variable when the bucket is not empty 
+    if (this.storage[i] !== undefined) counter++
+  }
+
+  // check if counter is greater than 75% of the given size
+  if (counter > this.SIZE * 0.75) {
+    // double the size if the statement is met
+    this.SIZE = this.SIZE * 2
+  }
+};
+
+let test = new HashTable
+test.set('a', '1')
+test.set('b', '2')
+test.set('c', '3')
+test.set('d', '4')
+test.set('e', '5')
+console.log(test)
+
+
+HashTable.prototype.remove = function(key) {
+  let bucket = hashCode(key, this.SIZE) 
+  if (this.storage[bucket][key] === undefined) {
+    return undefined;
+ } else {
+    delete this.storage[bucket][key]
+  }
+
+  // if this.SIZE is greater than 16 and result of removing the item drops 
+  // the number of stored items to be less than 25% of this.SIZE 
+
+  let counter = 0;
+  for (let i = 0; i < this.SIZE; i++) {
+    if (this.storage[i] !== undefined) counter++
+  }
+  
+  if(this.SIZE > 16 && counter < Math.floor(this.SIZE * 0.25)) {
+    // reduce the size by half 
+    this.SIZE = this.SIZE / 2
+
+  }
+};
 
 // YOUR CODE ABOVE
 
