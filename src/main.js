@@ -7,8 +7,9 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
+  this.items = 0;
 }
 
 /**
@@ -24,8 +25,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hashAddress = hashCode(key, this.SIZE);
+  if (this.storage[hashAddress] === undefined) {
+    let storageObj = {};
+    storageObj[key] = value;
+    this.storage[hashAddress] = storageObj;
+    this.items += 1;
+    return this.items;
+  }
+  this.storage[hashAddress][key] = value;
+  this.items += 1;
+  return this.items;
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +50,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hashAddress = hashCode(key, this.SIZE);
+  return this.storage[hashAddress][key];
 };
 
 /**
@@ -50,7 +63,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let hashAddress = hashCode(key, this.SIZE);
+  if (this.storage[hashAddress][key] !== undefined) {
+    let storedReturn = this.storage[hashAddress][key];
+    delete this.storage[hashAddress][key];
+    this.items -= 1;
+    return storedReturn;
+  }
+  return undefined;
 };
 
 
@@ -72,3 +92,26 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// Tests
+
+const testHash = new HashTable();
+console.log(testHash.set("Bob", 'Cat'));
+console.log(testHash.set("Sam", 'Smith'));
+console.log(testHash.set("Aac", 'Random'));
+console.log(testHash.set("Bab", 'Random2'));
+console.log(testHash.get("Sam"));
+console.log(testHash.get("Bob"));
+console.log(testHash.get("Bob"));
+console.log(testHash.get("Bob"));
+console.log(testHash.get("Bab"));
+console.log(testHash.get('Aac'));
+
+console.log(testHash.items);
+console.log(testHash.remove("Sam"));
+console.log(testHash.items);
+
+console.log(hashCode('Sam', 16)); 
+console.log(hashCode('Bob', 16)); 
+console.log(hashCode('Bab', 16)); 
+console.log(hashCode('Aac', 16)); 
