@@ -10,6 +10,10 @@ function HashTable() {
   
   this.storage = new Array(this.SIZE);
 }
+const hash = new HashTable()
+console.log(hash)
+// const wow = new Object('david')
+// console.log(wow)
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,7 +28,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const index = hashCode(key, this.SIZE);
+  let numOfItems = 0;
+  if (this.storage[index] === null) {
+    const newObj = new Object();
+    newObj[key] = value;
+    this.storage[index] = newObj;
+    numOfItems++;
+  } else {
+    this.storage[index][key] = value;
+  }
+  return numOfItems;
 };
 
 /**
