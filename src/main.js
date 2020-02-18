@@ -7,7 +7,7 @@
  */
 function HashTable() {
   this.SIZE = 16;
-
+  this.number = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -53,8 +53,12 @@ HashTable.prototype.set = function(key, value) {
         currentNode[key] = value;
       } else currentNode = currentNode.next;
     }
-    if (!currentNode[key]) currentNode.next = newNode;
+    if (!currentNode[key]) {
+      currentNode.next = newNode;
+      this.number++;
+    }
   }
+  return this.number;
 };
 
 /**
@@ -110,13 +114,15 @@ HashTable.prototype.remove = function(key) {
   if (currentNode[key] && currentNode === this.storage[hashIndex].head) {
     this.storage[hashIndex].head = currentNode.next;
     delete currentNode;
-    return;
+    this.number--;
+    return currentNode[key];
   }
   while (currentNode.next) {
     if (currentNode[key]) {
       prevNode.next = currentNode.next;
       delete currentNode;
-      return;
+      this.number--;
+      return currentNode[key];
     }
     prevNode = currentNode;
     currentNode = currentNode.next;
