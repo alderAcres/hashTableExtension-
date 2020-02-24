@@ -7,14 +7,38 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  this.hashIndex = testIndex;
   this.storage = new Array(this.SIZE);
+  this.count = 0;
 }
+
+function LinkedList() {
+  this.head = null;
+  this.tail = null;
+  this.count = 0;
+}
+LinkedList.prototype.push = function(value) {
+  const newNode = new Node(value);
+  console.log(newNode);
+  
+  if (this.head === null) {
+    this.head = newNode;
+    this.tail = newNode;
+  }else{
+    this.tail.next = newNode;
+    this.tail = newNode;
+  }
+};
+
+function Node(val) {
+  this.value = val;
+  this.next = null;
+}
+
 
 /**
 * set - Adds given value to the hash table with specified key.
 *
-* - // confused on this If the provided key has already been used to store another value, simply overwrite
+* - //  If the provided key has already been used to store another value, simply overwrite
 *   the existing value with the new value.
 * - If the hashed address already contains another key/value pair, you must handle
 *   the collision appropriately.
@@ -24,16 +48,45 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-  if (!this.storage[this.hashIndex]) { // conditional statement if the key exists then overwrite
-    this.storage[this.hashIndex] = { key : value, next : null };
-  } else { this.storage[this.hashIndex].next = {key : value, next : null}
-    // how do i set the next property in the annoymous object that is at this.storage[this.hashIndex]
-    // to the current this.storage[this.hashIndex]
+    let index = hashCode(key, this.SIZE); //same key is used to create hashed address as to be stored in linked list
+    let bucket = this.storage[index];
+    let item = new Node(value);
     
-
-
+    // Create a new bucket if none exist
+    if (!bucket) {
+      console.log('if bucket does not exist')
+      bucket = new LinkedList(item);
+      this.storage[index] = bucket; 
+      bucket.head = item;
+      bucket.tail = item;
+      bucket.count++;
+      this.count++;
+    } 
+    else {
+      let current = bucket.head;
+      
+      // If the head has null next it is there is only one node in the list
+      if (!current.next) {
+        current.next = item;
+      }
+      else {
+        // move to the end of the list
+        while(current.next) {
+          current = current.next;
+        }
+        
+        current.next = item;
+      }
+      bucket.count++;
+      this.count++;
+      
+      return 'New item placed in bucket at position ' + bucket.count;
+    }
   }
-};
+  
+  
+  
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -80,11 +133,18 @@ function hashCode(string, size) {
 
 
 
-const testIndex = hashCode('Hello World', 16)
-console.log(testIndex);
+
+
 const test = new HashTable();
-console.log(test.SIZE;)
-console.log(test.hashIndex);
+console.log(test.storage);
+test.set('1', 'Justin');
+console.log(test.storage);
+test.set('2', 'Gillespie');
+console.log(test.storage);
+test.set('1', 'Joel');
+console.log(test.storage)
+
+
 
 // Do not remove!!
 module.exports = HashTable;
