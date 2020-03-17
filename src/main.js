@@ -40,6 +40,7 @@ HashTable.prototype.set = function(key, value) {
     this.storage[index][key] = value;
   }
   console.log(this.storage[0])
+  return this.storage.filter(bucket=>(typeof bucket === 'object')).length
 };
 
 const myHash = new HashTable();
