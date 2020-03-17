@@ -24,8 +24,9 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-  //found a good video on Youtube?!
-  //https://www.youtube.com/watch?v=UOxTMOCTEZk
+  //found two good videos on Youtube?!
+  //conceptual background: https://www.youtube.com/watch?v=shs0KM3wKv8
+  //actual coding example in Javascript: https://www.youtube.com/watch?v=UOxTMOCTEZk
 };
 
 /**
