@@ -8,7 +8,7 @@
 function HashTable() {
   this.SIZE = 16;
   
-  this.storage = new Array(this.SIZE).fill(Object);
+  this.storage = new Array(this.SIZE);
 }
 
 /**
@@ -27,8 +27,8 @@ HashTable.prototype.set = function(key, value) {
   // I'm using objects as the buckets at each index
   // Another way to do this is to use linked lists as buckets instead
   const arrayIndex = hashCode(key, this.SIZE);
+  if (!this.storage[arrayIndex]) this.storage[arrayIndex] = {};
   this.storage[arrayIndex][key] = value;
-  console.log(arrayIndex);
 };
 
 /**
@@ -58,6 +58,7 @@ HashTable.prototype.remove = function(key) {
   const arrayIndex = hashCode(key, this.SIZE);
   if (this.storage[arrayIndex][key]) {
     delete this.storage[arrayIndex][key];
+    if (!Object.keys(this.storage[arrayIndex]).length) delete this.storage[arrayIndex];
   }
 };
 
