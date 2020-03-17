@@ -24,7 +24,14 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // figure out the index where we want to store this key/value pair by running the key through the hashing function
+  const index = (hashCode(key, this.SIZE));
+  // if an object doesn't exist at this index yet, create an empty object at the index
+  if (typeof this.storage[index] !== 'object') {
+    this.storage[index] = {};
+  }
+  // in the object, add/overwrite the key value pair
+  this.storage[index][key] = value;
 };
 
 /**
@@ -37,9 +44,11 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
-};
+HashTable.prototype.get = function (key) {
+  // run key through hashing function to get index
+  const index = (hashCode(key, this.SIZE));
+  return this.storage[index][key];
+}
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,7 +59,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // run key through hashing function to get index
+  const index = (hashCode(key, this.SIZE));
+  // check whether the key/value pair exists
+  if (this.storage[index][key]) {
+    const saved = key;
+    delete this.storage[index][key];
+    return saved;
+  }
+  return undefined;
 };
 
 
@@ -72,3 +89,29 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// TESTS
+// setting
+// console.log(hashCode('test', 16)); // gives us 2
+// console.log(hashCode('great', 16)); // gives us 13
+// console.log(hashCode('another one', 16)); // gives us 7
+// const table = new HashTable();
+// table.set('test', 'it\'s working!');
+// table.set('great', 'I should be at index 12');
+// table.set('another one', 'am I at index 6?');
+// console.log(table);
+
+// getting
+// const table = new HashTable();
+// table.set('test', 'it\'s working!');
+// table.set('great', 'I should be at index 12');
+// table.set('another one', 'am I at index 6?');
+// console.log(table.get('test'));
+
+// deleting
+// const table = new HashTable();
+// table.set('test', 'it\'s working!');
+// table.set('great', 'I should be at index 12');
+// table.set('another one', 'am I at index 6?');
+// console.log(table.remove('test'));
+// console.log(table.remove('test'));
