@@ -61,11 +61,9 @@ HashTable.prototype.set = function(key, value) {
     if(item !== undefined){
       count++;
     }
-    console.log('count',this.items);
    }
 
    if((count/this.SIZE) > .75){
-     console.log(count/this.SIZE);
     for (let item in this.storage){
       if(item !== undefined){
         let obj={};
