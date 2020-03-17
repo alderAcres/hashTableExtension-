@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.length = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,31 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // get where to store this by getting the hashKey
+  const hashKey = hashCode(key, this.SIZE);
+  // if the key's value is nil - make an array into there for collissions
+  if (this.storage[hashKey] === undefined) {
+    //  push value into first array element of hash[hashKey]
+    const newObj = {};
+    newObj[key] = value;
+    this.storage[hashKey] = newObj;
+    // increment the number of items stored
+    this.length++;
+  } else {
+    // else there is already an array at this spot
+    //  push value into array of hash[hashKey]
+    if (this.storage[hashKey][key] === undefined) {
+      this.storage[hashKey][key] = value;   
+      // increment the number of items stored
+      this.length++;
+    } else {
+      // only add without incrementing the number of items stored
+      this.storage[hashKey][key] = value;
+    }
 
+  }
+  // return number of items stored
+  return this.length;
 };
 
 /**
@@ -38,7 +62,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // get where the value was stored by getting the hashKey
+  const hashKey = hashCode(key, this.SIZE);
+  console.log(hashKey);
+  // if the value at the hashkey is undefined - return undefined
+  if (this.storage[hashKey] === undefined) return undefined;
+  // if the key exists at the hash[hashKey] return value
+  else if (this.storage[hashKey].hasOwnProperty(key)) return this.storage[hashKey][key];
 };
 
 /**
@@ -50,9 +80,33 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // convert the key into a hashKey
+  const hashKey = hashCode(key, this.SIZE);
+  // if the value at the hashKey is undefined return undefined
+  if (this.storage[hashKey] === undefined) return undefined;
+  // else delete the key/value pair and return the value
+  else if (this.storage[hashKey].hasOwnProperty(key)) {
+    const returnValue = this.storage[hashKey][key];
+    delete this.storage[hashKey][key];
+    // decrement the size of the hash table
+    this.length--;
+    return returnValue;
+  }
 };
 
+// Test cases
+/*
+const hash = new HashTable();
+console.log(hash.set(8, 'number'));
+console.log(hash.set(9, 'number2'));
+console.log(hash.set('A', 'letter'));
+console.log(hash);
+console.log(hash.get(9));
+console.log(hash.length);
+console.log(hash.remove(9));
+console.log(hash);
+console.log(hash.length);
+*/
 
 // Do not modify
 function hashCode(string, size) {
