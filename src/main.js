@@ -26,7 +26,6 @@ function HashTable() {
 HashTable.prototype.set = function set(key, value) {
   const hashedKey = hashCode(JSON.stringify(key), this.SIZE);
 
-  console.log(hashedKey);
   // hash already exists, so we have a collision
   // add the key/value pair to existing item storage
   if (this.storage[hashedKey]) {
@@ -56,14 +55,6 @@ HashTable.prototype.set = function set(key, value) {
   return this.items;
 };
 
-// const h = new HashTable();
-// console.log(h.set(5, 'hello'));
-// console.log(h);
-// console.log(h.set(5, 'goodbye'));
-// console.log(h);
-// console.log(h.set(16, 'not today'));
-// console.log(h);
-
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -86,11 +77,6 @@ HashTable.prototype.get = function get(key) {
   // otherwise return undefined
   return undefined;
 };
-
-// console.log(h.get(5));
-// console.log(h.get(16));
-// console.log(h.set(1, 'steve'));
-// console.log(h);
 
 
 /**
@@ -119,40 +105,6 @@ HashTable.prototype.remove = function(key) {
   return item;
 };
 
-// console.log(h);
-// console.log(h.remove(5));
-// console.log(h);
-// console.log(h.remove(1));
-// console.log(h);
-// console.log(h.remove(1));
-// console.log(h.set(1, 'steve'));
-// console.log(h);
-
-// const hashTable = new HashTable();
-// hashTable.set('key','value');
-// console.log(hashTable.get('key')); // .to.be('value');
-// console.log(hashTable.storage.length); // .to.eql(16);
-// hashTable.set('first key', 'first value');
-// hashTable.set('second key', 'second value');
-// console.log(hashTable.get('first key')); // to.be('first value');
-// console.log(hashTable.get('second key')); // .to.be('second value');
-// hashTable.set('first key', 'first value');
-// console.log(hashTable.get('first key')); // .to.eql('first value');
-// console.log(hashTable.remove('first key')); //.to.eql('first value');
-// console.log(hashTable.get('first key')); // .to.eql(undefined);
-
-// const hashTable = new HashTable();
-// for (let i = 0; i < 30; i++) {
-//   const key = 'key ' + i;
-//   const value = 'value ' + i;
-//   hashTable.set(key, value);
-//   console.log(hashTable.get(key)); // .to.be(value);
-// }
-// for (let i = 0; i < 30; i++) {
-//   const key = 'key ' + i;
-//   const value = 'value ' + i;
-//   console.log(hashTable.get(key)); // .to.be(value);
-// }
 
 // Do not modify
 function hashCode(string, size) {
