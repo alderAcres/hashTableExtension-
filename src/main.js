@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,9 +23,38 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+HashTable.prototype.set = function set(key, value) {
+  const hashedKey = hashCode(JSON.stringify(key), this.SIZE);
 
+  // hash already exists, so we have a collision
+  // add the key/value pair to existing item storage
+  if (this.storage[hashedKey]) {
+    const item = this.storage[hashedKey];
+
+    if (!Object.keys(item).includes(JSON.stringify(key))) {
+      this.items += 1;
+    }
+
+    item[JSON.stringify(key)] = value;
+
+    this.storage[hashedKey] = item;
+  } else {
+    // create new item storage and add key/value pair to it
+    const item = {};
+    item[JSON.stringify(key)] = value;
+
+    // store item on hash table
+    this.storage[hashedKey] = item;
+
+    // increment number of items in hash table
+    this.items += 1;
+  }
+
+
+  // @return {number} The new number of items stored in the hash table
+  return this.items;
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -37,9 +66,18 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
+HashTable.prototype.get = function get(key) {
+  const hashedKey = hashCode(JSON.stringify(key), this.SIZE);
 
+  // if hashed key exists, retrieve the value specified by key
+  if (this.storage[hashedKey]) {
+    return this.storage[hashedKey][JSON.stringify(key)];
+  }
+
+  // otherwise return undefined
+  return undefined;
 };
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,7 +88,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const hashedKey = hashCode(JSON.stringify(key), this.SIZE);
 
+  let item;
+
+  // if hashed key exists, retrieve the item specified by key from storage
+  // delete the key from the storage
+  // return the item
+  if (this.storage[hashedKey]) {
+    item = this.storage[hashedKey][JSON.stringify(key)];
+    delete this.storage[hashedKey][JSON.stringify(key)];
+    this.items -= 1;
+  }
+
+  // will return undefined if item not found
+  return item;
 };
 
 
