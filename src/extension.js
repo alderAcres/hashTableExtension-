@@ -14,9 +14,86 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 2;
+  this.REHASHED = 0; // keeps track of how many times we rehashed
+  this.length = 0;
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.set = function(key, value) {
+  const hashKey = hashCode(key, this.SIZE);
+  if (this.storage[hashKey] === undefined) {
+    const newObj = {};
+
+    // if (new length > SIZE * .75) Double SIZE and Rehash
+    const threshold = Math.floor(this.SIZE * 0.75); 
+    if (this.length > threshold) {
+      // Double the Size
+      this.SIZE = this.SIZE * 2;
+      // increment number of times rehashed
+      this.REHASHED++;
+      // Rehash everything
+      const oldStorage = this.storage;
+      this.storage = new Array(this.SIZE);
+      // iterate through entire hash
+      for (let item in oldStorage) {
+        if (item !== undefined) {
+          console.log(oldStorage[item]);
+          // for every item in oldStorage[item] push into this.storage
+        }
+      }
+
+    }
+    newObj[key] = value;
+    this.storage[hashKey] = newObj;
+    this.length++;
+  } else {
+    if (this.storage[hashKey][key] === undefined) {
+      this.storage[hashKey][key] = value;   
+      this.length++;
+    } else {
+      this.storage[hashKey][key] = value;
+    }
+  }
+  return this.length;
+};
+
+// Test cases
+const hash = new HashTable();
+console.log(hash.set(8, 'number'));
+console.log(hash.set(9, 'number2'));
+console.log(hash);
+console.log(hash.set('A', 'letter'));
+console.log(hash);
+/*
+console.log(hash);
+console.log(hash.get(9));
+console.log(hash.length);
+console.log(hash.remove(9));
+console.log(hash);
+console.log(hash.length);
+*/
 
 
 
+HashTable.prototype.get = function(key) {
+  const hashKey = hashCode(key, this.SIZE);
+  console.log(hashKey);
+  if (this.storage[hashKey] === undefined) return undefined;
+  else if (this.storage[hashKey].hasOwnProperty(key)) return this.storage[hashKey][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  const hashKey = hashCode(key, this.SIZE);
+  if (this.storage[hashKey] === undefined) return undefined;
+  else if (this.storage[hashKey].hasOwnProperty(key)) {
+    const returnValue = this.storage[hashKey][key];
+    delete this.storage[hashKey][key];
+    this.length--;
+    return returnValue;
+  }
+};
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
