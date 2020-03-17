@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.CONTENTS = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,20 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const bucket = hashCode(key, this.SIZE);
+  if (!this.storage[bucket]) {
+    const hash = {};
+    hash[key] = value;
+    this.storage[bucket] = hash;
+    this.CONTENTS++;
+  } else {
+    const hash = this.storage[bucket];
+    if (!hash.hasOwnProperty(key)) {
+      this.CONTENTS++;
+    }
+    hash[key] = value;
+  }
+  return this.CONTENTS;
 };
 
 /**
@@ -38,7 +51,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const bucket = hashCode(key, this.SIZE);
+  const hash = this.storage[bucket];
+  if (hash === undefined)
+    return undefined;
+  else {
+    return hash[key];
+  }
 };
 
 /**
@@ -50,7 +69,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const bucket = hashCode(key, this.SIZE);
+  const hash = this.storage[bucket];
+  if (hash === undefined) 
+    return undefined;
+  else {
+    const removed = hash[key];
+    if (removed !== undefined) {
+      this.CONTENTS--;
+    }
+    delete hash[key];
+    return removed;
+  }
 };
 
 
@@ -72,3 +102,19 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+const myHash = new HashTable();
+console.log('set(1, "a")', myHash.set('1', 'a'), 'expect 1');
+console.log('set(2, "a")', myHash.set('2', 'a'), 'expect 2');
+console.log(myHash.storage);
+console.log('get(1)', myHash.get('1'), 'expect "a"');
+console.log('get(1)', myHash.set('1', 'b'), 'expect 2');
+console.log('set(1, "a")', myHash.get('1'), 'expect "b"');
+console.log('remove(1)', myHash.remove('1'), 'expect "b"');
+console.log('remove(1)', myHash.remove('1'), 'expect undefined');
+console.log('set(1, "a")', myHash.set('1', 'a'), 'expect 2');
+console.log('set("ab", "a")', myHash.set('ab', 'ab'), 'expect 3');
+console.log('set("abb", "a")', myHash.set('abb', 'abb'), 'expect 4');
+console.log(myHash.get('ab'), 'expect "ab"');
+console.log('remove("abc")', myHash.remove('abc'), 'expect undefined');
+console.log(myHash.get('abb'), 'expect "abb"');

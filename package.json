@@ -1,5 +1,5 @@
 {
-  "name": "week-1-assessment",
+  "name": "cs-fundamentals-assessment",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/CodesmithLLC/week-1-assessment.git"
+    "url": "https://github.com/CodesmithLLC/cs-fundamentals-assessment.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/CodesmithLLC/week-1-assessment/issues"
+    "url": "https://github.com/CodesmithLLC/cs-fundamentals-assessment/issues"
   },
-  "homepage": "https://github.com/CodesmithLLC/week-1-assessment",
+  "homepage": "https://github.com/CodesmithLLC/cs-fundamentals-1-assessment",
   "dependencies": {
     "request": "^2.69.0"
   }
