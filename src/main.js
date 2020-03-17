@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const index = hashCode(key, this.SIZE);
 
+  //if there's a value at index then handle collision
+  //if not then create a new object to store the pair
+  if(!this.storage[index]) {
+    this.storage[index] = {
+      [key] : value
+    }
+  } else {
+    console.log(key);
+    this.storage[index][key] = value;
+  }
 };
 
 /**
@@ -38,7 +49,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const index = hashCode(key, this.SIZE);
 
+  if(!this.storage[index]) return undefined;
+
+  return this.storage[index][key];
 };
 
 /**
@@ -50,7 +65,20 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE);
 
+  if(!this.storage[index]) return undefined;
+
+  let deletedValue = this.storage[index][key];
+
+  delete this.storage[index][key];
+
+  //remove the entire object if there's no pairs left.
+  if(Object.keys(this.storage[index]).length === 0) {
+    delete this.storage[index];
+  }
+
+  return deletedValue;
 };
 
 
@@ -69,6 +97,20 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+const newHTB = new HashTable();
+
+//setting duplicate key to make sure it overwrites previous values
+newHTB.set('TN', 'some value');
+newHTB.set('TN', 'another one');
+newHTB.set('A', 'A value');
+
+console.log('retrieved with TN key', newHTB.get('TN'));
+
+newHTB.remove('TN');
+
+//when this logged the array should contain only one object with key 'A' and value 'A value'
+console.log(newHTB.storage);
 
 // Do not remove!!
 module.exports = HashTable;
