@@ -14,7 +14,57 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) {
+  const bucket = hashCode(key, this.SIZE);
+  this.bucketSize++;
 
+  if (this.storage[bucket]) {
+    this.storage[bucket][key] = value;
+    return this.bucketSize;
+  }
+
+  const item = {};
+  item[key] = value;
+  if (this.bucketSize / this.SIZE > 0.75) {
+    this.SIZE *= 2;
+    const prevStorage = this.storage;
+    this.storage = new Array(this.SIZE);
+    this.bucketSize = 0;
+    prevStorage.forEach(obj => {
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key))
+          this.set(key, obj[key]);
+      }
+    });
+    this.set(key, value);
+  } else {
+    this.storage[bucket] = item;
+  }
+  return this.bucketSize;
+};
+
+HashTable.prototype.remove = function(key) {
+  const bucket = hashCode(key, this.SIZE);
+
+  if (!this.storage[bucket][key]) return undefined;
+  const deleted = this.storage[bucket][key];
+  delete this.storage[bucket][key];
+  this.bucketSize--;
+
+  if (this.SIZE > 16 && this.bucketSize / this.SIZE <= .25) {
+    this.SIZE /= 2;
+    const prevStorage = this.storage;
+    this.storage = new Array(this.SIZE);
+    this.bucketSize = 0;
+    prevStorage.forEach(obj => {
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key))
+          this.set(key, obj[key]);
+      }
+    });
+  }
+  return deleted;
+};
 
 
 // YOUR CODE ABOVE
