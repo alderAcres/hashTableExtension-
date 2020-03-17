@@ -57,7 +57,12 @@ HashTable.prototype.get = function(key) {
  * @param {string} key - key to be found and deleted in hash table
  * @return {string|number|boolean} The value deleted from the hash table
  */
-HashTable.prototype.remove = function(key) {};
+HashTable.prototype.remove = function(key) {
+  const address = hashCode(key, this.SIZE);
+  deletedEle = this.storage[address][key];
+  delete this.storage[address][key];
+  return deletedEle;
+};
 
 // Do not modify
 function hashCode(string, size) {
