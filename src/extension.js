@@ -15,24 +15,215 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+/**
+ * HashTable costructor
+ *
+ * construct a new hash table
+ *
+ * - You may modify this constructor as you need to achieve the challenges below.
+ */
+function HashTable() {
+    this.SIZE = 16;
+    this.length = 0;
+    this.storage = new Array(this.SIZE);
+}
+
+/**
+ * set - Adds given value to the hash table with specified key.
+ *
+ * - If the provided key has already been used to store another value, simply overwrite
+ *   the existing value with the new value.
+ * - If the hashed address already contains another key/value pair, you must handle
+ *   the collision appropriately.
+ *
+ * @param {string} key - key to be used to create hashed address
+ * @param {string|number|boolean} value - value to be stored in hash table
+ * @return {number} The new number of items stored in the hash table
+ */
+HashTable.prototype.set = function(key, value, setState = false) {
+    if (this.overUsed()) {
+        this.resize()
+    }
+    const hashLocation = hashCode(key, this.SIZE);
+    if (!this.storage[hashLocation]) {
+        this.storage[hashLocation] = {}
+    }
+    this.storage[hashLocation][key] = value;
+    if (!setState) return ++this.length;
+};
+
+HashTable.prototype.resize = function() {
+    // perform a resize
+    // return a list of all key/value pairs in the hashTabe
+    const hashListing = this.hashDirectory();
+    // increase the size
+    this.SIZE *= 2;
+    this.storage = new Array(this.SIZE);
+    Object.keys(hashListing).forEach(item => this.set(item, hashListing[item], true));
+}
+
+/**
+ * Returnes number of locations used in the HashTables
+ *
+ **/
+HashTable.prototype.hashUtilized = function() {
+    return this.storage.reduce(function(locationsUsed, eachHashLocation) {
+        return eachHashLocation && Object.keys(eachHashLocation).length > 0 ? ++locationsUsed : 0;
+    }, 0);
+}
+
+/**
+ * Returns a boolean true/false is hash is over utilized
+ *
+ **/
+HashTable.prototype.overUsed = function() {
+    const locationsUsed = this.hashUtilized();
+    return locationsUsed > 0 ? ((locationsUsed / this.SIZE) * 100) >= 75.0 ? true : false : false
+}
+
+/**
+ * Returns a boolean true/false is hash is under utilized
+ *
+ **/
+HashTable.prototype.underUsed = function() {
+    const locationsUsed = this.hashUtilized();
+    console.log(locationsUsed)
+    return locationsUsed > 0 ? ((locationsUsed / this.SIZE) * 100) <= 25.0 ? true : false : false
+}
+
+/**
+ * list - List all key/value pairs in the hashTable
+ *
+ **/
+HashTable.prototype.hashDirectory = function() {
+    return this.storage.reduce(function listItems(hashItems, hasContent) {
+        return Object.keys(hasContent).reduce(function itemsInRow(hashContentInRow, eachRowKey) {
+            hashContentInRow[eachRowKey] = hasContent[eachRowKey]
+            return hashContentInRow;
+        }, hashItems)
+    }, {})
+}
+
+/**
+ * get - Retrieves a value stored in the hash table with a specified key
+ *
+ * - If more than one value is stored at the key's hashed address, then you must retrieve
+ *   the correct value that was originally stored with the provided key
+ *
+ * @param {string} key - key to lookup in hash table
+ * @return {string|number|boolean} The value stored with the specifed key in the
+ * hash table
+ */
+HashTable.prototype.get = function(key) {
+    const hashLocation = hashCode(key, this.SIZE);
+    return this.storage[hashLocation] && this.storage[hashLocation].hasOwnProperty(key) ? this.storage[hashLocation][key] : undefined;
+};
+
+/**
+ * remove - delete a key/value pair from the hash table
+ *
+ * - If the key does not exist in the hash table, return undefined
+ *
+ * @param {string} key - key to be found and deleted in hash table
+ * @return {string|number|boolean} The value deleted from the hash table
+ */
+HashTable.prototype.remove = function(key) {
+    if (this.underUsed()) {
+        // this.resize()
+        console.log('Reduce Size')
+    }
+    const hashLocation = hashCode(key, this.SIZE);
+    if (this.storage[hashLocation] && this.storage[hashLocation].hasOwnProperty(key)) {
+        const delValue = this.storage[hashLocation][key];
+        delete this.storage[hashLocation][key]
+        this.length--;
+        return delValue;
+    }
+    return undefined;
+};
 
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
-  'use strict';
-  
-  let hash = 0;
-  if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
-    const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  
-  return Math.abs(hash) % size;
+    'use strict';
+
+    let hash = 0;
+    if (string.length === 0) return hash;
+
+    for (let i = 0; i < string.length; i++) {
+        const letter = string.charCodeAt(i);
+        hash = ((hash << 5) - hash) + letter;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+
+    return Math.abs(hash) % size;
 }
+
+
+const tst = new HashTable();
+tst.set('lan', 'wee')
+tst.set('tos', 'man')
+tst.set('dgh', 'wqs')
+
+tst.set('lanx', 'weed')
+tst.set('tosi', 'mankind')
+tst.set('daug', 'wweeqs')
+
+tst.set('one', 'wee')
+tst.set('two', 'man')
+tst.set('three', 'wqs')
+
+tst.set('four', 'wee')
+tst.set('five', 'man')
+tst.set('six', 'wqs')
+
+tst.set('seven', 'wee')
+tst.set('eight', 'man')
+tst.set('nine', 'wqs')
+
+tst.set('ten', 'wee')
+tst.set('eleven', 'man')
+tst.set('twelve', 'wqs')
+
+tst.set('thirteen', 'wee')
+tst.set('fiurteen', 'man')
+tst.set('fifteen', 'wqs')
+
+// console.log('NOW TESTING TO RESIZE')
+// console.log(tst);
+// console.log('AFTER RESIZE')
+tst.set('sixteen', 'wqs')
+
+
+tst.remove('lanx')
+tst.remove('tosi')
+tst.remove('daug')
+
+tst.remove('one')
+tst.remove('two')
+tst.remove('three')
+
+tst.remove('four')
+tst.remove('five')
+tst.remove('six')
+
+tst.remove('seven')
+tst.remove('eight')
+tst.remove('nine')
+
+tst.remove('ten')
+tst.remove('eleven')
+
+console.log(tst);
+
+// console.log(tst.hashDirectory());
+// console.log(tst.overUsed());
+// console.log(tst);
+
+// console.log(tst.get('lanx'))
+// console.log(tst.get('lan'))
+// console.log(tst)
 
 // Do not remove!!
 module.exports = HashTable;
