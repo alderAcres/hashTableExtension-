@@ -7,25 +7,54 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
+const ht = new HashTable();
 
+function Node(val) {
+  this.value = val;
+  this.next = null;
+}
+
+function LinkeList(value) {
+  const newNode = new Node(value);
+  this.head = newNode;
+  this.tail = null;
+}
 /**
-* set - Adds given value to the hash table with specified key.
-*
-* - If the provided key has already been used to store another value, simply overwrite
-*   the existing value with the new value.
-* - If the hashed address already contains another key/value pair, you must handle
-*   the collision appropriately.
-*
-* @param {string} key - key to be used to create hashed address
-* @param {string|number|boolean} value - value to be stored in hash table
-* @return {number} The new number of items stored in the hash table
-*/
-HashTable.prototype.set = function(key, value) {
+ * set - Adds given value to the hash table with specified key.
+ *
+ * - If the provided key has already been used to store another value, simply overwrite
+ *   the existing value with the new value.
+ * - If the hashed address already contains another key/value pair, you must handle
+ *   the collision appropriately.
+ *
+ * @param {string} key - key to be used to create hashed address
+ * @param {string|number|boolean} value - value to be stored in hash table
+ * @return {number} The new number of items stored in the hash table
+ */
+HashTable.prototype.set = function (key, value) {
+  const hashKey = hashCode(key, this.SIZE);
 
+  // if hashKey not in storage, use linked list to store key value
+  if (this.storage[hashKey] === undefined) {
+    const ll = new LinkeList();
+    console.log(ll);
+    // stingify key value for easy comparison
+    const keyVal = JSON.stringify([key, value]);
+    ll.push(keyVal);
+    this.storage[hashKey] = ll;
+  }
+  // else if the hashKey does exist in the hash table
+  else {
+    const ll = this.storage[hashKey];
+    ll.push(JSON.stringify([key, value]));
+  }
 };
+ht.set('0', 0);
+console.log(ht);
+ht.storage.forEach((elem) => console.log('elem =', elem));
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -37,7 +66,7 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
+HashTable.prototype.get = function (key) {
 
 };
 
@@ -49,24 +78,22 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function (key) {
 
 };
 
 
 // Do not modify
 function hashCode(string, size) {
-  'use strict';
-  
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
+    hash &= hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
