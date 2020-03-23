@@ -10,7 +10,6 @@ function HashTable() {
   
   this.storage = new Array(this.SIZE);
 }
-
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,8 +23,25 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+// use hash function to get location inside hash table
+ const location = hashCode(key, this.SIZE)
+//if location already exists, add in additional key value pair
+ if(this.storage[location]){
+   this.storage[location][key] = value
+ }
+//if location does not exist, create an empty object at location and then add in key value pair (to handle collisions)
+ else{
+  this.storage[location] = {};
+  this.storage[location].key = value
 
+ }
 };
+
+let hashTable = new HashTable();
+console.log(hashTable)
+
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +54,20 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //get location using hash function
+  const location = hashCode(key, this.SIZE)
+  //return what is stored at that location with the key that was input (to handle potential collisions)
+  return this.storage[location][key]
+  //(this doesn't work, trying to pull from the key at the locations object, but returning undefined)
+  
 };
+
+console.log(hashTable.get('key'))
+hashTable.set('key', 'value')
+hashTable.set('key 11', 'collision handler')
+console.log(hashTable.get('key'))
+console.log(hashTable)
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,7 +78,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //get location using hash function
+  const location = hashCode(key, this.SIZE)
+  //if location does not exist return undefined
+  if(!this.storage[location]) return undefined;
+  //otherwise delete
+  delete this.storage[location]
 };
 
 
