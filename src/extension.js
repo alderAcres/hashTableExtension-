@@ -14,8 +14,82 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  let storageSize = 0
+  for (let i = 0; i < hash.storage.length; i++) {
+    if (hash.storage[i]) {
+      storageSize++
+    }
+  }
+  if (storageSize/hash.storage.length >= 0.75) {
+    this.SIZE = this.SIZE*2
+  }
 
+  if (!this.storage[hashCode(key,this.SIZE)]) {
+    this.storage[hashCode(key,this.SIZE)] = {[key]:value}
+  }
+  else {
+    this.storage[hashCode(key,this.SIZE)][key] = value
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  return this.storage[hashCode(key,this.SIZE)][key]
+};
+
+HashTable.prototype.remove = function(key) {
+  
+  if (this.storage[hashCode(key,this.SIZE)][key]){
+    delete this.storage[hashCode(key,this.SIZE)]
+  }
+  else {
+    return undefined
+  }
+
+  let storageSize = 0
+  for (let i = 0; i < hash.storage.length; i++) {
+    if (hash.storage[i]) {
+      storageSize++
+    }
+  }
+  if (storageSize/hash.storage.length <= 0.25 && hash.storage.length > 16) {
+    this.SIZE = this.SIZE/2
+  }
+};
+
+//TESTING
+const hash = new HashTable
+hash.set('cary', 'chan')
+hash.set('augustine', 235)
+hash.set('jason', 315)
+hash.set('phil', 345)
+hash.set('iea', 345)
+hash.set('oew', 345)
+hash.set('sdaf', 345)
+hash.set('gwea', 345)
+hash.set('ew', 345)
+hash.set('bcd', 345)
+hash.set('v fs', 345)
+hash.set('sadf', 345)
+hash.set('pheil', 345)
+hash.set('rhe', 345)
+hash.set('qwfg', 345)
+hash.set('234', 345)
+hash.set('qwfggr', 345)
+hash.set('qwf2g', 345)
+hash.set('plkqwfg', 345)
+hash.set('mnhgqwfg', 345)
+// console.log(hash.get('jason'))
+// hash.remove('cary')
+// console.log(hash.remove('dave'))
+console.log(hash)
+console.log(hash.storage.length)
 
 // YOUR CODE ABOVE
 
