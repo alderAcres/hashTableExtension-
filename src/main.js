@@ -36,10 +36,11 @@ HashTable.prototype.set = function(key, value) {
 
 const newHash = new HashTable()
 newHash.set('Steve', 1234)
+newHash.set('Steve', 12341)
 newHash.set('Steves', 1234)
 newHash.set('Alan', 1234)
 newHash.set('Alan', 5802)
-// console.log(newHash)
+console.log(newHash)
 
 
 
@@ -56,6 +57,7 @@ newHash.set('Alan', 5802)
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  if (typeof key !== 'string') return 'Input needs to be a string'
   //loop over storage array
   for (const hash of this.storage) {
     // check if current hash exists and return
