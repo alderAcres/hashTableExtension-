@@ -52,16 +52,21 @@ HashTable.prototype.set = function(key, value) {
   // if spaces taken is 75% of this.size, double this.size
   // rehash everything = give everything new indexes??
     // how do I access objects inside a given index's values?
-  // if (this.spacesTaken / this.SIZE === 0.75){
-  //   this.SIZE = this.SIZE * 2;
-
-  //   for (let i = 0; i < this.storage.length; i++){
-  //     console.log(this.storage[i])
-  //     if (this.storage[i]){
-        
-  //     }
-  //   }
-  // }
+  if (this.spacesTaken / this.SIZE === 0.75){
+    this.SIZE = this.SIZE * 2;
+    
+    for (let i = 0; i < this.storage.length; i++){
+      if (this.storage[i]){
+      for (let prop in this.storage[i]){
+        let savedKey = prop;
+        let savedValue = this.storage[i][prop];
+        delete prop;
+        this.spacesTaken -= 1;
+        this.set(savedKey, savedValue)
+        }
+      }
+    }
+  }
 
   return this.spacesTaken;
 };
