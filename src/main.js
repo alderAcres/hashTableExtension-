@@ -57,8 +57,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-  if (this.storage[hashCode(key,this.SIZE)][key]){
+  // console.log(Object.keys(this.storage[hashCode(key,this.SIZE)]).length)
+  if (this.storage[hashCode(key,this.SIZE)][key] && Object.keys(this.storage[hashCode(key,this.SIZE)]).length === 1){
     delete this.storage[hashCode(key,this.SIZE)]
+  }
+  else if (this.storage[hashCode(key,this.SIZE)][key]) {
+    delete this.storage[hashCode(key,this.SIZE)][key]
   }
   else {
     return undefined
