@@ -9,7 +9,6 @@
 // ** NOTE: I will go over this section with Evan (senior) because I realized I need more practice with this topic **
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
