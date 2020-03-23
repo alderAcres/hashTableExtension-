@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.storedItems = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //checks to see if hashed address already contains element
+  if (this.storage[hashCode(value, this.SIZE)]) {
+    //if hashtable already contains element at index, then store hashed address as key/value pair in object
+    this.storage[hashCode(value, this.SIZE)][key] = value
+  } else {
+    //if no element is found at index, create a new object and store hashed address as new k/v pair in object
+    this.storage[hashCode(value, this.SIZE)] = {}
+    this.storage[hashCode(value, this.SIZE)][key] = value
+  }
+  //increment stored items variable and return new number of items stored in hash table
+  return(`Number of stored items: ${++this.storedItems}`)
 };
 
 /**
@@ -38,7 +48,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[hashCode(key, this.SIZE)][key]
 };
 
 /**
@@ -50,7 +60,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //checks to see if key/value pair exists in hashtable
+  if (this.storage[hashCode(key, this.SIZE)][key]) {
+    //stores k/v pair on new variable
+    let removedItem = this.storage[hashCode(key, this.SIZE)][key];
+    //deletes k/v pair from hashtable
+    delete this.storage[hashCode(key, this.SIZE)][key];
+    //decrements amount of stored items in hashtable
+    this.storedItems--
+    return removedItem
+  } else {
+    //returns undefined if key/value pair is not found in hashtable
+    return undefined
+  }
 };
 
 
@@ -69,6 +91,7 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
 
 // Do not remove!!
 module.exports = HashTable;
