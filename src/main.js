@@ -58,7 +58,7 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
   if (this.storage[hashCode(key,this.SIZE)][key]){
-    delete this.storage[hashCode(key,this.SIZE)][key]
+    delete this.storage[hashCode(key,this.SIZE)]
   }
   else {
     return undefined

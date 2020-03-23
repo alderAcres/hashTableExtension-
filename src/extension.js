@@ -14,8 +14,45 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  if (!this.storage[hashCode(key,this.SIZE)]) {
+    this.storage[hashCode(key,this.SIZE)] = {[key]:value}
+  }
+  else {
+    this.storage[hashCode(key,this.SIZE)][key] = value
+  }
+};
 
+HashTable.prototype.get = function(key) {
+  return this.storage[hashCode(key,this.SIZE)][key]
+};
+
+HashTable.prototype.remove = function(key) {
+  if (this.storage[hashCode(key,this.SIZE)][key]){
+    delete this.storage[hashCode(key,this.SIZE)]
+  }
+  else {
+    return undefined
+  }
+};
+
+//TESTING
+const hash = new HashTable
+hash.set('cary', 'chan')
+hash.set('augustine', 235)
+hash.set('jason', 315)
+hash.set('phil', 345)
+console.log(hash.get('jason'))
+hash.remove('cary')
+// console.log(hash.remove('dave'))
+console.log(hash)
+console.log(hash.storage.length)
 
 // YOUR CODE ABOVE
 
