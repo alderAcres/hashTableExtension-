@@ -24,8 +24,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  if (!this.storage[hashCode(key,this.SIZE)]) {
+    this.storage[hashCode(key,this.SIZE)] = {[key]:value}
+  }
+  else {
+    this.storage[hashCode(key,this.SIZE)][key] = value
+  }
 };
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +45,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[hashCode(key,this.SIZE)][key]
 };
 
 /**
@@ -50,7 +57,56 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  if (this.storage[hashCode(key,this.SIZE)][key]){
+    delete this.storage[hashCode(key,this.SIZE)][key]
+  }
+  else {
+    return undefined
+  }
+};
 
+//TESTING
+const hash = new HashTable
+console.log(hash)
+hash.set('cary', 'chan')
+hash.set('augustine', 235)
+hash.set('jason', 315)
+hash.set('phil', 345)
+console.log(hash)
+console.log(hash.get('jason'))
+hash.remove('phil')
+// console.log(hash.remove('dave'))
+console.log(hash)
+
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+*
+* - If more than one value is stored at the key's hashed address, then you must retrieve
+*   the correct value that was originally stored with the provided key
+*
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+  return this.storage[hashCode(key,this.SIZE)][key]
+};
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  if (this.storage[hashCode(key,this.SIZE)][key]){
+    delete this.storage[hashCode(key,this.SIZE)][key]
+  }
+  else {
+    return undefined
+  }
 };
 
 
