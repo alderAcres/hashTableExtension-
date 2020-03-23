@@ -24,7 +24,16 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let address = hashCode(key, this.SIZE);
+  console.log('address:', address);
+  // console.log('this.storage[addr]:', this.storage[address]);
+  if (this.storage[address] === undefined) {
+    this.storage[address] = {};
+    this.storage[address][key] = value;
+  } else {
+    // console.log('handling collision!')
+    this.storage[address][key] = value;
+  }
 };
 
 /**
@@ -38,7 +47,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let address = hashCode(key, this.SIZE);
+  // console.log('getting address:', address);
+  if (this.storage[address]) {
+    console.log("address found!")
+    return this.storage[address][key];
+  }
 };
 
 /**
@@ -50,10 +64,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let address = hashCode(key, this.SIZE);
 
+  if (this.storage[address]) {
+    delete this.storage[address][key];
+  }
 };
 
-
+////////////////////////////
 // Do not modify
 function hashCode(string, size) {
   'use strict';
@@ -69,6 +87,33 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+/////////////////////////
+/////TESTS//////////////
+
+const myTable = new HashTable();
+
+myTable.set('one', 1);
+myTable.set('two', 2);
+myTable.set('two', 222);
+myTable.set('tw', 333);
+myTable.set('twoo', 412); //<=== collision! Check that this pair is properly set.
+console.log(myTable.get('two'), "<== 222 ");
+
+console.log("before remove:", myTable.storage);
+
+myTable.remove('two');
+
+console.log("after remove:", myTable.storage);
+
+
+
+
+
+/////////////////////////
+//////////////////////////
+
 
 // Do not remove!!
 module.exports = HashTable;
