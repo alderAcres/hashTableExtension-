@@ -7,9 +7,12 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.spacesTaken = 0;
   this.storage = new Array(this.SIZE);
 }
+
+// create a new hashtable
+let hashTable = new HashTable();
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,7 +27,24 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // generate a key to store in hashtable
+  // check if key is occupied to check for collisions
+    // if key exists, add new object in key value
+    // if key does not exist, add new key value pair
+  // increment space taken once new object is set
+  // return current number of spaces occupied in array
+  let index = hashCode(key, this.SIZE);
 
+  if (this.storage[index] === undefined){
+    this.storage[index] = {};
+    this.storage[index][key] = value;
+    this.spacesTaken += 1;
+  } else if (this.storage[index]){
+    this.storage[index][key] = value;
+    this.spacesTaken += 1;
+  }
+
+  return this.spacesTaken;
 };
 
 /**
@@ -38,7 +58,16 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // generate index for key 
+  // iterate through storage and search for key
+  // return object found inside index that matches key
+  let index = hashCode(key, this.SIZE);
 
+  for (let i = 0; i < this.storage.length; i++){
+    if (this.storage[index][key]){
+      return this.storage[index][key];
+    }
+  }
 };
 
 /**
@@ -50,9 +79,35 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+// generate index for key
+// iterate through hashtable until index
+// delete object found at index with matching key
+// return deleted object
+  let index = hashCode(key, this.SIZE);
+  
+  for (let i = 0; i < this.storage.length; i++){
+    if (!this.storage[index]){
+      return undefined;
+    }
 
+    if (this.storage[index][key]){
+      deleted = this.storage[index][key];
+      delete this.storage[index][key];
+      this.spacesTaken -= 1;
+      return deleted;
+    }
+
+  }
+
+  return undefined;
 };
 
+// my self tests
+let hash = new HashTable();
+console.log(hash.set('John', '10'));
+console.log(hash.get('John'));
+console.log(hash.remove('Jack'));
+console.log(hash.remove('John'));
 
 // Do not modify
 function hashCode(string, size) {
