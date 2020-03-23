@@ -24,8 +24,13 @@ function HashTable() {
  */
 HashTable.prototype.set = function(key, value) {
   let hashKey = hashCode(key, this.SIZE);
-  this.storage[hashKey] = value;
-  return this.storage;
+  if (!this.storage[hashKey]) {
+    let collisionObj = {};
+    collisionObj[key] = value;
+    this.storage[hashKey] = obj;
+  } else {
+    this.storage[hashKey][key] = value;
+  }
 };
 
 /**
