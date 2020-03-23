@@ -93,6 +93,7 @@ HashTable.prototype.remove = function(key) {
     if (this.storage[index][key]){
       deleted = this.storage[index][key];
       delete this.storage[index][key];
+      this.spacesTaken -= 1;
       return deleted;
     }
 
