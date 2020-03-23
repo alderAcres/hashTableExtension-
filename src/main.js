@@ -24,7 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // use hash function to determine where to store the key value pair
+  const location = hashCode(key, this.SIZE)
+  // if there is already something stored at that location, overwrite it
+  if (this.storage[location]) {
+    this.storage[location][key] = value; // does this overwrite it?? or just adds a new pair?
+    // if nothing is stored there, add it to the location and increment size
+  } else {
+    this.storage[location] = {};
+    this.storage[lcocation][key] = value;
+    this.SIZE++;
+  }
+  // return number of items stored
+  return this.SIZE
 };
 
 /**
@@ -38,7 +50,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // use hash function to determine where the value is stored
+  const location = hashCode(key, this.SIZE);
+  // go to that location
+  let value = this.storage[location][key]
+  // return the value
+  return value;
 };
 
 /**
@@ -50,7 +67,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // use hash function to determine where the value of the key would be stored
+  const location = hashCode(key, this.SIZE);
+  // if nothing is at that location, return undefined
+  if (!this.storage[location]) {  // or !this.storage[location][key] ??
+    return undefined
+    // if something is at that location, delete it and return it
+  } else {
+    const removed = this.storage[location][key];
+    delete this.storage[location][key];
+    //decrement size 
+    this.SIZE--
+    return removed
+  }
 };
 
 
