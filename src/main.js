@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // Find the location in the hash table to store the key value pair
+  const location = hashCode(key, this.SIZE);
+  // Check if the location already stores an object
+  // If not, create an empty object at the location
+  if (!this.storage[location]) this.storage[location] = {};
+  // Add key value pair to object at location as a property
+  this.storage[location][key] = value;
+  // Track the number of stored items in the hash table
+  this.items++;
+  // Return the current number of stored items
+  return this.items;
 };
 
 /**
@@ -38,7 +48,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // Find location in the hash table where key is stored
+  const location = hashCode(key, this.SIZE);
+  // If location is empty return undefined
+  if (!this.storage[location]) return;
+  // If property at location does not exist return undefined
+  if (!this.storage[location][key]) return;
+  // Return the value associated with key at the location
+  return this.storage[location][key];
 };
 
 /**
@@ -50,7 +67,22 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // Find the location of the property to be removed
+  const location = hashCode(key, this.SIZE);
+  // Check if the key value pair exists at the location
+  // If not, return undefined
+  if (!this.storage[location]) return;
+  // Otherwise, save the value at location
+  const output = this.storage[location][key];
+  // Delete the property
+  delete this.storage[location][key];
+  // Track the number of stored items in the hash table
+  this.items--;
+  // Check if the object at location is now empty
+  // If so remove object from hash table
+  if (!Object.entries(this.storage[location]).length) delete this.storage[location];
+  // Return saved value
+  return output
 };
 
 
@@ -69,6 +101,28 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+// Test region
+const hashTable = new HashTable();
+
+hashTable.set('a', '1');
+hashTable.set('b', '2');
+const numItems = hashTable.set('1', '3');
+console.log(numItems);
+hashTable.set('Hello', 'World');
+const value = hashTable.remove('b');
+console.log(value);
+console.log(hashTable.get('b'));
+console.log(hashTable.get('1'));
+console.log(hashTable.items);
+console.log(hashTable.storage);
+hashTable.remove('a');
+hashTable.remove('1');
+hashTable.remove('Hello');
+hashTable.remove('Hello');
+console.log(hashTable.items);
+console.log(hashTable.storage);
+
 
 // Do not remove!!
 module.exports = HashTable;
