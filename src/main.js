@@ -25,17 +25,18 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   //checks to see if hashed address already contains element
-  if (this.storage[hashCode(value, this.SIZE)]) {
+  if (this.storage[hashCode(key, this.SIZE)]) {
     //if hashtable already contains element at index, then store hashed address as key/value pair in object
-    this.storage[hashCode(value, this.SIZE)][key] = value
+    this.storage[hashCode(key, this.SIZE)][key] = value
   } else {
     //if no element is found at index, create a new object and store hashed address as new k/v pair in object
-    this.storage[hashCode(value, this.SIZE)] = {}
-    this.storage[hashCode(value, this.SIZE)][key] = value
+    this.storage[hashCode(key, this.SIZE)] = {}
+    this.storage[hashCode(key, this.SIZE)][key] = value
   }
   //increment stored items variable and return new number of items stored in hash table
   return(`Number of stored items: ${++this.storedItems}`)
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
