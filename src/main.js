@@ -49,10 +49,11 @@ HashTable.prototype.set = function(key, value) {
 };
 
 const hash = new HashTable();
-console.log(hash)
+//console.log(hash)
 hash.set('dan', true)
 hash.set('markusLarkus', 5)
 console.log(hash)
+
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -64,8 +65,23 @@ console.log(hash)
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  //make sure key is a string
+  if(typeof key !== "string") throw new Error('Please input a string value');
+  //get has code
+  const code = hashCode(key, key.length)
+  let value;
+  //check to see if our hash table has object
+  if(this.storage[code][key]){
+    value = this.storage[code][key];
+  }
+  return value
 
 };
+
+//hash.get(2)
+console.log(hash.get('dan'), '=> true')
+//key that doesn't exist should return undefined
+console.log(hash.get('Victor'), '=> undefined')
 
 /**
 * remove - delete a key/value pair from the hash table
