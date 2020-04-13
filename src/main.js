@@ -24,8 +24,16 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const index = hashCode(key, this.SIZE);
 
+  if (this.storage[index] === undefined) {
+    this.storage[index] = {};
+    this.storage[index][key] = value;
+  } else {
+    this.storage[index][key] = value;
+  }
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +46,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const index = hashCode(key, this.SIZE);
 
+  return this.storage[index][key];
 };
 
 /**
@@ -50,7 +60,10 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const index = hashCode(key, this.SIZE);
+  const deletedKey = this.storage[index][key];
+  delete this.storage[index][key];
+  return deletedKey;
 };
 
 
@@ -69,6 +82,37 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+
+
+
+// Create new instance of hashtable
+const table = new HashTable;
+
+// Add some key-value pairs to table
+table.set("dog", "sweet");
+table.set("New York", "raining");
+table.set("cookies", "yum");
+table.set("a", "apple");
+table.set("b", "bear");
+table.set("Codesmith", "awesome");
+
+// See what table looks like - check if .set function working 
+// also check for any collisions
+console.log(table);
+
+// check that get function is working 
+console.log(table.get("dog"));
+console.log(table.get("cookies"));
+
+// check remove function 
+console.log(table.remove("New York"));
+
+// see if remove function removed key from table 
+console.log(table);
+
+
 
 // Do not remove!!
 module.exports = HashTable;
