@@ -1,3 +1,51 @@
+//use linkedList to avoid collisions.
+function LinkedList1() {
+  this.head = null;
+  this.tail = null;
+}
+
+function Node1(key, val) {
+  this.value = {key, val};
+  this.next = null;
+}
+
+// adds node to end of list
+LinkedList1.prototype.push = function (key, value) {
+
+  let newKey = true;
+  let node = new Node1(key, value)
+  if (this.head === null) {
+    this.head = node;
+  }
+  else {
+    this.current = this.head;
+    while (this.current.next != null) {
+
+      console.log(this.current.value);
+      // console.log(this.current.value[key]);
+      if (this.current.value[key] == key){
+        this.current.value[val] = value;
+        newKey = false;
+        break;
+      }
+      this.current = this.current.next;
+
+      
+    }
+    if (newKey){
+      this.current.next = node;
+    }
+    
+  }
+  return newKey;
+
+};
+
+let linkedList1 = new LinkedList1();
+console.log(linkedList1.push("male", "tommy"));
+console.log(linkedList1.push("male", "harry"));
+console.log(linkedList1);
+
 /**
 * HashTable costructor
 *
@@ -7,8 +55,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.itemsStored = 0;
 }
 
 /**
@@ -24,8 +72,28 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let hashAddress = hashCode(key, this.SIZE);
+  // console.log(hashAddress)
+  
+  let newKey = true;
+  if (this.storage[hashAddress] == undefined) {
+    let linkedList1 = new LinkedList1();
+    linkedList1.push(key, value);
+    // console.log(linkedList1);
+    this.storage[hashAddress] = linkedList1;
+  } else {
+    newKey = this.storage[hashAddress].push(key,value);
+  };
 
+  // console.log(this.storage);
+  return newKey ? ++this.itemsStored : this.itemsStored;
 };
+
+let hashtable = new HashTable();
+console.log(hashtable.set("male", "tommy"));
+console.log(hashtable.set("male", "harry"));
+console.log(hashtable.set("female", "katty"))
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +106,16 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hashAddress = hashCode(get);
+  // console.log(hashAddress)
+  
+  if (this.storage[hashAddress] == undefined) {
+    throw Error(`HashTable get: no item found with key ${key} provided ! `);
+  } else {
+    this.storage[hashAddress];
+  };
+  // console.log(this.storage);
+  return ++this.itemsStored;
 };
 
 /**
@@ -69,6 +146,8 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
 
 // Do not remove!!
 module.exports = HashTable;
