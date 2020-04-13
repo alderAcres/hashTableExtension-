@@ -67,7 +67,7 @@ console.log(hash)
 HashTable.prototype.get = function(key) {
   //make sure key is a string
   if(typeof key !== "string") throw new Error('Please input a string value');
-  //get has code
+  //get hash code
   const code = hashCode(key, key.length)
   let value;
   //check to see if our hash table has object
@@ -79,9 +79,9 @@ HashTable.prototype.get = function(key) {
 };
 
 //hash.get(2)
-console.log(hash.get('dan'), '=> true')
+//console.log(hash.get('dan'), '=> true')
 //key that doesn't exist should return undefined
-console.log(hash.get('Victor'), '=> undefined')
+//console.log(hash.get('Victor'), '=> undefined')
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -92,9 +92,30 @@ console.log(hash.get('Victor'), '=> undefined')
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //make sure key is a string
+  if(typeof key !== "string") throw new Error('Please input a string value');
+  
+  //get hash code
+  const code = hashCode(key, key.length)
+  
+  //if it doesn't exist, return undefined
+  if(!this.storage[code][key]){
+    return undefined
+  }else{
+    //else if it does exist, delete the key/value pair and return the deleted value
+    let returnVal = this.storage[code][key];
+    delete this.storage[code][key];
+    return returnVal
+  }
 
 };
 
+//if it doesn't exist, return undefined
+console.log(hash.remove('Victor'), '=> undefined')
+//if it does exist, delete the key/value pair and return value
+console.log(hash.remove('dan'), '=> true')
+//check to make sure deleted, should return undefined
+console.log(hash.get('dan'), '=> undefined')
 
 // Do not modify
 function hashCode(string, size) {
