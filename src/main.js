@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /**
 * HashTable costructor
 *
@@ -23,9 +24,29 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+HashTable.prototype.set = function(key, value) {
+  // determine hashcode and store in variable
+  const hash = hashCode(key, this.SIZE);
+  // if hashcode doesn't already exist, passed in key, value as object
+  if (!this.storage[hash]) {
+    this.storage[hash] = {[key]:value}
+  // else HASH COLLISION: if hashcode already exist in hashtable ->
+  } else if (this.storage[hash]) {
+    // if the key is the same, overwrite; if hash is same but key is different ->
+        this.storage[hash][key] = value;
+  };
 };
+
+/* TESTS
+const test = new HashTable();
+console.log(test);
+test.set('dan','cat');
+console.log(test)
+test.set('nad', 'rock');
+test.set('dad', 'dog');
+console.log(test)
+*/
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +59,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // determine hashcode
+  const hash = hashCode(key, this.SIZE);
+  // if key at hashcode exists, return value
+  if (this.storage[hash] === undefined) return false;
+  if (this.storage[hash][key]) return this.storage[hash][key];
+  // else return false
+  return false;
 };
+
+/* TESTS
+// console.log(test.get('nad'))
+// console.log(test.get('other'))
+*/
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -72,3 +104,4 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
