@@ -1,3 +1,6 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-use-before-define */
 /**
 * HashTable costructor
 *
@@ -7,8 +10,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.length = 0; // counter for number of items added to the table
 }
 
 /**
@@ -24,7 +27,34 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  this.length += 1;
+  
+  const hashKey = hashCode(key, this.SIZE);
+  // using object to handle the collision. While linked list if preferable,
+  // the time limit makes me go with a simpler solution
+  // that doesnt require writing a linked list:)
+  if (this.storage[hashKey] === undefined) {
+    const obj = {};
+    obj[key] = value;
+    this.storage[hashKey] = obj;
+  } else {
+    // dont forget to decrement the length if we're overwriting
+    if (this.storage[hashKey][key]) this.length -= 1;
+    this.storage[hashKey][key] = value;
+  }
+  if (this.length >= this.SIZE * 0.75) {
+    const copyOfStorage = this.storage;
+    this.SIZE = this.SIZE * 2;
+    this.length = 0;
+    this.storage = new Array(this.SIZE);
+    for (const bucket of copyOfStorage) {
+      if (bucket) {
+        for (const key in bucket) {
+          this.set(key, value);
+        }
+      }
+    }
+  }
 };
 
 /**
@@ -38,7 +68,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hashKey = hashCode(key, this.SIZE);
+  return this.storage[hashKey][key];
 };
 
 /**
@@ -50,9 +81,27 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hashKey = hashCode(key, this.SIZE);
+  const toBeRemoved = this.storage[hashKey][key];
+  if (toBeRemoved) {
+    this.length -= 1;
+  }
+  delete this.storage[hashKey][key];
+  if (this.SIZE > 16 && this.length < this.SIZE / 4) {
+    const copyOfStorage = this.storage;
+    this.SIZE = this.SIZE / 2
+    this.length = 0;
+    this.storage = new Array(this.SIZE);
+    for (const bucket of copyOfStorage) {
+      if (bucket) {
+        for (const key in bucket) {
+          this.set(key, bucket[key]);
+        }
+      }
+    }
+  }
+  return toBeRemoved;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
@@ -69,6 +118,8 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+// Do not remove!!
 
 // Do not remove!!
 module.exports = HashTable;
