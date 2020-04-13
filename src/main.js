@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  this.currentStored = 0
+  this.currentStored = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -47,7 +47,7 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
   let hash = hashCode(key, this.SIZE);
-  return this.storage[hash][key]
+  return this.storage[hash][key];
 };
 
 /**
@@ -63,7 +63,7 @@ HashTable.prototype.remove = function(key) {
   if (this.storage[hash] === undefined ||
     this.storage[hash][key] === undefined) return undefined;
   let removeVal = this.storage[hash][key];
-  delete this.storage[hash][key]
+  delete this.storage[hash][key];
   this.currentStored--
   return removeVal;
 };
@@ -90,23 +90,23 @@ module.exports = HashTable;
 
 
 const hashTable = new HashTable();
-console.log(hashTable.set('1', 'ubbers'))
-console.log(hashTable.set('22', 'lber'))
-console.log(hashTable.set('tasato', 'dasdber'))
-console.log(hashTable.set('posdasdo', 'blurbs'))
-console.log(hashTable.set('pasdo', 'blubbaer'))
-console.log(hashTable.set('asd', 'blor'))
-hashTable.set('potado', 'blab')
-hashTable.set('potao', 'blub')
-hashTable.set('pdasdasdo', 'blbbr')
-hashTable.set('pdaaasdo', 'bleb')
+console.log(hashTable.set('1', 'ubbers'));
+console.log(hashTable.set('22', 'lber'));
+console.log(hashTable.set('tasato', 'dasdber'));
+console.log(hashTable.set('posdasdo', 'blurbs'));
+console.log(hashTable.set('pasdo', 'blubbaer'));
+console.log(hashTable.set('asd', 'blor'));
+hashTable.set('potado', 'blab');
+hashTable.set('potao', 'blub');
+hashTable.set('pdasdasdo', 'blbbr');
+hashTable.set('pdaaasdo', 'bleb');
 
-console.log(hashTable)
+console.log(hashTable);
 
-console.log(hashTable.get('potao'))
+console.log(hashTable.get('potao'));
 
-console.log(hashTable.remove('pasdo'))
-console.log(hashTable.remove('posdasdo'))
-console.log(hashTable.remove('undefinedTest'))
+console.log(hashTable.remove('pasdo'));
+console.log(hashTable.remove('posdasdo'));
+console.log(hashTable.remove('undefinedTest'));
 
-console.log(hashTable)
+console.log(hashTable);
