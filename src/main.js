@@ -8,6 +8,7 @@
 function HashTable() {
   this.SIZE = 16;
   
+  //creates a new Hash storage array of size 16
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,10 +24,35 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+  //else get the hash code using the given function
+    //check to see if location is already occupied
+      //if occupied add as another key-value pair in the object
+      //if not occupied save as an object
+
+HashTable.prototype.set = function(key, value) {
+  //add given value to hash table with specified key
+
+  // will invoke function hash code and save result in constant variable code
+  const code = hashCode(key, key.length);
+  console.log(code)
+  
+  //is our bucket empty?
+  if(!this.storage[code]){
+    //if so create a new object with our key value pair
+    this.storage[code] = {}
+    this.storage[code][key] = value;
+  }else{
+    //else create a new key value pair within the bucket
+    this.storage[code][key] = value
+  } 
 };
 
+const hash = new HashTable();
+console.log(hash)
+hash.set('dan', true)
+hash.set('markusLarkus', 5)
+console.log(hash)
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
