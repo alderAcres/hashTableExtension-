@@ -24,7 +24,14 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+let bin = hashCode(key, this.SIZE)
+//if bin has null value, add an empty object to the bin and then add key:value to it
+if (!this.storage[bin]) {
+  this.storage[bin] = {}
+  this.storage[bin][key] = value
+} else {
+  this.storage[bin][key] = value
+}
 };
 
 /**
@@ -38,7 +45,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+let bin = hashCode(key, this.SIZE)
+if (this.storage[bin][key]) {
+  return this.storage[bin][key]
+} 
+return undefined
 };
 
 /**
@@ -50,7 +61,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //get hashcode
+  let bin = hashCode(key, this.SIZE)
+  //check if value at bin of storage is undefined
+  if (!this.storage[bin][key]) {
+    return undefined
+  }
+  // otherwise, delete the value at the key in bin of storage
+  delete this.storage[bin][key]
+ 
 };
 
 
@@ -72,3 +91,14 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+//test hash table
+const table = new HashTable()
+table.set('a', 1)
+table.set('b', 2)
+table.set('c', 3)
+console.log(`expect "${table.get('a')}" to equal "1"`)
+console.log(`expect "${table.get('b')}" to equal "2"`)
+console.log(`expect "${table.get('c')}" to equal "3"`)
+table.remove('a')
+console.log(`expect: "${table.get('a')}" to equal "undefined"`)
