@@ -11,6 +11,15 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+function StoreObj() {
+  this.obj = {}
+}
+
+
+// what is a hash table?
+// A key is converted into an integer index by using a hash function.
+// This index decides the where the key-value pair record belongs.
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -25,6 +34,20 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+  // key is converted to integer using hash function
+  let convertedKey = hashCode(key, this.SIZE)
+
+  // if the convertedKey already exists, store the key-val pairs in their own objs
+  if (this.storage[convertedKey] !== undefined){
+    let store = new StoreObj(key)
+    
+    this.storage[convertedKey][store.obj]
+
+    return this.storage[convertedKey]
+
+  }
+  this.storage[convertedKey] = value
+
 };
 
 /**
@@ -38,6 +61,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // return val
+  let convertedKey = hashCode(key)
+  return this.storage[convertedKey]
 
 };
 
@@ -50,6 +76,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  // if key doesn't exist
+  if (key === undefined){
+    return undefined
+  }
+
+  // find the hashed address and delete the value associated with it 
+  let convertedKey = hashCode(key, this.SIZE)
+  delete this.storage[convertedKey]
 
 };
 
@@ -69,6 +103,21 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+
+
+let random = new HashTable()
+console.log(random.set('hello', 'jack'))
+console.log(random.set('goodbye', 'parsimony'))
+console.log(random.set('aloha', 'pflopfish'))
+
+
+// console.log(random.remove('aloha'))
+console.log(random.get('hello'))
+
+
+
 
 // Do not remove!!
 module.exports = HashTable;
