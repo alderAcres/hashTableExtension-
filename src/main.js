@@ -7,9 +7,16 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
+ this.storage = new Array(this.SIZE)
+// make storage area
 }
+///need a node constructor to implement linked list structure( if time left maybe switch to class declaration)
+function Node (key, value){
+  this.value = value
+  this.key = key
+  this.next = null
+}
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,7 +31,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //simplify typing with vars
+let obj = new Node(key, value)
+let hash = hashCode(key)
+if (!this.storage[hash]){
+  this.storage[hash] = obj
+}
+else {
+  let head = this.storage[hash]
+  while (head.next !== null){
+    head = head.next
+  }
+  head.next = obj
+}
 };
 
 /**
@@ -38,7 +57,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+let current = this.storage[hashCode(key)]
+while (current !== null){
+  if(current.key = key) {
+    return current.value
+  }
+  current = current.next
+}
 };
 
 /**
@@ -50,9 +75,34 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // check if location exists, simplify repeat typing with index var
+let index = hashCode(key)
+if (this.storage[index]){
+  return
+}
+// check if target is the head
+if (this.storage[index].key === key){
+  let obj = this.storage[index]
+  // if it is, reset the head to the next link
+  this.storage[index] = this.storage[index].next
+  return obj.value
+  // if time remains check if pass by reference messes with this, if so, JSON parser to clone node
+}
+// target is not head:
+let current = this.storage[index]
+while (current.next !== null){
+  if (current.next.key === key){
+   //fix chain (try parser to make sure reference isnt broken)
+   let obj = JSON.parse(JSON.stringify(current.next))
+   let newNext = current.next.next
+   current.next = newNext
+   return obj.value
+  }
+  current = current.next
+}
+return undefined
 };
-
+// case)
 
 // Do not modify
 function hashCode(string, size) {
