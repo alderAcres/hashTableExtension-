@@ -14,7 +14,115 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+/**
+* HashTable costructor
+*
+* construct a new hash table
+*
+* - You may modify this constructor as you need to achieve the challenges below.
+*/
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  this.itemsStored = 0;
+  this.OVERFLOW = this.SIZE * 3/4;
+  this.UNDERFLOW = this.SIZE * 1/2;
+}
 
+/**
+* set - Adds given value to the hash table with specified key.
+*
+* - If the provided key has already been used to store another value, simply overwrite
+*   the existing value with the new value.
+* - If the hashed address already contains another key/value pair, you must handle
+*   the collision appropriately.
+*
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+  const hashAddress = hashCode(key, this.SIZE);
+  
+  if (this.storage[hashAddress] == undefined) {
+    const obj = {};
+    obj[key] = value;
+    this.storage[hashAddress] = obj;
+    return ++this.itemsStored;
+  } else {
+    if (this.itemsStored === this.OVERFLOW){
+      this.storage = this.rehash(this.SIZE * 2);
+      hashAddress = hashCode(key, this.SIZE);
+    }
+    this.storage[hashAddress][key] = value;
+    return this.itemsStored;
+  }
+};
+
+
+HashTable.prototype.rehash = function(size){
+  this.SIZE = size;
+  const newStorage = new Array(this.SIZE);
+  
+  return this.storage.reduce( (acc, currObj) =>{
+    if (currObj instanceof Object){
+      Object.keys(currObj).forEach(currKey =>{
+        acc[hashCode(currKey)] = currObj[currKey];
+      });
+      return acc;
+    }
+  },newStorage)
+
+
+}
+
+
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+*
+* - If more than one value is stored at the key's hashed address, then you must retrieve
+*   the correct value that was originally stored with the provided key
+*
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+  const hashAddress = hashCode(key, this.SIZE);
+
+  if (this.storage[hashAddress] === undefined || this.storage[hashAddress][key] === undefined) {
+    throw new Error(`HashTable get: no item found with key **${key}** provided ! `);
+  }
+  return this.storage[hashAddress][key];
+};
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  let hashAddress = hashCode(key, this.SIZE);
+  
+  // console.log(this.storage[hashAddress], key)
+  if (this.storage[hashAddress] === undefined || this.storage[hashAddress][key] === undefined) {
+    throw Error(`HashTable get: no item found with key ${key} provided ! `);
+  } else {
+    deletedValue = this.storage[hashAddress][key];
+    delete this.storage[hashAddress][key]
+    this.itemsStored--;
+    if (this.itemsStored <= this.UNDERFLOW){
+      this.SIZE = this.SIZE/2;
+      this.storage = this.rehash(this.SIZE);
+      hashAddress = hashCode(key, this.SIZE);
+    }
+    return deletedValue;
+  }
+
+};
 
 
 // YOUR CODE ABOVE

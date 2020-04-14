@@ -1,51 +1,3 @@
-//use linkedList to avoid collisions.
-function LinkedList1() {
-  this.head = null;
-  this.tail = null;
-}
-
-function Node1(key, val) {
-  this.value = {key, val};
-  this.next = null;
-}
-
-// adds node to end of list
-LinkedList1.prototype.push = function (key, value) {
-
-  let newKey = true;
-  let node = new Node1(key, value)
-  if (this.head === null) {
-    this.head = node;
-  }
-  else {
-    this.current = this.head;
-    while (this.current.next != null) {
-
-      console.log(this.current.value);
-      // console.log(this.current.value[key]);
-      if (this.current.value[key] == key){
-        this.current.value[val] = value;
-        newKey = false;
-        break;
-      }
-      this.current = this.current.next;
-
-      
-    }
-    if (newKey){
-      this.current.next = node;
-    }
-    
-  }
-  return newKey;
-
-};
-
-let linkedList1 = new LinkedList1();
-console.log(linkedList1.push("male", "tommy"));
-console.log(linkedList1.push("male", "harry"));
-console.log(linkedList1);
-
 /**
 * HashTable costructor
 *
@@ -72,27 +24,22 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-  let hashAddress = hashCode(key, this.SIZE);
-  // console.log(hashAddress)
+  const hashAddress = hashCode(key, this.SIZE);
   
-  let newKey = true;
   if (this.storage[hashAddress] == undefined) {
-    let linkedList1 = new LinkedList1();
-    linkedList1.push(key, value);
-    // console.log(linkedList1);
-    this.storage[hashAddress] = linkedList1;
+    const obj = {};
+    obj[key] = value;
+    this.storage[hashAddress] = obj;
+    return ++this.itemsStored;
   } else {
-    newKey = this.storage[hashAddress].push(key,value);
+    if (this.storage[hashAddress][key] == undefined){
+        ++this.itemsStored
+    } 
+    this.storage[hashAddress][key] = value;
+    // console.log(this.storage);
+    return this.itemsStored;
   };
-
-  // console.log(this.storage);
-  return newKey ? ++this.itemsStored : this.itemsStored;
 };
-
-let hashtable = new HashTable();
-console.log(hashtable.set("male", "tommy"));
-console.log(hashtable.set("male", "harry"));
-console.log(hashtable.set("female", "katty"))
 
 
 /**
@@ -106,16 +53,12 @@ console.log(hashtable.set("female", "katty"))
 * hash table
 */
 HashTable.prototype.get = function(key) {
-  let hashAddress = hashCode(get);
-  // console.log(hashAddress)
-  
-  if (this.storage[hashAddress] == undefined) {
-    throw Error(`HashTable get: no item found with key ${key} provided ! `);
-  } else {
-    this.storage[hashAddress];
-  };
-  // console.log(this.storage);
-  return ++this.itemsStored;
+  const hashAddress = hashCode(key, this.SIZE);
+
+  if (this.storage[hashAddress] === undefined || this.storage[hashAddress][key] === undefined) {
+    throw new Error(`HashTable get: no item found with key **${key}** provided ! `);
+  }
+  return this.storage[hashAddress][key];
 };
 
 /**
@@ -127,8 +70,26 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let hashAddress = hashCode(key, this.SIZE);
+  
+  // console.log(this.storage[hashAddress], key)
+  if (this.storage[hashAddress] === undefined || this.storage[hashAddress][key] === undefined) {
+    throw Error(`HashTable get: no item found with key ${key} provided ! `);
+  } else {
+    deletedValue = this.storage[hashAddress][key];
+    delete this.storage[hashAddress][key]
+    this.itemsStored--;
+    return deletedValue;
+  }
 
 };
+
+let hashtable = new HashTable();
+console.log(hashtable.set("male", "tommy")); //1
+console.log(hashtable.set("male", "harry"));  //1
+console.log(hashtable.set("female", "katty"))  //2
+console.log(hashtable.get("male")); //harry
+console.log(hashtable.remove("male")) //harry
 
 
 // Do not modify
