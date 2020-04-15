@@ -42,7 +42,7 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-  const hashAddress = hashCode(key, this.SIZE);
+  let hashAddress = hashCode(key, this.SIZE);
   
   if (this.storage[hashAddress] == undefined) {
     const obj = {};
@@ -50,11 +50,20 @@ HashTable.prototype.set = function(key, value) {
     this.storage[hashAddress] = obj;
     return ++this.itemsStored;
   } else {
-    if (this.itemsStored === this.OVERFLOW){
-      this.storage = this.rehash(this.SIZE * 2);
+    if (this.itemsStored >= this.OVERFLOW){
+      this.SIZE = this.SIZE*2
+      this.storage = this.rehash(this.SIZE);
       hashAddress = hashCode(key, this.SIZE);
     }
-    this.storage[hashAddress][key] = value;
+    console.log(this.storage[hashAddress], hashAddress)
+    if (this.storage[hashAddress] == undefined){
+      const obj = {};
+      obj[key] = value;
+      this.storage[hashAddress] = obj;
+    }else {
+      this.storage[hashAddress][key] = value;
+    }
+
     return this.itemsStored;
   }
 };
@@ -67,13 +76,18 @@ HashTable.prototype.rehash = function(size){
   return this.storage.reduce( (acc, currObj) =>{
     if (currObj instanceof Object){
       Object.keys(currObj).forEach(currKey =>{
-        acc[hashCode(currKey)] = currObj[currKey];
+        const hash = hashCode(currKey, this.SIZE);
+        if (acc[hash] == undefined){
+          const obj = {};
+          obj[currKey] = currObj[currKey];
+          acc[hash] = obj;
+        }else{
+          acc[hash][currKey] = currObj[currKey]
+        }
       });
-      return acc;
     }
+    return acc;
   },newStorage)
-
-
 }
 
 
@@ -117,13 +131,52 @@ HashTable.prototype.remove = function(key) {
     if (this.itemsStored <= this.UNDERFLOW){
       this.SIZE = this.SIZE/2;
       this.storage = this.rehash(this.SIZE);
-      hashAddress = hashCode(key, this.SIZE);
+      console.log(this.storage, this.SIZE);
     }
     return deletedValue;
   }
 
 };
 
+let hashtable = new HashTable();
+console.log(hashtable.set("male1", "tommy1")); 
+console.log(hashtable.set("male2", "james2"));  
+console.log(hashtable.set("male3", "james3")); 
+console.log(hashtable.set("male4", "katty4"));  
+console.log(hashtable.set("male5", "katty5"));
+console.log(hashtable.set("male6", "james6")); 
+console.log(hashtable.set("male7", "katty7"));  
+console.log(hashtable.set("male8", "katty8"));
+console.log(hashtable.set("male9", "james9")); 
+console.log(hashtable.set("male10", "katty10"));  
+console.log(hashtable.set("male11", "katty11"));
+console.log(hashtable.set("male12", "james12")); 
+console.log(hashtable.set("male13", "katty13")); 
+console.log(hashtable.set("male14", "katty14"));
+console.log(hashtable.set("male15", "james15")); 
+console.log(hashtable.set("male16", "katty16")); 
+console.log(hashtable.set("male17", "katty17"));
+console.log(hashtable);
+console.log(hashtable.set("male18", "katty18"));
+console.log(hashtable.set("male19", "katty19"));
+console.log(hashtable.set("male20", "katty20"));
+console.log(hashtable);
+
+console.log(hashtable.get("male15")); 
+console.log(hashtable.get("male12")) 
+
+console.log(hashtable.remove("male20"));
+console.log(hashtable.remove("male19"));
+console.log(hashtable.remove("male18"));
+console.log(hashtable.remove("male17"));
+console.log(hashtable.remove("male16"));
+console.log(hashtable.remove("male15"));
+console.log(hashtable.remove("male14"));
+console.log(hashtable.remove("male13"));
+console.log(hashtable.remove("male12"));
+console.log(hashtable.remove("male11"));
+console.log(hashtable.remove("male10"));
+console.log(hashtable.remove("male9"));
 
 // YOUR CODE ABOVE
 
