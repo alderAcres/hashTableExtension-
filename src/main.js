@@ -11,46 +11,85 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
-/**
-* set - Adds given value to the hash table with specified key.
-*
-* - If the provided key has already been used to store another value, simply overwrite
-*   the existing value with the new value.
-* - If the hashed address already contains another key/value pair, you must handle
-*   the collision appropriately.
-*
-* @param {string} key - key to be used to create hashed address
-* @param {string|number|boolean} value - value to be stored in hash table
-* @return {number} The new number of items stored in the hash table
-*/
-HashTable.prototype.set = function(key, value) {
+//there is a more efficient way of iterating through the hashtable by starting at the converted key and proceeding afterwards looping to the start if not found. Would like to implement this later
 
-};
+HashTable.prototype = {
+  /**
+  * set - Adds given value to the hash table with specified key.
+  *
+  * - If the provided key has already been used to store another value, simply overwrite
+  *   the existing value with the new value.
+  * - If the hashed address already contains another key/value pair, you must handle
+  *   the collision appropriately.
+  *
+  * @param {string} key - key to be used to create hashed address
+  * @param {string|number|boolean} value - value to be stored in hash table
+  * @return {number} The new number of items stored in the hash table
+  */
 
-/**
-* get - Retrieves a value stored in the hash table with a specified key
-*
-* - If more than one value is stored at the key's hashed address, then you must retrieve
-*   the correct value that was originally stored with the provided key
-*
-* @param {string} key - key to lookup in hash table
-* @return {string|number|boolean} The value stored with the specifed key in the
-* hash table
-*/
-HashTable.prototype.get = function(key) {
+  set : function(key, value) {
+    console.log(key, value)
+    const hash = hashCode(key, this.SIZE);
+    console.log(hash)
+    // if the key already exists in our storage
+    if (this.storage[hash]){
+      //overwrite the old value
+      this.storage[hash][key] = value;
+    }
+    // if the key does not already exist we will create :
+    this.storage[hash] = {};
+    //add the key taken in as the key and give it the value it was given
+    this.storage[hash][key] = value;
+  },
 
-};
+  /**
+  * get - Retrieves a value stored in the hash table with a specified key
+  *
+  * - If more than one value is stored at the key's hashed address, then you must retrieve
+  *   the correct value that was originally stored with the provided key
+  *
+  * @param {string} key - key to lookup in hash table
+  * @return {string|number|boolean} The value stored with the specifed key in the
+  * hash table
+  */
 
-/**
-* remove - delete a key/value pair from the hash table
-*
-* - If the key does not exist in the hash table, return undefined
-*
-* @param {string} key - key to be found and deleted in hash table
-* @return {string|number|boolean} The value deleted from the hash table
-*/
-HashTable.prototype.remove = function(key) {
+  get : function(key) {
+    //iterate through the hash table to find key
+    for (let i in this.storage) {
+      //if we find a match while iterating through the hashtable
+      if (Object.keys(this.storage[i])[0] === key) {
+        //return the value corresponding to the key passed into prototype.get
+        return Object.values(this.storage[i])[0];
+      }
+    }
+    //return false after iterating through the hashtable and not finding a match
+    return false;
+  },
 
+  /**
+  * remove - delete a key/value pair from the hash table
+  *
+  * - If the key does not exist in the hash table, return undefined
+  *
+  * @param {string} key - key to be found and deleted in hash table
+  * @return {string|number|boolean} The value deleted from the hash table
+  */
+  remove : function(key) {
+    //iterate through the hashtable to see if we can find a matching key
+    for (let i in this.storage) {
+      // if we find a match of key passed in our storage
+      if (Object.keys(this.storage[i])[0] === key) {
+        // save our soon to be deleted obj in a variable to return later
+        const soonToBeDeleted = this.storage[i];
+        // delete the desired obj
+        delete (this.storage[i]);
+        //return
+        return soonToBeDeleted;
+      }
+    }
+    // if we do not find a matching key in our hashtable we can return something else. false as an example
+    return false;
+  }
 };
 
 
