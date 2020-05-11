@@ -73,8 +73,19 @@ HashTable.prototype.remove = function(key) {
 	let savedKey = this.storage[hash][key];
 	if (!this.storage[hash][key]) return undefined;
 	delete this.storage[hash][key];
+	//if the hash is an empty object now, redefine the hash as undefined
+	if (isEmpty(this.storage[hash])) this.storage[hash] = undefined;
 	return savedKey;
 };
+//helper function to check if object is empty
+function isEmpty(obj) {
+	for (let key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			return false;
+		}
+	}
+	return true;
+}
 
 // Do not modify
 function hashCode(string, size) {
