@@ -11,11 +11,71 @@
       - If the hash table's SIZE is greater than 16 and the result of removing the
         item drops the number of stored items to be less than 25% of the hash table's SIZE
         (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
+
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  //new property to keep track of usege 
+  this.USED = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key, this.SIZE);
+  if(!this.storage[index]){
+    this.storage[index] = {};
+  }
 
+  this.storage[index][key] = value;
+  this.USED++
+
+  if(this.SIZE*0.75 === this.USED){
+    this.SIZE = Math.floor(this.SIZE*2);
+    // involke helper function
+    this.storage = HashTable.prototype.resize(this.storage, this.SIZE)
+  }
+
+  return this.USED
+};
+
+HashTable.prototype.remove = function(key) {
+  let index = hashCode(key, this.SIZE);
+  if(this.storage[index]){
+    let removed = this.storage[index][key];
+    delete this.storage[index][key];
+    this.USED--;
+    if(this.SIZE*0.25 === this.USED - 1){
+      this.SIZE = this.SIZE/2;
+      // involke helper function
+      this.storage = HashTable.prototype.resize(this.storage, this.SIZE);
+    }
+    return removed;
+  } else {
+    return false;
+  }
+};
+
+// helper function
+HashTable.prototype.resize = function(storage, size) {
+  for(let index of storage){
+    key = storage[index];
+    value = storage[index][key];
+    index = hashCode(key, size);
+    if(!storage[index]){
+      storage[index] = {};
+    }
+    storage[index][key] = value;
+  }
+  return storage;
+}
+
+HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
+  if(this.storage[index]) return this.storage[index][key];
+  return false
+};
 
 // YOUR CODE ABOVE
 
