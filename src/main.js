@@ -93,12 +93,12 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
-// Do not remove!!
-module.exports = HashTable;
-
 let myHash = new HashTable();
 myHash.set('Stephanie', 'female');
 myHash.set('Jim', 'male');
 myHash.get('Stephanie');
-console.log(myHash.remove('Jim'));
 console.log(myHash.SIZE);
+console.log(myHash.remove('Jim'));
+
+// Do not remove!!
+module.exports = HashTable;

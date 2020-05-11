@@ -96,6 +96,6 @@ let myHash = new HashTable();
 myHash.set('Stephanie', 'female');
 myHash.set('Jim', 'male');
 console.log(myHash.set('Julie', 'female'));
+console.log(myHash);
 // myHash.get('Stephanie');
 // myHash.remove('Jim'));
-console.log(myHash);
