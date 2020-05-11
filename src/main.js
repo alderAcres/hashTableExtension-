@@ -7,7 +7,7 @@
  */
 function HashTable() {
   this.SIZE = 16;
-
+  this.numItems = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -31,15 +31,8 @@ HashTable.prototype.set = function (key, value) {
   // place a key,value pair into the object
   this.storage[hash][key] = value;
   // return incremented index
-  return ++this.SIZE;
+  return ++this.numItems;
 };
-
-// const hashTable = new HashTable();
-
-//console.log(hashTable.storage[hashCode("a", hashTable.SIZE)]);
-
-// console.log(hashTable.set(" a", 3));
-// console.log(hashTable);
 
 /**
  * get - Retrieves a value stored in the hash table with a specified key
@@ -58,7 +51,7 @@ HashTable.prototype.get = function (key) {
   return this.storage[hash][key];
 };
 
-const hashTable = new HashTable();
+// const hashTable = new HashTable();
 
 // hashTable.set(" a", 3);
 // console.log(hashTable.get(" a"));
@@ -82,15 +75,16 @@ HashTable.prototype.remove = function (key) {
     const removedItem = this.storage[hash][key];
     delete this.storage[hash][key];
     // decrement size
-    this.SIZE--;
+    this.numItems--;
+    // should we delete empty hash objects?
     return removedItem;
   }
 };
 
-hashTable.set(" a", 3);
-hashTable.get(" a");
-console.log(hashTable.remove(" a"));
-console.log(hashTable);
+// hashTable.set(" a", 3);
+// hashTable.get(" a");
+// console.log(hashTable.remove(" a"));
+// console.log(hashTable);
 
 // Do not modify
 function hashCode(string, size) {
@@ -107,6 +101,14 @@ function hashCode(string, size) {
 
   return Math.abs(hash) % size;
 }
+
+const hashTable = new HashTable();
+
+console.log(hashTable.storage[hashCode("a", hashTable.SIZE)]);
+
+console.log(hashTable.set(" a", 3));
+console.log(hashTable.remove(" a"));
+console.log(hashTable);
 
 // Do not remove!!
 module.exports = HashTable;
