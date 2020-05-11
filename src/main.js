@@ -24,8 +24,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // if we haven't encountered a particular hashcode yet, initialize it to empty object.
+  if (!this.storage[hashCode(key, this.SIZE)])
+    this.storage[hashCode(key, this.SIZE)] = {};
+  // set the object's property found at hascode as key and value
+  this.storage[hashCode(key, this.SIZE)][key] = value;
 };
+
+hash = new HashTable();
+hash.set('bren', 'hello');
+
+console.log(hash.storage);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +47,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  if (!this.storage[hashCode(key, this.SIZE)])
+    return;
+  return this.storage[hashCode(key, this.SIZE)][key];
 };
+console.log(hash.get('bren'));
+console.log(hash.get('2'));
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +63,29 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  if (this.storage[hashCode(key, this.SIZE)]) {
+    // store value in a variable that will be returned later
+    let delVal = this.storage[hashCode(key, this.SIZE)][key];
+    
+    // delete property from object.
+    delete this.storage[hashCode(key, this.SIZE)][key];
 
+    // if there are no more key values in the object after deleting the appropriate key.
+    if (Object.keys(this.storage[hashCode(key, this.SIZE)]).length === 0) {
+      delete this.storage[hashCode(key, this.SIZE)];
+    }
+    
+      // return variable
+    return delVal
+  }
 };
+
+console.log(hash.remove('bren'));
+console.log(hash.storage);
+hash.set('bren', 'hello Im back');
+hash.set('hello', 'I"m new');
+console.log(hash.storage);
+
 
 
 // Do not modify
