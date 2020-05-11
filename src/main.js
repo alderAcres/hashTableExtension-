@@ -25,6 +25,7 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   let index = hashCode(key, this.SIZE);
+  let counter;
   if (!this.storage[index]) {
     this.storage[index] = {};
     this.storage[index][key] = value;
@@ -77,9 +78,7 @@ HashTable.prototype.remove = function(key) {
     }
     return removed;
   }
- 
-  return undefined;
-  
+   return undefined;
 };
 
 newHash.remove('hacker');
