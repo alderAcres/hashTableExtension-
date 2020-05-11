@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.numOfItems = 0; 
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,7 +23,31 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
+// for Airbnb sake
+const has = Object.prototype.hasOwnProperty; 
+
 HashTable.prototype.set = function(key, value) {
+  // declare a variable the refers to the index on the hash table we will be storing our value
+  const index = hashCode(key, this.SIZE);
+
+  // if the hash bucket at the comptued index is empty (undefined), create and store a new empty object at that index,
+  if (!this.storage[index]) {
+
+    this.storage[index] = {};
+  }
+
+  // for sake of keeping num of Items correct, we calculate if hash table already has a key at that property
+  if (has.call(this.storage[index], key)) {
+
+    this.numOfItems--; 
+  }
+
+  // store inputs as property of object stored at the computed index on the hash table, and increase the number of items count
+  this.storage[index][key] = value;
+  this.numOfItems++; 
+
+  // return new number of items in table; 
+  return this.numOfItems; 
 
 };
 
@@ -38,7 +62,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // calculated index at with this key is stored
+  const index = hashCode(key, this.SIZE);
 
+  // access value associated with the key stored on the object at that index of the storage array
+  // returns undefined if either key doesn't exist on object, or object doesn't exist in bucket
+  return this.storage[index] ? this.storage[index][key] : this.storage[index]; 
 };
 
 /**
@@ -51,6 +80,20 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
 
+  // compute index at with object with desired key would be store
+  const index = hashCode(key, this.SIZE);
+
+  // handle edge case, if no object stored at that index, return undefined
+  if (!this.storage[index]) return this.storage[index]; 
+  
+  // if object does exist at that index, store that property in variable so we can return it later (will be undefined if key doesn't exist on that object)
+  const removedProp = this.storage[index][key];
+
+  // delete property from the bucket object, decrementing numOfItems counter
+  delete this.storage[index][key];
+
+  // return stored property value
+  return removedProp;
 };
 
 
@@ -69,6 +112,22 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+const newHash = new HashTable(); 
+console.log('--------TESTING SET---------');
+newHash.set('hello', true);
+newHash.set('this is a test', true); 
+newHash.set(true, 'hello'); 
+newHash.set(7678, 'testagain'); 
+console.log(' hashtable after adding a few items...', newHash);
+newHash.set('hello', false); 
+console.log('can handle hash collisions?', newHash)
+console.log('------------TESTING GET---------'); 
+console.log('getting false....', newHash.get('hello')); 
+console.log('getting value that is not in table...', newHash.get('not real value'))
+console.log('------------TESTING REMOVE----------');
+console.log('removing "hello".....', newHash.remove('hello'), '...hashTable after remove:   ', newHash);
+console.log('removing object that doesn\'t exist....', newHash.remove('akldsdlfas;dl'))
 
 // Do not remove!!
 module.exports = HashTable;
