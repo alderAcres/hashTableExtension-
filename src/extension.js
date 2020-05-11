@@ -15,6 +15,62 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+//I honestly HAVE no idea on how to increase the size at the moment.
+
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+
+//there is a more efficient way of iterating through the hashtable by starting at the converted key and proceeding afterwards looping to the start if not found. Would like to implement this later 
+
+HashTable.prototype = {
+  set : function(key, value) {
+    console.log(key, value)
+    const hash = hashCode(key, this.SIZE);
+    console.log(hash)
+    // if the key already exists in our storage
+    if (this.storage[hash]){
+      //overwrite the old value
+      this.storage[hash][key] = value;
+    }
+    // if the key does not already exist we will create :
+    this.storage[hash] = {};
+    //add the key taken in as the key and give it the value it was given
+    this.storage[hash][key] = value;
+  },
+
+  get : function(key) {
+    //iterate through the hash table to find key
+    for (let i in this.storage) {
+      //if we find a match while iterating through the hashtable
+      if (Object.keys(this.storage[i])[0] === key) {
+        //return the value corresponding to the key passed into prototype.get
+        return Object.values(this.storage[i])[0];
+      }
+    }
+    //return false after iterating through the hashtable and not finding a match
+    return false;
+  },
+
+  remove : function(key) {
+    //iterate through the hashtable to see if we can find a matching key
+    for (let i in this.storage) {
+      // if we find a match of key passed in our storage
+      if (Object.keys(this.storage[i])[0] === key) {
+        // save our soon to be deleted obj in a variable to return later
+        const soonToBeDeleted = this.storage[i];
+        // delete the desired obj
+        delete (this.storage[i]);
+        //return
+        return soonToBeDeleted;
+      }
+    }
+    // if we do not find a matching key in our hashtable we can return something else. false as an example
+    return false;
+  }
+};
 
 
 // YOUR CODE ABOVE
