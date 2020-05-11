@@ -60,9 +60,9 @@ HashTable.prototype.get = function (key) {
 
 const hashTable = new HashTable();
 
-hashTable.set(" a", 3);
-console.log(hashTable.get(" a"));
-console.log(hashTable.get("a"));
+// hashTable.set(" a", 3);
+// console.log(hashTable.get(" a"));
+// console.log(hashTable.get("a"));
 
 /**
  * remove - delete a key/value pair from the hash table
@@ -72,7 +72,25 @@ console.log(hashTable.get("a"));
  * @param {string} key - key to be found and deleted in hash table
  * @return {string|number|boolean} The value deleted from the hash table
  */
-HashTable.prototype.remove = function (key) {};
+HashTable.prototype.remove = function (key) {
+  const hash = hashCode(key, this.SIZE);
+  // if key or hash values don't exist, return undefined
+  if (!this.storage[hash]) return;
+
+  if (this.storage[hash][key]) {
+    // save item to be deleted to a new variable and then delete it
+    const removedItem = this.storage[hash][key];
+    delete this.storage[hash][key];
+    // decrement size
+    this.SIZE--;
+    return removedItem;
+  }
+};
+
+hashTable.set(" a", 3);
+hashTable.get(" a");
+console.log(hashTable.remove(" a"));
+console.log(hashTable);
 
 // Do not modify
 function hashCode(string, size) {
