@@ -25,10 +25,10 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   let hashKey = hashCode(key, this.SIZE);
-  if (this.storage[hashKey] === undefined){
+  if (this.storage[hashKey] === undefined){ //if haskey unused create abject to deal with collisions
     this.storage[hashKey]= {};
    } 
-  if (!this.storage[hashKey][key]){
+  if (!this.storage[hashKey][key]){ //no new items added if overwrite
   this.items++;
   }
   this.storage[hashKey][key] = value;
@@ -60,6 +60,9 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
   let hashKey = hashCode(key, this.SIZE);
+  if (this.storage[hashKey] === undefined || this.storage[hashKey][key] === undefined){//if key does not exist, return undfined
+    return undefined;
+  }
   let deletedValue = this.storage[hashKey][key];
   delete this.storage[hashKey][key];
   this.items--;
@@ -87,7 +90,8 @@ function hashCode(string, size) {
 module.exports = HashTable;
 
 let hash = new HashTable();
-console.log(hash.set('happy', '5'));
-console.log(hash.set('happy', '6'));
-console.log(hash.get('happy'));
+// console.log(hash.set('happy', '5'));
+// console.log(hash.set('happy', '6'));
+// console.log(hash.get('happy'));
+// console.log(hash.remove('happy'));
 console.log(hash.remove('happy'));
