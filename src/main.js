@@ -24,8 +24,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  
+  const code = hashCode(key, this.SIZE)
 
-};
+   // if there is nothing there, add empty object w key & value
+  if(!this.storage[code]) this.storage[code] = {};
+
+  // add the key value pair
+  this.storage[code][key] = value;
+
+  return 1;
+}
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +47,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  
+  const code = hashCode(key, this.SIZE);
 
+  // note: returns undefined if key not found
+  return this.storage[code][key];     
 };
 
 /**
@@ -51,7 +64,43 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
 
+  const code = hashCode(key, this.SIZE);
+  let retVal = undefined;; 
+
+  if(this.storage[code][key]) {
+    retVal = this.storage[code][key];
+    delete this.storage[code][key];
+  }
+  return retVal;
 };
+
+
+let table = new HashTable();
+// table.set('john', 5);
+// table.set('bob', 6);
+// console.log(table);
+// console.log(table.get('john'));
+// console.log(table.get('bob'));
+// console.log(table.get('zeke'));
+// console.log("remove bob results: ", table.remove('bob'));
+// console.log(table.get('john'));
+// console.log(table.set('bob', 10));
+// console.log(table.get('bob'));
+// console.log(table);
+
+// test for collisions 
+// for (let i = 0; i < 50; i++) {
+//   const key = 'key' + i;
+//   const value = 'value' + i;
+//   table.set(key, value);
+//   console.log(`${key}, ${value}, get returns: ${table.get(key)}`);
+// }
+// for (let i = 0; i < 50; i++) {
+//   const key = 'key' + i;
+//   const value = 'value' + i;
+//   console.log(`${key}, ${value}, get returns: ${table.get(key)}`);
+// }
+// console.log(table);
 
 
 // Do not modify
