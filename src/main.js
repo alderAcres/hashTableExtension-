@@ -104,10 +104,8 @@ function hashCode(string, size) {
 
 const hashTable = new HashTable();
 
-console.log(hashTable.storage[hashCode("a", hashTable.SIZE)]);
-
-console.log(hashTable.set(" a", 3));
-console.log(hashTable.remove(" a"));
+hashTable.set(" a", 3);
+hashTable.remove(" a");
 console.log(hashTable);
 
 // Do not remove!!
