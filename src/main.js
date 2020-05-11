@@ -6,9 +6,9 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
+	this.SIZE = 16;
+
+	this.storage = new Array(this.SIZE);
 }
 
 /**
@@ -24,7 +24,22 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+	// ('A', 'First')
+	//our hash is the index of our hash table storage
+	//run the hashcode function into a var called hash
+	let hash = hashCode(key, this.SIZE); //key/v pair goes into slot 1
+	console.log(hash);
+	//if the hash slot is undefined or empty
+	if (this.storage[hash] === undefined) {
+		//create a new object in that hash slot
+		this.storage[hash] = {};
+		//add the key value pair the hash slot
+		this.storage[hash][key] = value;
+	}
+	//otherwise if there is an object in our hash table, add our new key val pair to the object
+	console.log(this.storage[hash]);
+	//if theres  value in our hash table, we add another k/v pair in
+	this.storage[hash][key] = value;
 };
 
 /**
@@ -38,7 +53,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+	//return the key valur pair in our hashtable
+	let hash = hashCode(key, this.SIZE);
+	//we ge the key val pair by looking into our hash table
+	return this.storage[hash][key];
 };
 
 /**
@@ -50,24 +68,39 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+	let hash = hashCode(key, this.SIZE);
+	console.log(this.storage);
+	let savedKey = this.storage[hash][key];
+	if (!this.storage[hash][key]) return undefined;
+	delete this.storage[hash][key];
+	//if the hash is an empty object now, redefine the hash as undefined
+	if (isEmpty(this.storage[hash])) this.storage[hash] = undefined;
+	return savedKey;
 };
-
+//helper function to check if object is empty
+function isEmpty(obj) {
+	for (let key in obj) {
+		if (obj.hasOwnProperty(key)) {
+			return false;
+		}
+	}
+	return true;
+}
 
 // Do not modify
 function hashCode(string, size) {
-  'use strict';
-  
-  let hash = 0;
-  if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
-    const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  
-  return Math.abs(hash) % size;
+	'use strict';
+
+	let hash = 0;
+	if (string.length === 0) return hash;
+
+	for (let i = 0; i < string.length; i++) {
+		const letter = string.charCodeAt(i);
+		hash = (hash << 5) - hash + letter;
+		hash = hash & hash; // Convert to 32bit integer
+	}
+
+	return Math.abs(hash) % size;
 }
 
 // Do not remove!!
