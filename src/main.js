@@ -27,6 +27,7 @@ HashTable.prototype = {
   * @return {number} The new number of items stored in the hash table
   */
 
+  //I did not handle for collision 
   set : function(key, value) {
     console.log(key, value)
     const hash = hashCode(key, this.SIZE);
@@ -53,6 +54,8 @@ HashTable.prototype = {
   * hash table
   */
 
+  //did not complete the second requested functionality only looking for [0]
+  //possible brute force solution would be to add an addition for loop to find a match
   get : function(key) {
     //iterate through the hash table to find key
     for (let i in this.storage) {
@@ -74,6 +77,8 @@ HashTable.prototype = {
   * @param {string} key - key to be found and deleted in hash table
   * @return {string|number|boolean} The value deleted from the hash table
   */
+
+  //not checking for multiple keys
   remove : function(key) {
     //iterate through the hashtable to see if we can find a matching key
     for (let i in this.storage) {
@@ -87,8 +92,8 @@ HashTable.prototype = {
         return soonToBeDeleted;
       }
     }
-    // if we do not find a matching key in our hashtable we can return something else. false as an example
-    return false;
+    // if we do not find a matching key in our hashtable return undefined.
+    return;
   }
 };
 
