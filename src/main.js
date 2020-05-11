@@ -25,6 +25,27 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+  let hash = hashCode(key, this.SIZE)
+
+  if(!this.storage[hash]){
+    
+    this.storage[hash]={};
+
+    this.storage[hash][key]=value;
+    console.log(this.storage[hash])
+  }
+  
+  else{//if hash location exists/overwrite
+
+    this.storage[hash]=value;
+    console.log(this.storage[hash])
+  }
+
+  //unsure if this approproiatly handles collsion since it essentially creates a key;pair object whenver it places a value in  a hash. prevents collision, but mayne  not  cleam
+  
+  // value of hash  location  = value of object of key value pairs within hash location to handle collisions
+  
+
 };
 
 /**
@@ -39,6 +60,22 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+  let hash = hashCode(key, this.SIZE)
+          // value of hash at location
+  //check if it contains multiple values
+  if(Object.values(this.storage[hash]).length > 1){
+
+    return this.storage[hash][key];
+
+  }
+  else {
+
+    return this.storage[hash]
+  }
+
+  return this.storage[hash]
+    // if more than one value at location
+    // this.storage[hash][key]
 };
 
 /**
@@ -51,9 +88,31 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
 
+  let hash = hashCode(key, this.SIZE);
+
+  if (this.storage[hash]){console.log(this.storage[hash])
+
+    let removedVal =this.storage[hash]
+    delete this.storage[hash];
+
+    return removedVal
+  }
+
+  else{
+    
+    return undefined 
+  }
+
 };
 
+let table = new HashTable
 
+console.log(table.set(7,12))
+console.log(table)
+console.log(table.get(7))
+console.log(table)
+console.log(table.remove(7))
+console.log(table)
 // Do not modify
 function hashCode(string, size) {
   'use strict';
