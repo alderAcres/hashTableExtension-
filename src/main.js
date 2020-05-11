@@ -9,6 +9,8 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+
+  this.count = 0
 }
 
 /**
@@ -24,7 +26,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //determine the index by evaluating the key with the table size in the hashCode function
+  let index = hashCode(key, this.SIZE); 
+  //if the index is undefined, make it an empty object
+  if (this.storage[index] === undefined) {
+    this.storage[index] = {};
+  };
+  //add key/value pair to object at that index
+  this.storage[index][key] = value;
+  //increase count of hash table by 1, return count
+  this.count++;
+  return console.log(`There are ${this.count} items in this Hash Table.`)
 };
 
 /**
@@ -38,7 +50,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //determine index by invoking hashCode on key and size
+  let index = hashCode(key, this.SIZE);
+  //return the value that associates with the given key at that index
+  return this.storage[index][key];
 };
 
 /**
@@ -50,8 +65,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
-};
+  //determine index by invoking hashCode on key with table size
+  let index = hashCode(key, this.SIZE);
+  //if there is nothing stored at the index, return undefined
+  if (!this.storage[index]) return undefined; 
+  //otherwise delete the key/value pair at that index
+  let toBeRemoved = this.storage[index][key];
+  if (Object.keys(this.storage[index] === 1)) {
+    delete this.storage[index];
+    this.count--;}
+    else {
+    delete this.storage[index][key];
+    }
+    this.count--
+    return toBeRemoved;
+  };
 
 
 // Do not modify
@@ -66,7 +94,6 @@ function hashCode(string, size) {
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
   return Math.abs(hash) % size;
 }
 
