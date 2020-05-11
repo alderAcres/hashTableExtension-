@@ -24,8 +24,21 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // the location of the hash table is the output of the function passed in with the key and size of the hash table
+  let location = hashCode(key, this.SIZE);
+  // if the location is empty/undefined, create an obj inside the location and pass in the key, val pair; this will avoid collisons with similar values
+  if (!this.storage[location]) {
+    this.storage[location] = {};
+    this.storage[location][key] = value;
+  } else {
+    // if something does exist in this obj, include the key, val pairs that were passed in the argument
+    this.storage[location][key] = value;
+  }
 };
+let hash = new HashTable();
+console.log(hash.set('Edwin','awesome')); 
+console.log(hash.set('dann','awesome')); 
+console.log(hash);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,6 +51,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // search for the location of the key 
+  let location = hashCode(key, this.SIZE);
+  // access the key from the given location and return its value
+  return this.storage[location][key];
 
 };
 
@@ -50,9 +67,27 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // search for the location of the key
+  let location = hashCode(key, this.SIZE);
+  // will keep track if a key exists
+  let count = 0;
+ // iterate through obj and check to see if the key passed in exists
+  for (let prop in this.storage[location]) {
+    if (key === prop) {
+      // if the count remains 0, then the key does not exist in the hash table
+      count++;
+    }
+  }
+   // if key does not exist in the storage obj return undefined
+  if (!count) return;
+  let remvoedItem = this.storage[location][key];
+  delete this.storage[location][key];
+  return remvoedItem;
 };
 
+console.log(hash.remove('Edwin'));
+console.log(hash.remove('george'));
+console.log(hash);
 
 // Do not modify
 function hashCode(string, size) {

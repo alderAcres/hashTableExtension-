@@ -14,7 +14,54 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+HashTable.prototype.set = function(key, value) {
+  // count keeps track of elements and if 75% or more of the elements are not undefined, then we will double the size of the hashTable
+  let count = 0;
+  // iterate through the storage array
 
+  // the location of the hash table is the output of the function passed in with the key and size of the hash table
+  let location = hashCode(key, this.SIZE);
+  // if the location is empty/undefined, create an obj inside the location and pass in the key, val pair; this will avoid collisons with similar values
+  if (!this.storage[location]) {
+    this.storage[location] = {};
+    this.storage[location][key] = value;
+  } else {
+    // if something does exist in this obj, include the key, val pairs that were passed in the argument
+    this.storage[location][key] = value;
+  }
+};
+let hash = new HashTable();
+console.log(hash.set('Edwin','awesome')); 
+console.log(hash.set('dann','awesome')); 
+console.log(hash);
+
+
+HashTable.prototype.remove = function(key) {
+  // search for the location of the key
+  let location = hashCode(key, this.SIZE);
+  // will keep track if a key exists
+  let count = 0;
+ // iterate through obj and check to see if the key passed in exists
+  for (let prop in this.storage[location]) {
+    if (key === prop) {
+      // if the count remains 0, then the key does not exist in the hash table
+      count++;
+    }
+  }
+   // if key does not exist in the storage obj return undefined
+  if (!count) return;
+  let remvoedItem = this.storage[location][key];
+  delete this.storage[location][key];
+  return remvoedItem;
+};
+console.log(hash.remove('Edwin'));
+console.log(hash.remove('george'));
+console.log(hash);
 
 
 // YOUR CODE ABOVE
