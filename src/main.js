@@ -25,13 +25,14 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   let hashKey = hashCode(key, this.SIZE);
-   if (this.storage[hashKey] === null ){
-    this.storage[hashKey][key] = value;
-   } else {
-   this.storage[hashKey][key] = value;
-   }
-   this.items++;
-   return this.items;
+  if (this.storage[hashKey] === undefined){
+    this.storage[hashKey]= {};
+   } 
+  if (!this.storage[hashKey][key]){
+  this.items++;
+  }
+  this.storage[hashKey][key] = value;
+  return this.items;
 };
 
 /**
@@ -84,3 +85,9 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let hash = new HashTable();
+console.log(hash.set('happy', '5'));
+console.log(hash.set('happy', '6'));
+console.log(hash.get('happy'));
+console.log(hash.remove('happy'));
