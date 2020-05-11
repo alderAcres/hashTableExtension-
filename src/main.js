@@ -9,6 +9,13 @@ function HashTable() {
   this.SIZE = 16;
 
   this.storage = new Array(this.SIZE);
+
+  // make new property
+  let occupiedBucket = 0;
+  for (let bucket of this.storage) {
+    if (bucket !== undefined) occupiedBucket++;
+  }
+  this.occupied = occupiedBucket;
 }
 
 /**
@@ -27,6 +34,14 @@ HashTable.prototype.set = function (key, value) {
   // only 1 arg
   if (value === undefined) return 'Must enter 2 args';
 
+  // type issues
+  if (
+    typeof value !== 'number' &&
+    typeof value !== 'string' &&
+    typeof value !== 'boolean'
+  ) {
+    return undefined;
+  }
   const hashedIndex = hashCode(key, this.SIZE);
   // if bucket is empty
   // pushing both key:value pair to resolve collision
@@ -34,12 +49,13 @@ HashTable.prototype.set = function (key, value) {
     // can't figure out how to combine line 32 with 33...   this.storage[hashedIndex] = {key: value} does not work
     this.storage[hashedIndex] = {};
     this.storage[hashedIndex][key] = value;
-    return;
+
+    return ++this.occupied;
   }
   // if bucket already exists, either add a new key:value pair or overwrite existing key value
   else {
     this.storage[hashedIndex][key] = value;
-    return;
+    return this.occupied;
   }
 };
 
@@ -77,7 +93,6 @@ HashTable.prototype.get = function (key) {
  * @return {string|number|boolean} The value deleted from the hash table
  */
 
-// return void
 HashTable.prototype.remove = function (key) {
   // no input
   if (key === undefined) return 'Must pass in key';
@@ -90,25 +105,33 @@ HashTable.prototype.remove = function (key) {
   ) {
     return undefined;
   }
-
-  // If it's only one pair in the bucket, reinitiate bucket to undefined.
-  if (Object.keys(this.storage[hashIndex]).length === 1) {
-    this.storage[hashIndex] = undefined;
-    return;
-  }
-  // otherwise just delete the key:value pair in the bucket
+  // store value before deleting
+  const toDelete = this.storage[hashIndex][key];
   delete this.storage[hashIndex][key];
-  return;
+  // if that bucket is now empty, reinitiate to undefined so set() will function properly
+  if (Object.keys(this.storage[hashIndex]).length === 0) {
+    this.storage[hashIndex] = undefined;
+    // decrement count
+    this.occupied--;
+  }
+  return toDelete;
 };
 
 // testing
 
 // const hashTable = new HashTable();
 // hashTable.set(1, '5');
-// hashTable.set(2, '7');
+// hashTable.set(2, '2');
 // console.log(hashTable.remove(1));
 // console.log(hashTable.remove(2));
-// hashTable.set(6, 'hi');
+// console.log(hashTable);
+// // console.log(hashTable.remove(2));
+// // hashTable.set(6, 'hi');
+// console.log(hashTable.storage); // -> should return just one bucket with {'6' : 'hi'}
+// console.log(hashTable.remove(2));
+// console.log(hashTable.storage);
+
+// hashTable.set(1, '5');
 // console.log(hashTable.storage);
 
 // Do not modify
@@ -126,14 +149,6 @@ function hashCode(string, size) {
 
   return Math.abs(hash) % size;
 }
-
-// const hashTable = new HashTable();
-// hashTable.set(1, '5');
-// hashTable.set(2, '7');
-// hashTable.set('z', 'hello');
-// console.log(hashTable.get(2));
-
-// console.log(hashTable.storage);
 
 // Do not remove!!
 module.exports = HashTable;
