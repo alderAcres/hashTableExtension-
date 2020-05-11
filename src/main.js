@@ -70,9 +70,10 @@ HashTable.prototype.get = function(key) {
 HashTable.prototype.remove = function(key) {
 	let hash = hashCode(key, this.SIZE);
 	console.log(this.storage);
-	//if the
+	let savedKey = this.storage[hash][key];
 	if (!this.storage[hash][key]) return undefined;
 	delete this.storage[hash][key];
+	return savedKey;
 };
 
 // Do not modify
