@@ -25,7 +25,6 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   const index = hashCode(key, this.SIZE);
-  // const obj = this.storage[index];
   if(this.storage[index]) {
     this.storage[index][key] = value;
   } else {
