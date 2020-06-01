@@ -62,10 +62,11 @@ HashTable.prototype.set = function (key, value) {
 };
 
 HashTable.prototype.remove = function (key) {
-  if (this.SIZE > 16 && this.items - 1 === 0.25 * this.SIZE) {
+  if (this.SIZE > 16 && this.items - 1 === Math.floor(0.25 * this.SIZE)) {
     this.SIZE /= 2;
     this.items = 0;
 
+    //rehasing everything by creating a temporary object
     const temp = {};
     for (let i in this.storage) {
       if (this.storage[i] !== undefined) {
@@ -76,6 +77,7 @@ HashTable.prototype.remove = function (key) {
       }
     }
 
+    //add new objects from the temp to this.storage
     for (let i in temp) {
       let index = hashCode(i, this.SIZE);
 
