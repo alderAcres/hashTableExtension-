@@ -11,6 +11,29 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+function LinkedList() {
+  this.head = null;
+  this.tail = null;
+}
+
+function Node(val) {
+  this.value = val; 
+  this.next = null;
+}
+
+LinkedList.prototype.push = function(value) {
+  let newNode = new Node(value);
+
+  if (this.head == null) {
+    this.head = newNode;
+    this.tail = newNode;
+  } else {
+    this.tail.next = newNode;
+    this.tail = newNode;
+  }
+}
+
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,7 +47,34 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+<<<<<<< Updated upstream
 
+=======
+  // use hashcode to get hashed address
+  let address = hashCode(key, this.SIZE)
+  // console.log(`address ${address}`);
+  let linkedList = new LinkedList()
+
+  // if there is a collision, add to linked list
+  this.storage[address] = linkedList.push(value);
+
+  console.log(linkedList);
+
+  // get count of keys in hash table
+  let hashCount = Object.keys(this.storage).length;
+  // get count of linked list values within has table
+  for (const key in this.storage) {
+    for (const keyL in this.storage[key]) {
+        
+      }
+    }
+  }
+
+  
+  
+  // return how many keys in hash table
+  return Object.keys(this.storage).length;
+>>>>>>> Stashed changes
 };
 
 /**
