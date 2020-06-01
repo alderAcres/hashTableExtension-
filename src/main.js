@@ -32,6 +32,9 @@ HashTable.prototype.set = function (key, value) {
     this.storage[index] = {};
   }
   //simply add a new key value pair to the object
+  if (this.storage[index][key]) {
+    --this.items;
+  }
   this.storage[index][key] = value;
   return ++this.items;
 };
