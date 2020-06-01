@@ -42,6 +42,15 @@ HashTable.prototype.set = function(key, value) {
     newObj[key] = value;
     realArray[hashIndex] = newObj;
   }
+
+  let counter = 0;
+  for (let prop in newArray) {
+    if (newArray[prop]) {
+      counter++;
+    }
+  }
+
+  return counter;
 };
 
 /**
