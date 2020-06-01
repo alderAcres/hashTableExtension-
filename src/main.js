@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.numItems = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +23,12 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  const hashedAddress = hashCode(key, this.SIZE);
+  if (this.storage[hashedAddress] === undefined) this.storage[hashedAddress] = {};
+  if (this.storage[hashedAddress][key] === undefined) this.numItems += 1;
+  this.storage[hashedAddress][key] = value;
+  return this.numItems;
 };
 
 /**
@@ -37,8 +41,9 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function (key) {
+  const hashedAddress = hashCode(key, this.SIZE);
+  return this.storage[hashedAddress][key];
 };
 
 /**
@@ -49,26 +54,43 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
-
+HashTable.prototype.remove = function (key) {
+  const hashedAddress = hashCode(key, this.SIZE);
+  if (this.storage[hashedAddress] === undefined) return undefined;
+  this.numItems -= 1;
+  const removedItem = this.storage[hashedAddress][key];
+  delete this.storage[hashedAddress][key];
+  return removedItem;
 };
 
 
 // Do not modify
 function hashCode(string, size) {
-  'use strict';
-  
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
+    hash &= hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
 // Do not remove!!
 module.exports = HashTable;
+
+// const hash = new HashTable();
+// console.log(hash.storage);
+// console.log(hash.set('aaa', 'blah'));
+// console.log(hash.storage);
+// console.log(hash.get('aaa'));
+// console.log(hash.set('aa', 'dah'));
+// console.log(hash.storage);
+// console.log(hash.get('aa'));
+// console.log(hash.storage);
+// console.log(hash.remove('aaa'));
+// console.log(hash.storage);
+// console.log(hash.remove('aa'));
+// console.log(hash.storage);
