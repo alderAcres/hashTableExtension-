@@ -24,8 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+   let arrayIndex = hashCode(key, this.SIZE)
+   arrayIndex
+   if (this.storage[arrayIndex]){
+    this.storage[arrayIndex][key] = value
+   } else {
+     let newObject = {}
+     newObject[key] = value
+    this.storage[arrayIndex] = newObject  
+  } 
+   
 };
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +49,16 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+    let arrayIndex = hashCode(key, this.SIZE);
+    let object = this.storage[arrayIndex]
+     
+    for (let prop in object){
+      if (prop === key){
+        return object[prop]
+      }
+    }
 
+    return false
 };
 
 /**
@@ -50,6 +70,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let arrayIndex = hashCode(key, this.SIZE);
+  let object = this.storage[arrayIndex]
+  console.log(object)
+
+  if(!object){
+    return undefined
+  }
+
+  for (let prop in object){
+    if (prop === key){
+      delete object[prop]
+    }
+  }
 
 };
 
@@ -72,3 +105,15 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+const phoneNumbers = new HashTable()
+phoneNumbers.set('Anthony',9179969715)
+phoneNumbers.set('Police',911)
+console.log(phoneNumbers.get('Anthony'))
+console.log(phoneNumbers.remove('Anthony'))
+console.log(phoneNumbers.get('Anthony'))
+console.log(phoneNumbers.set('Anthony',917))
+console.log(phoneNumbers.set('Anthon',918))
+console.log(phoneNumbers.set('davi',918))
+console.log(phoneNumbers.get('davi',918))
+console.log(phoneNumbers)
