@@ -14,7 +14,46 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  this.itemsNum = 0;
+  this.keysUsed = [];
+}
 
+HashTable.prototype.set = function (key, value) {
+  const ind = hashCode(key, this.SIZE);
+  //handling collision using the object for each element of array this.storage
+  if (this.storage[ind] === undefined) {
+    const obj = {};
+    obj[key] = value;
+    this.storage[ind] = obj;
+    this.keysUsed.push(key);
+    this.itemsNum++;
+  } else {
+    //overwriting the value if key is the same
+    if (this.keysUsed.includes(key)) this.storage[ind][key] = value;
+    else {
+      this.storage[ind][key] = value;
+      this.keysUsed.push(key);
+      this.itemsNum++;
+    }
+  }
+  // return this.itemsNum;
+
+  if (this.itemsNum > 0.75 * this.SIZE) {
+    this.SIZE *= 2;
+    for (elem of this.storage) {
+      const obj = elem;
+      //rehashing what was already stored in the hashtable
+      for (let [k, v] of Object.entries(obj)) {
+        const ind = hashCode(k, this.SIZE);
+        this.storage[ind][k] = v;
+      }
+    }
+  }
+  return temp;
+};
 
 
 // YOUR CODE ABOVE
