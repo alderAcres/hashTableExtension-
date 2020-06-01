@@ -23,8 +23,22 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+HashTable.prototype.set = function(key, value, items = 0, store = {}) {
+  //using the key string, find the location where this should be stored
+  //store the value in that location
+  //if another val is in the location, what then?
 
+ let location = hashCode(key, this.SIZE);
+
+if (this.storage[location] === undefined) {
+  store[key] = value;
+this.storage[location] = store;
+}
+else if (store !== {}) {
+store[key] = value;
+}
+ items++;
+ return items;
 };
 
 /**
@@ -38,7 +52,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let location = hashCode(key, this.SIZE);
+  let value = this.storage[location];
+  return value[key];
 };
 
 /**
@@ -50,7 +66,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let location = hashCode(key, this.SIZE);
+  let value = this.storage[location];
+  console.log(value)
+  if (key) {
+  const deleted = value;
+  delete value;
+  console.log(deleted)
+  return deleted;
+  }
 };
 
 
@@ -69,6 +93,19 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+let hashTable = new HashTable();
+console.log(hashTable.set('key', 'value'));
+console.log(hashTable);
+hashTable.set('first key', 'first value');
+console.log(hashTable);
+hashTable.set('code', 'smith');
+console.log(hashTable);
+console.log(hashTable.get('key')) // 'value'
+console.log(hashTable.storage.length); //16
+console.log(hashTable.remove('first key'));
+console.log(hashTable);
+
 
 // Do not remove!!
 module.exports = HashTable;
