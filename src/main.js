@@ -36,6 +36,8 @@ HashTable.prototype.set = function (key, value) {
 
   else { this.storage[locationNum][key] = value }
 
+  return Object.keys(this.storage[locationNum]).length ;
+
 };
 
 
@@ -65,15 +67,15 @@ HashTable.prototype.get = function (key) {
 
 
 };
-// let result = new HashTable();
+let result = new HashTable();
 
-// result.set("1", 3);
-// result.set("J", 7)
-
-
+result.set("1", 3);
+result.set("J", 7)
 
 
-// console.log(result.get('J'))
+
+
+console.log(result.get('J'))
 
 
 
