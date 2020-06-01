@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +23,21 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+HashTable.prototype.set = function (key, value) {
+  //hashCode(key) will throw error of key is an object
+  //key should only be primitive data type
+  if (typeof key !== 'string' && typeof key !== 'number' && typeof key !== 'boolean'
+    || value === undefined) {
+    return;
+  }
 
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash]) this.storage[hash][key] = value;
+  else this.storage[hash] = { [key]: value }
+  return this.storage.reduce((acc, obj) => {
+    if (obj) return acc + Object.keys(obj).length;
+    else return acc;
+  }, 0);
 };
 
 /**
@@ -37,8 +50,19 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
+HashTable.prototype.get = function (key) {
+  try {
+    if (typeof key !== 'string' && typeof key !== 'number' && typeof key !== 'boolean') {
+      return;
+    }
 
+    return this.storage[hashCode(key, this.SIZE)][key];
+  }
+  catch (e) {
+    //if this.storage has no object at hashCode 
+    //func will throw error trying to read property of undefined
+    if (!this.storage[hashCode(key, this.SIZE)]) return undefined;
+  }
 };
 
 /**
@@ -49,7 +73,18 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function (key) {
+  try {
+    if (typeof key !== 'string' && typeof key !== 'number' && typeof key !== 'boolean') {
+      return;
+    }
+    const hash = hashCode(key, this.SIZE);
+    const value = this.storage[hash][key];
+    delete this.storage[hash][key];
+    return value;
+  } catch (e) {
+    if (!this.storage[hashCode(key, this.SIZE)]) return undefined;
+  }
 
 };
 
@@ -57,18 +92,43 @@ HashTable.prototype.remove = function(key) {
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
 // Do not remove!!
 module.exports = HashTable;
+
+const hashTable = new HashTable();
+console.log('test this.set()')
+console.log(hashTable.set('a', 'testA'));
+console.log(hashTable.set('key2', 'test2'));
+console.log(hashTable.set(0, 'test0'));
+console.log(hashTable.set('1', 'test1'));
+
+console.log(hashTable.set([1], 'array'))
+console.log(hashTable.set([1], 'array'))
+console.log(hashTable.set(3))
+console.log(hashTable.set(undefined, 'testUndefined'))
+
+console.log(hashTable.storage);
+
+console.log('test this.get()')
+console.log(hashTable.get('a'));
+console.log(hashTable.get('1'));
+console.log(hashTable.get('na'));
+
+console.log('test this.remove()')
+console.log(hashTable.remove('b'))
+console.log(hashTable.remove('0'))
+console.log(hashTable.remove('1'))
+console.log(hashTable.storage);
