@@ -64,7 +64,9 @@ HashTable.prototype.remove = function(key) {
   if(!this.storage[index][key]) {
     return undefined;
   } else {
+    let removedItem = this.storage[index][key];
     delete this.storage[index][key];
+    return removedItem;
   }
 };
 
