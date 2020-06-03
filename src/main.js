@@ -8,6 +8,8 @@
 function HashTable() {
   this.SIZE = 16;
   
+  this.counter = 0; // for tracking indexes
+  
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,8 +26,35 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  
+  console.log(key.length);
+  console.log(foo.counter)
+  
+  const keyLength = key.length; // accept the key length
+  const inputValue = value  // input value
+
+  // calculate key, known size quantity of 16, this.counter
+  // ??recursive func to divide by 2 until can subtract from Hastable.size
+  const hashKey = foo.counter
+
+  // assign new key/value pair
+  foo.storage[hashKey] = value;
+
+  // increment counter
+  foo.counter++
+
+  // Return new length
+  return foo.counter;
 
 };
+
+// TESTING *****
+const foo = new HashTable();
+foo.set('test', true);
+foo.set('test', 9);
+foo.set('test', 'string');
+console.log(foo);
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -39,7 +68,11 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+
 };
+
+// TESTING
+foo.get()
 
 /**
 * remove - delete a key/value pair from the hash table
