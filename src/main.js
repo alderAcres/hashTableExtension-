@@ -7,8 +7,16 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+
+  //Added an object to every array element. [Using objects as the bucket for HT]
+  for(let i = 0; i < this.SIZE; i++) {
+    this.storage[i] = {};
+  }
+
+  //Total Number of Key/Value pairs (or items) in a bucket. 
+  //Used in set function.
+  this.totalItems = 0;
 }
 
 /**
@@ -24,7 +32,10 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let idx = hashCode(key, this.SIZE);
+  this.storage[idx][key] = value;
+  //Increment total k/v pairs (items) every time its within the idx.
+  return ++this.totalItems;
 };
 
 /**
@@ -38,7 +49,16 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let idx = hashCode(key, this.SIZE);
+  let bucket = this.storage[idx];
 
+  //checks if that index has the key, returns true if key is found.
+  let checkKey = this.storage[idx].hasOwnProperty(key);
+  if(checkKey) {
+    return bucket[key];
+  } else {
+    throw new Error("The Hash Table does not contain this key");
+  }
 };
 
 /**
@@ -50,9 +70,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let idx = hashCode(key, this.SIZE);
+  let bucket = this.storage[idx];
+  //checks if that index has the key
+  let checkKey = this.storage[idx].hasOwnProperty(key);
+  if(checkKey) {
+    delete bucket[key];
+  } else {
+    throw new Error("The Hash Table does not contain this key");
+  }
 };
-
 
 // Do not modify
 function hashCode(string, size) {
@@ -69,6 +96,16 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+//~~~Uncomment to the code run.~~~
+// let ht = new HashTable();
+// ht.set("dan", true); ht.set("dxd", 4); ht.set("may", 3);
+// console.log(ht);
+// ht.get("dan"); ht.get("may");
+// console.log(ht);
+// ht.remove("dan");
+// console.log(ht);
+
 
 // Do not remove!!
 module.exports = HashTable;
