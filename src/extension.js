@@ -15,6 +15,11 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16; // number of hash buckets 
+  this.items = 0
+  this.storage = new Array(this.SIZE);
+}
 
 
 // YOUR CODE ABOVE

@@ -6,8 +6,8 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
-  
+  this.SIZE = 16; // number of hash buckets 
+  this.items = 0
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,12 +24,16 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-  let someValue = hashCode(key, this.SIZE)
-  if (!this.storage[key]) this.storage[key] = someValue  
-  if (this.storage[key]) {
-    // handle hash table collisions using linkedlists
-  }
-  return this.SIZE++
+  // adds value to hash table at key 
+  // hash a key --> returns index where key is in hash table 
+  const hashKey = hashCode(key, this.SIZE)
+  console.log(hashKey)
+  // if key has already been use to store another value write over existing value w/ input value 
+  if (!this.storage[hashKey]) this.storage[hashKey] = {} 
+  // if hash address already contains another key/value pair - handle collisions  
+  else this.storage[hashKey][key] = value 
+  
+  return ++this.items
 };
 
 
@@ -45,9 +49,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-  let returnValue = hashCode(key, this.SIZE)
-  return this.storage[key][returnValue]    
+  // retrieves a value in hash from input key
+  let hashKey = hashCode(key, this.SIZE)
+  // if more than 1 key, return correct value 
+  for (let nestKeys in this.storage[hashKey]) {
+    if (nestKeys === key) return this.storage[hashKey][nestKeys]
+  }
+  return "there is no key present in storage"
 };
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -58,8 +68,10 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-    const keyRemove = hashCode(this.storage[key], this.SIZE)
-    delete keyRemove
+    const hashKey = hashCode(key, this.SIZE)
+    const hashRemove = this.storage[hashkey]
+    items--
+    delete hashRemove
 };
 
 
