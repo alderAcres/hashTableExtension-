@@ -25,7 +25,11 @@ function HashTable() {
 */
 
 HashTable.prototype.set = function(key, value) {
-  this.storage[hashCode(key, this.SIZE)] = value;
+  if(!this.storage[hashCode(key, this.SIZE)]){;
+    this.storage[hashCode(key, this.SIZE)] = {key : value};
+  }else{
+    console.log(" COLLISION FOUND ")
+  }
 };
 
 /**
@@ -40,6 +44,11 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
   let retrieve = hashCode(key, this.SIZE);
+  console.log(hashCode(key, this.SIZE)) 
+  console.log( this.storage[hashCode(key, this.SIZE)])
+  if( retreive ){
+    
+  }
   console.log(" retrieve ", retrieve);
   return this.storage[retrieve];
 };
@@ -53,6 +62,7 @@ console.log( hashed.get("Jack") );
 hashed.set("jetta", "baby" );
 hashed.set("Bella", "vista");
 hashed.set("Terrific", "Mantra");
+hashed.set("jetta", "blue");
 
 console.log( hashed.storage );
 
