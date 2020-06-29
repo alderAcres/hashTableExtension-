@@ -15,22 +15,34 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+/* I don't have time to actually implement this, so I'll just talk through my thinking briefly
+ First thought is that this seems incredibly computationally expensive. Re-sizing requires re-computing
+ every single hash value, then rewriting each of those values to a new array. For a large array that may
+ set and remove in chunks, the re-sizing would happen frequently. Our original object method seems for the
+ most efficient for the way Javascript works. OR! better yet: hash every value with some algo that promises
+ extremely low collision rates, and just use the hash as a key directly on an object or Map. All that said:
 
+ Every set method needs to first compute the ratio of this.LENGTH to this.size. If it crosses the threshold,
+ we instantiate a new temporary array that we will be reassigning to this.storage. Then iterate over the current
+ storage array, and at each index, iterate through the object.keys, rehashing each key and assigning it's value
+ into the new array we created. Then update the this.LENGTH property
+
+ Do the reverse for remove, essentially (checking after deleting)
+
+*/
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
-  'use strict';
-  
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
+    hash = (hash << 5) - hash + letter;
+    hash &= hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
