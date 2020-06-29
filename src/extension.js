@@ -53,7 +53,7 @@ HashTable.prototype.set = function(key, value) {
     this.counter++; // add to the counter to keep track of length
   }
 
-  // perform check to see if over half the length
+  // perform check to see if the hashtable is over 50% filled
   if (this.counter > this.SIZE/2){
     // resize that hashtable
     this.SIZE = 32
