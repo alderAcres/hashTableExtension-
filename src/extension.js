@@ -57,7 +57,7 @@ HashTable.prototype.set = function(key, value) {
   // perform check to see if the hashtable is over 50% filled
   if (this.counter > this.SIZE/2){
     // resize that hashtable
-    this.SIZE = 32
+    this.SIZE = this.SIZE * 2;
     // rehash everything that existed with the new size. Delete all values inside the array currently, and rehash them
     for (const pair of this.storage){
       // if not undefined, go through
@@ -123,6 +123,39 @@ HashTable.prototype.remove = function(key) {
   delete this.storage[hash][key];
   // return that variable
   this.counter--
+
+
+  // EXTENSION: Create conditional, if after removing, the counter is less than 25% of the total length, then resize the hashtable to 50% of the size, and rehash
+  if ((this.counter < this.SIZE/4) && this.SIZE > 16 ){
+    // resize that hashtable
+    this.SIZE = this.SIZE/2;
+    // rehash everything that existed with the new size. Delete all values inside the array currently, and rehash them
+    for (const pair of this.storage){
+      // if not undefined, go through
+      if (pair){
+        for (let key in pair){
+          let temp = pair[key] // store the value of the key that will be deleted
+          delete pair[key]; // delete all values inside
+          // rehash the value
+          let newHash = hashCode(key, this.SIZE);
+            // if there is already an existing key, then we just add the new key value pair
+            if (this.storage[newHash]){
+              this.storage[newHash][key] = temp;
+            } else{ // if there is no existing key, we must create an empty object then insert the key value pair
+              this.storage[newHash] = {} // create an empty object if nothing exists at location
+              this.storage[newHash][key] = temp;
+            }
+        }
+      } else{
+        continue;
+      }
+    }
+  }
+
+
+
+
+
   return returnVar
 };
 
@@ -199,10 +232,25 @@ hashTable.set("twelve", 12)
 //console.log(hashTable)
 
 
-
 // Testing new set functionality
 console.log(hashTable.counter)
 console.log(hashTable) // should double the size and reassign the hashcode values
+
+// Testing new remove functionality
+
+hashTable.remove('twelve')// checking remove
+hashTable.remove('eleven')// checking remove
+hashTable.remove('ten')// checking remove
+hashTable.remove('nine')// checking remove
+hashTable.remove('eight')// checking remove
+hashTable.remove('seven')// checking remove
+hashTable.remove('six')// checking remove
+hashTable.remove('five')// checking remove
+hashTable.remove('four')// checking remove
+hashTable.remove('three')// checking remove
+
+
+console.log(hashTable) // should resize and rehash to 16 elements
 
 // Do not remove!!
 module.exports = HashTable;
