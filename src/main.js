@@ -94,11 +94,11 @@ function hashCode(string, size) {
 }
 
 /** Testing **/
-let testHT = new HashTable();
-console.log('1 item ' + testHT.set('one', 1));
-console.log('2 items ' + testHT.set('two', 2));
-testHT.set('hi', 'hola');
-testHT.set('truth', true);
+// let testHT = new HashTable();
+// console.log('1 item ' + testHT.set('one', 1));
+// console.log('2 items ' + testHT.set('two', 2));
+// testHT.set('hi', 'hola');
+// testHT.set('truth', true);
 
 // console.log(testHT);
 // console.log(testHT.get('one'));
@@ -106,10 +106,10 @@ testHT.set('truth', true);
 // console.log(testHT.get('truth'));
 // console.log(typeof testHT.get('truth'));
 
-console.log(testHT.remove('hi'));
-console.log(testHT.remove('truth'));
+// console.log(testHT.remove('hi'));
+// console.log(testHT.remove('truth'));
 
-console.log(testHT);
+// console.log(testHT);
 
 // Do not remove!!
 module.exports = HashTable;
