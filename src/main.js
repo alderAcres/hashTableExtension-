@@ -7,8 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  // this.storage refers to the new Hash Table being created
 }
 
 /**
@@ -24,7 +24,23 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // create a new hash address using the hashcode function from below
+  const hashKey = hashCode(key, this.SIZE);
+  // check the hash again to see if the created hash address has already been used;
+  if (this.storage[hashKey]) {
+    let index = 0;
+    // use an index to loop through all key/value pairs stored at hash address
+    while (this.storage[hashKey][index] !== undefined) {
+      // increment index until an empty index is found
+      index += 1;
+    }
+    // store new key/value pair in hashTable at hashKey address at empty index
+    this.storage[hashKey][index] = {};
+    this.storage[hashKey][index][key] = value
+  }
+  // store the key value pair in the hashTable at calculated address
+  this.storage[hashKey] = {};
+  this.storage[hashKey][key] = value;
 };
 
 /**
@@ -38,7 +54,20 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // lookup the hash address using the passed in key
+  const hashKey = hashCode(key, this.SIZE);
+  // check the hash table for the data at address
+  const retrieved = this.storage[hashKey];
+  // check if retrieved data has more than one key/value pairs;
+  if (retrieved.length > 0) { 
+    // loop through until correct key is found
+    for (let i = 0; i < retrieved.length; i += 1) {
+      if (retrieved[i].hasOwnProperty(key)) {
+        return retrieved[i][key];
+      }
+    }
+  }
+  return retrieved;
 };
 
 /**
@@ -50,7 +79,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // create a hashaddress from the passed in key
+  const hashKey = hashCode(key, this.SIZE);
+  // check the hashTable for the hashKey, if not defined return undefined
+  if (!this.storage[hashKey]) return undefined;
+  // else, store key to be deleted in a variable, then delete key
+  const removedKey = this.storage[hashKey];
+  delete this.storage[hashKey];
+  // return the variable hlding the deleted key
+  return removedKey;
 };
 
 
@@ -69,6 +106,7 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
 
 // Do not remove!!
 module.exports = HashTable;
