@@ -6,8 +6,8 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
   
+  this.SIZE = 16;  
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +23,9 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+HashTable.prototype.set = function(key, value) {
+  this.storage[hashCode(key, this.SIZE)] = value;
 };
 
 /**
@@ -38,9 +39,24 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let retrieve = hashCode(key, this.SIZE);
+  console.log(" retrieve ", retrieve);
+  return this.storage[retrieve];
 };
 
+let hashed = new HashTable();
+
+hashed.set("Jack", "Crish");
+
+console.log( hashed.get("Jack") );
+
+hashed.set("jetta", "baby" );
+hashed.set("Bella", "vista");
+hashed.set("Terrific", "Mantra");
+
+console.log( hashed.storage );
+
+console.log(hashed.get("Bella"), hashed.get("jetta"), hashed.get("Jack"))
 /**
 * remove - delete a key/value pair from the hash table
 *
