@@ -67,8 +67,27 @@ console.log(hashed.get("Bella"), hashed.get("jetta"), hashed.get("Jack"))
 */
 HashTable.prototype.remove = function(key) {
 
+  //using delete on an array will allow retaining empty cells.
+  //double check if length is modified. If not you will need to manually update
+  //each get/set.
+
+  let del = hashCode(key, this.SIZE);
+
+  console.log( 'delete this item ', this.storage[del]);
+  delete this.storage[del];
+
+  console.log( this.storage.length, this.storage );
+  return this.storage;
+
 };
 
+hashed.remove("jetta");
+
+console.log( hashed.storage)
+
+hashed.remove("Terrific");
+
+console.log(hashed.storage.length, hashed.storage);
 
 // Do not modify
 function hashCode(string, size) {
