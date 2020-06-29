@@ -1,3 +1,5 @@
+//const { delete } = require("request");
+
 /**
 * HashTable costructor
 *
@@ -7,7 +9,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +25,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // pass key and this.size into hashCode() to determine location.
+  const location = hashCode(key, this.size);
+  // assign the key/value pair to the location.
+    // location should be an object so as to handle collisions.
+      // test if object, if yes, add key/value. If no, initialize to object, then add.
+  if (typeof this.storage[location] !== 'object') this.storage[location] = {};
+  this.storage[location][key] = value;
 };
 
 /**
@@ -38,7 +45,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // pass key and this.size into hashCode() to determine location.
+  const location = hashCode(key, this.size);
+  // return the value associated with key at the hashCode location on the storage array.
+  return this.storage[location][key];
 };
 
 /**
@@ -50,7 +60,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // pass key and this.size into hashCode() to determine location.
+  const location = hashCode(key, this.size);
+  // grab value of key at location
+  const value = this.storage[location][key]
+  // if value is not undefined, delete it.
+  if (value) delete this.storage[location][key];
+  return value;
 };
 
 
@@ -72,3 +88,10 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+console.log(HashTable.storage);
+console.log();
+console.log();
+console.log();
+console.log();
+
