@@ -48,23 +48,8 @@ HashTable.prototype.set = function (key, value) {
   // then set the key value pair within the object of this.storage[index]
   this.storage[index][key] = value;
 
-  //  - If adding the new item will push the number of stored items to over 75% of
-  // the hash table's SIZE, then double the hash table's SIZE and rehash everything
+  this.rehash("expand")
 
-  // Strategy:
-  // Be able to check if the stored items are over 75% of this.SIZE
-      // loop through this.storage to count if the number of stored item is more than > this.SIZE * .75
-  // If yes, rehash everything by rehashing everything
-  if (this.storage.filter(item => !(!item)).length > (this.SIZE * 0.75)) {
-    let newStorage = []
-    for(let chunk of this.storage) {
-      for(let item in chunk) {
-        newStorage.set(item, chunk[item])
-      }
-    }
-    this.SIZE *= 2
-    this.storage = newStorage
-  }
 };
 
 /**
@@ -95,7 +80,35 @@ HashTable.prototype.remove = function (key) {
   const index = hashCode(key, this.SIZE);
   if (!this.storage[index]) return undefined;
   else delete this.storage[index][key];
+
+  this.rehash("shrink")
 };
+
+HashTable.prototype.rehash = function (expand) {
+  // Strategy:
+  // Be able to check if the stored items are over 75% of this.SIZE or less than 25% of this.SIZE
+      // loop through this.storage to count if the number of stored item is > this.SIZE * .75 or < this.SIZE * .25
+  // If yes, rehash everything by rehashing everything
+  let currStorage = this.storage.filter(item => !(!item))
+  // console.log("curr", currStorageSize.length)
+  if (currStorage.length < this.SIZE * 0.25 || currStorage.length >  this.SIZE * 0.75) {
+    let newStorage = []
+    for (let chunk of currStorage) {
+      let index;
+      for (let key in chunk) {
+        index = hashCode(`${key}`, expand === "expand" ? this.SIZE * 2 : this.SIZE / 2);
+        // if nothing exists within the storage, set this.storage[index] to be equal to an empty object
+        if (newStorage[index] === undefined) newStorage[index] = {};
+        // then set the key value pair within the object of this.storage[index]
+        newStorage[index][key] = chunk[key];
+      }
+    }
+  // double the hash table's SIZE
+    expand === "expand" ? this.SIZE *= 2 : this.SIZE /= 2;
+  // rehash everything by setting this.storage to be a copy of the newStorage
+    this.storage = [...newStorage]
+  }
+}
 
 // YOUR CODE ABOVE
 
@@ -113,6 +126,16 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+let hashTable = new HashTable();
+
+hashTable.set("lucy", "says hi")
+hashTable.set("justin", "says hello")
+// hashTable.set("luis", "says ello")
+
+console.log(hashTable.get("lucy"))
+console.log(hashTable.get("justin"))
+// console.log(hashTable.get("luis"))
+console.log(hashTable)
 
 // Do not remove!!
 module.exports = HashTable;
