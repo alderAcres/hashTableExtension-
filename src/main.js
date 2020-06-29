@@ -1,3 +1,5 @@
+// const { delete } = require("request");
+
 /**
 * HashTable costructor
 *
@@ -24,7 +26,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // make hashkey with hash function
+  const hashKey = hashCode(key, this.SIZE);
+  // add hashkey to hastable
+  const has = Object.prototype.hasOwnProperty; // cache the lookup once, in module scope.
+  // check if in the storage, if not add new object as haskey value, then add key:value inside
+  if (has.call(this.storage, hashKey)) {
+    this.storage[hashKey][key] = value;
+  } else {
+    this.storage[hashKey] = {};
+    this.storage[hashKey][key] = value;
+  }
 };
 
 /**
@@ -38,7 +50,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // make hashkey to check storage
+  const hashKey = hashCode(key, this.SIZE);
+  // check if hashkey exists in the storage, return value if true, string if otherwise
+  const has = Object.prototype.hasOwnProperty; // cache the lookup once, in module scope.
+  if (has.call(this.storage, hashKey)) {
+    return this.storage[hashKey][key];
+  }
+  return 'key not found, archives must be incomplete';
 };
 
 /**
@@ -50,7 +69,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // make hashkey to check storage
+  const hashKey = hashCode(key, this.SIZE);
+  // check if hashkey exists in the storage, delete key:value, return string if otherwise
+  const has = Object.prototype.hasOwnProperty; // cache the lookup once, in module scope.
+  if (has.call(this.storage, hashKey)) {
+    delete this.storage[hashKey][key];
+  }
 };
 
 
