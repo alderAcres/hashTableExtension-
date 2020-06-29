@@ -14,7 +14,26 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(key, this.SIZE);
 
+  if(this.storage[hash]){
+     this.storage[hash][key] = value;
+    }
+  else{
+     this.storage[hash] = {};
+     this.storage[hash][key] = value ; 
+    } 
+    
+    let newSIZE= this.SIZE * 2;
+    let newHash = hashCode(key, newSIZE);
+
+  if(this.storage.length > this.storage.length * 0.75){
+  
+    this.storage[hash][key] = this.storage[newHash][key]
+  }
+
+};
 
 
 // YOUR CODE ABOVE
