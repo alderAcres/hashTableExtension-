@@ -10,7 +10,8 @@ function HashTable() {
   
   this.storage = new Array(this.SIZE);
 }
-
+ const hash = new HashTable();
+ 
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,8 +25,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // create a const that is the result of the hashCOde with key passed in as it string param and this.size as size param
+  const hashNum = hashCode(key, this.SIZE);
+// if the hashNum index is empty make its value a empty object
+  if (!this.storage[hashNum]) {this.storage[hashNum] = {} };
+  // store key and val as a pair inside of the object at the hashNum index
+  this.storage[hashNum][key] = value;
 };
+hash.set('bob', 5);
+hash.set('john', 6);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +46,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // create a const that is the index in the array at which the key : val pair resides
+  const hashNum = hashCode(key, this.SIZE);
+  // return the value associated with the key at the stoarge array's hashnum index
+  return this.storage[hashNum][key] 
 };
 
 /**
@@ -50,7 +61,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // create a const that is the index in the array at which the key : val pair resides
+  const hashNum = hashCode(key, this.SIZE);
+  // create a const that is the value associated with the key at the stoarge array's hashnum index
+  const keep = this.storage[hashNum][key];
+  // delete this hashNum property from the storage array 
+  delete this.storage[hashNum][key]  
+  // return keep
+  return keep
 };
 
 
