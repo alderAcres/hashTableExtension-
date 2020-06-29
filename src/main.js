@@ -1,74 +1,110 @@
+/* eslint-disable no-bitwise */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-use-before-define */
 /**
-* HashTable costructor
-*
-* construct a new hash table
-*
-* - You may modify this constructor as you need to achieve the challenges below.
-*/
+ * HashTable costructor
+ *
+ * construct a new hash table
+ *
+ * - You may modify this constructor as you need to achieve the challenges below.
+ */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
 /**
-* set - Adds given value to the hash table with specified key.
-*
-* - If the provided key has already been used to store another value, simply overwrite
-*   the existing value with the new value.
-* - If the hashed address already contains another key/value pair, you must handle
-*   the collision appropriately.
-*
-* @param {string} key - key to be used to create hashed address
-* @param {string|number|boolean} value - value to be stored in hash table
-* @return {number} The new number of items stored in the hash table
-*/
-HashTable.prototype.set = function(key, value) {
-
+ * set - Adds given value to the hash table with specified key.
+ *
+ * - If the provided key has already been used to store another value, simply overwrite
+ *   the existing value with the new value.
+ * - If the hashed address already contains another key/value pair, you must handle
+ *   the collision appropriately.
+ *
+ * @param {string} key - key to be used to create hashed address
+ * @param {string|number|boolean} value - value to be stored in hash table
+ * @return {number} The new number of items stored in the hash table
+ */
+HashTable.prototype.set = function (key, value) {
+  // assign new variable hash which wil invoke hashCode and spit out a random number between 1 and 16
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash]) {
+    // if the key at that hash has already been used to store a value, overwrite value with new value
+    this.storage[hash][key] = value;
+  } else {
+    // if the hash already contains another key/value pair, handle the collision by adding another object with they key value pair assigned there
+    this.storage[hash] = {};
+    this.storage[hash][key] = value;
+  }
 };
 
 /**
-* get - Retrieves a value stored in the hash table with a specified key
-*
-* - If more than one value is stored at the key's hashed address, then you must retrieve
-*   the correct value that was originally stored with the provided key
-*
-* @param {string} key - key to lookup in hash table
-* @return {string|number|boolean} The value stored with the specifed key in the
-* hash table
-*/
-HashTable.prototype.get = function(key) {
-
+ * get - Retrieves a value stored in the hash table with a specified key
+ *
+ * - If more than one value is stored at the key's hashed address, then you must retrieve
+ *   the correct value that was originally stored with the provided key
+ *
+ * @param {string} key - key to lookup in hash table
+ * @return {string|number|boolean} The value stored with the specifed key in the
+ * hash table
+ */
+HashTable.prototype.get = function (key) {
+  // declare a variable hash that will invoke the hashcode function and spit out number from 1-16
+  const hash = hashCode(key, this.SIZE);
+  // direct lookup at that hash index
+  const spot = this.storage[hash][key];
+  return spot;
 };
 
 /**
-* remove - delete a key/value pair from the hash table
-*
-* - If the key does not exist in the hash table, return undefined
-*
-* @param {string} key - key to be found and deleted in hash table
-* @return {string|number|boolean} The value deleted from the hash table
-*/
-HashTable.prototype.remove = function(key) {
-
+ * remove - delete a key/value pair from the hash table
+ *
+ * - If the key does not exist in the hash table, return undefined
+ *
+ * @param {string} key - key to be found and deleted in hash table
+ * @return {string|number|boolean} The value deleted from the hash table
+ */
+HashTable.prototype.remove = function (key) {
+  // declare a variable hash that will invoke the hashcode function and spit out number from 1-16
+  const hash = hashCode(key, this.SIZE);
+  // edge case, if key doesn't exist in hash table then return undefined
+  if (!this.storage[hash][key]) {
+    return undefined;
+  }
+  // if the key does exist then delete the key/value pair from hash table
+  // remove method should return the deleted value from the hash table
+  // storing value we want ot delete in removed item
+  const removedItem = this.storage[hash][key];
+  // deleting key/value pair from hash table
+  delete this.storage[hash][key];
+  // returning out the value that we deleted from the hash table
+  return removedItem;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
-  'use strict';
-  
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
+    hash = (hash << 5) - hash + letter;
+    hash &= hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
+let myHash = new HashTable();
+myHash.set('hi', 2);
+myHash.set('hello', 5);
+console.log(myHash);
+myHash.set('hi', 4);
+console.log(myHash);
+console.log(myHash.get('hello'));
+console.log(myHash.remove('hi'));
+console.log(myHash);
+console.log(myHash.remove('hola'));
 // Do not remove!!
 module.exports = HashTable;
