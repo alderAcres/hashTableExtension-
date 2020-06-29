@@ -43,7 +43,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-  let retrieve = hashCode(key, this.SIZE);
+  let retrieve = this.storage[hashCode(key, this.SIZE)];
   console.log(hashCode(key, this.SIZE)) 
   console.log( this.storage[hashCode(key, this.SIZE)])
   if( retreive ){
