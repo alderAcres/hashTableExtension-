@@ -53,6 +53,7 @@ HashTable.prototype.set = function(key, value) {
     this.counter++; // add to the counter to keep track of length
   }
 
+
   // perform check to see if the hashtable is over 50% filled
   if (this.counter > this.SIZE/2){
     // resize that hashtable
@@ -78,7 +79,6 @@ HashTable.prototype.set = function(key, value) {
         continue;
       }
     }
-
   }
 };
 
@@ -113,7 +113,7 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 
-// remove value from the hashTable
+// remove value from the hashTable -- EXTENSION:
 HashTable.prototype.remove = function(key) {
   // generate the hash key to locate the position
   const hash = hashCode(key, this.SIZE);
@@ -180,6 +180,7 @@ hashTable.set("four", 4)
 hashTable.set("five", 5)
 hashTable.set("six", 6)
 hashTable.set("seven", 7)
+console.log(hashTable) // should have the original size of 16
 hashTable.set("eight", 8)
 hashTable.set("nine", 9)
 hashTable.set("ten", 10)
@@ -201,7 +202,7 @@ hashTable.set("twelve", 12)
 
 // Testing new set functionality
 console.log(hashTable.counter)
-console.log(hashTable)
+console.log(hashTable) // should double the size and reassign the hashcode values
 
 // Do not remove!!
 module.exports = HashTable;
