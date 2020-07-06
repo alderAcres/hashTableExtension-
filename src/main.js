@@ -25,10 +25,20 @@ function HashTable() {
 */
 
 HashTable.prototype.set = function(key, value) {
-  if(!this.storage[hashCode(key, this.SIZE)]){;
-    this.storage[hashCode(key, this.SIZE)] = {key : value};
+  
+  const idx = hashCode(key, this.SIZE)
+  let hashed = this.storage[idx];
+  
+  if(!hashed){
+    
+    this.storage[idx] = {
+      [key]: value
+    };
+
   }else{
-    console.log(" COLLISION FOUND ")
+        
+    this.storage[idx][key] = value;
+    
   }
 };
 
@@ -43,28 +53,32 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  console.log("FIND KEY ", key);
   let retrieve = this.storage[hashCode(key, this.SIZE)];
-  console.log(hashCode(key, this.SIZE)) 
-  console.log( this.storage[hashCode(key, this.SIZE)])
-  if( retreive ){
-    
+  
+  console.log("TESTING ", retrieve);
+  if(retrieve[key]){
+    console.log("retrieve ", retrieve[key]);
+    return retrieve[key];
   }
-  console.log(" retrieve ", retrieve);
-  return this.storage[retrieve];
+
 };
 
 let hashed = new HashTable();
 
 hashed.set("Jack", "Crish");
 
-console.log( hashed.get("Jack") );
+//console.log( hashed.get("Jack") );
 
 hashed.set("jetta", "baby" );
 hashed.set("Bella", "vista");
 hashed.set("Terrific", "Mantra");
 hashed.set("jetta", "blue");
+hashed.set("John", "Blevins");
+hashed.set("Paul", "Gotfried");
+hashed.set("Jimm", "Blunder");
 
-console.log( hashed.storage );
+//console.log( hashed.storage );
 
 console.log(hashed.get("Bella"), hashed.get("jetta"), hashed.get("Jack"))
 /**
@@ -83,21 +97,29 @@ HashTable.prototype.remove = function(key) {
 
   let del = hashCode(key, this.SIZE);
 
-  console.log( 'delete this item ', this.storage[del]);
-  delete this.storage[del];
-
-  console.log( this.storage.length, this.storage );
+  //REFACTOR!
+  
+  //console.log( 'delete this item ', this.storage[del]);
+  if(this.storage[del][key]){
+    delete this.storage[del][key];
+  }
+  //console.log( this.storage.length, this.storage );
   return this.storage;
 
 };
 
 hashed.remove("jetta");
-
+hashed.remove("Jimm");
+hashed.set("Jimm", "Blunder");
 console.log( hashed.storage)
-
+console.log(hashed.get("Jack"));
 hashed.remove("Terrific");
+console.log(hashed.storage);
+hashed.remove("Jack");
+console.log(hashed.storage);
 
-console.log(hashed.storage.length, hashed.storage);
+
+//console.log(hashed.storage.length, hashed.storage);
 
 // Do not modify
 function hashCode(string, size) {
