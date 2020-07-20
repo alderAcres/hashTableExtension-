@@ -15,7 +15,60 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function (key, value) {
+  if (Array.isArray(key) || key instanceof Object) {
+    return 'Key provided is an invalid data type';
+  }
+  const index = hashCode(key, this.SIZE);
+  if (this.storage[index] === undefined) {
+    const newObj = {
+      [key]: value,
+    };
+    this.storage[index] = newObj;
+  } else {
+    this.storage[index][key] = value;
+  }
+
+  // Checking if the size of storage array is nore more than 75%
+  const usedSpace = this.storage.filter(el => el !== undefined);
+  if (usedSpace.length > (0.75 * this.SIZE)) {
+    const slicedCopy = this.storage.slice();
+  }
+
+  // Augmenting the size of the this.storage container
+  this.SIZE *= 2;
+  this.storage = new Array(this.SIZE);
+};
+
+HashTable.prototype.get = function (key) {
+  if (Array.isArray(key) || key instanceof Object) {
+    return 'Key provided is an invalid data type';
+  }
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index] || !this.storage[index][key]) {
+    return undefined;
+  }
+  return this.storage[index][key];
+};
+
+HashTable.prototype.remove = function (key) {
+  if (Array.isArray(key) || key instanceof Object) {
+    return 'Key provided is an invalid data type';
+  }
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index] || !this.storage[index][key]) {
+    return undefined;
+  }
+
+  const storedVal = this.storage[index][key];
+  delete this.storage[index][key];
+  return storedVal;
+};
 
 // YOUR CODE ABOVE
 
@@ -36,3 +89,10 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+const myHash = new HashTable();
+myHash.set('City', 'NYC');
+myHash.set('City', 'LA');
+myHash.set('Gotham', 'Batman');
+console.log(myHash);
+
