@@ -1,3 +1,6 @@
+/* eslint-disable no-bitwise */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-restricted-syntax */
 /**
 * HashTable costructor
 *
@@ -5,9 +8,9 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable() {
-  this.SIZE = 16;
-  
+function HashTable(size = 16) {
+  this.SIZE = size;
+  this.length = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +26,11 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  const hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash]) this.storage[hash] = {};
+  this.storage[hash][key] = value;
+  this.length++;
 };
 
 /**
@@ -37,8 +43,11 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function (key) {
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash][key]) {
+    return this.storage[hash][key];
+  }
 };
 
 /**
@@ -49,26 +58,41 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
-
+HashTable.prototype.remove = function (key) {
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash]) {
+    const result = this.storage[hash][key];
+    delete this.storage[hash][key];
+    this.length--;
+    return result;
+  }
+  return undefined;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
-  'use strict';
-  
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
+    hash &= hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
 // Do not remove!!
 module.exports = HashTable;
+
+// Tests
+
+// const hT = new HashTable();
+// for (let i = 0; i < 13; i++) {
+//   hT.set(`key ${i}`, `value ${i}`);
+// }
+// console.log(hT);
+// hT.remove('key 0');
+// console.log(hT.get('key 11'));
+// console.log(hT);
