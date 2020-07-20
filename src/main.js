@@ -7,7 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.originalSize = 16;
+  this.numOfItems = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +25,22 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // Finds address
+  let bucket = hashCode(key, this.SIZE);
+  // Creates bucket if not instantiated and places key-value pair in bucket
+  if (this.storage[bucket] === undefined) {
+    this.storage[bucket] = {};
+    this.storage[bucket][key] = value;
+    this.numOfItems++;
+  } else {
+    // If not overwriting, must increment numOfItems
+    if (!this.storage[bucket][key]) {
+      this.numOfItems++;
+    }
+    // Assigns or overwrites key
+    this.storage[bucket][key] = value;
+  }
+  return this.numOfItems;
 };
 
 /**
@@ -38,7 +54,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // Find address
+  let bucket = hashCode(key, this.SIZE);
+  // Handles empty bucket
+  if (this.storage[bucket] === undefined) {
+    return undefined;
+  } else {
+    return this.storage[bucket][key];
+  }
 };
 
 /**
@@ -50,23 +73,58 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // Find address
+  let bucket = hashCode(key, this.SIZE);
+  // Handles empty buckets
+  if (this.storage[bucket] === undefined) {
+    return undefined;
+  } else {
+    // Handles existing key-value pairs
+    if (this.storage[bucket][key]) {
+      let temp = this.storage[bucket][key];
+      delete this.storage[bucket][key];
+      this.numOfItems--;
+      return temp;
+    } else {
+      // Handles nonexistent key-value pairs
+      return undefined;
+    }
+  }
 };
 
+/* TESTS */
+// let test = new HashTable();
+// test.set("bob", 17);
+// test.set("bnc", 21);
+// test.set("4gf", 36);
+// test.set("iuj", 49);
+// test.set("lop", true);
+// test.set("dog", "sdfg");
+// test.set("cat", 63);
+// test.set("leop", "%%");
+// test.set("gdhef", false);
+// test.set("bcn", 46);
+// console.log(test);
+// console.log(test.get("gasdf"));
+// console.log(test);
+// console.log(test.get("leop"));
+// console.log(test);
+// console.log(test.remove("size"));
+// console.log(test);
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
