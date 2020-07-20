@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +22,25 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  // invoke the hash function with the key, value pair
+  // the evaluated result will be the index at which to place the key, value pair
+  // Traverse to the right index...
+  // if empty, simply create an object and assign that index the value of the newly created object
+  // if the object already has the same key, then overwrite
+  // if the object already has other key, value pairs, then add to the object
+  if (Array.isArray(key) || key instanceof Object) {
+    return 'Key provided is an invalid data type';
+  }
+  const index = hashCode(key, this.SIZE);
+  if (this.storage[index] === undefined) {
+    const newObj = {
+      [key]: value,
+    };
+    this.storage[index] = newObj;
+  } else {
+    this.storage[index][key] = value;
+  }
 };
 
 /**
@@ -37,8 +53,20 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function (key) {
+  // invoke the hash function and pass in the key as an arg to generate the correct index
+  // traverse in the hashtable to the identified index, and access the right key-value pair
+  // if the index is undefined OR the key is undefined
+  // return undefined
+  // else, return the value stored at that key at the index in the hashtable
+  if (Array.isArray(key) || key instanceof Object) {
+    return 'Key provided is an invalid data type';
+  }
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index] || !this.storage[index][key]) {
+    return undefined;
+  }
+  return this.storage[index][key];
 };
 
 /**
@@ -49,24 +77,36 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function (key) {
+  // invoke the hash function and pass in the key as an arg to generate the correct index
+  // traverse in the hashtable to the identified index, and access the right key-value pair
+  if (Array.isArray(key) || key instanceof Object) {
+    return 'Key provided is an invalid data type';
+  }
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index] || !this.storage[index][key]) {
+    return undefined;
+  }
 
+  const storedVal = this.storage[index][key];
+  delete this.storage[index][key];
+  return storedVal;
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
