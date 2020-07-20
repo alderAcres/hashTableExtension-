@@ -2,14 +2,19 @@
 * HashTable costructor
 *
 * construct a new hash table
-*
+* 
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
+  this.SIZE = 10;
   
   this.storage = new Array(this.SIZE);
+  for (let i=0; i<this.SIZE; i++){
+    this.storage[i] = {}
+  }
 }
+const testHash = new HashTable()
+console.log(testHash)
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -23,9 +28,17 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+// adds a value to the hash table
+HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(key, this.SIZE); // get the hash code
+
+  this.storage[hash][key] = value
 };
+
+testHash.set('asdf',3)
+testHash.set('sdfa',5)
+console.log(testHash)
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -37,9 +50,14 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
 
+HashTable.prototype.get = function(key) {
+  const hash = hashCode(key, this.SIZE);
+
+  return this.storage[hash][key]
 };
+
+console.log(testHash.get('sdfa'))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +68,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let hash = hashCode(key, this.SIZE);
 
+  delete this.storage[hash][key]
 };
+
+testHash.remove('asdf')
+console.log(testHash)
 
 
 // Do not modify
