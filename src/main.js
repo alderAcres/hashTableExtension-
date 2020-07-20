@@ -24,7 +24,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const password = hashCode(key, this.SIZE);
 
+  if (!this.storage[password]){
+    const obj = {}
+    obj[key] = value;
+    this.storage[password] = obj;
+  } else {
+    this.storage[password][key] = value;
+  }
 };
 
 /**
@@ -38,7 +46,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const password = hashCode(key, this.SIZE);
+  return this.storage[password][key];
 };
 
 /**
@@ -50,8 +59,24 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const password = hashCode(key, this.SIZE);
 
+  if (!this.storage[password]){ // needs to work on understanding different conditional syntax. This is where a lot of my errors come into play
+    return undefined
+  } else {
+    const remove = this.storage[password][key];
+    delete this.storage[password];
+    return remove;
+  }
 };
+
+
+//It works! :) 
+const x = new HashTable();
+x.set('abc', '123')
+x.remove('abc')
+console.log(x.remove('abc'))
+console.log(x);
 
 
 // Do not modify
