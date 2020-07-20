@@ -24,7 +24,31 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let index = hashCode(key, this.SIZE);
+  //check if index exist
+  if (this.storage[index] === undefined) {
+    this.storage[index] = ([[key, value]]);
+    console.log(this.storage[index])
+  } else {
+    let inStorage = false;
+    for (let i = 0; i < this.storage[index].length; i++) {
+      //check if key exist at this index
+      if (this.storage[index][i][0] === key) {
+        //if it does, rewrite the value
+        console.log(value,key)
+        this.storage[index][i][0] = value;
+        console.log(this.storage[index][i][0])
+        // set inStore to true;
+        inStorage = true;
+      } 
+    }
+    //if inStorage is false
+    if (inStorage === false) {
+      //add new item at the end of this index
+      this.storage[index].push([[key, value]]);
+      console.log(this.storage[index])
+    }
+  }
 };
 
 /**
@@ -38,7 +62,18 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  for (let i = 0; i < this.storage.length; i++) {
+    //check key is in first index
+    if (this.storage[i] !== undefined) {
+      //loop through the array
+      for (let j = 0; j < this.storage[i].length; j++) {
+        //if there is a match, return it
+        if (this.storage[i][j][0] === key) {
+          return this.storage[i][j][1];
+        }
+      }
+    }
+  }
 };
 
 /**
@@ -72,3 +107,11 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+let test = new HashTable();
+test.set('a','b');
+
+console.log(test.get('a'));
+
+
