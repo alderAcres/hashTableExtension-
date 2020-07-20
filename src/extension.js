@@ -14,8 +14,25 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+HashTable.prototype.set = function(key, value) {
+  const index = hashCode(key,this.SIZE); 
+  if (this.storage[index] === undefined) this.storage[index] = {}
+  this.storage[index][key] = value
+  if (this.storage[index] > 12) this.SIZE *= 2
+  this.storage[index][key] = value
 
-
+};
+HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE);
+  const value = this.storage[index][key];
+  delete this.storage[index][key];
+  return value;
+};
 
 // YOUR CODE ABOVE
 
