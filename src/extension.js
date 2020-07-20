@@ -174,7 +174,7 @@ hashTable.remove('value 12');
 hashTable.remove('value 11');
 hashTable.remove('value 10');
 hashTable.remove('value 9');
-// hashTable.remove('value 7');
+hashTable.remove('value 7');
 // hashTable.remove('value 6');
 // hashTable.remove('value 5');
 // hashTable.remove('value 4');
