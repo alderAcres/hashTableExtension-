@@ -1,3 +1,4 @@
+/* eslint-disable lines-around-directive */
 /**
 * HashTable costructor
 *
@@ -7,7 +8,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.count = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +24,11 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  const hashKey = hashCode(key, this.SIZE);
+  this.storage[hashKey] = {};
+  this.storage[hashKey][key] = value;
+  this.count++;
 };
 
 /**
@@ -37,8 +41,9 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function (key) {
+  const hashKey = hashCode(key, this.SIZE);
+  return this.storage[hashKey][key];
 };
 
 /**
@@ -49,26 +54,44 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function (key) {
+  const hashKey = hashCode(key, this.SIZE);
+  if (!this.storage[hashKey]) return undefined;
 
+  const removed = this.storage[hashKey][key];
+  delete this.storage[hashKey][key];
+  return removed;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
+  // eslint-disable-next-line strict
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
+    hash &= hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
 // Do not remove!!
 module.exports = HashTable;
+
+const hashTable = new HashTable();
+
+hashTable.set('value 1', 1);
+hashTable.set('value 2', 2);
+hashTable.set('value 2', 3);
+hashTable.set('value 8', 8);
+hashTable.remove('value 1');
+hashTable.remove('value 8');
+console.log(hashTable.remove('value 8'));
+console.log(hashTable.get('value 2'));
+
+console.log(hashTable.storage);
