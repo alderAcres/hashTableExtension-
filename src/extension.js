@@ -14,25 +14,55 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+	this.SIZE = 16;
 
+	this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function (key, value) {
+	let bucket = hashCode(String(key), this.SIZE);
+	let size = Object.keys(this.storage[bucket]).length;
+
+	if (size < this.SIZE * 0.75 && !this.storage[bucket]) {
+		this.storage[bucket] = {};
+	} else if (size < this.SIZE * 0.75 && this.storage[bucket]) {
+		this.storage[bucket][key] = value;
+	}
+
+	//if the number of stored items is over 75% of the hash table's size
+	if (size > this.SIZE * 0.75) {
+		this.SIZE = this.SIZE * 2;
+		bucket = hashCode(String(key), this.SIZE);
+
+		this.storage[bucket][key] = value;
+	}
+};
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
-  'use strict';
-  
-  let hash = 0;
-  if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
-    const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  
-  return Math.abs(hash) % size;
+	'use strict';
+
+	let hash = 0;
+	if (string.length === 0) return hash;
+
+	for (let i = 0; i < string.length; i++) {
+		const letter = string.charCodeAt(i);
+		hash = (hash << 5) - hash + letter;
+		hash = hash & hash; // Convert to 32bit integer
+	}
+
+	return Math.abs(hash) % size;
 }
 
 // Do not remove!!
 module.exports = HashTable;
+
+const ourHashTable = new HashTable();
+console.log(ourHashTable);
+ourHashTable.set('first key', 'first value');
+ourHashTable.set('second key', 'second value');
+console.log(ourHashTable);
+console.log(ourHashTable.storage.length);
+// ourHashTable.get('second key');
