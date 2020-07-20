@@ -16,6 +16,79 @@
 // PASTE AND MODIFY YOUR CODE BELOW
 
 
+function HashTable() {
+  this.SIZE = 16;
+  this.count = 0;
+  this.storage = new Array(this.SIZE);
+}
+
+
+HashTable.prototype.set = function(key, value) {
+  let changeLev = (this.SIZE * .75) 
+  if (this.count < changeLev) {
+    const store = hashCode(key, this.SIZE);
+    if (!this.storage[store]) {
+      this.storage[store] = {};
+    }
+    this.storage[store][key] = value;
+    this.count += 1;
+  }
+  else {
+    // need to double this.SIZE and re-hash
+    const oldTable = this.storage;
+    this.SIZE *= 2;
+    this.storage = new Array(this.SIZE);
+    // iterate oldTable and re-add values
+    oldTable.forEach((el)=>{
+      if (el) {
+        // means el must be object
+        for (let key in el) {
+          // add key: value pair to new "this.storage"
+          const store = hashCode(key, this.SIZE);
+          if (!this.storage[store]) {
+            this.storage[store] = {};
+          }
+          this.storage[store][key] = el[key];
+        }
+      }
+    })
+    // when done adding new values, delete oldTable
+    delete oldTable;
+    // still need to add the newValue (after re-hashing old values)
+    const store = hashCode(key, this.SIZE);
+    if (!this.storage[store]) {
+      this.storage[store] = {};
+    }
+    this.storage[store][key] = value;
+    this.count += 1;
+  }
+};
+
+
+HashTable.prototype.get = function(key) {
+  const store = hashCode(key, this.SIZE);
+  if (this.storage[store][key]) {
+    return this.storage[store][key];
+  }
+  return undefined;
+};
+
+
+HashTable.prototype.remove = function(key) {
+  const store = hashCode(key, this.SIZE);
+  let output = undefined;
+  if (this.storage[store][key]) {
+    output = this.storage[store][key];
+    this.count -= 1;
+    delete this.storage[store][key];
+  }
+  return output;
+};
+
+
+
+
+
 
 // YOUR CODE ABOVE
 
