@@ -17,7 +17,8 @@
 
 // construct a new hash table
 function HashTable() {
-  this.SIZE = 10;
+  this.numOfItems = 0
+  this.SIZE = 3;
   
   this.storage = new Array(this.SIZE);
   for (let i=0; i<this.SIZE; i++){
@@ -25,19 +26,47 @@ function HashTable() {
   }
 }
 const testHash = new HashTable()
-// console.log(testHash)
+console.log(testHash)
 
 
 // adds a value to the hash table
 HashTable.prototype.set = function(key, value) {
+
   const hash = hashCode(key, this.SIZE); // get the hash code
 
-  this.storage[hash][key] = value
-};
+  if (this.storage[hash][key] === undefined) { // if we're not replacing it
+    this.numOfItems++ // increment numOfItems
+  }
 
+  // IF MORE THAN 75%
+  if (this.numOfItems > this.SIZE*.75) {
+    let previousSize = this.SIZE
+    this.SIZE *= 2 // double size
+    for (let i=previousSize; i<this.SIZE; i++){this.storage[i] = {}} // create additional indicies
+    console.log(this.storage)
+    
+    for (let i=0; i<previousSize; i++){ // rehash everything
+        for (const [k, v] of Object.entries(this.storage[i])){ // go inside object[i]
+          const oldHash = hashCode(k, previousSize); // old hashCode
+          const newHash = hashCode(k, this.SIZE); // new hashCode
+          delete this.storage[oldHash][key] // delete previous
+          this.storage[newHash][k] = v // add new
+        }
+      }
+    console.log(this.storage)
+    }
+
+  this.storage[hash][key] = value
+
+};
+testHash.set('z',5)
+console.log(testHash)
 testHash.set('asdf',3)
-testHash.set('sdfa',5)
-// console.log(testHash)
+console.log(testHash)
+testHash.set('zz',5)
+console.log(testHash)
+testHash.set('zz',5)
+console.log(testHash)
 
 // retrieve a value from hash table
 HashTable.prototype.get = function(key) {
@@ -46,7 +75,7 @@ HashTable.prototype.get = function(key) {
   return this.storage[hash][key]
 };
 
-// console.log(testHash.get('sdfa'))
+console.log(testHash.get('sdfa'))
 
 
 // Delete a key/value pair from the hash table
@@ -57,30 +86,10 @@ HashTable.prototype.remove = function(key) {
 };
 
 testHash.remove('asdf')
-// console.log(testHash)
+console.log(testHash)
 
 
 // Do not modify
-function hashCode(string, size) {
-  'use strict';
-  
-  let hash = 0;
-  if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
-    const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  
-  return Math.abs(hash) % size;
-}
-
-// Do not remove!!
-module.exports = HashTable;
-
-//////////////////////////////// YOUR CODE ABOVE
-
 function hashCode(string, size) {
   'use strict';
   
