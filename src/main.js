@@ -7,8 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.itemCount = 0;
 }
 
 /**
@@ -23,8 +23,15 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  // if index is not a storage object, create it --> collision avoidance
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index]) this.storage[index] = {};
+  // store original k/v pair
+  this.storage[index][key] = value;
+  // incriment and return new item count
+  this.itemCount += 1;
+  return this.itemCount;
 };
 
 /**
@@ -38,7 +45,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // return value at original key within index
+  const index = hashCode(key, this.SIZE);
+  return this.storage[index][key];
 };
 
 /**
@@ -50,25 +59,37 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // EDGE CASE: key does not exist in hash table --> return undefined
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index][key]) return undefined;
+  // console.log(this.location);
+  // otherwise hash -> find -> store temp -> delete original -> return temp
+  const temp = this.storage[index][key];
+  delete this.storage[index][key];
+  return temp;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
   let hash = 0;
   if (string.length === 0) return hash;
-  
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
   return Math.abs(hash) % size;
 }
+
+// TEST SUITE
+const hashBrowns = new HashTable();
+console.log(hashBrowns.set('foo', 'bar')); // -> 1
+console.log(hashBrowns.set('spam', 'eggs')); // -> 2
+console.log(hashBrowns.get('foo')); // -> bar
+console.log(hashBrowns.remove('foo')); // -> bar
+console.log(hashBrowns.remove('spam')); // -> eggs
+console.log(hashBrowns.remove('spam')); // -> undefined
 
 // Do not remove!!
 module.exports = HashTable;
