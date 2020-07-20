@@ -7,8 +7,14 @@
 */
 function HashTable() {
   this.SIZE = 16;
+  this.load = 0;
   
   this.storage = new Array(this.SIZE);
+  
+  // assign empty object to each index of storage array
+  for (let i = 0; i < this.storage.length; i++) {
+    this.storage[i] = {};
+  }
 }
 
 /**
@@ -24,7 +30,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const hashedKey = hashCode(key, this.SIZE);
+  
+  // store key-value pair in object at hashed index, increment load
+  this.storage[hashedKey][key] = value;
+  this.load++;
 
+  return this.load;
 };
 
 /**
@@ -38,7 +50,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hashedKey = hashCode(key, this.SIZE);
+  return this.storage[hashedKey][key] || null; // returns null if key not found
 };
 
 /**
@@ -50,7 +63,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const hashedKey = hashCode(key, this.SIZE);
+  
+  // store value to be deleted
+  const removed = this.storage[hashedKey][key]
 
+  // delete key-value pair at hashed index, decrement load
+  delete this.storage[hashedKey][key];
+  this.load--;
+
+  return removed;
 };
 
 
