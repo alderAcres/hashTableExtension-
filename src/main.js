@@ -24,7 +24,23 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // check if key is a string, if not make it one
+  // if (typeof key !== 'string') key = key.toString();
 
+  // send it through the hashCode
+  const hash = hashCode(key, this.SIZE);
+  // check if the bucket is defined
+  if (!this.storage[hash]) {
+    // if not, make it empty object
+    this.storage[hash] = {};
+  }
+
+  if (this.storage[hash][key] !== undefined) return 'key already exists';
+
+  this.storage[hash][key] = value;
+
+  // mdn says returns a pointer to where it's stored...
+  return hash;
 };
 
 /**
@@ -38,7 +54,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  
+  return this.storage[hash][key];
 };
 
 /**
@@ -50,7 +68,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash][key]) return undefined;
+  
+  const removed = this.storage[hash][key];
+  // this.storage[hash][key] = undefined;
+  delete this.storage[hash][key]; // I remember this didn't work how a previous test wanted, but it felt odd to leave the key in the object floating around even if it has an undefined value. I'll look up later which of these two options is better.
 
+  return removed;
 };
 
 
@@ -69,6 +94,22 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+let table = new HashTable();
+console.log(table.set('4', true));
+console.log(table.set('matt', 30));
+console.log(table.set('denis', 'fellow'));
+table.set('jen', 'facemask');
+console.log(table.get('4'));
+console.log(table.get('jen'));
+
+console.log(table)
+console.log(table.storage[4])
+console.log(table.set('matt', 'alabama'));
+
+console.log(table.remove('4'));
+console.log(table.remove('matt'));
+console.log(table);
 
 // Do not remove!!
 module.exports = HashTable;
