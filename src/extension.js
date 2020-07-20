@@ -18,7 +18,94 @@
 
 
 // YOUR CODE ABOVE
+/**
+* HashTable costructor
+*
+* construct a new hash table
+*
+* - You may modify this constructor as you need to achieve the challenges below.
+*/
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+/**
+* set - Adds given value to the hash table with specified key.
+*
+* - If the provided key has already been used to store another value, simply overwrite
+*   the existing value with the new value.
+* - If the hashed address already contains another key/value pair, you must handle
+*   the collision appropriately.
+*
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+  const keyAmount = Object.keys(this.storage).length;
+  // Just realized that my keyamount variable above is always going to be 16!!! I needed to check for empty keys...
+  const doubled = this.SIZE * 2;
+  const index = hashCode(key, this.SIZE); // key because we use that to establish our index
+  if (keyAmount / doubled === 0.75) {
+    this.SIZE = doubled;
+    const index = hashCode(key, doubled);
+    const temp = new Array(doubled);
+    this.storage.forEach((item) => {
+      for (const key in item) {
+        this.set(key, item[key], temp);
+      }
+      this.storage = temp;
+    });
+    this.store(key, doubled, value);
+  } else {
+    this.store(key, this.SIZE, value);
+  }
+};
+
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+*
+* - If more than one value is stored at the key's hashed address, then you must retrieve
+*   the correct value that was originally stored with the provided key
+*
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.store = function (key, size, value) {
+  const index = hashCode(key, size);
+  if (!this.storage[index]) {
+    const innerStore = {};
+    innerStore[key] = value;
+    this.storage[index] = innerStore;
+  } else {
+    this.storage[index][key] = value;
+  }
+};
+HashTable.prototype.get = function(key) {
+  const index = hashCode(key, this.SIZE);
+  return this.storage[index][key];
+};
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE);
+  const output = this.storage[index];
+  delete this.storage[index];
+  return output;
+};
+
+
+// Do not modify
 function hashCode(string, size) {
   'use strict';
   
@@ -33,6 +120,10 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+const hash = new HashTable();
+hash.set('John', 'has a laugh');
+hash.set('John', 'is a fun guy');
+hash.set('Andy', 100098);
 
 // Do not remove!!
 module.exports = HashTable;
