@@ -14,7 +14,54 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
-
+function HashTable() {
+  this.SIZE = 16; // number of total buckets
+  this.currSIZE = 0 // this is the number of buckets that have an obj in it.
+  this.storage = new Array(this.SIZE);
+}
+HashTable.prototype.set = function(key, value) {
+  const bucket = hashCode(key,this.SIZE);
+  if (!this.storage[bucket]) {
+    this.storage[bucket] = {};
+    this.currSIZE++ // if we need to fill another bucket, incr currSIZE
+  }
+  this.storage[bucket][key] = value;
+  //after we store new keyval Arrfill >75%
+  if(this.currSIZE/this.SIZE > 0.75) {
+    //resize: make new arr with double this.SIZE
+    this.SIZE*=2
+    //rehash 
+    HashTable.prototype.rehash;
+  }
+};
+HashTable.prototype.remove = function(key) {
+  const bucket = hashCode(key,this.SIZE);
+  const removed = this.storage[bucket][key]; //store item to be returned later
+  delete this.storage[bucket][key];
+  if (this.storage[bucket] === {}) {
+    this.storage[bucket] = undefined;
+    this.currSIZE--; // decrement current size if the bucket is now empty
+  }
+  if(this.currSIZE/this.SIZE<0.25 && this.SIZE>16) { // if less that 25% buckets are filled and this.SIZE >16
+    this.SIZE/=2; // we will resize to half 
+    HashTable.prototype.rehash; //then rehash
+  }
+  return removed;
+};
+HashTable.prototype.rehash = function () {
+  const tempStorage = this.storage //store current this.storage in a tempArray.
+  this.storage = new Array(this.SIZE) // create new this.storage with updated this.SIZE;
+  const bucket = hashCode(key,this.SIZE); //hash function
+  tempStorage.forEach(obj => {
+  //not sure if i can just call the set function. for each key
+    for (let key in obj) { 
+      if (!this.storage[bucket]) {
+        this.storage[bucket] = {};
+      }
+      this.storage[bucket][key] = obj[key]
+    }
+  })
+}
 
 
 // YOUR CODE ABOVE
