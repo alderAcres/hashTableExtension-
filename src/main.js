@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.total = 0; 
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //declare a variable, run the input key value through the hash code to determine the index where the input key:value pair will be stored
+  let index = hashCode(key, this.SIZE); //results in a num between 0 and size
+  //store the input key:value pair at the resulting index found above
+  if (this.storage[index] === undefined) {
+    let obj = {}
+    obj[key] = value
+    this.storage[index] = obj;  
+  } else {
+    this.storage[index][key] = value; 
+  }
+  this.total+= 1; 
+  //return the total number of items in storage 
+  return this.total; 
 };
 
 /**
@@ -38,7 +50,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let index = hashCode(key, this.SIZE); 
+  return this.storage[index][key]; 
 };
 
 /**
@@ -50,7 +63,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //run the input key through the hashcode to determine the index 
+  let index = hashCode(key, this.SIZE); 
+  //if result is undefined, return undefined
+  if (this.storage[index] === undefined) {return undefined}; 
+  if (this.storage[index][key] === undefined) {return undefined}
+  //declare a result variable to store the value that will be deleted
+  let result = this.storage[index][key]; 
+  //if the # of keys at a given index is 1, set that index to equal undefined
+  if (Object.keys(this.storage[index]).length === 1) {
+    this.storage[index] = undefined;
+    //else, delete the key value paired of the input target at the hashed index 
+  } else {
+    delete this.storage[index][key]
+  }
+  return result; 
 };
 
 
@@ -72,3 +99,12 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+let hashTable = new HashTable; 
+hashTable.set('Set', 1); 
+console.log(hashTable.storage); 
+hashTable.set('Set', 2); 
+hashTable.remove('Set'); 
+console.log(hashTable.storage); 
+console.log(hashTable.remove('DNE')); 
