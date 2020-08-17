@@ -51,21 +51,27 @@ HashTable.prototype.set = function(key, value) {
   } else {
     // if this.storage is NOT 75% 'full', initialize as object to handle collisions
     // create varaible that represents capacity of this.storage: i:e; this.storage.length - amount of '' * 10 --> 10 - 4 * 10 = 60%
-    
-    // Couldn figure this out!
-    
-    // this.storage.forEach((el) => {
-    //   console.log(el)
-    //   if (!el) {
-    //     count += 1; //? 
-    //     console.log(count)
-    //   }
-    // });
 
-
-    this.storage[hash] = {};
-    // set the key/value to the hash index
-    this.storage[hash][key] = value;
+    let count = 0;
+    this.storage.forEach((el) => {
+      console.log(el)
+      if (el) {
+        count += 1; //? 
+        console.log(count)
+      }
+    });
+    // declare variable percentage  
+    const emptyPercentage = (this.storage.length - count) / (this.storage.length) * 100; //?
+    if (emptyPercentage < 25) {
+      // if emptyPercentage of storage is less than 25%
+      this.storage[hash] = {};
+      // set the key/value to the hash index
+      this.storage[hash][key] = value;
+      // otherwise if emptyPercentage is higher than 25%
+    } else {
+      // Increase this.storage size to double
+      console.log('We need to dev the logic to increase the storage size...');
+    }
   }
 };
 
