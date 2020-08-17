@@ -9,11 +9,15 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  // for (let i =0; i<this.storage.length; i++){
+  //   //prevent collision
+  //   this.storage[i] = new Map();
+  //}
 }
 
 /**
 * set - Adds given value to the hash table with specified key.
-*
+* 
 * - If the provided key has already been used to store another value, simply overwrite
 *   the existing value with the new value.
 * - If the hashed address already contains another key/value pair, you must handle
@@ -24,9 +28,27 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //index of where we want to store value
+const storeVal = hashCode(key, this.size);
+//if its empty
+if(!this.storage[storeVal]) {
+  //create an obj and sets its value with key/value
+const obj = {key:value};
+//assign the value for that index in that array storage to the obj
+this.storage[storeVal] = obj;
 
-};
-
+} else {
+  //adding key/value pair to the obj at the index of the array of storage 
+  let obj = this.storage[StoreVal];
+  const hold = Object.keys(this.storage[StoreVal]);
+  for(let i = 0; i < hold.length +1; i++) {
+   if(!obj[hold[i]]) {
+   this.storage[storeVal].key = value;
+   //console.log(this.storage[storeVal])
+  }
+}
+}
+}
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -38,7 +60,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const storeVal = hashCode(key, this.size);
+  const hold = Object.keys(this.storage[StoreVal]);
+if(this.storage[hashVal].key){
+  return hold[0]
+}
+  return this.storage[hashVal].key
 };
 
 /**
@@ -50,9 +77,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const storeVal = hashCode(key, this.size);
+  const deleted = this.storage[storeVal].key;
+  if((!this.storage[storeVal])) { 
+    return undefined; 
+  } else {
+  //delete this.storage
+  delete this.storage[storeVal].key;
+  return deleted;
+  };
 };
-
 
 // Do not modify
 function hashCode(string, size) {
