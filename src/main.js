@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // set variable that stores result from hashed function invocation 
+  let output = hashCode(key, this.SIZE);
+  // check if 'bucket' is empty
+  // if true, add key: value to specified index
+  if (this.storage[output]) {
+    // build out obj on bucket
+    this.storage[output][key] = value;
+  } else {
+    // if false, create new obj at 'bucket' and populate with result
+    this.storage[output] = {};
+    this.storage[output][key] = value;
+  }
 };
 
 /**
@@ -38,7 +49,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let output = hashCode(key, this.SIZE);
+  // access specific bucket value and return 
+  return this.storage[output][key];
 };
 
 /**
@@ -50,7 +63,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let output = hashCode(key, this.SIZE);
+  // store deleted data in a var
+  let temp = this.storage[output][key];
+  // check if output exists
+  // if false, return undefined
+  if (!this.storage[output][key]) return undefined;
+  // if true, delete temp with 'delete' keyword and return
+  delete this.storage[output][key];
+  return temp;
 };
 
 
@@ -70,5 +91,12 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
+const hash = new HashTable();
+hash.set(1, 2);
+hash.set(4, 5);
+hash.set(8, 9);
+console.log(hash.get(4));
+hash.remove(8);
+console.log(hash);
 // Do not remove!!
 module.exports = HashTable;
