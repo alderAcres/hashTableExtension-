@@ -24,7 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //create bucket, assign it to hashCode(string, this.size)
+  const bucket = hashCode(key, this.SIZE);
+  //create an object with passed in key and value pair
+  const pair = {};
+  pair[key] = value;
+  //check if bucket is empty
+  if (this.storage[bucket] === undefined) {
+    //if yes, assign storage to the pair passed in
+    this.storage[bucket] = pair;
+  } else {
+    //else, create the bucket in storage, then add in the key/value pair
+    this.storage[bucket][key] = value;
+  }
 };
 
 /**
@@ -38,7 +50,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //use the hashCode function to find which bucket the key is in
+  const bucket = hashCode(key, this.SIZE);
+  //return the value from the key from inside the bucket
+  return this.storage[bucket][key];
 };
 
 /**
@@ -50,7 +65,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //use hashCode function to locate the bucket
+  const bucket = hashCode(key, this.SIZE);
+  //check if undefined-if so, return undefined
+  if (!(this.storage[bucket])) return undefined;
+  //else, save the key/value pair
+  else {
+    const removed = this.storage[bucket][key];
+    //delete from bucket
+     delete this.storage[bucket][key];
+     //return removed key/value pair
+     return removed;
+  }
 };
 
 
