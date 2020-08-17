@@ -62,7 +62,15 @@ HashTable.prototype.get = function (key) {
  * @param {string} key - key to be found and deleted in hash table
  * @return {string|number|boolean} The value deleted from the hash table
  */
-HashTable.prototype.remove = function (key) {};
+HashTable.prototype.remove = function (key) {
+  // create variable to store result of passing key through hash function
+  const address = hashCode(key, this.SIZE);
+  // create variable to store return value of accessing HashTable at address at key
+  const returnValue = this.storage[address][key];
+  // delete value at HashTable at address at key
+  delete this.storage[address][key];
+  return returnValue;
+};
 
 // Do not modify
 function hashCode(string, size) {
@@ -96,5 +104,10 @@ table.set('Roxy', 'prettiest');
 
 console.log(table); // should log object with storage property set to array of 13 empty spaces, object with 'Roxy': 'prettiest' at index 13 and object with 'Regis':'handsomest' and 'Ramses': 'cutest' at index 14, and empty space at index 15
 
-console.log(table.get('Roxy')); // should return 'prettiest'
-console.log(table.get('Regis')); // should return 'handsomest'
+console.log(table.get('Roxy')); // should return/log 'prettiest'
+console.log(table.get('Regis')); // should return/log 'handsomest'
+
+console.log(table.remove('Roxy')); // should return/log 'prettiest'
+console.log(table); // should log object with storage property set to array of 14 empty spaces, object with 'Regis':'handsomest' and 'Ramses': 'cutest' at index 14, and empty space at index 15
+
+//RIP Roxy, you were the goodest and prettiest girl and we will always love you. 😿😿😿
