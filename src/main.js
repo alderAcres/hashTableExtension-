@@ -10,7 +10,7 @@ function HashTable() {
   
   this.storage = new Array(this.SIZE);
 }
-// basic structure { size: 16, storage: [{}, {}, {}, {}, ...]  }   // {} is used when there is collision
+// basic structure { size: 16, storage: [{}, {}, {}, {}, ...]  }  
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -30,7 +30,8 @@ HashTable.prototype.set = function(key, value) {
 
   // if there is no key/value pair at the address, add it
   if (this.storage[address] === undefined) {
-    this.storage[address] = {key: value};
+    this.storage[address] = {};
+    this.storage[address][key] = value;
   } 
   // else if there is a pre-existing value at the bucket, simply add the key/val pair - this code overwrites as well
   else {
@@ -90,13 +91,26 @@ HashTable.prototype.remove = function(key) {
   // declare constant bucketVal and set it to the value of corresponding key at address bucket
   const bucketVal = this.storage[address][key];
 
-  // delete the value from the hash table(this.storage)
-  delete this.storage[address][key];
+   // delete the value from the hash table(this.storage)
+   delete this.storage[address][key];
+
+  // if the key/val pair was the only value at the bucket, reassign bucket to undefined
+  if (Object.keys(this.storage[address]).length === 0) this.storage[address] = undefined;
 
   // output: return the value deleted from the hash table
   return bucketVal;
 };
 
+// Test Case - pass
+// const hashTable = new HashTable();
+// console.log(hashTable.set('first', 1));
+// console.log(hashTable);
+// console.log(hashTable.set('second', 2));
+// console.log(hashTable);
+// console.log(hashTable.get('second'));
+// console.log(hashTable);
+// console.log(hashTable.remove('first'));
+// console.log(hashTable);
 
 // Do not modify
 function hashCode(string, size) {
