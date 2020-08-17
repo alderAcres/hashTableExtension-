@@ -24,8 +24,25 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //declare a variable with the label hasIndex and set it to the result of passing in hashcode;
+    const hashIndex = hashCode(value, this.SIZE);
+  //conditional statement to check if there is already an index item
+  if (this.storage[hashIndex] === undefined) {
+    // if not we are going to create position add the new key/value pair to the empty location
+      this.storage[hashIndex] = {};
+      //add value to that created position
+      this.storage[hashIndex][key] = value;
+  }
+  else {
+    // if there is already an item at that location we are going to add the new values to them.
+    this.storage[hashIndex][key] = value;
+  }
 };
+
+// const checker = new HashTable();
+// checker.set(5, "there");
+// checker.set(1, "Hello");
+// console.log(checker);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,7 +55,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // declare const var with label of HashIndex and assign it to the result of calling hashCode with key/this.SIZE being passed.
+  const hashIndex = hashCode(key, this.SIZE);
+  //return requested index
+  return this.storage[hashIndex][key];
 };
 
 /**
@@ -50,6 +70,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  // declare const var with label of HashIndex and assign it to the result of calling hashCode with key/this.SIZE being passed.
+  const hashIndex = hashCode(key, this.SIZE);
+  // declare const var with label of remover and assign it to the arg key to return later.
+  const remover = this.storage[hashIndex][key];
+  // delete that element from the index
+  delete this.storage[hashIndex][key];
+  // return our delcared var remover.
+  return remover;
 
 };
 
@@ -69,6 +97,12 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+const checker = new HashTable();
+checker.set(5, "there");
+checker.set(1, "Hello");
+console.log(checker);
+console.log(checker.get(0))
 
 // Do not remove!!
 module.exports = HashTable;
