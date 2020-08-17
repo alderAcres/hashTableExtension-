@@ -47,7 +47,12 @@ HashTable.prototype.set = function (key, value) {
  * @return {string|number|boolean} The value stored with the specifed key in the
  * hash table
  */
-HashTable.prototype.get = function (key) {};
+HashTable.prototype.get = function (key) {
+  // create variable to store result of passing key through hash function
+  const address = hashCode(key, this.SIZE);
+  // return value of key at address
+  return this.storage[address][key];
+};
 
 /**
  * remove - delete a key/value pair from the hash table
@@ -78,15 +83,18 @@ function hashCode(string, size) {
 // Do not remove!!
 module.exports = HashTable;
 
+//Tests
+
 console.log(hashCode('Regis', 16));
 console.log(hashCode('Ramses', 16));
 console.log(hashCode('Roxy', 16));
-
-//Tests
 
 const table = new HashTable();
 table.set('Regis', 'handsomest');
 table.set('Ramses', 'cutest');
 table.set('Roxy', 'prettiest');
 
-console.log(table);
+console.log(table); // should log object with storage property set to array of 13 empty spaces, object with 'Roxy': 'prettiest' at index 13 and object with 'Regis':'handsomest' and 'Ramses': 'cutest' at index 14, and empty space at index 15
+
+console.log(table.get('Roxy')); // should return 'prettiest'
+console.log(table.get('Regis')); // should return 'handsomest'
