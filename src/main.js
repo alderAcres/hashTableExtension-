@@ -24,6 +24,11 @@ function HashTable() {
  * @return {number} The new number of items stored in the hash table
  */
 HashTable.prototype.set = function (key, value) {
+  // return error if both key and value are not passed
+  if (!key || !value) {
+    console.log('This method requires valid key and value arguments');
+    return;
+  }
   // create variable to store result of passing key through hash function
   const address = hashCode(key, this.SIZE);
   // if an object does not exist at hashed address in storage proeprty of hashTable obj, create object with input key: value pair
@@ -48,6 +53,11 @@ HashTable.prototype.set = function (key, value) {
  * hash table
  */
 HashTable.prototype.get = function (key) {
+  //return error if key not passed
+  if (!key) {
+    console.log('This method requires a valid key argument');
+    return;
+  }
   // create variable to store result of passing key through hash function
   const address = hashCode(key, this.SIZE);
   // return value of key at address
@@ -63,6 +73,11 @@ HashTable.prototype.get = function (key) {
  * @return {string|number|boolean} The value deleted from the hash table
  */
 HashTable.prototype.remove = function (key) {
+  //return error if key not passed
+  if (!key) {
+    console.log('This method requires a valid key argument');
+    return;
+  }
   // create variable to store result of passing key through hash function
   const address = hashCode(key, this.SIZE);
   // create variable to store return value of accessing HashTable at address at key
@@ -101,13 +116,16 @@ const table = new HashTable();
 table.set('Regis', 'handsomest');
 table.set('Ramses', 'cutest');
 table.set('Roxy', 'prettiest');
+console.log(table.set('cat')); // should return undefined and log err message to console
 
 console.log(table); // should log object with storage property set to array of 13 empty spaces, object with 'Roxy': 'prettiest' at index 13 and object with 'Regis':'handsomest' and 'Ramses': 'cutest' at index 14, and empty space at index 15
 
 console.log(table.get('Roxy')); // should return/log 'prettiest'
 console.log(table.get('Regis')); // should return/log 'handsomest'
+console.log(table.get()); // should return undefined and log err message to console
 
 console.log(table.remove('Roxy')); // should return/log 'prettiest'
+console.log(table.remove()); // should return undefined and log err message to console
 console.log(table); // should log object with storage property set to array of 14 empty spaces, object with 'Regis':'handsomest' and 'Ramses': 'cutest' at index 14, and empty space at index 15
 
 //RIP Roxy, you were the goodest and prettiest girl and we will always love you. 😿😿😿
