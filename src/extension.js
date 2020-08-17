@@ -15,22 +15,50 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  // StorageSize will keep track of hash table's size
+  this.storageSize = 0;
+  this.storage = new Array(this.SIZE);
+}
+
+
+// SET
+HashTable.prototype.set = function (key, value) {
+  // Declare empty object to store in hash table
+  let obj = {};
+  // If object does not exist at hash code index, add new key-value pair to object at this index
+  if (this.storage[hashCode(key, this.SIZE)] === undefined) {
+    this.storage[hashCode(key, this.SIZE)] = obj;
+    obj[key] = value;
+    // Increment storageSize
+    this.storageSize++
+  } else {
+    // If hashed address already has key-value pair, add additional key value pair, OR if key already has value, overwrite exisiting value
+    this.storage[hashCode(key, this.SIZE)][key] = value;
+    // Increment storageSize
+    this.storageSize++
+  } else if (this.storageSize >= 0.75 * this.SIZE) {
+    // If adding the new item is greater than 75% of the hash table's SIZE, then double the hash table's SIZE and rehash everything
+    
+  }
+};
 
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
