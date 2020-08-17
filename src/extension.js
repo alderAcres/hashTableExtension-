@@ -40,10 +40,10 @@ HashTable.prototype.set = function(key, value) {
             newStor[binNum] = {};
           }
           newStor[binNum][k] = value;
-          this.stored++;
         }
       }
     }
+    this.store++;
     this.storage = newStor;
   } else {
     let binNum = hashCode(key, this.SIZE);
