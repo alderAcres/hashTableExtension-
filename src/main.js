@@ -24,7 +24,16 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // run key through hash function
+  const hashKey = hashCode(key,this.SIZE);
+  // if index element does not exist, create it
+  if (!this.storage[hashKey]) {
+    this.storage[hashKey] = { key : value };
+  }
+  // otherwise move to storage at appropriate bucket with appropriate key
+  else {
+    this.storage[hashKey][key] = value;
+  }
 };
 
 /**
@@ -38,7 +47,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // run key through hash function
+  const hashKey = hashCode(key, this.SIZE);
+  // if key exists return value at key in bucket at hashed key index
+  if (this.storage[hashKey]) return this.storage[hashKey].key;
 };
 
 /**
@@ -50,7 +62,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // run key through hash function
+  const hashKey = hashCode(key, this.SIZE);
+  // if value exists, delete it
+  if (this.storage[hashKey]) {
+    delete this.storage[hashKey].key;
+  }
+  else return undefined;
 };
 
 
@@ -72,3 +90,17 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// ------------------------ test ------------------ //
+// const hashTest = new HashTable();
+// hashTest.set("eggs", "chicken");
+// console.log(hashTest[hashCode("eggs",16)]);
+// console.log("---- now remove a non-existent key-value pair ------------");
+// console.log(hashTest.remove("milk"));
+// console.log("---- now get a nonexistent value ------------");
+// console.log(hashTest.get("milk"));
+// console.log("---- now get an existent value ------------");
+// console.log(hashTest.get("eggs"));
+// console.log("---- now remove an existent value and return the hash table ------------");
+// hashTest.remove("eggs");
+// console.log(hashTest);
