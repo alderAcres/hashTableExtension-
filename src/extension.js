@@ -14,7 +14,34 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+// SET
+HashTable.prototype.set = function(key, value) {
+  // set variable that stores result from hashed function invocation 
+  let output = hashCode(key, this.SIZE);
+  // check if 'bucket' is empty
+  // if true, add key: value to specified index
+  if (this.storage[output]) {
+    // build out obj on bucket
+    this.storage[output][key] = value;
+  } else {
+    // if false, create new obj at 'bucket' and populate with result
+    this.storage[output] = {};
+    this.storage[output][key] = value;
+  }
+};
 
+// REMOVE
+HashTable.prototype.remove = function(key) {
+  let output = hashCode(key, this.SIZE);
+  // store deleted data in a var
+  let temp = this.storage[output][key];
+  // check if output exists
+  // if false, return undefined
+  if (!this.storage[output][key]) return undefined;
+  // if true, delete temp with 'delete' keyword and return
+  delete this.storage[output][key];
+  return temp;
+};
 
 
 // YOUR CODE ABOVE
