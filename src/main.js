@@ -24,7 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+//run hash function to get location
+let hashSet = hashCode(key, this.SIZE);
+//if this location is undefined, add an object
+  if(this.storage[hashSet] === undefined) {
+    let newObj = {};
+    this.storage[hashSet] = newObj;
+    newObj[key] = value;
+    return newObj;
+//add a key value pair
+  } else {
+    this.storage[hashSet][key] = value;
+    return value;
+    }
 };
 
 /**
@@ -38,7 +50,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+//run hash function to get location
+let hashGet = hashCode(key, this.SIZE);
 
+return this.storage[hashGet][key];
 };
 
 /**
@@ -50,6 +65,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+
+let hashRemove = hashCode(key, this.SIZE);
+//need to return a value after deleting it
+let hashRemoveVal = this.storage[hashRemove][key];
+//return undefined if key value pair doesn't exist
+if(this.storage[hashRemove] === undefined) {
+  return undefined;
+} else {
+  delete this.storage[hashRemove][key];
+  return hashRemoveVal;
+}
 
 };
 
@@ -72,3 +98,15 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let newTest = new HashTable();
+newTest.set("casey", "Los Angeles");
+newTest.set("delete", "California");
+console.log(newTest.storage);
+newTest.get("casey");
+console.log(newTest.get("casey"));
+console.log(newTest.get("delete"));
+// console.log(newTest.get("casey"));
+console.log(newTest.remove("delete"));
+console.log(newTest.remove("delete"));//should return undefined
+console.log(newTest.storage);
