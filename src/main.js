@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,9 +22,30 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+//input: key, value 
+//init a var called index and assign it to invocation of hashCode
+//Check if the index does not exist 
+  //if it doesn't exist, place an empty object at that index 
+//If index does exist 
+  //push key valu epair into object 
+//check if key exists at that index 
+  //if it does exist, 
+    //replace value with new value 
+//return number of items in storage 
+//ouput: number 
+
+HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key, this.SIZE);
+  if(!this.storage[index]){
+    this.storage[index] = {};
+  }
+  else {
+    this.storage[index][key] = value;
+  }
+  return this.SIZE;
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -37,9 +57,22 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
 
+//input: key
+//check if key exists in storage 
+  //if yes, return the value 
+//ouput: value 
+
+HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
+  if(this.storage[index][key]) {
+    return this.storage[index][key];
+  }
+  else return false;
 };
+
+
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -49,8 +82,24 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
 
+//input: key
+//check if key exists in storage
+  //if it does, 
+    //init var to store the key/val pair 
+    //delete the key/val pair 
+    //return the var that stored the pair
+//else if key does not exist 
+  // return undefined
+//output: value or undefined
+
+HashTable.prototype.remove = function(key) {
+  if(this.storage[index][key]){
+    let removed = this.storage[index][key];
+    delete this.storage[index][key];
+    return removed;
+  }
+  else return undefined; 
 };
 
 
