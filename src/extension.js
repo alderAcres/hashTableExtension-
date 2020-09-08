@@ -33,11 +33,32 @@ HashTable.prototype.set = function (key, value) {
     //double size
     this.SIZE = this.SIZE * 2;
 
-    //re-hash everything
-    const tempObj = this.storage;
+    //create copy of storage
+    const storage = this.storage;
 
-    //iterate over storage updating tempObj before rehashing
-    Object.entries(this.storage).forEach((entry) => {
+    //create new table
+    this.storage = new Array(this.SIZE);
+
+    //iterate over storage updating storage before rehashing
+    storage.forEach((obj) => {
+      for (let key in obj) {
+        // create new hash keys
+        let hashKey = hashCode(key, this.SIZE);
+
+        // if hashKey doesn't exist yet
+        if (!this.storage[hashKey]) {
+          let tempObj = {};
+          // create new key/value pair
+          tempObj[key] = value;
+          // assign to hashKey location
+          this.storage[hashKey] = tempObj;
+        } else {
+          // copy existing key/value pair to new hashKey
+          this.storage[hashKey][key] = obj[key];
+          //increment size
+          this.currentSize++;
+        }
+      }
       //ran out of time
     });
     //increment
