@@ -25,13 +25,14 @@ function HashTable() {
  */
 HashTable.prototype.set = function (key, value) {
   const hashKey = hashCode(key, this.SIZE);
-  if (!this.storage[hashCode(key, 16)]) {
-    this.storage[hashCode(key, 16)] = {};
+  if (!this.storage[hashCode(key, this.SIZE)]) {
+    this.storage[hashCode(key, this.SIZE)] = {};
     this.storage[hashKey][key] = value;
   } else {
     this.storage[hashKey][key] = value;
   }
-  return this.totalItems++;
+  this.totalItems += 1;
+  return this.totalItems;
 };
 
 // let test = new HashTable();
@@ -73,18 +74,18 @@ HashTable.prototype.remove = function (key) {
   if (!this.storage[index][key]) return undefined;
   const value = this.storage[index][key];
   delete this.storage[index][key];
-  this.totalItems--;
+  this.totalItems -= 1;
   return value;
 };
 
-let test = new HashTable();
-test.set("a", 1);
-test.set("ab", 5);
-console.log(test);
-console.log(test.remove("a"));
-console.log(test.remove("asdf"));
-console.log(test);
-console.log(test.get("a"));
+// let test = new HashTable();
+// test.set("a", 1);
+// test.set("ab", 5);
+// console.log(test);
+// console.log(test.remove("a"));
+// console.log(test.remove("asdf"));
+// console.log(test);
+// console.log(test.get("a"));
 
 // Do not modify
 function hashCode(string, size) {
