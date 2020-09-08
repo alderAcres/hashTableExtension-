@@ -23,6 +23,8 @@ function HashTable() {
 // we're going to create a new method for our hashTable - sizeCheck
 // we'll call it as the last step inside both methods that change the size (set, remove)
 
+// first a helper method to assign table data, so we don't repeat
+
 HashTable.prototype.sizeCheck = function() {
 	// declare a variable to check how many of the indices in our storage array point to data (objects)
 	let storageItems = 0;
@@ -40,32 +42,18 @@ HashTable.prototype.sizeCheck = function() {
 		// create a new table that's double the size
 		const newTable = new HashTable();
 		newTable.SIZE = this.SIZE * 2;
-
-		// should create a helper function here - reassignTableData() or something. Since we repeat the exact code below - it's not very DRY
-		// but I ran out of time!
-		newTable.storage = new Array(newTable.SIZE);
-		// re-hash our existing data, and put it in our new hash table
-		this.storage.forEach((index) => {
-			// check each index. if it has data...
-			if (this.storage[index]) {
-				// run through each kvPair and reassign it to our new object, after being hashed (in the 'set' method)
-				Object.entries(this.storage[index]).forEach(([ key, value ]) => {
-					newTable.set(key, value);
-				});
-			}
-		});
-		return newTable;
 	}
-
 	// if it's less than 25% full (AND the size of our table is greater than 16)
 	if (storageSpaceTaken < 0.25 && this.SIZE > 16) {
 		// create a new table that's half the size
 		const newTable = new HashTable();
 		newTable.SIZE = this.SIZE / 2;
-
-		// the other potential place for our helper function - reassignTableData()
+	}
+	// if we've hit either of these conditions
+	if (newTable) {
+		// now we have our new Table - we need to repopulate the existing data
 		newTable.storage = new Array(newTable.SIZE);
-		// re-haze our existing data, and put it in our new hash table
+		// re-hash our existing data, and put it in our new hash table
 		this.storage.forEach((index) => {
 			// check each index. if it has data...
 			if (this.storage[index]) {
