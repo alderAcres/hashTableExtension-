@@ -64,10 +64,16 @@ HashTable.prototype.set = function(key, value) {
  
       for(let i = 0; i < this.storage.length; i++) {
         const curr = this.storage[i];
+        if(Array.isArray(curr)) {
+          curr = curr.flat();
+        }
         for(const key in curr) {
           const index = hashCode(key, this.SIZE);
           console.log(index)
           this.storage[index][key] = curr[key]; 
+     
+
+        
         }
       }
   }
