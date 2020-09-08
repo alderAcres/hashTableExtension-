@@ -7,9 +7,10 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
-}
+  this.storage.fill({})
+} 
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -23,8 +24,23 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+HashTable.prototype.set = function(key, value) {
+  // run key through hashfunction, get hash address
+  let index = hashCode(key, this.SIZE)
+  // This line covers multiple conditions:
+  // If there is no key within object of hash's index
+  // If there is a key already there, it will overwrite the value
+  // If there is already a key/value pair in object at hashtable's index, it will create new key/value pai
+  this.storage[index][key] = value
+  // Return number of items stored in hash table
+  // Iterate through hash table
+  return this.storage.reduce((acc, cV) => {
+    // Put keys of object into array, get length of array. Reassign acc to acc + length of object keys array.
+    acc += Object.keys(cV).length
+    // Return accumulator
+    return acc
+  })
 };
 
 /**
@@ -38,7 +54,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // run key through hashfunction, get hash address
+  let index = hashCode(key, this.SIZE)
+  // Return value of key/value pair in object at hash table's index
+  return this.storage[index][key]
 };
 
 /**
@@ -50,7 +69,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // run key through hashfunction, get hash address
+  let index = hashCode(key, this.SIZE)
+  // If key not in hashtable, return undefined
+  if (!this.storage[index][key]) return undefined
+  // Initialize variable to value of object at index in hash table
+  let result = this.storage[index][key]
+  // Delete key value pair 
+  delete this.storage[index][key]
+  // return value
+  return result
 };
 
 
