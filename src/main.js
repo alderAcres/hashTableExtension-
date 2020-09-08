@@ -24,8 +24,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // declare a variable to establish an address by using our hashCode function
+  const address = hashCode(key, this.SIZE);
+  // if the address in storage is equal to undefined set currentBucket to an empty array
+  if (!this.storage[address]) {
+    this.storage[address] = [];
+  }
+  // push our key/value pair to our array
+  this.storage[address].push([key, value]);
+  return this.storage;
 };
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +47,17 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // declare a variable to establish an address by using our hashCode function
+  const address = hashCode(key, this.SIZE);
+  // declare a variable for the bucket the address leads us to
+  const currentBucket = this.storage[address];
+  // initialize a for loop that will check to see if first elem of the array and its corresponding key are equal to key param
+  for (let i = 0; i < currentBucket.length; i++) {
+    // if so, return second value elem within nested array
+    if (currentBucket[i][0] === key) return currentBucket[i][1];
+  }
 };
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +68,30 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // declare a variable to establish an address by using our hashCode function
+  const address = hashCode(key, this.SIZE);
+  // declare a variable for the bucket the address leads us to
+  const currentBucket = this.storage[address];
+  // initialize a loop that will find the key we are looking for within the bucket
+  for (let i = 0; i < currentBucket.length; i++) {
+    // if found assign the value we will ultimately delete to a variable
+    if (currentBucket[i][0] === key) {
+      let returnVal = currentBucket[i][1];
+      // delete key/value pair
+      delete currentBucket[i];
+      // return variable
+      return returnVal;
+    }
+  }
+  return undefined;
 };
+
+const testHash = new HashTable();
+testHash.set('blue', 1000);
+testHash.set('green', 10000);
+console.log(testHash);
+testHash.remove('blue');
+console.log(testHash);
 
 
 // Do not modify
