@@ -25,5 +25,15 @@
   "homepage": "https://github.com/CodesmithLLC/cs-fundamentals-1-assessment",
   "dependencies": {
     "request": "^2.69.0"
+  },
+  "devDependencies": {
+    "eslint": "7.2.0",
+    "eslint-config-airbnb": "18.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jsx-a11y": "^6.3.0",
+    "eslint-plugin-react": "^7.20.0",
+    "eslint-plugin-react-hooks": "4.0.0",
+    "mocha": "^8.1.3"
   }
 }
