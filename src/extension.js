@@ -31,10 +31,31 @@ HashTable.prototype.set = function (key, value) {
     }
   }
   if (count / this.SIZE <= 0.25) {
-    console.log(count);
-    let addOnBuckets = new Array(this.SIZE);
-    this.storage = this.storage.concat(addOnBuckets);
-    this.SIZE = 2 * this.SIZE;
+    //need to rehash or won't be able to retrieve data sinze this.SIZE affects hashCode
+    //create an array of all the key-value pairs
+    //loop though this.storage array
+    //each element is a bucket object, loop through the keys of the bucket object
+    //can try using reduce? or map?
+    let data = this.storage.reduce((acc, bucket) => {
+      //each bucket is an object, we want to push it's key-value pairs into acc
+      Object.keys(bucket).forEach((key) => {
+        //the key value pairs are [key, [bucket[key]]], need to add to acc
+        // acc.push([key][bucket[key]]);
+        acc[key] = bucket[key];
+      });
+      return acc;
+    }, {});
+
+    //now that we have the original data stored in data object, we can clear the old this.storage and restart with double the size
+    this.SIZE *= 2;
+    this.storage = new Array(this.SIZE);
+    //now we go through the data object, setting in each key value pair.
+    Object.keys(data).forEach((key) => {
+      // this.set(key, data[value]);
+      let idx = hashCode(key, this.SIZE);
+      if (!this.storage[idx]) this.storage[idx] = {};
+      this.storage[idx][key] = data[key];
+    });
   }
 };
 
@@ -45,11 +66,44 @@ HashTable.prototype.get = function (key) {
 
 HashTable.prototype.remove = function (key) {
   let idx = hashCode(key, this.SIZE);
+  let output;
   if (this.storage[idx][key]) {
-    let value = this.storage[idx][key];
+    output = this.storage[idx][key];
     delete this.storage[idx][key];
-    return value;
-  } else return undefined;
+  } else output = undefined;
+
+  if (Object.keys(this.storage[idx]).length === 0) this.storage[idx] = 0;
+
+  if (this.SIZE > 16) {
+    console.log(key);
+    //check how many buckets are empty;
+    let count = 0;
+    console.log(this.storage.length);
+    for (let i = 0; i < this.storage.length; i++) {
+      if (!this.storage[i]) {
+        count++;
+      }
+    }
+    console.log(count);
+    console.log(count / this.SIZE);
+    if (count / this.SIZE >= 0.75) {
+      let data = this.storage.reduce((acc, bucket) => {
+        Object.keys(bucket).forEach((key) => {
+          acc[key] = bucket[key];
+        });
+        return acc;
+      }, {});
+
+      this.SIZE /= 2;
+      this.storage = new Array(this.SIZE);
+      Object.keys(data).forEach((key) => {
+        let idx = hashCode(key, this.SIZE);
+        if (!this.storage[idx]) this.storage[idx] = {};
+        this.storage[idx][key] = data[key];
+      });
+    }
+  }
+  return output;
 };
 
 // YOUR CODE ABOVE
@@ -71,3 +125,19 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// let myTable = new HashTable();
+// for (let i = 0; i < 25; i++) {
+//   myTable.set('key-' + i, 'value-' + i);
+// }
+// console.log(myTable);
+// console.log(myTable.storage.length);
+
+// // console.log(myTable.get('key-10'));
+
+// for (let i = 0; i < 24; i++) {
+//   myTable.remove('key-' + i);
+// }
+
+// console.log(myTable);
+// console.log(myTable.storage.length);
