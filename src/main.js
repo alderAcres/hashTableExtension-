@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,8 +23,35 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // run the hashCode function to get an id# for data passing in as key and value pairs
+  let id = hashCode(key, this.SIZE);
+  // access the storage object and check if that id already exist (collition check)
+    // if it does not exist, create the obj inside storage with its apropriate id "drawer" and set its key-value pairs
+  if (this.storage[id] === undefined) {
+    this.storage[id] = {};
+    this.storage[id][key] = value
+    // if it exist, overwritethe existing value with the new value
+  } else if (this.storage[id][key]) {
+    this.storage[id][key] = value;
+  }
+  // if id does not exist create one with its value
+  else this.storage[id][key] = value;
 };
+
+
+// test it
+let myHashedTable = new HashTable();
+// myHashedTable.set('a', 1)
+// myHashedTable.set('b', 2)
+// // myHashedTable.set('c', 3)
+// // myHashedTable.set('c', 4)
+// // myHashedTable.set('c', 3)
+// myHashedTable.set('a', 3)
+console.log(myHashedTable)
+
+
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,6 +64,18 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // run hashCode to get the id
+  let id = hashCode(key,this.SIZE)
+  // decl. a veriable 'level' and let it be = to value in storage with its apropriate id
+  let level = this.storage[id]
+  // if that key dosent exist
+  if (level === undefined) {
+    return console.log('key not found');
+  }
+  // if key exist than return that key 
+  if (level[key]) {
+    return level[key];
+  } 
 
 };
 
@@ -50,7 +88,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // get the id
+  let id = hashCode(key, this.SIZE);
+  // create a temp veriable to store the data that needs to be returned
+  let removedEl = this.storage[id][key];
+  // delete that property
+  delete this.storage[id][key];
+  // if key does not exist return undefined 
+  if (!this.storage[id][key]) {
+    return undefined;
+  }
 };
 
 
