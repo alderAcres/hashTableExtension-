@@ -95,7 +95,7 @@ HashTable.prototype.get = function (key) {
  * @return {string|number|boolean} The value deleted from the hash table
  */
 HashTable.prototype.remove = function (key) {
-  const index = hashCode(index, this.SIZE);
+  const index = hashCode(key, this.SIZE);
   // check to see if key exists in hash table, if not, return "undefined"
   if (this.storage[index] === undefined) return undefined;
 
@@ -113,14 +113,14 @@ HashTable.prototype.remove = function (key) {
 };
 
 /* Testing */
-// const myHashTable3 = new HashTable();
-// console.log(myHashTable3.remove('Richie'));
-// // myHashTable3.set('Richie', 'R');
-// // myHashTable3.set('apple', 'a');
-// // myHashTable3.set('richie', 'r');
-// // console.log(myHashTable3.storage);
-// // console.log(myHashTable3.remove('richie'));
-// // console.log(myHashTable3.storage);
+const myHashTable3 = new HashTable();
+console.log(myHashTable3.remove('Richie'));
+myHashTable3.set('Richie', 'R');
+myHashTable3.set('apple', 'a');
+myHashTable3.set('richie', 'r');
+console.log(myHashTable3.storage);
+console.log(myHashTable3.remove('richie'));
+console.log(myHashTable3.storage);
 
 // Do not modify
 function hashCode(string, size) {
