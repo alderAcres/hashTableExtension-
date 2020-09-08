@@ -33,9 +33,6 @@ function HashTable() {
  * @return {number} The new number of items stored in the hash table
  */
 
-// - If adding the new item will push the number of stored items to over 75% of
-// the hash table's SIZE, then double the hash table's SIZE and rehash everything
-
 HashTable.prototype.set = function (key, value) {
   const hashKey = hashCode(key, this.SIZE);
   const itemLimit = this.SIZE * 0.75;
@@ -43,7 +40,11 @@ HashTable.prototype.set = function (key, value) {
     this.SIZE *= 2;
     this.storage.forEach((ob) => {
       Object.entries(ob).forEach((el) => {
-        delete this.storage[hashKey][el[0]];
+        // console.log(this.storage)
+        let k = el[0];
+        // console.log(k);
+        // console.log(this.storage[hashKey][k]);
+        delete this.storage[hashKey][k];
         this.totalItems--;
         this.set(el[0], el[1]);
       });
@@ -89,12 +90,6 @@ HashTable.prototype.get = function (key) {
   return this.storage[index][key];
 };
 
-// let test = new HashTable();
-// test.set("a", 1);
-// test.set("ab", 5);
-// console.log(test.get("a"));
-// console.log(test.get("ab"));
-
 /**
  * remove - delete a key/value pair from the hash table
  *
@@ -103,24 +98,59 @@ HashTable.prototype.get = function (key) {
  * @param {string} key - key to be found and deleted in hash table
  * @return {string|number|boolean} The value deleted from the hash table
  */
+
+// 2. remove:
+// - If the hash table's SIZE is greater than 16 and the result of removing the
+//   item drops the number of stored items to be less than 25% of the hash table's SIZE
+//   (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
+// */
 HashTable.prototype.remove = function (key) {
   const index = hashCode(key, this.SIZE);
+  // this.SIZE will always be a factor of 16 so will always be divisible by 4 without remainder
+  const itemLowerLimit = this.SIZE * 0.25;
+  if (this.SIZE > 16 && this.totalItems - 1 < itemLowerLimit) {
+    this.SIZE = this.SIZE / 2;
+    this.storage.forEach((ob) => {
+      Object.entries(ob).forEach((el) => {
+        delete this.storage[index][el[0]];
+        this.totalItems--;
+        this.set(el[0], el[1]);
+      });
+    });
+  }
   if (!this.storage[index]) return undefined;
   if (!this.storage[index][key]) return undefined;
-  const value = this.storage[index][key];
-  delete this.storage[index][key];
-  this.totalItems -= 1;
-  return value;
+  if (this.storage[index][key]) {
+    const value = this.storage[index][key];
+    delete this.storage[index][key];
+    this.totalItems -= 1;
+    return value;
+  }
 };
 
-// let test = new HashTable();
-// test.set("a", 1);
-// test.set("ab", 5);
-// console.log(test);
-// console.log(test.remove("a"));
-// console.log(test.remove("asdf"));
-// console.log(test);
-// console.log(test.get("a"));
+let test = new HashTable();
+test.set("a1", 2);
+test.set("a2", 5);
+test.set("a3", 1);
+test.set("a4", 1);
+test.set("a5", 3);
+test.set("a6", 4);
+test.set("a7", 1);
+test.set("a8", 8);
+test.set("a9", 1);
+test.set("a10", 1);
+test.set("a11", 1);
+test.set("a12", 1);
+test.set("a13", 1);
+// test.remove("a13");
+// test.remove("a12");
+// test.remove("a11");
+// test.remove("a10");
+// test.remove("a9");
+// test.remove("a8");
+// test.remove("a7");
+
+console.log(test);
 
 // YOUR CODE ABOVE
 
