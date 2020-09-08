@@ -42,18 +42,33 @@ HashTable.prototype.sizeCheck = function() {
 		// create a new table that's double the size
 		const newTable = new HashTable();
 		newTable.SIZE = this.SIZE * 2;
+
+		// should create a helper function here - reassignTableData() or something. Since we repeat the exact code below - it's not very DRY
+		// but I ran out of time!
+
+		newTable.storage = new Array(newTable.SIZE);
+		// re-hash our existing data, and put it in our new hash table
+		this.storage.forEach((index) => {
+			// check each index. if it has data...
+			if (this.storage[index]) {
+				// run through each kvPair and reassign it to our new object, after being hashed (in the 'set' method)
+				Object.entries(this.storage[index]).forEach(([ key, value ]) => {
+					newTable.set(key, value);
+				});
+			}
+		});
+		return newTable;
 	}
+
 	// if it's less than 25% full (AND the size of our table is greater than 16)
 	if (storageSpaceTaken < 0.25 && this.SIZE > 16) {
 		// create a new table that's half the size
 		const newTable = new HashTable();
 		newTable.SIZE = this.SIZE / 2;
-	}
-	// if we've hit either of these conditions
-	if (newTable) {
-		// now we have our new Table - we need to repopulate the existing data
+
+		// the other potential place for our helper function - reassignTableData()
 		newTable.storage = new Array(newTable.SIZE);
-		// re-hash our existing data, and put it in our new hash table
+		// re-haze our existing data, and put it in our new hash table
 		this.storage.forEach((index) => {
 			// check each index. if it has data...
 			if (this.storage[index]) {
@@ -153,3 +168,8 @@ function hashCode(string, size) {
 hashCode('hey', 16);
 // Do not remove!!
 module.exports = HashTable;
+
+let blah = new HashTable();
+blah.set('name', 'nate');
+
+console.log(blah);
