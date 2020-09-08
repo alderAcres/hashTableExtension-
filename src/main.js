@@ -81,6 +81,8 @@ HashTable.prototype.remove = function (key) {
 
   delete this.storage[hashKey][key];
 
+  this.currentSize--;
+
   return deletedVAlue;
 };
 
@@ -102,6 +104,7 @@ function hashCode(string, size) {
 
 const myTable = new HashTable();
 
+// testing
 myTable.set("name", "James");
 myTable.get("name");
 myTable.remove("name");
