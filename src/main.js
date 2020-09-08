@@ -30,10 +30,11 @@ HashTable.prototype.set = function(key, value) {
     this.storage[index] = {};
    
   } 
+
   this.storage[index][key] = value;
   
+  
 };
-
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key

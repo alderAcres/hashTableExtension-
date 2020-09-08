@@ -73,7 +73,6 @@ HashTable.prototype.set = function(key, value) {
           this.storage[index][key] = curr[key]; 
      
 
-        
         }
       }
   }
