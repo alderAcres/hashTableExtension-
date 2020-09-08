@@ -14,7 +14,32 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+HashTable.prototype.set = function(key, value) {
+  const indexValue = hashCode(key, this.SIZE);
+  if (!this.storage[indexValue]) {
+    this.storage[indexValue] = {};
+    this.storage[indexValue][key] = value;
+  } else {
+  this.storage[indexValue][key] = value;
+  }
+  let storageSize = Object.keys(this.storage[indexValue]).length;
+  if (storageSize > (.75 * this.SIZE)) {
+    this.SIZE = this.SIZE * 2;
+  }
+};
 
+HashTable.prototype.remove = function(key) {
+  const indexValue = hashCode(key, this.SIZE);
+  if (!this.storage[indexValue][key]) {
+    return undefined;
+  }
+  delete this.storage[indexValue][key];
+
+  let storageSize = Object.keys(this.storage[indexValue].length)
+  if (this.SIZE > 16 && storageSize < Math.floor(.25 * this.SIZE)) {
+    this.SIZE = this.SIZE / 2;
+  }
+};
 
 
 // YOUR CODE ABOVE
