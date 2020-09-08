@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.itemsInStorage = 0;
 }
 
 /**
@@ -24,7 +25,27 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // give default storage of 16 "slots", make it so that
+  // implementing set does the following:
+  // creates an empty object within to store the new value at the generated index
+  // if the object already existed from a previous set, simply put the new key-value pair in that 
+  // initially generated obj
+  // this handles collision
+  // visual reference: // HashTable { SIZE: 16, storage: [ , , , , , , , , , , ,  , , , , ...]}
 
+  // utilizing the params of "value" and "key", pass to hashCode function, referencing this.size
+  const generatedIndex = hashCode(key, this.SIZE);
+  // does it exist yet?
+  if(!this.storage[generatedIndex]) {
+    this.storage[generatedIndex] = {}; // if not, let's put a nifty, new nested object at this slot
+    this.storage[generatedIndex][key] = value; // followed by creating a new key value pair located at this object
+    this.itemsInStorage += 1;
+  } else if (this.storage[generatedIndex][key]) {
+    this.storage[generatedIndex][key] = value; // if it already existed, let's create a new key value pair at location
+  } else {
+    this.storage[generatedIndex][key] = value;
+    this.itemsInStorage += 1;
+  }
 };
 
 /**
@@ -38,7 +59,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[hashCode(key, this.SIZE)][key];
 };
 
 /**
@@ -50,7 +71,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  this.itemsInStorage -= 1;
+  if(!this.storage[hashCode(key, this.SIZE)][key]) {
+    return undefined;
+  }
+  const itemToDelete = this.storage[hashCode(key, this.SIZE)][key];
+  delete this.storage[hashCode(key, this.SIZE)][key];
+  return itemToDelete;
 };
 
 
@@ -69,6 +96,21 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+let firstHashTable = new HashTable();
+console.log(firstHashTable);
+firstHashTable.set("lemon", 2);
+console.log(firstHashTable);
+firstHashTable.set("fork", 4);
+console.log(firstHashTable);
+firstHashTable.set("something", true);
+console.log(firstHashTable);
+firstHashTable.set("alligator", "orange");
+console.log(firstHashTable);
+console.log(firstHashTable.get("alligator"));
+console.log(firstHashTable.remove("alligator"));
+console.log(firstHashTable);
+// HashTable { SIZE: 16, storage: [ , , , , , , , , , , ,  , , , , ...]}
 
 // Do not remove!!
 module.exports = HashTable;
