@@ -14,23 +14,58 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function (key, value) {
+  let idx = hashCode(key, this.SIZE);
+  if (!this.storage[idx]) this.storage[idx] = {};
+  this.storage[idx][key] = value;
 
+  let count = 0;
+  for (let i = 0; i < this.storage.length; i++) {
+    if (!this.storage[i]) {
+      count++;
+    }
+  }
+  if (count / this.SIZE <= 0.25) {
+    console.log(count);
+    let addOnBuckets = new Array(this.SIZE);
+    this.storage = this.storage.concat(addOnBuckets);
+    this.SIZE = 2 * this.SIZE;
+  }
+};
+
+HashTable.prototype.get = function (key) {
+  let idx = hashCode(key, this.SIZE);
+  return this.storage[idx][key];
+};
+
+HashTable.prototype.remove = function (key) {
+  let idx = hashCode(key, this.SIZE);
+  if (this.storage[idx][key]) {
+    let value = this.storage[idx][key];
+    delete this.storage[idx][key];
+    return value;
+  } else return undefined;
+};
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
+    hash = (hash << 5) - hash + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
