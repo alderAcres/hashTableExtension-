@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.count = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // convert key to storageLocation key
+  const storageLocation = hashCode(key, this.SIZE);
+  console.log(storageLocation);
+  // check if an object already exists at location and, if not, creat new object to store entries
+  if (this.storage[storageLocation] === undefined) this.storage[storageLocation] = {};
+  console.log(this.storage);
+  // check if your are overwritting existing property and, if your ARE NOT, increment counter
+  if (this.storage[storageLocation][key] === undefined) this.count += 1;
+  // add the key value pair to the storageLocation
+  this.storage[storageLocation][key] = value;
+  console.log(this.storage);
+  return this.count;
 };
 
 /**
@@ -38,7 +49,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // get location from hashCode
+  const storageLocation = hashCode(key, this.SIZE);
+  // return value from lookup with storageLocation
+  return this.storage[storageLocation][key];
 };
 
 /**
@@ -50,7 +64,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // get storage location with hashCode
+  const storageLocation = hashCode(key, this.SIZE);
+  // check if key exists and, IF NOT, return undefined
+  if (this.storage[storageLocation][key] === undefined) return undefined;
+  // save value of property to be deleted
+  const result = this.storage[storageLocation][key];
+  // delete the property
+  delete this.storage[storageLocation][key];
+  // decrement count of entries
+  this.count--;
+  // return value of deleted property
+  return result;
 };
 
 
