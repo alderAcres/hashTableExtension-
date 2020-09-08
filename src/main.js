@@ -32,9 +32,8 @@ HashTable.prototype.set = function(key, value) {
 	// check if data already exists at our storage
 	// if it doesn't create an object to store our data, and pass in our key and value params as a property / value
 	if (!this.storage[arrIndex]) {
-		const newObj = {
-			key: value
-		};
+		const newObj = {};
+		newObj[key] = value;
 		this.storage[arrIndex] = newObj;
 	} else {
 		// if it already exists, simply add a new key property (or reassign the old one)
