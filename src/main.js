@@ -72,7 +72,7 @@ HashTable.prototype.remove = function(key) {
   // run key through hashfunction, get hash address
   let index = hashCode(key, this.SIZE)
   // If key not in hashtable, return undefined
-  if (!this.storage[index][key]) return undefined
+  if (!this.storage[index].hasOwnProperty(key)) return undefined
   // Initialize variable to value of object at index in hash table
   let result = this.storage[index][key]
   // Delete key value pair 
