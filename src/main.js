@@ -6,9 +6,9 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
+	this.SIZE = 16;
+
+	this.storage = new Array(this.SIZE);
 }
 
 /**
@@ -24,7 +24,21 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+	// find the array index of running our key through the hash index
+	const arrIndex = hashCode(key, this.SIZE);
 
+	// we're going to store our data in objects, to prevent hash collision
+
+	// check if data already exists at our storage
+	// if it doesn't create an object to store our data, and pass in our key and value params as a property / value
+	if (!this.storage[arrIndex]) {
+		const newObj = {};
+		newObj[key] = value;
+		this.storage[arrIndex] = newObj;
+	} else {
+		// if it already exists, simply add a new key property (or reassign the old one)
+		this.storage[arrIndex][key] = value;
+	}
 };
 
 /**
@@ -38,7 +52,16 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+	// first find the index
+	const arrIndex = hashCode(key, this.SIZE);
 
+	// if the data exists in the obj assigned to the index prop of our storage object, return it.
+	// otherwise, just return out of the method call
+	if (this.storage[arrIndex][key]) {
+		return this.storage[arrIndex][key];
+	} else {
+		return;
+	}
 };
 
 /**
@@ -50,25 +73,34 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+	// find the index
+	const arrIndex = hashCode(key, this.SIZE);
 
+	// if it exists, delete it from our object associated with the index at our storage object
+	// otherwise, just return out of the method call
+	if (this.storage[arrIndex][key]) {
+		delete this.storage[arrIndex][key];
+	} else {
+		return;
+	}
 };
-
 
 // Do not modify
 function hashCode(string, size) {
-  'use strict';
-  
-  let hash = 0;
-  if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
-    const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  
-  return Math.abs(hash) % size;
+	'use strict';
+
+	let hash = 0;
+	if (string.length === 0) return hash;
+
+	for (let i = 0; i < string.length; i++) {
+		const letter = string.charCodeAt(i);
+		hash = (hash << 5) - hash + letter;
+		hash = hash & hash; // Convert to 32bit integer
+	}
+
+	return Math.abs(hash) % size;
 }
 
+hashCode('hey', 16);
 // Do not remove!!
 module.exports = HashTable;
