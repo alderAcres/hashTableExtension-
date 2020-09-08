@@ -1,5 +1,6 @@
+/* eslint-disable */
 /**
-* HashTable costructor
+* HashTable constructor
 *
 * construct a new hash table
 *
@@ -7,8 +8,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.count = 0;
 }
 
 /**
@@ -24,7 +25,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index]){
+    this.storage[index] = {};
+  }
+  const bucket = this.storage[index];
+  
+  //only increment count if not overwriting
+  if (!bucket.hasOwnProperty(key)) {
+    this.count += 1; 
+  }
 
+  bucket[key] = value;
+  return this.count;
 };
 
 /**
@@ -38,7 +51,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const index = hashCode(key, this.SIZE);
+  const bucket = this.storage[index];
+  if (!bucket) return;
 
+  return bucket[key];
 };
 
 /**
@@ -50,9 +67,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE);
+  const bucket = this.storage[index];
+  if (!bucket || !bucket.hasOwnProperty(key)) return;
 
+  const value = bucket[key];
+  delete bucket[key];
+  this.count -= 1;
+  return value;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
@@ -72,3 +95,62 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+
+///////////////////////////////
+// TESTS
+///////////////////////////////
+
+const ht = new HashTable();
+
+//
+// Tests set method
+//
+console.log(ht.storage);
+
+console.log(ht.set('bob', 30));
+console.log(ht.storage);
+
+console.log(ht.set('bob', 20));
+console.log(ht.storage);
+
+console.log(ht.set('linda', 40));
+console.log(ht.storage);
+
+console.log(ht.set('linda', 27));
+console.log(ht.storage);
+
+console.log(ht.set('adnil', 40));
+console.log(ht.storage);
+
+
+//
+// Tests get method
+//
+console.log(ht.get('bob'));
+console.log(ht.get('linda'));
+console.log(ht.get('adnil'));
+console.log(ht.get('adnilsssss'));
+console.log(ht.get('susan'));
+console.log(ht.count)
+
+
+//
+// Tests remove method
+//
+console.log(ht.count);
+console.log(ht.remove('susan'));
+console.log(ht.count);
+console.log(ht.remove('bob'));
+console.log(ht.count);
+console.log(ht.remove('bob'));
+console.log(ht.count);
+console.log(ht.remove('adnil'));
+console.log(ht.count);
+console.log(ht.remove('adnilssss'));
+console.log(ht.count);
+console.log(ht.remove('linda'));
+console.log(ht.count);
+console.log(ht.remove('linda'));
+console.log(ht.count);
