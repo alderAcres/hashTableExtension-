@@ -23,7 +23,64 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+HashTable.prototype.set = function(key, value){ //{dan : true}{
+  //create new object from parent class
+  const myTable = new HashTable();
+
+  //use hashCode function to hash the key into the index code where we will store the valu
+  let index = hashCode(key, this.SIZE);
+
+//******
+  //first check if they key has already been used to store another value
+    //if it has, overwrite the existing value with the new value
+
+      //create and aux object 
+      //store each new key passed in to this object
+
+  
+
+  //create node class for objects being pushed into HashTable
+  function LinkedList(){
+    this.head = null;
+    this.tail= null;
+  }
+  
+  function Node(val){
+    this.value = val;
+    this.next = null;
+  }
+  //if the hashed addess already exists with another key/value pair
+    //you must create a linked list by connecting the existing node to the new node
+    
+  if(!myTable.storage[index]){
+    //create a new LinkedList 
+    let myLinkedList = new LinkedList();
+    //create a new node
+    let newStorage = new Node();
+    //create a new object and place key/value inside it
+    let file = {};
+    file.key = value
+    //set this.value of new node to key/value that you want to file in Hashed Table
+    newStorage.value = file;//object with {dan ; true};
+    //push node into HashTable aka Array
+    myTable.push(newStorage);
+  }
+  else if(myTable.storage[index]){
+    let newStorage = new Node();
+   //connect this new node to the previous node
+    //first go to previous node and reassign its this.next this.value of this node
+
+    ///****** how do I connect to the previous node?????
+    
+    //make this node the tail of the LinkedList
+    myLinkedList.tail = newStorage.value;
+   //create a new object and place key/value inside it
+   let file = {};
+   file.key = value;
+   //set this.value of new node to key/value that you want to file in Hashed Table
+   newStorage.value = file;//object with {dan ; true};    
+  }
+
 
 };
 
