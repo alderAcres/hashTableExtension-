@@ -88,7 +88,7 @@ HashTable.prototype.remove = function (key) {
   return output;
 };
 
-console.log(test.remove('a'));
+console.log(test.remove('new'));
 console.log(test.remove('de'));
 console.log(test);
 
