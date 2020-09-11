@@ -26,34 +26,13 @@ HashTable.prototype.set = function(key, value) {
   // pass our key argument (along with the size of the hash table)
   // into the hash function and save the return value to a variable
   const index = hashCode(key, this.SIZE);
-  // if there is already a key/value pair stored at the bucket associated with the index
-  // and there isn't already an array there to deal with collisions...
-  if (this.storage[index] && !Array.isArray(this.storage[index])) {
-    // ...store the key/value pair that is there in a variable
-    const existingValue = this.storage[index];
-    // create an empty array to deal with the collision and insert it into the bucket
-    const collisionArray = [];
-    this.storage[index] = collisionArray;
-    // create an array to hold the key/value pair
-    const keyValue = [key, value];
-    // push the exisitng value into the array
-    collisionArray.push(existingValue);
-    // and push our new key/value pair into that array too
-    collisionArray.push(keyValue);
-    // if there already is an array in the bucket to deal with collisions
-  } else if (Array.isArray(this.storage[index])) {
-    // save the bucket's array under a different name that's easier to deal with
-    const collisionArray = this.storage[index];
-    // create an array to hold the key/value pair
-    const keyValue = [key, value];
-    // and push the key/value pair into the collision array
-    collisionArray.push(keyValue);
-  } else {
-    // otherwise, add our value to the appropriate bucket
-    // in the hash table by using our index variable
-    this.storage[index] = value;
+  // if there isn't already a key/value pair stored at the bucket associated with the index...
+  if (!this.storage[index]) {
+    // create an object for the bucket
+    this.storage[index] = {};
   }
-  // return the number of items stored in the hash table
+  // add the key/value pair to the bucket (or overwrite an existing key's value)
+  this.storage[index][key] = value;
   return Object.entries(this.storage).length;
 };
 
@@ -68,27 +47,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-  // pass our key argument (along with the size of the hash table)
-  // into the hash function and save the return value to a variable
   const index = hashCode(key, this.SIZE);
-  // if the value of the bucket associated with the index is an array
-  // (and therefore other keys have values stored there too)
-  if (Array.isArray(this.storage[index])) {
-    // save the bucket's array under a different name that's easier to deal with
-    const collisionArray = this.storage[index];
-    // iterate through this array, looking for an element that matches our key
-    for (let i = 0; i < collisionArray.length; i += 1) {
-      // if we find one...
-      if (collisionArray[i][0] === key) {
-        // ...return the associated value
-        return collisionArray[i][1];
-      }
-    }
-  } else {
-    // otherwise, if we aren't dealing with collisions,
-    // return the value retrieved from the bucket associated with the index variable
-    return this.storage[index];
-  }
+  // return the value from the appropriate key in the index's bucket
+  return this.storage[index][key];
 };
 
 /**
@@ -100,15 +61,10 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-  // pass our key argument (along with the size of the hash table)
-  // into the hash function and save the return value to a variable
   const index = hashCode(key, this.SIZE);
-  // save the key/value pair in the bucket associated with our index variable
-  const deletedValue = this.storage[index];
-  // delete that key/value pair from the hash table
-  delete this.storage[index];
-  // return the deleted value
-  return deletedValue;
+  const deletedVal = this.storage[index][key];
+  delete this.storage[index][key];
+  return deletedVal;
 };
 
 
@@ -131,13 +87,17 @@ function hashCode(string, size) {
 // Let's test!
 const newHash = new HashTable();
 console.log(newHash.set("cool", "beans"));
+console.log(newHash.storage);
 console.log(newHash.set("wow", "mom"));
+console.log(newHash.storage);
 console.log(newHash.set("clam", "gross"));
+console.log(newHash.storage);
 console.log(newHash.get("clam"));
-console.log(newHash.remove("clam"));
-console.log(newHash.remove("notReal"));
-console.log(newHash.get("pup"));
-console.log(newHash.set("cool", "newCool"));
+console.log(newHash.get("wow"));
+console.log(newHash.get("cool"));
+console.log(newHash.storage);
+console.log(newHash.remove("cool"));
+console.log(newHash.remove("cool"));
 console.log(newHash.get("cool"));
 
 // Do not remove!!
