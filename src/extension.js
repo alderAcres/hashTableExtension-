@@ -15,6 +15,132 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+/**
+* HashTable costructor
+*
+* construct a new hash table
+*
+* - You may modify this constructor as you need to achieve the challenges below.
+*/
+function HashTable(size) {
+  this.SIZE = size;
+  this.numberOfElements = 0;
+  this.numberOfDistictAddresses = 0;
+  
+  this.storage = new Array(this.SIZE); //How to fill with empty, DISTINCT, objects?? 
+}
+
+/**
+* set - Adds given value to the hash table with specified key.
+
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+  if (key === null) return "Cannot compute hashCode for null Object"
+
+  const address = hashCode(key, this.SIZE);
+
+  
+  if(this.storage[address]) {
+    if(this.storage[address][key]){
+      
+      this.storage[address][key] = value;
+      return this.numberOfElements;
+    }
+    
+    this.storage[address][key] = value;
+    return ++this.numberOfElements;
+  }
+  this.storage[address] = new Object();
+  this.storage[address][key] = value;
+  //conditional to check if increment exceeds 75%
+    //if true construct ne array with size increase and rehash
+    this.numberOfDistictAddresses++; 
+  return ++this.numberOfElements;
+};
+
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+*
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+  const address = hashCode(key,this.SIZE);
+  
+  return (this.storage[address]) ? this.storage[address][key] : null;
+};
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  const address = hashCode(key,this.SIZE);
+
+  if (this.storage[address]){
+    for (const keyInObj in this.storage[address]){
+      if (keyInObj === key) {
+        const deletedVal = this.storage[address][key];
+        delete this.storage[address][key];
+        return deletedVal;
+      } 
+    }
+  } 
+  return null;
+
+};
+
+
+// Do not modify
+function hashCode(string, size) {
+  'use strict';
+  let hash = 0;
+  if (string.length === 0) return hash;
+  
+  for (let i = 0; i < string.length; i++) {
+    const letter = string.charCodeAt(i);
+    hash = ((hash << 5) - hash) + letter;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  
+  return Math.abs(hash) % size;
+}
+
+
+const test = new HashTable(16);
+
+
+console.log(test.set("Logan", "testOne"));
+console.log(test.set("Logan", "testTwo"));
+console.log(test.set("bob", "testThree"));
+console.log(test.set(true, "testFour"));
+console.log(test.set("geo", "testFive"));
+console.log(test.set(600, "testSix"));
+console.log(test.set("zia", "testSeven"));
+console.log(test.set(null, "testEight"));
+console.log(test.set("Lazzer", "testNine"));
+console.log(test.set(10, "testTen"));
+
+
+
+
+console.log(test.numberOfElements);
+console.log(test.storage);
+console.log(Object.keys(test.storage[1]))
+
+console.log(test.get("Logan"))
+console.log(test.get("does not exist"))
+
+console.log(test.storage);
+console.log(test.remove("zia"))
+console.log(test.remove("zia"))
+console.log(test.storage);
 
 
 // YOUR CODE ABOVE
