@@ -123,7 +123,7 @@ HashTable.prototype.remove = function(key) {
   
   this.counter--; 
 
-  if (this.SIZE >= 16 && this.counter < this.lowerLimit) {
+  if (this.SIZE > 16 && this.counter < this.lowerLimit) {
     this.rehash('smaller'); 
   }
 
