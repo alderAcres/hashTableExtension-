@@ -62,8 +62,8 @@ HashTable.prototype.set = function (key, value) {
         this.set(el[0], el[1]);
       }
     });
-    return this.storage;
   }
+  return this.storage;
 };
 console.log(table.set(1, 2));
 console.log(table.set(3, 4));
