@@ -24,7 +24,20 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let hashedKey = hashCode(key, this.SIZE)
+  let index = 0;
+  if (this.storage[hashedKey] === undefined) {
+    this.storage[hashedKey] = [];
+    this.storage[hashedKey][0] = key;
+    this.storage[hashedKey][1] = value;
+  }
+  else {
+    // push value into empty index at this.storage[hashedKey] array
+    this.storage[hashedKey].push(key);
+    this.storage[hashedKey].push(value);
 
+  }
+  return this.storage;
 };
 
 /**
@@ -38,7 +51,20 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // use hash function to determine which index to search for
+  let hashedKey = hashCode (key, this.SIZE)
+  // check if theres more than one value stored at that location in memory
+  if (this.storage[hashedKey].length < 2) {
+    return this.storage[hashedKey][1];
+  }
+  else {
+    // if there is, loop through the nested array to find the value
+    for (let i = 0; i < this.storage[hashedKey].length; i++) {
+      if (this.storage[hashedKey][i] === key) {
+        return this.storage[hashedKey][i+1];
+      }
+    }
+  }
 };
 
 /**
@@ -50,7 +76,22 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // check if this.storage[hashedKey] is undefined and if it is, return undefined
+  // else loop through the nested array to search for the key and delete it
+  let hashedKey  = hashCode (key, this.SIZE)
+  let currentArr = this.storage[hashedKey]
+  if (currentArr === undefined) {
+    return undefined;
+  }
+  else {
+    for (let i = 0; i < currentArr.length; i++) {
+      if (currentArr[i] === key) {
+        delete currentArr[i]
+        delete currentArr[i+1]
+        return this.storage;
+      }
+    }
+  }
 };
 
 
@@ -69,6 +110,14 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
-
+let hashTable = new HashTable()
+console.log(hashTable.set(10,'firstVal'))
+// console.log(hashTable.set(10,'firstVal'))
+console.log(hashTable.set(15,'secondVal'))
+console.log(hashTable.get(10))
+console.log(hashTable.get(15))
+console.log(hashTable.remove(10))
+console.log(hashTable.remove(15))
+// console.log(hashTable.remove(17))
 // Do not remove!!
 module.exports = HashTable;
