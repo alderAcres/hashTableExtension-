@@ -7,9 +7,21 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.entries = 0;
+
   this.storage = new Array(this.SIZE);
+
+  for(let i = 0; i < this.SIZE; i++){
+    this.storage[i] = {};
+  }
+  
 }
+
+// clever method of converting keys to #s between 0 and size goes here:
+function convert(size, key){
+  return key.length % size
+}
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,8 +36,25 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let address = convert(this.SIZE, key);
 
+  // if the key doesn't already exist at the hashed address, add to total entries
+    // i.e. if the key exists, it will get overwritten, so total entries remains the same
+  if(!this.storage[address].hasOwnProperty(key)) { 
+    this.entries++;
+  } 
+  // add or overwrite the key value pair
+  this.storage[address][key] = value;
+
+  return this.entries;
 };
+
+let ht = new HashTable()
+ht.set("hello", "what's up")
+ht.set("hello", "world")
+ht.set("My name is Penny", "I'm a fat kitty")
+ht.set("Bread", "butter")
+console.log(ht)
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +67,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let address = convert(this.SIZE, key);
+  return this.storage[address][key]
 };
+
+console.log(ht.get("hello"))
+console.log(ht.get("Bread"))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +83,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let address = convert(this.SIZE, key);
 
+  if(this.storage[address][key] === undefined) return;
+  
+  let removed = this.storage[address][key];
+  delete this.storage[address][key];
+  this.entries--;
+
+  return removed;
 };
 
+console.log(ht.remove('hello'))
+console.log(ht)
 
 // Do not modify
 function hashCode(string, size) {
