@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.count = 0;
 }
 
 /**
@@ -24,7 +25,28 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key, this.SIZE);
+  // console.log('The index is: ', index);
+  
+  if (this.storage[index] === undefined){
+    this.storage[index] = {[key]: value}
+    this.count++;
+    // console.log('The storage is now: ', this.storage);
+    // console.log('The number of items in hash table is now: ', this.count);
+  }
 
+  if (this.storage[index][key]){
+    this.storage[index][key] = value;
+    // console.log('The storage is now: ', this.storage);
+    // console.log('The number of items in hash table is now: ', this.count);
+  } else {
+    this.storage[index][key] = value;
+    this.count++
+    // console.log('The storage is now: ', this.storage);
+    // console.log('The number of items in hash table is now: ', this.count);
+  }
+
+  return this.count;
 };
 
 /**
@@ -38,7 +60,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
+  // console.log('The index is: ', index);
 
+  if (this.storage[index] === undefined){
+    return 'This key does not exist in the hash table'
+  } else {
+    return this.storage[index][key];
+  }
 };
 
 /**
@@ -50,7 +79,22 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let index = hashCode(key, this.SIZE);
 
+  if (this.storage[index] === undefined){
+    return undefined;
+  } else {
+    let deleted = this.storage[index][key];
+    // console.log('This key has been deleted: ', deleted);
+
+    delete this.storage[index][key];
+    this.count--;
+    // console.log('The number of items in hash table is now: ', this.count);
+    // console.log('The storage is now: ', this.storage);
+    
+    
+    return deleted;
+  }
 };
 
 
@@ -72,3 +116,17 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+const hashTable = new HashTable();
+
+// console.log(hashTable.set('name0', 2));
+// console.log(hashTable.set('job', 'engineer'))
+// console.log(hashTable.set('name0', 21))
+// console.log(hashTable.set('name000', 6));
+// console.log(hashTable.get('last'))
+// console.log(hashTable.get('name0'))
+// console.log(hashTable.get('job'));
+// console.log(hashTable.remove('name000'))
+// console.log(hashTable.remove('name0'))
+// console.log(hashTable.remove('name0'))
