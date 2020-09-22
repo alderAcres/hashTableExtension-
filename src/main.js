@@ -24,7 +24,23 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let found = false;
 
+  const newObj = {};
+  newObj[key] = value;
+
+
+  this.storage.forEach((obj, i) => {
+    found = false
+      if (obj[key]) {
+        this.storage[i] = newObj;
+        found = true;
+      }
+  })
+
+  if (!found) this.storage.push(newObj);
+
+  return this.storage;
 };
 
 /**
