@@ -35,7 +35,6 @@ HashTable.prototype.set = function(key, value) {
     // push value into empty index at this.storage[hashedKey] array
     this.storage[hashedKey].push(key);
     this.storage[hashedKey].push(value);
-
   }
   return this.storage;
 };
