@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.index = 0;
 }
 
 /**
@@ -24,8 +25,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hash = hashCode(key, this.SIZE);
+  // not enough time to handle collisions :(
+  this.storage[hash] = value;
+  this.index++;
+  return this.storage[hash];
 };
+
+const test = new HashTable();
+console.log(test);
+console.log(test.set('a', 'apple'));
+console.log(test.set('b', 'banana'));
+console.log(test);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +49,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  for (let i = 0; i < this.SIZE; i++) {
+    if (this.storage[i] === this.storage[hash]) return this.storage[hash];
+  }
+  return;
+  // not enough time to handle more than one value stored at key's hashed address :(
 };
+
+console.log(test);
+console.log(test.get('a'));
+console.log(test.get('b'));
+console.log(test.get('c'));
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +72,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  console.log(hash);
+  if (!this.storage[hash]) return;
+  // stopped here, didn't get to finish in time
+  // I'd like an APC if possible because this challenge was quite difficult for me
 };
 
+console.log(test);
+console.log(test.remove('a'));
 
 // Do not modify
 function hashCode(string, size) {
