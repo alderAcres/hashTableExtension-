@@ -24,13 +24,12 @@ function HashTable() {
  * @return {number} The new number of items stored in the hash table
  */
 HashTable.prototype.set = function(key, value) {
-  const address = hashCode(key, this.SIZE);
-  // console.log(address);
-  if (!this.storage[address]) {
-    this.storage[address] = { [key]: value };
-  } else {
-    const previousValue = this.storage[address];
-    this.storage[address] = { ...previousValue, [key]: value };
+  const address = hashCode(key, this.SIZE)
+  if (!this.storage[address])
+    this.storage[address] = { [key]: value}
+  else {
+    const previousValue = this.storage[address]
+    this.storage[address] = { ...previousValue, [key]: value}
   }
 };
 
@@ -45,8 +44,8 @@ HashTable.prototype.set = function(key, value) {
  * hash table
  */
 HashTable.prototype.get = function(key) {
-  const address = hashCode(key, this.SIZE);
-  return this.storage[address][key];
+  const address = hashCode(key, this.SIZE)
+  if (this.storage[address]) return this.storage[address][key]
 };
 
 /**
@@ -58,10 +57,12 @@ HashTable.prototype.get = function(key) {
  * @return {string|number|boolean} The value deleted from the hash table
  */
 HashTable.prototype.remove = function(key) {
-  const address = hashCode(key, this.SIZE);
-  deletedEle = this.storage[address][key];
-  delete this.storage[address][key];
-  return deletedEle;
+  const address = hashCode(key, this.SIZE)
+  if (this.storage[address]) {
+    const removeItem = this.storage[address][key]
+    delete this.storage[address][key]
+    return removeItem
+  }
 };
 
 // Do not modify
@@ -82,14 +83,14 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
-
-const ht = new HashTable();
-console.log(ht.storage);
-ht.set("John", "123");
-console.log(ht.get("John"));
-ht.set("John", "126");
-console.log(ht.get("John"));
-console.log(ht);
-console.log(ht.storage);
-ht.remove("John");
-console.log(ht.storage);
+const table = new HashTable();
+console.log(table.storage)
+table.set("John","123");
+table.set("Luis", "126");
+console.log(table.storage);
+console.log("Value for John ", table.get("John"));
+console.log("Value for Luis ", table.get("Luis"));
+console.log(table.storage);
+console.log("Removing John...")
+console.log("Removing the value ", table.remove("John"));
+console.log(table.storage);
