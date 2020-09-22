@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.COUNTER = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const result = hashCode(key, this.SIZE);
 
+  if (this.storage[result]) {
+    if (!this.storage[result][key]) this.COUNTER++;
+    this.storage[result][key] = value;
+  } else {
+    this.storage[result] = {};
+    this.storage[result][key] = value;
+    this.COUNTER++;
+  }
+  return this.COUNTER;
 };
 
 /**
@@ -38,8 +48,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const result = hashCode(key, this.SIZE);
 
+  if (this.storage[result]) {
+    return this.storage[result][key];
+  } 
+  return undefined;
 };
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +66,33 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const result = hashCode(key, this.SIZE);
+  const value = this.get(key);
 
+  if (value) {
+    delete this.storage[result][key];
+    this.COUNTER--;
+  }
+  return value;
 };
+
+// const hash = new HashTable();
+// console.log(hash);
+// console.log(hash.set('19', 'hi'));
+// console.log(hash);
+// console.log(hash.set('8', 'hey'));
+// console.log(hash.set('10', 'hello'));
+// console.log(hash);
+// console.log(hash.get('8'));
+// console.log(hash.get('19'));
+// console.log(hash.get('10'));
+// console.log(hash.get('11'));
+// console.log(hash.remove('11'));
+// console.log(hash.remove('10'));
+// console.log(hash.remove('19'));
+// console.log(hash);
+// console.log(hash.remove('8'));
+// console.log(hash);
 
 
 // Do not modify
