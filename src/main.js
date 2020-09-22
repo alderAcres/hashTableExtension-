@@ -24,7 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  
+  //Use hashCode function (provided at bottom of page) to get key position
+  let hashKey = hashCode(key, this.SIZE);
+  //Check if there is a key value pair existing at the hashKey
+  if (this.storage[hashKey] !== undefined) {
+    //if true, overwrite the existing value with new value
+    this.storage[hashKey][key] = value;
+  } else {
+    //handle collision by using an object to store the value at the same hashKey address
+    this.storage[hashKey] = {};
+    //set the key/value pair into the created object
+    this.storage[hashKey][key] = value;
+  }
 };
 
 /**
@@ -39,6 +51,12 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+  //Use the hashCode function again to get the needed key position
+  const hashKey = hashCode(key, this.SIZE);
+  //if there is more than one value already stored, return the original value
+  if (this.storage[hashKey] !== undefined) {
+    return this.storage[hashKey][key];
+  } 
 };
 
 /**
@@ -51,6 +69,18 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
 
+  //Use hashCode function to generate hash Index 
+  const hashKey = hashCode(key, this.SIZE);
+  //if the key doesn't exist in the hashtable return undefined
+  if (!this.storage[hashKey][key]){
+    return undefined;
+  }
+  //Store deleted item into a variable
+  let deleted = this.storage[hashKey][key]
+  //delete the item
+  delete this.storage[hashKey][key]
+  //return the deleted item
+  return deleted;
 };
 
 
