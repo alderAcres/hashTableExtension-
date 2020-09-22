@@ -25,6 +25,47 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+  //create hash
+  let hash = hashCode(key, this.SIZE)
+
+  if(!hash in this.storage) return 'No value hashed'
+
+  // set new value
+  if(this.storage[hash] === undefined){
+      this.storage[hash] = value;
+  }
+  // just updating value
+  else if(hash in this.storage && this.storage[hash] !== value){
+      this.storage[hash] = value
+  }
+  // collision detected
+  else {
+    //  create empty obj for to store multiple hash
+    let myHashObj = {}
+
+    // no hash object yet and must create one
+    if(this.storage[hash] !== "[object Object]"){
+      
+      let newHash = hash(this.storage[hash], this.SIZE)
+      myHashObj[newHash] = this.storage[hash]
+
+      let otherHash = hash(value, this.SIZE)
+      myHashObj[otherHash] = value
+
+    }// Another hash table already exist
+    else{
+      // rehash
+      let newHash = hash(value, this.SIZE)
+
+      // assign to inner object
+      this.storage[hash][newHash] = value
+
+    }
+
+  }
+
+  
+  
 };
 
 /**
@@ -38,6 +79,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // create hash
+  let hash = hashCode(key, this.SIZE)
+
+  // retrives a stored value w/ speificed key
+  if(this.storage[hash] !== 'undefined' && this.storage){
+    return this.storage[hash]
+  }
+  // retrives hash with multiple values
+  else{
+   
+    return true
+   
+  }
 
 };
 
@@ -72,3 +126,15 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let myTable = new HashTable()
+
+// set new value 
+myTable.set('abc','23')
+// overwrite current value
+myTable.set('abc', 122)
+
+// get unhashed value
+console.log(myTable.get('ac'))
+// get value
+
