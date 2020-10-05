@@ -24,7 +24,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //find the index where the information will be stored by calling the hashCode function with the key name and size of HashTable obj as arguments
+  const index = hashCode(key, this.SIZE)
+  // check and see if that index already has a value in it
+  // if not place an object literal in the index
+  if (!this.storage[index]) this.storage[index] = {};
+  // assign the key/value pair to the object literal
+  this.storage[index][key] = value;
 };
 
 /**
@@ -38,7 +44,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // iterate through the contents of the HashTable obj
+  for (let obj of this.storage) {
+    // console.log(obj)
+    // if key is contained in the current hashed address, return that key's stored value 
+    if (obj) {
+      if (obj[key]) return obj[key];
+    }
+  }
 };
 
 /**
@@ -50,7 +63,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // iterate through the contents of the HashTable obj
+  for (let obj of this.storage) {
+    // if key is found in any of the objects, delete it and its value and return the value
+    if (ob) {
+      if (obj[key]) {
+        let val = obj[key];
+        delete (obj[key]);
+        return val;
+      }
+    }
+  }
+  // if the key/value pair was not found, return undefined
+  return undefined;
 };
 
 
@@ -69,6 +94,19 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+const testHash = new HashTable();
+
+testHash.set('Greeting', 'Hello!');
+testHash.set('Pleasantry', 'How do you do?')
+testHash.set('rgreeting', 'repeated index?, no')
+testHash.set('greeting', 'repeated index?, yes')
+console.log(testHash);
+// console.log(testHash.get('Pleasantry'))
+testHash.set('Pleasantry');
+console.log(testHash);
+console.log(testHash.set('test'));
 
 // Do not remove!!
 module.exports = HashTable;
