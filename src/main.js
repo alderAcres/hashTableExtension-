@@ -67,7 +67,7 @@ HashTable.prototype.remove = function (key) {
 };
 
 // Do not modify
-unction hashCode(string, size) {
+function hashCode(string, size) {
   'use strict';
 
   let hash = 0;
