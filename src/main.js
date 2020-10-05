@@ -7,7 +7,9 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
+  this.number = 0;
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +26,22 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // create a constant hashValue to store the hashCode address results
+  const hashValue = hashCode(key, this.SIZE);
 
+  // check if the hash value location exists in storage
+  if (!this.storage[hashValue]) { //error: cannot read property NaN of undefined
+    // if not, set it equal to an empty object. This will take care of future collisions with this hashCode location.
+    this.storage[hashValue] = {};
+  }
+
+  // check if the key exists already, if not, incrememnt number property
+  if (!this.storage[hashValue][key]) {
+    this.number++;
+  }
+
+  // set key-value pair at the correct hash code, should overwrite existing keys with new value
+  this.storage[hashValue][key] = value;
 };
 
 /**
@@ -38,7 +55,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // set constant hashValue to get location of key
+  const hashValue = hashCode(key, this.SIZE);
 
+  // return value of the key at the hashValue in storage
+  return this.storage[hashValue][key];
 };
 
 /**
@@ -50,7 +71,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  // set constant hashValue to get the location of the key in storage
+  const hashValue = hashCode(key, this.SIZE);
 
+  // check if the storage at the hashValue contains the specified key
+  if(!this.storage[hashValue][key]) {
+    return undefined;
+  }
+  this.number--;
+  delete this.storage[hashValue][key];
 };
 
 
@@ -69,6 +98,19 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+let testTable = new HashTable();
+testTable.set('1', "one");
+testTable.set('2', "two");
+testTable.set('3', "three");
+testTable.set('4', "four")
+testTable.set('1', "eins");
+testTable.set('441', "forty-four")
+console.log(testTable.get('1')); //eins
+testTable.remove('2');
+console.log(testTable.remove('2')); //undefined
+console.log(testTable)
+
 
 // Do not remove!!
 module.exports = HashTable;
