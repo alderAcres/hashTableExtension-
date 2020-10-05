@@ -33,6 +33,24 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // increment the current capacity by 1 
+  this.currCapacity++;
+  // check if currCapacity is > 75% the hashtables size
+  const maxCapacity = this.SIZE * 0.75;
+
+  if (this.currCapacity > maxCapacity) {
+    // if so create a new storage with double the size of the curr table
+    const newStorage = new Array(this.SIZE * 2);
+    // add everything in old table to new table with new hash based on new size
+    //    iterate through old storage and create new hash for each key value pair found
+    this.storage.forEach((item) => {
+      console.log("curr item:", ...Object.entries(item));
+    })
+    // set storage to newStorage
+    // set size to new size
+    this.SIZE = this.SIZE * 2;
+    // add new item as usual
+  }
   // get hash code for new key
   const address = hashCode(key, this.SIZE);
   //  create an object with key val pair if there is not one at the hash already
@@ -43,8 +61,7 @@ HashTable.prototype.set = function(key, value) {
     //  overwrite exsisting value if key already exists at address
     this.storage[address][key] = value;
   } 
-  // increment the current capacity by 1 and return curr capacity
-  this.currCapacity++;
+  // return curr capacity
   return this.currCapacity;
 };
 
@@ -76,6 +93,7 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  
   // invoke hashCode function with key and size to get address
   const address = hashCode(key, this.SIZE);
   // if the address and or key is undefined return undefined
@@ -84,8 +102,16 @@ HashTable.prototype.remove = function(key) {
   const storedValue = this.storage[address][key];
   // delete key value pair at that address
   delete this.storage[address][key];
+  
   // decrement curr capacity
   this.currCapacity--;
+  const minCapacity = this.SIZE * .25;
+  // if table size > 16 && currCapacity is < min Capacity (25% of table)
+  if (this.SIZE > 16 && this.currCapacity < minCapacity) {
+    //   create a new storage with 1/2 the current size 
+    //  add everything from table to new storage with  new hash based on new size
+    
+  }
   // return the stored value
   return storedValue;
 };
@@ -107,6 +133,21 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+let ht = new HashTable;
+console.log(ht.set("dan", 17))
+console.log(ht.set("bob", 37))
+console.log(ht.set("steph", 11))
+console.log(ht.set("jo", 67))
+console.log(ht.set("sue", 57))
+console.log(ht.set("tim", 2))
+console.log(ht.set("meg", 32))
+console.log(ht.set("JB", 31))
+console.log(ht.set("bailey", 32))
+console.log(ht.set("Paul", 31))
+console.log(ht.set("lou", 70))
+console.log(ht.set("gail", 67))
+console.log(ht.set("eliza", 25))
 
 // Do not remove!!
 module.exports = HashTable;

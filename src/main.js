@@ -75,6 +75,8 @@ HashTable.prototype.remove = function(key) {
   const storedValue = this.storage[address][key];
   // delete key value pair at that address
   delete this.storage[address][key];
+  // decrement curr capacity
+  this.currCapacity--;
   // return the stored value
   return storedValue;
 };
