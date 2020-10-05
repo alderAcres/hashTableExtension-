@@ -24,7 +24,10 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+let index = hashCode(key, this.SIZE)
+if (!this.storage[index]) this.storage[index] = {}
+this.storage[index][key] = value
+return this
 };
 
 /**
@@ -38,7 +41,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+let index = hashCode(key, this.SIZE)
+return this.storage[index][key]
 };
 
 /**
@@ -50,7 +54,11 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key, this.SIZE)
+if (!this.storage[index]) return 'key not found'
+let answer = this.storage[index][key]
+delete this.storage[index][key]
+return answer
 };
 
 
@@ -72,3 +80,9 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let hasher = new HashTable()
+console.log(hasher.set('seamus', 11221))
+console.log(hasher.get('seamus'))
+console.log(hasher.remove('seamus'))
+console.log(hasher)

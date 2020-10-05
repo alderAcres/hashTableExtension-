@@ -14,25 +14,77 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.set = function(key, value) {
+let index = hashCode(key, this.SIZE)
+let full = 0
+if (!this.storage[index]) {
+  this.storage[index] = {}
+  full++
+} 
+if (full > this.storage.length * 0.75) {
+  delete this.storage
+  this.SIZE * 2
+}
+
+this.storage[index][key] = value
+return this
+};
+
+/**
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+let index = hashCode(key, this.SIZE)
+return this.storage[index][key]
+};
+
+/**
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  let index = hashCode(key, this.SIZE)
+if (!this.storage[index]) return 'key not found'
+let answer = this.storage[index][key]
+delete this.storage[index][key]
+return answer
+};
 
 
-
-// YOUR CODE ABOVE
-
+// Do not modify
 function hashCode(string, size) {
   'use strict';
   
   let hash = 0;
   if (string.length === 0) return hash;
-  
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
   return Math.abs(hash) % size;
 }
+
+// Do not remove!!
+module.exports = HashTable;
+
+let hasher = new HashTable()
+console.log(hasher.set('seamus', 11221))
+console.log(hasher.get('seamus'))
+console.log(hasher.remove('seamus'))
+console.log(hasher)
+
+
+// YOUR CODE ABOVE
+
+
 
 // Do not remove!!
 module.exports = HashTable;
