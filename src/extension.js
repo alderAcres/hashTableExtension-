@@ -14,7 +14,87 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+/**
+* HashTable costructor
+*
+* construct a new hash table
+*
+* - You may modify this constructor as you need to achieve the challenges below.
+*/
+function HashTable() {
+  this.SIZE = 16;
+  this.itemCount = 0
+  this.storage = new Array(this.SIZE);
+}
 
+/**
+* set - Adds given value to the hash table with specified key.
+*
+* - If the provided key has already been used to store another value, simply overwrite
+*   the existing value with the new value.
+* - If the hashed address already contains another key/value pair, you must handle
+*   the collision appropriately.
+*
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+  let size = this.SIZE;
+  let breakPoint = (size / 100) * 75;
+  if (this.itemCount + 1 >= breakPoint) this.SIZE = size * 2;
+  let index = hashCode(key, this.SIZE);
+  if (!this.storage[index]) this.storage[index] = {};
+  this.storage[index][key]= value;
+  return ++this.itemCount;
+};
+
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+*
+* - If more than one value is stored at the key's hashed address, then you must retrieve
+*   the correct value that was originally stored with the provided key
+*
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
+  if (!this.storage[index]) return null;
+  return this.storage[index][key];
+};
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  let size = this.SIZE;
+  let breakPoint = (size / 100) * 25;
+  console.log(breakPoint)
+  if (this.itemCount - 1 <= breakPoint && size > 16) this.SIZE = size / 2;
+  let index = hashCode(key, this.SIZE);
+  if (!this.storage[index][key]) return undefined
+  let result = this.storage[index][key];
+  delete this.storage[index][key];
+  this.itemCount--
+  return result; 
+};
+
+const hash = new HashTable();
+console.log(hash.set('gavin', 17))
+console.log(hash.set('stacy', true))
+console.log(hash.set('vanessa', 35))
+console.log(hash.SIZE)
+console.log(hash.get('gavin'))
+console.log(hash.get('stacy'))
+console.log(hash.remove('gavin'));
+console.log(hash.SIZE)
 
 
 // YOUR CODE ABOVE
