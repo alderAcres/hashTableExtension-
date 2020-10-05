@@ -139,6 +139,25 @@ HashTable.prototype.remove = function(key) {
     delete this.storage[hashedKeyIndex][key];
     this.counter--;
 
+    
+  }
+
+
+
+  // 2. remove:
+  //     - If the hash table's SIZE is greater than 16 and the result of removing the
+  //       item drops the number of stored items to be less than 25% of the hash table's SIZE
+  //       (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
+
+  if (this.counter <= Math.floor(this.SIZE * 0.25) && this.SIZE > 16) {
+    //need to rehash everything and do similar to the rehashing in the set method
+    //but now need to reduce size of hash by 1/2 
+    let passedInKey = key; 
+    this.SIZE = this.SIZE / 2; 
+    //re-start counter at 0 
+    this.counter = 0;
+
+
     //then need to rehash everything 
     //plan to do this by iterating through this.storage and rehashing each value to account for the change in size
     //since hash function takes size into account 
@@ -164,23 +183,6 @@ HashTable.prototype.remove = function(key) {
       this.storage[subArrs[0]][passedInKey] = subArrs[1];
     } //return this.storage after rehashing 
     return this.storage; 
-  }
-
-
-
-  // 2. remove:
-  //     - If the hash table's SIZE is greater than 16 and the result of removing the
-  //       item drops the number of stored items to be less than 25% of the hash table's SIZE
-  //       (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
-
-  if (this.counter <= Math.floor(this.SIZE * 0.25) && this.SIZE > 16) {
-    //need to rehash everything and do similar to the rehashing in the set method
-    //but now need to reduce size of hash by 1/2 
-    let passedInKey = key; 
-    this.SIZE = this.SIZE / 2; 
-    //re-start counter at 0 
-    this.counter = 0;
-
   }
 
 };
