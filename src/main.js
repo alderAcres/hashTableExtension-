@@ -65,7 +65,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // invoke hashCode function with key and size to get address
+  const address = hashCode(key, this.SIZE);
+  // if the address and or key is undefined return undefined
+  if (!this.storage[address][key]) return undefined;
+  // otherwise store value at that key and address to variable
+  const storedValue = this.storage[address][key];
+  // delete key value pair at that address
+  delete this.storage[address][key];
+  // return the stored value
+  return storedValue;
 };
 
 
@@ -84,15 +93,6 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
-let ht = new HashTable;
-ht.set("dan", 12)
-ht.set("bob", 45)
-ht.set("nancy", 30)
-ht.set("dan", 17)
-console.log(ht)
-console.log("get ralph:", ht.get("ralph")); // undefined
-console.log("get dan:", ht.get("dan")); // undefined
-console.log("get nancy:", ht.get("nancy")); // undefined
-console.log("get bob:", ht.get("bob")); // undefined
+
 // Do not remove!!
 module.exports = HashTable;
