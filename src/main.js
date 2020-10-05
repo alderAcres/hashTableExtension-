@@ -1,3 +1,5 @@
+const { delete } = require("request");
+
 /**
 * HashTable costructor
 *
@@ -24,6 +26,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //call hash function on key for size of this array
+  let tableEl = hashCode(key, this.SIZE);
+  //if this element in the storage array is undefined, define it and push key as key and value as value into new object stored in hash table
+  //otherwise push key value pair into existing object
+  if(this.storage[tableEl] === undefined){
+    this.storage[tableEl] = {};
+    this.storage[tableEl][key] = value;
+  }else{
+    this.storage[tableEl][key] = value;
+  }
+  return;
 
 };
 
@@ -38,7 +51,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //access table at element corresponding to key
+  let tableEl = hashCode(key, this.SIZE);
+  //as long as this table el is defined return the value corresponding to key in object
+  if(this.storage[tableEl]!== undefined){
+    return(this.storage[tableEl][key])
+  }
+  return undefined;
 };
 
 /**
@@ -50,6 +69,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //check hashtable at element to see if key value pair exists
+  let tableEl = hashCode(key, this.SIZE);
+  if(this.storage[tableEl][key]!==undefined){
+    //delete if exists
+    let retVal = this.storage[tableEl][key];
+    delete this.storage[tableEl][key];
+    return retVal;
+  }else{
+    return undefined;
+  }
+
 
 };
 
@@ -69,6 +99,13 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+// let hash = new HashTable();
+// hash.set("hello", "stuff");
+// hash.set("hello2", "stuff1");
+// console.log(hash.get("hello2"))
+// hash.remove("hello2");
+// console.log(hash);
 
 // Do not remove!!
 module.exports = HashTable;
