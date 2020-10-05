@@ -15,7 +15,52 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  this.itemCount = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  let item = hashCode(key, this.SIZE);
+  !this.storage[item] && (this.storage[item] = {});
+  !this.storage[item][key] && this.itemCount++;
+  this.storage[item][key] = value;
+  this.itemCount >= .75 * this.SIZE && (this.rehash(this.SIZE * 2, this.SIZE))
+  return this.itemCount;
+}
+
+HashTable.prototype.get = function(key) {
+  let item = hashCode(key, this.SIZE);
+  return this.storage[item][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  let item = hashCode(key, this.SIZE);
+  if (!this.storage[item][key]) return undefined;
+  let deleted = this.storage[item][key]; 
+  delete this.storage[item][key];
+  this.itemCount -= 1;
+  (this.itemCount <= this.SIZE * .25 && this.SIZE > 16) && (this.rehash(this.SIZE * 0.5, this.SIZE))
+  return deleted;
+};
+
+HashTable.prototype.rehash = function(UPDATEDSIZE, ORIGINALSIZE) {
+  this.SIZE = UPDATEDSIZE;
+  let temp = [...this.storage];
+  this.storage = new Array(UPDATEDSIZE);
+
+  temp.forEach(item => {
+    if (item) {
+      Object.keys(item).forEach(key => {
+        let origHash = hashCode(key, ORIGINALSIZE);
+        let updatedHash = hashCode(key, this.SIZE);
+        !this.storage[updatedHash] && (this.storage[updatedHash] = {});
+        this.storage[updatedHash][key] = temp[origHash][key];
+      });
+    }
+  });
+};
 
 // YOUR CODE ABOVE
 
@@ -33,6 +78,26 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+/* tests
+let hashTable = new HashTable();
+
+for (let i = 0; i < 13; i++) {
+  const key = 'key ' + i;
+  const value = 'value ' + i;
+  hashTable.set(key, value);
+}
+
+hashTable.SIZE //?
+
+for (let i = 0; i < 5; i++) {
+  const key = 'key ' + i;
+  hashTable.remove(key);
+}
+
+hashTable.SIZE //?
+
+*/
 
 // Do not remove!!
 module.exports = HashTable;

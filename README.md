@@ -1,7 +1,7 @@
 # CS-Fundamentals-Assessment
 
 ## Summary
-Week 1 assessment will be used to assess your understanding of the material provided in the past week. We'll be building an implementation of a hash table. You may remember being asked in your unit challenges to implement the resizing functionality in your hash table. Here you are asked to ONLY RESIZE IN THE EXTENSION. At the end of the period, commit your work and submit a pull request. This is done solo. **DO NOT** look at previous code or ask your cohort-mates for help. However, your other resources (e.g. google, stack overflow) are allowed.
+The CS fundamentals assessment will be used to assess your understanding of the material provided in units 1 through 3. We'll be building an implementation of a hash table. You may remember being asked in your unit challenges to implement the resizing functionality in your hash table. Here you are asked to ONLY RESIZE IN THE EXTENSION. At the end of the period, commit your work and submit a pull request. This is done solo. **DO NOT** look at previous code or ask your cohort-mates for help. However, your other resources (e.g. google, stack overflow) are allowed.
 
 ## How do I get started?
 1. Fork this repo
