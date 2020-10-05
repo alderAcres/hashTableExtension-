@@ -24,6 +24,22 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //run key through hash function to get hash code
+  let code = hashCode(key, this.SIZE);
+  // console.log(code); 
+
+  //check table object to see if the key already exists at given hash code
+    //if not, add key/value pair
+    //if so, check if key is the same & replace value if so
+      //else push new key value pair into same hash code
+        //NOTE: I think this means that if at that hash code there is a key value pair with the same key as "key" argument, we overwrite the corresponding value, whereas if the hash code is the same, but not the key, that's a collision and we have to add another key-value pair 
+  if (!this.storage[code]) {
+    this.storage[code] = {};
+  }
+
+  this.storage[code][key] = value;
+  //everything's adding at the same index and not sure why yet
+  
 
 };
 
@@ -38,7 +54,18 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //get hash code from key and hash function
+  //loop through existing elements at hash code to see if one matches the key
+    //return
+  //else return error message?
+  
+  let code = hashCode(key, this.SIZE);
+  let keyArray = Object.keys(this.storage[code]); 
+  for (let i = 0; i < keyArray.length; i++) {
+    if (keyArray[i] === key) return keyArray[code][key];
+  }
+  console.log("this key is not recorded, sry")
+  //need to test this more
 };
 
 /**
@@ -69,6 +96,21 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+let table = new HashTable();
+table.set(10, 94);
+table.set(20, 72);
+table.set(30, 1);
+table.set(21, 6);
+table.set(15, 21);
+table.set(32, 34);
+console.log(table.storage);
+
+
+
+
+
 
 // Do not remove!!
 module.exports = HashTable;
