@@ -7,8 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.items = 0;
 }
 
 /**
@@ -24,7 +24,16 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //invoke the hashCode function, passing in key and size to get a hashIndex, store as hashIndex
+  let hashIndex = hashCode(key, this.SIZE);
+  console.log(hashIndex)
 
+  //assign value to hashIndex on hash table
+  this.storage[hashIndex] = value;
+
+  //pre increment and return number of items in hash table
+  return ++this.items;
+  
 };
 
 /**
@@ -38,7 +47,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  //invoke the hashCode function, passing in key and size to get a hashIndex, store as hashIndex
+  let hashIndex = hashCode(key, this.SIZE);
 
+  //return the value at hashIndex
+  return this.storage[hashIndex];
 };
 
 /**
@@ -50,7 +63,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //invoke the hashCode function, passing in key and size to get a hashIndex, store as hashIndex
+  let hashIndex = hashCode(key, this.SIZE);
 
+  //store the value at hashIndex as temp
+  let temp = this.storage[hashIndex];
+
+  //delete the key/val pair at hashIndex and decrement this.items
+  delete this.storage[hashIndex];
+  this.items--;
+
+  //return temp
+  return temp;
 };
 
 
@@ -72,3 +96,20 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+//test cases
+// const myHash = new HashTable();
+// myHash.set('key1', true); 
+// myHash.set('key2', false);
+// myHash.set('key3', 3); 
+
+// console.log(myHash.storage);
+
+// myHash.get('key3'); 
+
+// console.log(myHash.remove('key2')); //should return false
+
+// console.log(myHash.storage) //should not include key2
+// console.log(myHash.items) //should be 2
+
+
