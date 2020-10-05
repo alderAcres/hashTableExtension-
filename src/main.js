@@ -11,6 +11,7 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+let hashData = new HashTable();
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,9 +25,25 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+// An empty object is necessary at the location of each index
+// this.storage is the object we already have on line 11 
+// This object has a flexible size, defualt set to 16
+// Create an index variable, 
+// Initialize it to calling the hashCode function on (key, this.SIZE)
+// Case 1: if no object exists, create an empty object
+// Case 2: if the object already exists, add another key-value pair
 
+  const index = hashCode(key, this.SIZE);
+  if (!this.storage[index]) this.storage[index] = {};
+  this.storage[index][key] = value;
 };
 
+hashData.set('a', 1);
+hashData.set('b', 2);
+hashData.set('c', 3);
+hashData.set('d', 4);
+
+console.log(hashData);
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -38,9 +55,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+// Return the value at the specified key (input)
+// To do that, run the hashCode function with 2 parameters (string = key, this.SIZE)
+return this.storage[hashCode(key, this.SIZE)][key];
 };
-
+console.log(hashData.get('a')); // 1
+console.log(hashData.get('b')); // 2
+console.log(hashData.get('c')); // 3
+console.log(hashData.get('d')); // 4
+console.log(hashData.get('e')); // property does not exist
 /**
 * remove - delete a key/value pair from the hash table
 *
@@ -50,9 +73,19 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+// Remove function needs to store the key-value pair in a variable (result)
+// Delete that key-value pair from our object (this.storage)
+// Return the key-value pair (result)
+  const result = this.storage[hashCode(key, this.SIZE)][key];
+  delete this.storage[hashCode(key, this.SIZE)][key];
+  return result;
 };
 
+console.log(hashData);
+console.log(hashData.remove('b'));
+console.log(hashData);
+hashData.remove('d');
+console.log(hashData);
 
 // Do not modify
 function hashCode(string, size) {
