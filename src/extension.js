@@ -124,6 +124,30 @@ HashTable.prototype.remove = function(key) {
   else {
     return "Error: There is no value associated with that key";
   }
+  //For the remove extension, first we have to check if the criteria is met
+  if (this.SIZE>16 && this.count<=this.SIZE*3/4) {
+    //then we're having the size of the storage and I believe the rest of the functionality should be the
+    //same as expanding the size. Again, didn't have time to test so let me know if this was the right way
+    // to go about it!
+  this.SIZE /=2;
+  this.count = 0;
+  //Then iterate through each index in our hash table
+  for (let x of this.storage) {
+    //then run through each object at that index
+    for (let y in this.storage[x]) {
+      //we'll save the associated value and run the key thru a new hash code
+      let value = this.storage[x][y];
+      let newHashCode = hashCode(y, this.SIZE);
+      //then we'll perform similar functionality to our the rest of our set function, checking if that exists and
+      //if not creating an object and saving the associated key-value pair to that object
+      if (this.storage[newHashCode] === undefined) {
+        this.storage[newHashCode] = {};
+    }
+    this.storage[newHashCode][y] = value;
+    //finally we'll remove the key-value pair from the old hash table
+    delete y;
+  }
+  }
 };
 
 test.remove("key")
