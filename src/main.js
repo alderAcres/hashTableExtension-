@@ -24,7 +24,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //get an index from the hash function provided using the key and size of the buckets
+  let index = hashCode(key, this.SIZE);
+  //check if the buckets already has the key and create an obj to store the key-value pair
+  if(!this.storage[index]) this.storage[index] = {};
 
+  //store the key-value pair in the right index
+  this.storage[index][key] = value;
 };
 
 /**
@@ -38,7 +44,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //get an index from the hash function provided using the key and size of the buckets
+  let index = hashCode(key, this.SIZE);
+  //return the value stored at index using key since the key-value pair is stored in obj form
+  return this.storage[index][key];
 };
 
 /**
@@ -50,7 +59,20 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //get an index from the hash function provided using the key and size of the buckets
+  let index = hashCode(key, this.SIZE);
+  //check if the key exist, 
+  if(!this.storage[index][key])
+    //if not, return undefined
+    return undefined;
+    //otherwise save the value in a new var
+  else{
+    let removed = this.storage[index][key];
+    //remove the entry in the obj at the index
+    delete this.storage[index][key];
+    //return the value using the new store var
+    return removed;
+  }
 };
 
 
@@ -72,3 +94,21 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+let hashT = new HashTable();
+hashT.set("hi", "bye");
+hashT.set("hello", "goodbye");
+hashT.set("welcome", "thanks");
+hashT.set("nice", "you, too");
+console.log(hashT);
+hashT.set("nice", "good to know");
+hashT.set(0, 1000);
+console.log(hashT);
+console.log(hashT.get("hi"));
+console.log(hashT.get("nice"));
+console.log(hashT.get("hello"));
+console.log(hashT.get(0));
+console.log(hashT.remove("hi"));
+console.log(hashT.remove("welcome"));
+console.log(hashT.remove(0));
+console.log(hashT);
