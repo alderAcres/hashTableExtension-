@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,10 +23,16 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  // get an index to store into hash table by running hash function passing in the key, value pair
+  let idx = hashCode(key, HashTable.SIZE);
+  //check if that index has already been stored in the hash table: if not, store the key, value pair as an array at the index provided from the hash function
+  if (!this.storage[idx]) {
+    this.storage[idx] = [key, value];
+  } else {
+    // if the index has already been used to store a key, value pair, 
+  }
 };
-
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -37,10 +43,9 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
+HashTable.prototype.get = function (key) {
 
 };
-
 /**
 * remove - delete a key/value pair from the hash table
 *
@@ -49,26 +54,23 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function (key) {
 
 };
-
-
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
-
 // Do not remove!!
 module.exports = HashTable;
