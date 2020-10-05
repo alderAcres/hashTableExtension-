@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.currCapacity = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -34,7 +34,9 @@ HashTable.prototype.set = function(key, value) {
     //  overwrite exsisting value if key already exists at address
     this.storage[address][key] = value;
   } 
-
+  // increment the current capacity by 1 and return curr capacity
+  this.currCapacity++;
+  return this.currCapacity;
 };
 
 /**
