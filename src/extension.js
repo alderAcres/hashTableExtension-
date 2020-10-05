@@ -29,7 +29,7 @@ HashTable.prototype.set = function(key, value) {
         //then we will store the value passed in inside the obj we just created
     this.storage[index] = value
 
-    // to count the amount of empty spots by pushing each new value into a newArr and using the length property
+    // to count the amount of filled spots by pushing each new value into a newArr and using the length property
     this.newArr.push(this.storage[index])
         // checks if the array length/this.SIZE is greater than 75%, if it is then we want to double the size
     if ((this.newArr.length / this.SIZE) > .75) {
