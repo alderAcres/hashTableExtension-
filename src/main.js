@@ -7,9 +7,11 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
+  this.count = 0;
 }
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,7 +26,9 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hash = hashCode(key, this.SIZE);
+  this.storage[hash] = value;
+  return ++this.count;
 };
 
 /**
@@ -38,7 +42,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[hashCode(key, this.SIZE)];
 };
 
 /**
@@ -50,25 +54,33 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let val = this.storage[hashCode(key, this.SIZE)];
+  --this.count;
+  delete this.storage[hashCode(key, this.SIZE)];
+  return val;
 };
 
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
+// var ht = new HashTable();
+// ht.set('a',1);
+// ht.set('b',2);
+// ht.set('c',3);
+// ht.set('d',4);
 // Do not remove!!
 module.exports = HashTable;
