@@ -106,7 +106,7 @@ console.log(testHash);
 // console.log(testHash.get('Pleasantry'))
 testHash.set('Pleasantry');
 console.log(testHash);
-console.log(testHash.set('nonsense'));
+console.log(testHash.set('test'));
 
 // Do not remove!!
 module.exports = HashTable;
