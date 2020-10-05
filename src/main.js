@@ -24,6 +24,16 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // get hash code for new key
+  const address = hashCode(key, this.SIZE);
+  //  create an object with key val pair if there is not one at the hash already
+  if (!this.storage[address]) {
+    this.storage[address] = { [key] : value }
+  } else {
+    //  else add key val pair to obj if one already exists
+    //  overwrite exsisting value if key already exists at address
+    this.storage[address][key] = value;
+  } 
 
 };
 
@@ -38,7 +48,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // invoke hashCode with key to get address
+  const address = hashCode(key, this.SIZE);
+  // if that key is not found at that adress return undefined
+  if (!this.storage[address][key]) return undefined;
+  // else return the value assigned to the key at the address
+  return this.storage[address][key];
 };
 
 /**
@@ -69,6 +84,15 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
-
+let ht = new HashTable;
+ht.set("dan", 12)
+ht.set("bob", 45)
+ht.set("nancy", 30)
+ht.set("dan", 17)
+console.log(ht)
+console.log("get ralph:", ht.get("ralph")); // undefined
+console.log("get dan:", ht.get("dan")); // undefined
+console.log("get nancy:", ht.get("nancy")); // undefined
+console.log("get bob:", ht.get("bob")); // undefined
 // Do not remove!!
 module.exports = HashTable;
