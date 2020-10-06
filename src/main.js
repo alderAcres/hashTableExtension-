@@ -27,7 +27,8 @@ HashTable.prototype.set = function(key, value) {
   // retrieve hash
   const hash = this.hashCode(key, this.SIZE)
   // access hash in storage, save hash and storage
-  this.storage[hash] = {}
+  // if hash doesn't exist, instantiate an empty object
+  if(!this.storage[hash]) this.storage[hash] = {}
   this.storage[hash][key] = value
   return this.storage.length
 };
