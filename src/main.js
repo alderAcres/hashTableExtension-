@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  this.numOfItems = 0;
   
   this.storage = new Array(this.SIZE);
 }
@@ -30,8 +29,7 @@ HashTable.prototype.set = function(key, value) {
   // access hash in storage, save hash and storage
   this.storage[hash] = {}
   this.storage[hash][key] = value
-  //increment num of items
-  return ++this.numOfItems
+  return this.storage.length
 };
 
 /**
@@ -68,8 +66,6 @@ HashTable.prototype.remove = function(key) {
   //if value exists, delete
   if(this.storage[hash][key]) {
     delete this.storage[hash][key]
-    //decrement number of items in hash table
-    this.numOfItems--
     return `${value} deleted`
   } else {
     return undefined
