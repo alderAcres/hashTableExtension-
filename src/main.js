@@ -24,6 +24,12 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // the theory kind of make sense to me, but i am not sure what i am doing
+  let index = this.hash(key)
+  if(!this.storage[index]){
+    this.storage[index] = [];
+  }
+  this.storage[index].push([key, value])
 
 };
 
@@ -38,6 +44,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let index = this.hash(key);
+  if(this.storage[index]){
+    for(let i = 0; i < this.storage[index].length; i++){
+      if(this.storage[index][i][0] === key){
+        return this.storage[index][i][1]
+      }
+    }
+  }
+  return undefined 
 
 };
 
