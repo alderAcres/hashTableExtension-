@@ -24,8 +24,23 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let index = hashCode(key, this.SIZE);
+  if (!this.storage[index]) {
+    let container = {};
+    container[key] = value;
+    this.storage[index] = container;
+  }
+  else {
+    let current = this.storage[index];
+    current[key] = value;
+    this.storage[index] = current
+  }
 };
+
+let dummy = new HashTable;
+dummy.set(5, 4);
+dummy.set('Mig', 'uel')
+console.log(dummy);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +53,24 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  let container = this.storage[index];
+  if (container[key] !== undefined) {
+    return true;
+  } else {
+    return false;
+  }
 };
+
+console.log(dummy.get(2));
+console.log(dummy.get(5));
+console.log(dummy.get('idk'));
+console.log(dummy.get('Mig'));
+dummy.set('mig', 'Hi');
+console.log(dummy);
+
+
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +81,20 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let index = hashCode(key, this.SIZE);
+  let container = this.storage[index];
+  let toReturn = undefined;
+  toReturn = container[key];
+  delete container[key];
+  return toReturn;
 };
+
+dummy.remove('mig');
+dummy.remove('Mig');
+console.log(dummy);
+
+console.log(dummy.remove(5));
+console.log(dummy);
 
 
 // Do not modify
