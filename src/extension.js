@@ -95,12 +95,39 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 
-/* Didn't get to this one in time :////// */
+
 HashTable.prototype.remove = function(key) {
   const index = hashCode(key, this.SIZE);
   if (!this.storage[index][key]) return;
   const temp = this.storage[index][key];
   delete this.storage[index];
+  let percentage = 0;
+  for (let i = 0; i < this.storage.length; i++) {
+    if (this.storage[i]) percentage += 1;
+  }
+  /* Account for extra value */
+  percentage += 1;
+  /* If we go over 75% of size */
+  if ((percentage / this.SIZE) < 0.25 && this.SIZE > 16) {
+    this.SIZE = this.SIZE / 2;
+    const newStorage = new Array(this.SIZE);
+    for (let i = 0; i < this.storage.length; i++) {
+      /* Rebuild new storage at new size */
+      if (this.storage[i]) {
+        for (const [key2, value2] of Object.entries(this.storage[i])) {
+          const newBucket = hashCode(key2, this.SIZE);
+          if (!newStorage[newBucket]) {
+            newStorage[newBucket] = {};
+            newStorage[newBucket][key2] = value2;
+          } else {
+            newStorage[newBucket][key2] = value2;
+          }
+        }
+      }
+    }
+    /* Replace old storage with new storage */
+    this.storage = newStorage;
+  }
   return temp;
 };
 
