@@ -17,6 +17,7 @@
 function HashTable() {
   this.SIZE = 16;
   this.storage = new Array(this.SIZE);
+  this.itemCount = 0;
 }
 
 /**
@@ -32,23 +33,26 @@ function HashTable() {
  * @return {number} The new number of items stored in the hash table
  */
 HashTable.prototype.set = function (key, value) {
-  const capacity = this.storage.reduce((acc, cur) => {
-    if (Object.keys(cur).length === 0 || undefined) {
+  let capacity = this.storage.reduce((acc,cur)=> {
+    if(Object.keys(cur).length === 0 || undefined){
       return acc;
     }
     return acc + 1;
   }, 0);
 
-  if (capacity > this.SIZE * 0.75) {
-    const previousData = this.storage.reduce((acc, cur) => {
-      return { ...acc, ...cur };
+  if(capacity > this.SIZE * 0.75) {
+    const currentItemCount = this.itemCount;
+    const previousData = this.storage.reduce((acc,cur)=> {
+      return {...acc, ...cur};
     }, {});
-    this.SIZE *= 2;
+    this.SIZE = this.SIZE * 2;
     this.storage = new Array(this.SIZE);
-    Object.keys(previousData).forEach((e) => {
+    Object.keys(previousData).forEach(e=> {
       this.set(e, previousData[e]);
-    });
+    })
+    this.itemCount = currentItemCount;
   }
+
 
   // get index by calling hashCode with key;
   const binNumber = hashCode(key, this.SIZE);
@@ -59,9 +63,13 @@ HashTable.prototype.set = function (key, value) {
   if (!this.storage[binNumber]) {
     obj[key] = value;
     this.storage[binNumber] = obj;
+    this.itemCount += 1;
+    return this.itemCount;
     // if there is data already in storage at binNumber, combine current data with new obj and storage as one object to reduce collision
   } else {
     this.storage[binNumber][key] = value;
+    this.itemCount += 1;
+    return this.itemCount;
   }
 };
 
@@ -101,6 +109,7 @@ HashTable.prototype.remove = function (key) {
     const deletedValue = this.storage[binNumber][key];
     // delete the key in the hashtable at the binNumber
     delete this.storage[binNumber][key];
+    this.itemCount -= 1;
     // return out the temporary variable
     return deletedValue;
   }
