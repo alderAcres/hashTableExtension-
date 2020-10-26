@@ -11,6 +11,10 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+let newHash = new HashTable;
+
+console.log(newHash);
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,8 +28,24 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let itemsStored = 0;
+  let index = hashCode(key, this.SIZE);
 
+  if (!this.storage[index]) {
+    this.storage[index] = {};
+  };
+
+  this.storage[index][key] = value;
+
+  for (let i = 0; i < this.SIZE; i++) {
+    if (this.storage[i] != null) itemsStored++;
+  };
+
+  return itemsStored;
 };
+
+console.log(newHash.set('published first:', 'the pig and the pony'));
+console.log(newHash.set('published second:', 'pink corn moon'));
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
