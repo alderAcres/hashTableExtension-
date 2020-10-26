@@ -24,8 +24,9 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-  const location = hashCode(key, this.size);
-  this.storage[location] = {}; //sets empty object container into location to handle collisions
+  const location = hashCode(key, this.size); // location will be a number outputted from hash function
+  console.log(location);
+  if (this.storage[location] === undefined) this.storage[location] = {}; //sets empty object container into location to handle collisions
   this.storage[location][key] = value; //will overwrite any value already stored in this location
 };
 
@@ -41,7 +42,9 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
   const location = hashCode(key, this.size);//determines location
-  return this.storage[location][key]; //retrieves value stored under key at specific location
+  if (this.storage[location][key]) return this.storage[location][key]; //retrieves value stored under key at specific location
+  return "--> * value not found * <--"
+   
 };
 
 /**
@@ -60,10 +63,21 @@ HashTable.prototype.remove = function(key) {
 
 const pleaseWorkHash = new HashTable();
 pleaseWorkHash.set(3, 'this is data');
-pleaseWorkHash.set('work', 'this is more data');
+console.log(pleaseWorkHash)
+pleaseWorkHash.set(3, 'this is more data');
+console.log(pleaseWorkHash)
 pleaseWorkHash.set('hash', 'i love data');
 console.log(pleaseWorkHash);
-console.log(pleaseWorkHash.get('please'));
+console.log(pleaseWorkHash.get('hash'));
+console.log(pleaseWorkHash.get(28));
+pleaseWorkHash.remove(3);
+pleaseWorkHash.set('zoom', 'this is still data');
+console.log(pleaseWorkHash);
+//ISSUES::
+//when the hashtable is logged, it shows 16 empty array indices and one object, so it appears i'm not putting the object containing my values into separate array spaces inside my hashtable, but rather putting them all into an object which is also stored on my array Hash... (???) --> it seems as if my hash function is always outputting the same value (NaN) when it runs and all my values are being stored in the object placed at this index
+
+
+
 // Do not modify
 function hashCode(string, size) {
   'use strict';
