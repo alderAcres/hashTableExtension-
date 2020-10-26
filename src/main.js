@@ -53,8 +53,24 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
 
+// what get does is access the place in memory where the key lives
+// it lets us know what the value is at key
+// the key needs to be hashed so we know where to look in mem
+
+HashTable.prototype.get = function(key) {
+  // first we hash the key
+  const hashedKey = hashCode(key, this.SIZE);
+  console.log(hashedKey);
+  // then we check memory at that pointer
+  // return the value found at that place
+  // if the place in mem at hashedKey is empty we return a string saying so
+  if (this.storage[hashedKey] === undefined) {
+    return 'Nothing here'
+  } else {
+    // if a value is there we return the val at key
+  return this.storage[hashedKey][key];
+  }
 };
 
 /**
@@ -71,6 +87,13 @@ HashTable.prototype.remove = function(key) {
 
 const migHash = new HashTable();
 migHash.set('pizza', true);
+migHash.set('water', 6);
+migHash.set('pants', 'yes');
+console.log(migHash)
+console.log(migHash.get('pizza')); // true
+console.log(migHash.get('nothing here')); // 'Nothing here'
+
+
 console.log(migHash);
 
 // Do not modify
