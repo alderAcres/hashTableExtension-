@@ -67,7 +67,7 @@ HashTable.prototype.resize = (size) => {
   const bucket = oldStorage[i];
       //if bucket exist, invoke set method to add new keys into new bucket;
     if (bucket) {
-       
+       git 
       }
 
   }
