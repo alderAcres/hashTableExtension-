@@ -81,7 +81,7 @@ HashTable.prototype.remove = function (key) {
     console.log(currHash);
     if (currHash !== undefined) {
       if (currHash.hasOwnProperty(key)) {
-        console.log('hi');
+        delete currHash[key];
         // if this.storage at the current index has the key, then delete it;
       }
     }
@@ -120,5 +120,7 @@ console.log(newHashTable.storage);
 console.log(newHashTable.get('orange'));
 newHashTable.remove('banana');
 console.log(newHashTable.storage);
+console.log(newHashTable.remove('banana'));
+
 // Do not remove!!
 module.exports = HashTable;
