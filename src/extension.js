@@ -55,10 +55,16 @@ HashTable.prototype.set = function(key, value) {
     this.storage[code] = object;
   }
   if (this.storage.reduce((a,c) => a += c ? 1 : 0, 0) > this.SIZE * .75) {
-    const empty = new Array(this.SIZE);
-    this.storage.concat(empty);
+    const temp = [...this.storage];
+    const pairs = temp.reduce((a, c) => {
+      if (c) a.push(Object.entries(c));
+      return a;
+    }, []);
     this.SIZE *= 2;
-    // didn't get to finish this!
+    this.storage = new Array(this.SIZE);  
+    pairs.forEach(element => {
+      this.set(element[0], element[1]);
+    });
   }
   // return # of items in storage
   return this.storage.reduce((a,c) => a += c ? 1 : 0, 0);
@@ -91,6 +97,18 @@ HashTable.prototype.remove = function(key) {
   const code = hashCode(key, this.SIZE);
   const value = this.storage[code][key];
   delete this.storage[code][key];
+  if (this.SIZE > 16 && this.storage.reduce((a,c) => a += c ? 1 : 0, 0) < this.SIZE * .25) {
+    const temp = [...this.storage];
+    const pairs = temp.reduce((a, c) => {
+      if (c) a.push(Object.entries(c));
+      return a;
+    }, []);
+    this.SIZE /= 2;
+    this.storage = new Array(this.SIZE);  
+    pairs.forEach(element => {
+      this.set(element[0], element[1]);
+    });
+  }
   return value;
 };
 
