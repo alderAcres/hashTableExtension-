@@ -100,15 +100,38 @@ HashTable.prototype.remove = function (key) {
 };
 
 HashTable.prototype.reHash = function (oldTable, newSize) {
-  return oldTable;
+  // update this.size, refresh numUnique
+  this.size = newSize;
+  this.numUnique = 0;
+  // Create new array that will store the new HashTable
+  const newHashTable = [];
+  // loop through this.storage, for each hashKey that's not undefined, loop through the object and update newHashTable and numUnique
+  for (let i = 0; i < oldTable.length; i++) {
+    if (oldTable[i] !== undefined) {
+      for (let key of Object.keys(oldTable[i])) {
+        const hashKey = hashCode(key, newSize);
+        if (newHashTable[hashKey] === undefined) {
+          newHashTable[hashKey] = {};
+          this.numUnique += 1;
+        }
+        newHashTable[hashKey][key] = value;
+      }
+    }
+  }
+  this.storage = newHashTable;
 };
 
-let newHash = new HashTable();
-newHash.set(2, 4);
-newHash.set(2, 8);
-console.log(newHash);
-console.log(newHash.get(1));
-console.log(hashCode(31, 16));
+// let newHash = new HashTable();
+// newHash.set(2, 4);
+// newHash.set(2, 8);
+// console.log(newHash);
+// console.log(newHash.get(1));
+// console.log(hashCode(31, 16));
+
+// let objtest= {'2': 3,'4':5}
+// for (let key of Object.keys(objtest)){
+//   console.log(key)
+// }
 
 // YOUR CODE ABOVE
 
