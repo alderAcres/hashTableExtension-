@@ -54,6 +54,12 @@ HashTable.prototype.set = function(key, value) {
   } else {
     this.storage[code] = object;
   }
+  if (this.storage.reduce((a,c) => a += c ? 1 : 0, 0) > this.SIZE * .75) {
+    const empty = new Array(this.SIZE);
+    this.storage.concat(empty);
+    this.SIZE *= 2;
+    // didn't get to finish this!
+  }
   // return # of items in storage
   return this.storage.reduce((a,c) => a += c ? 1 : 0, 0);
 };
@@ -107,13 +113,7 @@ function hashCode(string, size) {
 // Do not remove!!
 module.exports = HashTable;
 
-const hash = new HashTable;
-hash.set('chris', 31);
-hash.set('chris', 32);
-hash.set('shirley', 32);
-console.log(hash.get('chris'));
-console.log(hash.remove('shirley'));
-console.log(hash.storage);
+
 
 
 // YOUR CODE ABOVE

@@ -69,16 +69,9 @@ HashTable.prototype.remove = function(key) {
   const code = hashCode(key, this.SIZE);
   const value = this.storage[code][key];
   delete this.storage[code][key];
+  if (!Object.keys(this.storage[code]).length) this.storage[code] = undefined;
   return value;
 };
-
-const hash = new HashTable;
-hash.set('chris', 31);
-hash.set('chris', 32);
-hash.set('shirley', 32);
-console.log(hash.get('chris'));
-console.log(hash.remove('shirley'));
-console.log(hash.storage);
 
 // Do not modify
 function hashCode(string, size) {
