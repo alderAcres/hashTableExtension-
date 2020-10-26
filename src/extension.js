@@ -22,6 +22,18 @@ HashTable.prototype.set = function (key, value) {
   }
   this.storage[input][key] = value;
   this.items += 1;
+  if ((this.items / this.SIZE) * 100 >= 75) {
+    this.SIZE = this.SIZE * 2;
+    const arr = this.storage;
+    this.storage = new Array(this.SIZE);
+    arr.forEach((element) => {
+      if (element !== undefined) {
+        for (let item in element) {
+          this.storage.set(item, element[item]);
+        }
+      }
+    });
+  }
   return this.items;
 };
 
