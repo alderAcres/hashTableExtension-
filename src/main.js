@@ -24,7 +24,22 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  if (!key || !value) return 'Please enter a proper key/value pair.';
+  if (typeof key === 'object') return 'Key must be convertible to a string.';
+  // make an object using the pair
+  const object = {};
+  object[key] = value;
+  // convert the key into a hash code using the hashCode
+  const code = hashCode(key, this.SIZE);
+  // put the object in the storage with the hash code as key
+  if (this.storage[code]) {
+    // handle collisions
+    if (!this.storage[code][key]) this.storage[code][key] = value;
+  } else {
+    this.storage[code] = object;
+  }
+  // return # of items in storage
+  return this.storage.reduce((a,c) => a += c ? 1 : 0, 0);
 };
 
 /**
@@ -38,7 +53,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const code = hashCode(key, this.SIZE);
+  return this.storage[code][key];
 };
 
 /**
@@ -50,9 +66,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const code = hashCode(key, this.SIZE);
+  const value = this.storage[code][key];
+  delete this.storage[code][key];
+  if (!Object.keys(this.storage[code]).length) this.storage[code] = undefined;
+  return value;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
