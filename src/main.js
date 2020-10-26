@@ -77,6 +77,7 @@ HashTable.prototype.remove = function (key) {
 
 const test = new HashTable();
 test.set('ai mi', 'bui');
+test.set('something', 'here');
 console.log(test);
 console.log(test.get('aimi')); // undefined
 console.log(test.get('ai mi'));
