@@ -9,6 +9,8 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+
+  //if we have time, make a method on this object that can get our index, so we don't have to call it in all of our methods below
 }
 
 /**
@@ -24,7 +26,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //first we need to run our hashCode function to find out where our object is going to be stored at
+  // let hashIndex = hashCode(key, this.SIZE);
+  let hashIndex = this.getIndex(key, this.SIZE)
+  
+   //next let's check if our index has anything inside, if not, let's set that index to an object and put in our first key/value pair
+  if(this.storage[hashIndex] === undefined) {
+    this.storage[hashIndex] = {};
+    this.storage[hashIndex][key] = value;
+  } else {
+    //if we already have an object with key value pairs inside, we just want to add a new key/value pair to avoid collisions
+    this.storage[hashIndex][key] = value;
+}
 };
 
 /**
@@ -38,7 +51,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  //first get our hashIndex to know what part of the hash table to look in
+  // let hashIndex = hashCode(key, this.SIZE)
+  let hashIndex = this.getIndex(key, this.SIZE)
 
+    //return the value in our storage array at our index at our key!
+    return this.storage[hashIndex].key
 };
 
 /**
@@ -50,9 +68,28 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+let hashIndex = this.getIndex(key, this.SIZE)
+
+console.log(this.storage[hashIndex])
+
+  if(this.storage[hashIndex].hasOwnProperty(key)) {
+    //We save it into an immutable so we can return it out
+    let valueToDelete = this.storage[hashIndex][key]
+    //Then we delete the key/value pair in memory
+    delete this.storage[hashIndex][key];
+    //Lastly we return the value we deleted
+    return valueToDelete;
+  } 
+    //If we didn't find a property we are looking for, we just return undefined
+    return undefined;
+  
+
 
 };
 
+HashTable.prototype.getIndex = function(key, size) {
+  return hashCode(key, size)
+}
 
 // Do not modify
 function hashCode(string, size) {
@@ -69,6 +106,16 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+let hash = new HashTable()
+hash.set('a', 'muffin')
+hash.get('a')
+hash.set('b', 'carrot')
+hash.set('c', 'cheese')
+hash.remove('b')
+console.log(hash)
+
 
 // Do not remove!!
 module.exports = HashTable;
