@@ -35,7 +35,7 @@ HashTable.prototype.set = function (key, value) {
     // if it does NOT hold a value, push in an object literal with they key value pair, key and value
     // otherwise assign a key value pair to the existing object
   //return incremented counter
-  return ++this.num
+  return ++this.num;
 };
 
 /**
