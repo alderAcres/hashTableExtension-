@@ -9,7 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
-}
+  }
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,9 +24,24 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let newTable = new HashTable();
+  let code = hashCode(key, newTable.SIZE);
+  if (newTable.storage === undefined) {
+    newTable.storage = {};
+    newTable.storage[code][key] = value;
+    return newTable.storage.length;
+  }
+ else if (newTable.storage[code]) {
+    newTable.storage[code].push(newTable.storage[code][key] = value) 
+    return newTable.storage.length;
+  }
+  else {
+    newTable.storage[code] = {};
+    newTable.storage[code][key] = value;
+    return newTable.storage.length;
+  }
 };
-
+console.log(HashTable.prototype.set('Codesmith', "Hello"));
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -38,8 +53,26 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+let newTable = new HashTable();
+let code = hashCode(key, newTable.SIZE);
+console.log(newTable.storage)
+if (newTable.storage === undefined) {
+  return undefined;
+}
+else if (!newTable.storage[code][key]) {
+  return undefined;
+}
+else if (newTable.storage[code][key] !== typeof 'object'){
+  return newTable.storage[code][key];
+}
+else if (newTable.storage[code][key] === typeof 'object') {
+  return newTable.storage[code][key][0];
+}
 };
+
+HashTable.prototype.set('Codesmith', 'Hello')
+
+console.log(HashTable.prototype.get('Codesmith'))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -51,6 +84,12 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
 
+if (this.storage[key]) {
+  delete this.storage[key];
+}
+else if (!this.storage[key]) {
+  return undefined;
+}
 };
 
 
