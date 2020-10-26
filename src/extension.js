@@ -14,7 +14,31 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  // declare a resize function to double the hash table's size
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function (key, value) {
+  const index = hashCode(key, this.SIZE);
+  // if the the stored items (load) is equal to the number of items added divided by the size,
+  // and if the load is greater than .75 (75%), invoke the resize function
+  if (!this.storage[index]) this.storage[index] = {};
+  this.storage[index][key] = value;
+};
+
+HashTable.prototype.get = function (key) {
+  const index = hashCode(key, this.SIZE);
+  return this.storage[index][key];
+};
+
+HashTable.prototype.remove = function (key) {
+  const index = hashCode(key, this.SIZE);
+  const removed = this.storage[index][key];
+  delete this.storage[index][key];
+  return removed;
+};
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
