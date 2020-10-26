@@ -58,8 +58,13 @@ console.log(newHash.set('published second:', 'pink corn moon'));
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
 
+  return this.storage[index][key];
 };
+
+console.log(newHash.get('published first:', 'the pig and the pony'));
+console.log(newHash.get('published second:', 'pink corn moon'));
 
 /**
 * remove - delete a key/value pair from the hash table
