@@ -75,8 +75,28 @@ console.log(newHash.get('published second:', 'pink corn moon'));
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let index = hashCode(key, this.SIZE);
+  
+  let returnVal = this.storage[index][key];
 
+  delete this.storage[index][key];
+  console.log(this.storage[index]);
+
+  for (let i = 0; i < this.SIZE; i++) {
+    let el = this.storage[i];
+    if (el && Object.keys(el).length === 0) {
+      delete this.storage[i];
+    }
+  }
+
+  return returnVal;
 };
+
+console.log(newHash);
+console.log(newHash.remove('published first:', 'the pig and the pony'));
+console.log(newHash);
+console.log(newHash.remove('published second:', 'pink corn moon'));
+console.log(newHash);
 
 
 // Do not modify
