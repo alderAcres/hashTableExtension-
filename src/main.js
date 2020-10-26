@@ -29,7 +29,7 @@ HashTable.prototype.set = function(key, value) {
   //first we need to run our hashCode function to find out where our object is going to be stored at
   // let hashIndex = hashCode(key, this.SIZE);
   let hashIndex = this.getIndex(key, this.SIZE)
-  
+
    //next let's check if our index has anything inside, if not, let's set that index to an object and put in our first key/value pair
   if(this.storage[hashIndex] === undefined) {
     this.storage[hashIndex] = {};
@@ -88,7 +88,7 @@ console.log(this.storage[hashIndex])
 };
 
 HashTable.prototype.getIndex = function(key, size) {
-  return hashCode(key, size)
+  return hashCode(key, size);
 }
 
 // Do not modify
