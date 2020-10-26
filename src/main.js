@@ -33,7 +33,7 @@ function HashTable() {
 // this was that slow can hold multiple data that are unique
 
 HashTable.prototype.set = function(key, value) {
-  // so first we put the key value thru the given hashing function
+  // so first we put the key arg thru the hashing function
   const hashedKey = hashCode(key, this.SIZE);
   // we create an empty object and put it in that slot gotten from the hash func
   this.storage[hashedKey] = {};
@@ -59,14 +59,14 @@ HashTable.prototype.set = function(key, value) {
 // the key needs to be hashed so we know where to look in mem
 
 HashTable.prototype.get = function(key) {
-  // first we hash the key
+  // first we hash the key arg
   const hashedKey = hashCode(key, this.SIZE);
   console.log(hashedKey);
   // then we check memory at that pointer
   // return the value found at that place
   // if the place in mem at hashedKey is empty we return a string saying so
   if (this.storage[hashedKey] === undefined) {
-    return 'Nothing here'
+    return 'Nothing here';
   } else {
     // if a value is there we return the val at key
   return this.storage[hashedKey][key];
@@ -81,8 +81,25 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
 
+// what remove does is delete an existing kv pair from the hashtable
+// if the key isn't in the table, return undefined
+
+HashTable.prototype.remove = function(key) {
+  // first we hash the key arg
+  const hashedKey = hashCode(key, this.SIZE);
+  console.log(hashedKey);
+  console.log(this.storage[hashedKey])
+  // check memory at the calculated pointer
+  // if the place in memory is undefined it means that kv pair isn't in the table
+  // return undefined
+  if (this.storage[hashedKey] === undefined) {
+    return undefined;
+  } else {
+    // delete the kv pair and return the table
+  delete this.storage[hashedKey][key];
+  return this;
+  }
 };
 
 const migHash = new HashTable();
@@ -92,6 +109,8 @@ migHash.set('pants', 'yes');
 console.log(migHash)
 console.log(migHash.get('pizza')); // true
 console.log(migHash.get('nothing here')); // 'Nothing here'
+console.log(migHash);
+console.log(migHash.remove('pizza'));
 
 
 console.log(migHash);
