@@ -9,7 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
-}
+  }
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,9 +24,26 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let newTable = new HashTable();
+  let code = hashCode(key, newTable.SIZE);
+  if (newTable.storage === undefined) {
+    newTable.storage = {};
+    newTable.storage[code][key] = value;
+    return newTable.storage.length;
+  }
+ else if (newTable.storage[code]) {
+    newTable.storage[code].push(newTable.storage[code][key] = value) 
+    return newTable.storage.length;
+  }
+  else {
+    newTable.storage[code] = {};
+    newTable.storage[code][key] = value;
+    return newTable.storage.length;
+  }
 };
-
+console.log(HashTable.prototype.set('Codesmith', "Hello"));
+console.log(HashTable.prototype.set('Codesmith', "Goodbye"))
+console.log(HashTable.prototype.set('Cohort22', "Hello"))
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -38,8 +55,27 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+let newTable = new HashTable();
+let code = hashCode(key, newTable.SIZE);
+console.log(code)
+console.log(newTable.storage)
+if (newTable.storage === undefined) {
+  return undefined;
+}
+else if (!newTable.storage[code][key]) {
+  return undefined;
+}
+else if (newTable.storage[code][key] !== typeof 'object'){
+  return newTable.storage[code][key];
+}
+else if (newTable.storage[code][key] === typeof 'object') {
+  return newTable.storage[code][key][0];
+}
 };
+
+HashTable.prototype.set('Codesmith', 'Hello')
+
+//console.log(HashTable.prototype.get('Codesmith'))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +86,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+let newTable = new HashTable();
+let code = hashCode(key, newTable.SIZE);
+console.log(newTable.storage)
+if (!newTable.storage[code][key]) return undefined;
+else if (newTable.storage[code][key]){
+let value = newTable.storage[code][key];
+delete newTable.storage[code][key];
+return value;
+}
 };
-
+HashTable.prototype.set('Codesmtih', 'Hello')
+console.log(HashTable.prototype.remove('Codesmith'))
 
 // Do not modify
 function hashCode(string, size) {
