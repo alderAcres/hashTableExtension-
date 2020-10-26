@@ -23,8 +23,19 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  // declare a const to hold the value of index, the evaluated result of passing the key and this.SIZE into the hash function
+  const index = hashCode(key, this.SIZE);
+  // use conditional to check to see if the index of the hash table currently holds a value
+    if (!this.storage[index]) {
+      this.storage[index] = ({ [key]: value });
+  } else {
+      this.storage[index][key] = value;
+  }
+    // if it does NOT hold a value, push in an object literal with they key value pair, key and value
+    // otherwise assign a key value pair to the existing object
+  //return incremented counter
+  return ++this.num
 };
 
 /**
@@ -38,7 +49,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return this.storage[hashCode(key, this.SIZE)][key];
 };
 
 /**
@@ -50,8 +61,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  if (!this.storage[hashCode(key, this.SIZE)][key]) {
+    return undefined;
+  } else {
+    this.num--
+    const deleted = this.storage[hashCode(key, this.SIZE)][key];
+    delete this.storage[hashCode(key, this.SIZE)][key];
+    return deleted;
+  }
 };
+
+
+const check = new HashTable
+check.set('fav show', 'ATLA')
+check.set('2nd fav show', 'Doctor Who')
+check.set('conclusion', 'fucking nerd')
 
 
 // Do not modify
