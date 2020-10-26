@@ -23,9 +23,10 @@ function HashTable() {
   this.resizeTable = null;
 }
 
-HashTable.prototype.expand = function () {
-  this.SIZE *= 2;
-  this.count = 1;
+HashTable.prototype.resize = function (action) {
+  if (action === 'expand') this.SIZE *= 2;
+  if (action === 'contract') this.SIZE /= 2;
+  this.count = 0;
   this.resizeTable = this.storage;
   this.storage = new Array(this.SIZE);
   this.resizeTable.forEach((bucket) =>
@@ -35,7 +36,7 @@ HashTable.prototype.expand = function () {
 };
 
 HashTable.prototype.set = function (key, value) {
-  if (this.count + 1 >= this.SIZE * 0.75) this.expand();
+  if (this.count + 1 >= this.SIZE * 0.75) this.resize('expand');
   const address = hashCode(key, this.SIZE);
   if (!this.storage[address]) this.storage[address] = {};
   if (this.storage[address][key]) this.count -= 1;
@@ -50,7 +51,10 @@ HashTable.prototype.get = function (key) {
 };
 
 HashTable.prototype.remove = function (key) {
-  // if (this.count - 1 <= this.SIZE * 0.25)
+  // there is a little bit of a flaw here if the key is used twice,
+  // and it will overwrite the value saved, then the resizing may be unnecessary.
+  // if I had more time, i would adjust the condition to check where it would be stored before resizing.
+  if (this.count - 1 < this.SIZE * 0.25) this.resize('contract');
   const address = hashCode(key, this.SIZE);
   if (!this.storage[address]) return undefined;
   const removed = this.storage[address][key];
@@ -90,7 +94,15 @@ table.set('g', 5);
 table.set('h', 5);
 console.log(table.count);
 console.log(table.SIZE);
+console.log(table.storage);
 table.set('f', 5);
+console.log(table.SIZE);
+console.log(table.count);
+table.remove('a');
+table.remove('b');
+table.remove('c');
+table.remove('d');
+table.remove('e');
 console.log(table.SIZE);
 console.log(table.count);
 console.log(table.storage);
