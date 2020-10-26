@@ -11,6 +11,10 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+let newHash = new HashTable;
+
+console.log(newHash);
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,8 +28,27 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let itemsStored = 0;
+  let index = hashCode(key, this.SIZE);
 
+  if (!this.storage[index]) {
+    this.storage[index] = {};
+  };
+
+  this.storage[index][key] = value;
+
+  for (let i = 0; i < this.SIZE; i++) {
+    if (this.storage[i] != null) {
+      let keys = Object.keys(this.storage[i]);
+      itemsStored += keys.length;
+    }
+  };
+
+  return itemsStored;
 };
+
+console.log(newHash.set('published first:', 'the pig and the pony'));
+console.log(newHash.set('published second:', 'pink corn moon'));
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +61,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
 
+  return this.storage[index][key];
 };
+
+console.log(newHash.get('published first:', 'the pig and the pony'));
+console.log(newHash.get('published second:', 'pink corn moon'));
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +78,26 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let index = hashCode(key, this.SIZE);
+  let returnVal = this.storage[index][key];
 
+  delete this.storage[index][key];
+
+  for (let i = 0; i < this.SIZE; i++) {
+    let el = this.storage[i];
+    if (el && Object.keys(el).length === 0) {
+      delete this.storage[i];
+    }
+  }
+
+  return returnVal;
 };
+
+console.log(newHash);
+console.log(newHash.remove('published first:', 'the pig and the pony'));
+console.log(newHash);
+console.log(newHash.remove('published second:', 'pink corn moon'));
+console.log(newHash);
 
 
 // Do not modify
