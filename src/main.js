@@ -24,7 +24,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // Get the index of the HashTable that the key will go into from the hashCode function.
+  const hashIndex = hashCode(key, this.SIZE);
+  // If the index hashIndex in this.storage is undefined, create a new object in the location.
+  if (!this.storage[hashIndex]) {
+    this.storage[hashIndex] = {};
+  } 
+  // Store the key value pairs within the object in hashIndex location in this.storage
+  // If key already exists, it will overwrite. If not, it will add a new key value pair.
+  this.storage[hashIndex][key] = value;
 };
 
 /**
@@ -38,7 +46,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // Get the index of the HashTable that the key would have been stored into in this.storage
+  const hashIndex = hashCode(key, this.SIZE);
+  // Look into the hashIndex location. If the key does not exist, return undefined
+  if (!this.storage[hashIndex]) {
+    return undefined;
+  }
+  // Else, return the value of the correct key within the object at hashIndex
+  return this.storage[hashIndex][key];
 };
 
 /**
@@ -50,9 +65,38 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // Get the index of the HashTable that the key would have been stored into in this.storage
+  const hashIndex = hashCode(key, this.SIZE);
+  // Look into the hashIndex location. If the key does not exist, return undefined
+  if (!this.storage[hashIndex][key]) {
+    return undefined;
+  }
+  // Else, find the value of the correctt key within the object at hashIndex
+  const value = this.storage[hashIndex][key];
+  // Delete the key value pair from this.storage
+  delete this.storage[hashIndex][key];
+  // Return the value found earlier
+  return value;
 };
 
+// // T E S T I N G!!!
+
+// // Create an array hashTab with __proto__ bond to prototype methods
+// const hashTab = new HashTable;
+// // Add key value pairs 'one':'a' and 'two':'b' to array
+// hashTab.set('one', 'a');
+// hashTab.set('two', 'b');
+// console.log(hashTab.storage); // [ , , , , , , , , , , , , , , , , NaN: { one: 'a', two: 'b' } ] 
+// // Overwrite value of key 'one' with 'c'
+// hashTab.set('one', 'c');
+// console.log(hashTab.storage); // [ , , , , , , , , , , , , , , , , NaN: { one: 'c', two: 'b' } ]
+// // "get" the value of key 'two'
+// console.log(hashTab.get('two')); // b
+// // "get" the value of a key that doesn't exist
+// console.log(hashTab.get('three')); // undefined
+// // "remove" the key value pair 'one' and return the value of key 'one'
+// console.log(hashTab.remove('one')); // c
+// console.log(hashTab.storage); // [ , , , , , , , , , , , , , , , , NaN: { two: 'b' } ]
 
 // Do not modify
 function hashCode(string, size) {
