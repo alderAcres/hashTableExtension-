@@ -38,7 +38,10 @@ HashTable.prototype.set = function(key, value) {
   this.storage[index][key] = value;
 
   for (let i = 0; i < this.SIZE; i++) {
-    if (this.storage[i] != null) itemsStored++;
+    if (this.storage[i] != null) {
+      let keys = Object.keys(this.storage[i]);
+      itemsStored += keys.length;
+    }
   };
 
   return itemsStored;
@@ -76,11 +79,9 @@ console.log(newHash.get('published second:', 'pink corn moon'));
 */
 HashTable.prototype.remove = function(key) {
   let index = hashCode(key, this.SIZE);
-  
   let returnVal = this.storage[index][key];
 
   delete this.storage[index][key];
-  console.log(this.storage[index]);
 
   for (let i = 0; i < this.SIZE; i++) {
     let el = this.storage[i];
