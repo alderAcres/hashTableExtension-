@@ -23,8 +23,9 @@ function HashTable() {
   this.resizeTable = null;
 }
 
-HashTable.prototype.expand = function () {
-  this.SIZE *= 2;
+HashTable.prototype.resize = function (action) {
+  if (action === 'expand') this.SIZE *= 2;
+  if (action === 'contract') this.SIZE /= 2;
   this.count = 1;
   this.resizeTable = this.storage;
   this.storage = new Array(this.SIZE);
@@ -35,7 +36,7 @@ HashTable.prototype.expand = function () {
 };
 
 HashTable.prototype.set = function (key, value) {
-  if (this.count + 1 >= this.SIZE * 0.75) this.expand();
+  if (this.count + 1 >= this.SIZE * 0.75) this.resize('expand');
   const address = hashCode(key, this.SIZE);
   if (!this.storage[address]) this.storage[address] = {};
   if (this.storage[address][key]) this.count -= 1;
@@ -50,7 +51,7 @@ HashTable.prototype.get = function (key) {
 };
 
 HashTable.prototype.remove = function (key) {
-  // if (this.count - 1 <= this.SIZE * 0.25)
+  if (this.count - 1 < this.SIZE * 0.25) this.resize('contract');
   const address = hashCode(key, this.SIZE);
   if (!this.storage[address]) return undefined;
   const removed = this.storage[address][key];
@@ -91,6 +92,13 @@ table.set('h', 5);
 console.log(table.count);
 console.log(table.SIZE);
 table.set('f', 5);
+console.log(table.SIZE);
+console.log(table.count);
+table.remove('a');
+table.remove('b');
+table.remove('c');
+table.remove('d');
+table.remove('e');
 console.log(table.SIZE);
 console.log(table.count);
 console.log(table.storage);
