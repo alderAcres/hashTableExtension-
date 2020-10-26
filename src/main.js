@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.items = 0
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,12 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const location = hashCode(key, this.SIZE); // location will be a number outputted from hash function
+  console.log(location);
+  if (this.storage[location] === undefined) this.storage[location] = {}; //sets empty object container into location to handle collisions
+  this.storage[location][key] = value;//will overwrite any value already stored in this location
+  this.items++;
+  return (this.SIZE - this.items)
 };
 
 /**
@@ -38,7 +43,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const location = hashCode(key, this.SIZE);//determines location
+  if (this.storage[location][key]) return this.storage[location][key]; //retrieves value stored under key at specific location
+  return "--> * value not found * <--"
+   
 };
 
 /**
@@ -50,8 +58,31 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const location = hashCode(key, this.SIZE);
+  if (this.storage[location][key] === undefined) return undefined;
+  const returnedVal = this.storage[location][key];
+  delete this.storage[location][key];
+  this.items++;
+  return returnedVal;
 };
+
+const pleaseWorkHash = new HashTable();
+pleaseWorkHash.set('andrew', 'this is data');
+console.log(pleaseWorkHash)
+pleaseWorkHash.set(3, 'this is more data');
+console.log(pleaseWorkHash)
+pleaseWorkHash.set('hash', 'i love data');
+console.log(pleaseWorkHash);
+console.log(pleaseWorkHash.get(3));
+console.log(pleaseWorkHash.get(28));
+console.log(pleaseWorkHash.get('andrew'))
+pleaseWorkHash.remove(3);
+pleaseWorkHash.set('zoom', 'this is still data');
+console.log(pleaseWorkHash);
+//ISSUES::
+//when the hashtable is logged, it shows 16 empty array indices and one object, so it appears i'm not putting the object containing my values into separate array spaces inside my hashtable, but rather putting them all into an object which is also stored on my array Hash... (???) --> it seems as if my hash function is always outputting the same value (NaN) when it runs and all my values are being stored in the object placed at this index
+//update :: i changed this.size to be this.SIZE and now my hash function is always outputting 0 for everything that is run through it -- so I have now 15 empty array spaces and one object with my values stored. however, my get method isn't recognizing strings that are run through and i get an error
+
 
 
 // Do not modify
