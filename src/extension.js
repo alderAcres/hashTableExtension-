@@ -15,7 +15,23 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+//ran out of time T.T
+HashTable.prototype.set = function (key, value) {
+  if (Object.entries(this.storage).length >= this.SIZE * 0.75) {
+    this.SIZE = this.SIZE * 2
+    Object.entries(this.storage).forEach((x) => {
+      Object.entries(test.storage)[1][1]['key2']
+    }
+    )
+  }
+  this.storage[hashCode(key, this.SIZE)] === undefined ?
+    this.storage[hashCode(key, this.SIZE)] = new HashObj(key, value) :
+    this.storage[hashCode(key, this.SIZE)][key] = value;
+};
 
+HashTable.prototype.remove = function (key) {
+  delete this.storage[hashCode(key, this.SIZE)][key];
+};
 
 // YOUR CODE ABOVE
 

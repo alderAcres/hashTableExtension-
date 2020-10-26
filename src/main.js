@@ -50,7 +50,9 @@ HashTable.prototype.set = function (key, value) {
 * hash table
 */
 HashTable.prototype.get = function (key) {
-  return this.storage[hashCode(key, this.SIZE)][key]
+  let cache = this.storage[hashCode(key, this.SIZE)][key];
+  delete this.storage[hashCode(key, this.SIZE)][key];
+  return cache;
 };
 
 /**
@@ -62,7 +64,7 @@ HashTable.prototype.get = function (key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function (key) {
-  delete this.storage[hashCode(key, this.SIZE)][key]
+  delete this.storage[hashCode(key, this.SIZE)][key];
 };
 
 
