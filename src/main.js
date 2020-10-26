@@ -24,7 +24,9 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const location = hashCode(key, this.size);
+  this.storage[location] = {}; //sets empty object container into location to handle collisions
+  this.storage[location][key] = value; //will overwrite any value already stored in this location
 };
 
 /**
@@ -38,7 +40,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const location = hashCode(key, this.size);//determines location
+  return this.storage[location][key]; //retrieves value stored under key at specific location
 };
 
 /**
@@ -50,10 +53,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const location = hashCode(key, this.size);
+  if (this.storage[location][key] === undefined) return undefined;
+  delete this.storage[location][key];
 };
 
-
+const pleaseWorkHash = new HashTable();
+pleaseWorkHash.set(3, 'this is data');
+pleaseWorkHash.set('work', 'this is more data');
+pleaseWorkHash.set('hash', 'i love data');
+console.log(pleaseWorkHash);
+console.log(pleaseWorkHash.get('please'));
 // Do not modify
 function hashCode(string, size) {
   'use strict';
