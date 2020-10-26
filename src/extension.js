@@ -49,7 +49,30 @@ function HashTable() {
 // so the first time we put a thing in a slot, we put an empty object in the slot
 // this was that slow can hold multiple data that are unique
 
+// extension
+// if adding a new item makes the table more than 75% full, 
+// add the new entry
+// double the hash size and rehash all the data 
+
 HashTable.prototype.set = function(key, value) {
+  // first we check to see how full the table is
+
+  // if its under 75% full, add as usual
+
+  // if its going to be over 75 with this addition
+
+  // make a brand new storage with double the size
+
+  // iterate thru old storage finding where it isn't undefined
+
+  // get all the key values and hash them again at the new size
+
+  // put them in new storage
+
+  // delete old storage
+
+  // make new storage the current storage
+
   // so first we put the key arg thru the hashing function
   const hashedKey = hashCode(key, this.SIZE);
   // we create an empty object and put it in that slot gotten from the hash func
