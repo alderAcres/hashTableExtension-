@@ -66,7 +66,7 @@ HashTable.prototype.get = function(key) {
   // return the value found at that place
   // if the place in mem at hashedKey is empty we return a string saying so
   if (this.storage[hashedKey] === undefined) {
-    return 'Nothing here';
+    return undefined;
   } else {
     // if a value is there we return the val at key
   return this.storage[hashedKey][key];
@@ -105,14 +105,13 @@ HashTable.prototype.remove = function(key) {
 const migHash = new HashTable();
 migHash.set('pizza', true);
 migHash.set('water', 6);
+migHash.set('water', 'blue'); // should overwrite 6
 migHash.set('pants', 'yes');
 console.log(migHash)
 console.log(migHash.get('pizza')); // true
-console.log(migHash.get('nothing here')); // 'Nothing here'
+console.log(migHash.get('blankblank')); // undefined
 console.log(migHash);
 console.log(migHash.remove('pizza'));
-
-
 console.log(migHash);
 
 // Do not modify
