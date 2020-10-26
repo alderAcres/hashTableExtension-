@@ -14,23 +14,31 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
-
-
+HashTable.prototype.set = function (key, value) {
+  let input = hashCode(key, this.SIZE);
+  if (this.storage[input] === undefined) {
+    this.storage[input] = {};
+    this.storage[input][key] = value;
+  }
+  this.storage[input][key] = value;
+  this.items += 1;
+  return this.items;
+};
 
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
+    hash = (hash << 5) - hash + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
