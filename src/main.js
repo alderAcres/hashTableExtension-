@@ -11,6 +11,7 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+const cohort = new HashTable();
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,8 +25,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const bucket = hashCode(key, this.SIZE);
+  if (!this.storage.hasOwnProperty(bucket)) {
+    this.storage[bucket] = {};
+  }
+  this.storage[bucket][key] = value;
 };
+
+cohort.set('class', 22);
+console.log(cohort)
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +48,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const bucket = hashCode(key, this.SIZE);
+  if (!this.storage[bucket]) {
+    return null;
+  }
+  return this.storage[bucket][key];
 };
+
+console.log(cohort.get('class'))
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +67,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const bucket = hashCode(key, this.SIZE);
+  if (!this.storage.hasOwnProperty(bucket)) {
+    return undefined;
+  }
+  delete this.storage[bucket][key];
 };
 
+cohort.remove('class');
+console.log(cohort)
 
 // Do not modify
 function hashCode(string, size) {
