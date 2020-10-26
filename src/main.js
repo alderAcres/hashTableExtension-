@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.values = [];
 }
 
 /**
@@ -24,7 +25,12 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // input: key value pair
+  // output: updated number of items inside the hash table
+  // 1. check if key already exists inside this.storage: if true, overwrite/replace it with passed-in kvPair
+    // declare a variable hashedKey and assign it the evaluated result of calling hashCode(), passing in our key/str
+  // 
+  // 2. return this.values
 };
 
 /**
