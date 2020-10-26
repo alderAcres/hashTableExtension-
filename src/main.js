@@ -7,9 +7,11 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
+
 }
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -23,8 +25,22 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+// what set does is takes the data given, scrambles up the key
+// does some div and that determines where to put the key in mem
+// sometimes more than one key wants to go in the same spot
+// so the first time we put a thing in a slot, we put an empty object in the slot
+// this was that slow can hold multiple data that are unique
+
+HashTable.prototype.set = function(key, value) {
+  // so first we put the key value thru the given hashing function
+  const hashedKey = hashCode(key, this.SIZE);
+  // we create an empty object and put it in that slot gotten from the hash func
+  this.storage[hashedKey] = {};
+  // we put our original key val params into that object
+  this.storage[hashedKey][key] = value;
+  // return the hash table
+  return this;
 };
 
 /**
@@ -53,6 +69,9 @@ HashTable.prototype.remove = function(key) {
 
 };
 
+const migHash = new HashTable();
+migHash.set('pizza', true);
+console.log(migHash);
 
 // Do not modify
 function hashCode(string, size) {
