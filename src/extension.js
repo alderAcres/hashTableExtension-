@@ -15,6 +15,33 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+/*
+  For set, basically we add a value
+  then, we check if that makes us 75% full
+  if so then rehash everything
+  if not go on with your life
+
+  rehash everything
+  create a new hash table object with twice the size
+  loop through the current hash table
+    loop through each object at each index
+    call set on every item and insert into the hash table
+  return the new hash table, this.storage = our new storage
+*/
+
+/*
+  For remove, basically we remove a value
+  then, we check if that makes us 25% full
+  is so, great
+  if not
+    then also check if the arrays size is > 16
+      then lets reduce this item
+    
+  create a new hash table
+  iterate through old hash table (indices and objects)
+  rehash everything and add to new hash table
+  make the the new hash table the old hash table
+*/
 
 
 // YOUR CODE ABOVE
