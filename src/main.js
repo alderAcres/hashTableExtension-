@@ -23,8 +23,37 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  // get the value from the hash function 
+  let index = hashCode(key, this.SIZE);
+  // create a bucket variable to store place where the keyt/value pairs will be stored
+  let bucket = this.storage[index];
+  
+  // check that a bucket exists, if it is not create the bucket and insert it into the hash table
+  if (!bucket) {
+    let bucket = [];
+    this.storage[index] = bucket;
+  }
+  
+  // If the provided key has already been used to store another value, simply overwrite
+  //  the existing value with the new value.
+  let isOverriden = false;
+  for (let i = 0; i < bucket.length; i++) {
+    let pairs = bucket[i];
+    if (pairs[0] === key) {
+      pairs[1] = value;
+      isOverriden = true;
+    }
+  }
+  
+  // if there is collision
+  if (!isOverriden) {
+    bucket.push([key, value])
+  }
+  
+  // woulld this work?
+  return this
+   
 };
 
 /**
@@ -38,6 +67,24 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  // get the value from the hash function 
+  let index = hashCode(key, this.SIZE);
+  // create a bucket variable to store place where the value will be stored
+  let bucket = this.storage[index];
+ 
+  // if there is nothing stored at that index return undefined
+  if (!bucket) return undefined;
+
+  // if there is a bucket, go inside the bucket and and return the appropriate value
+  for (let i = 0; i < bucket.length; i++) {
+    let pairs = bucket[i];
+    if (pairs[0] === key) {
+      return pairs[1];
+    }
+  }
+ 
+  // if you can't find the key you are looking return undefined
+  return undefined;
 
 };
 
@@ -49,7 +96,26 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function (key) {
+  // get the value from the hash function 
+  let index = hashCode(key, this.SIZE);
+  // create a bucket variable to store place where the value will be stored
+  let bucket = this.storage[index];
+  
+  // if there is nothing to remove return undefined
+  if (!bucket) return undefined;
+
+  //loop through the bucket
+  for (let i = 0; i < bucket.length; i++) {
+    let pairs = bucket[i];
+    //check if key is inside the bucket
+    if (pairs[0] === key) {
+      //if it is remove that list
+      bucket.splice(i, 1);
+
+      return pairs[1];
+    }
+  
 
 };
 
