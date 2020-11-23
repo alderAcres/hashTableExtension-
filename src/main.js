@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.numItems = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // pass key to hashing function
+  const hashLocation = hashCode(key, this.SIZE);
+  // check whether hash table has a value at that location
+    // if not, add an object there
+  if (!this.storage[hashLocation]) this.storage[hashLocation] = {};
+  // check if key already exists - if not, increment numItems property
+  if (!this.storage[hashLocation][key]) this.numItems += 1;
+  // add the same key-value pair to the existing location (will overwrite if existing key)
+  this.storage[hashLocation][key] = value;
+    // return number of items in hash table
+  return this.numItems;
 };
 
 /**
@@ -38,7 +48,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // get location of input key using hashing function
+  const hashLocation = hashCode(key, this.SIZE);
+  // check whether the input key exists at that location
+    // if so, return it
+  if (this.storage[hashLocation][key]) return this.storage[hashLocation][key];
 };
 
 /**
@@ -50,7 +64,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // get location of input key using hashing function
+  const hashLocation = hashCode(key, this.SIZE);
+  // first, check if location exists in hash table
+  if (this.storage[hashLocation]) {
+    // if input key exists at that location, save it in a variable and delete key-value pair
+    if (this.storage[hashLocation][key]) {
+      const value = this.storage[hashLocation][key];
+      delete this.storage[hashLocation][key];
+      // decrement numItems property
+      this.numItems -= 1;
+      return value;
+    }
+  }
+  // otherwise, return undefined
+  return undefined;
 };
 
 
@@ -72,3 +100,13 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+// const hash = new HashTable();
+// console.log(hash.set('blue', 7));
+// console.log(hash);
+// console.log(hash.get('blue'));
+// console.log(hash)
+// console.log(hash.remove('blue'));
+// // console.log(hash.remove('green'));
+// console.log(hash.set('three'))
