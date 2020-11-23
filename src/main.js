@@ -7,8 +7,24 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  
+  // For each undefined key in our hash table, we will set its value to an array.
+  // This allows us to handle collisions by adding onto the new array when 
+  // a new key collides with an existing key in our table. 
+  for (let i = 0; i < this.storage.length; i++) {
+      this.storage[i] = [];  
+
+  // Thus, every new hash table should look like this:
+
+  // HashTable {
+  //   SIZE: 16,
+  //   storage:
+  //    [ [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [] ] }
+
+  }
+
+
 }
 
 /**
@@ -24,7 +40,27 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // *** I was confused about Line 33.  Isn't overwriting just another way to handle a collision?
+  // For example, if the provided key is the same as the existing key, then Line 33 is asking us
+  // to replace the existing key/value pair.
 
+  // I decided to handle collisions by making each key's value an array in the hash table:
+
+  // We will set an index that will allow us to traverse through each key's table value
+  let index = 0;
+
+  // If there are no items at the current index, then we'll set the current array element to be input value
+  if (this.storage[key][index] === undefined) {
+    this.storage[key][index] = value;
+  // Otherwise, we'll traverse through the array until we find an open slot to place our input value
+  } else {
+    for (let i = 0; i < this.storage[key].length; i++) {
+      if (this.storage[key][index] !== undefined) {
+        ++index;
+      }
+    }
+    this.storage[key][index] = value;
+  }
 };
 
 /**
@@ -38,7 +74,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // Retrieve the value stored in the hash table
+  return this.storage.key;
+  
+  // I didn't finish this function.
 };
 
 /**
@@ -50,8 +89,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // If the key doesn't exist, then return undefined
+  if (!this.storage.hasOwnProperty(key)) return undefined;
+  
+  // Remove the key/value pair with 'delete' keyword
+  delete this.storage[key];
 };
+
+// Testing the hash table functionality
+const hashBrowns = new HashTable();
+hashBrowns.set(0, 'Hello');
+hashBrowns.set(0, 'Goodbye');
+console.log(hashBrowns);
 
 
 // Do not modify
