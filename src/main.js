@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,9 +22,30 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
 
+HashTable.prototype.set = function(key, value) {
+  // declare helper function to get a random hash address in storage
+  const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
+  // get the address from 0 to 16
+  const hashAddress = getRandomInt(17);
+  //If the provided key has already been used to store another value, simply overwrite the existing value with the new value.
+  if (this.storage[hashAddress]){ 
+    this.storage[hashAddress][key] = value;
+  } else {
+    // if hashAddress is undefined in this.storage then create a subarr and set key/value pairs
+    this.storage[hashAddress] = {};
+    this.storage[hashAddress][key] = value;
+  }
 };
+
+// const test = new HashTable();
+// console.log(test)
+// console.log(test.set('hi', 'works'))
+// console.log(test)
+// console.log(test.set('hello', 'nice'))
+// console.log(test)
+// console.log(test.set('hi', 'reassign'))
+// // console.log(test)
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -37,9 +57,15 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function(key) { 
+  //loop over the storage, to get each object 
+ this.storage.forEach(element => {
+   //check if passed in key matches present key and return the value assosiated with it
+   if(element[key] === key) return element[key]
+ });
 };
+
+// console.log(test.get(4))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,9 +76,25 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  ////loop over the storage, to get each object 
+  this.storage.forEach(element => {
+    //delete key/value pair if passed in key matches existing key
+    if(element[key] === key) {
+      delete element[key]
+    };
+  });
+ };
 
-};
-
+ const test = new HashTable();
+//  console.log(test)
+//  console.log(test.set('hi', 'works'))
+// //  console.log(test)
+// //  console.log(test.set('hello', 'nice'))
+// //  console.log(test)
+// //  console.log(test.set('hi', 'reassign'))
+//  // console.log(test)
+// console.log(test)
+//  console.log(test.get(16))
 
 // Do not modify
 function hashCode(string, size) {
