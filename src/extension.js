@@ -45,15 +45,13 @@ HashTable.prototype.set = function(key, value) {
     const newStorage = [];
     for (let i = 0; i < this.SIZE; i += 1) {
       if (this.storage[i]) {
-        const keys = Object.keys(this.storage[i]) 
-        console.log(keys)
+        const keys = Object.keys(this.storage[i]);
         for (let t = 0; t < keys.length; t += 1) {
           const hashKey = hashCode(keys[t], (this.SIZE * 2));
           if (!newStorage[hashKey]) {
             newStorage[hashKey] = {};
             newStorage[hashKey][keys[t]] = this.storage[i][keys[t]];
-          }
-          else{
+          } else {
             newStorage[hashKey][keys[t]] = this.storage[i][keys[t]];
           }
         }
@@ -62,15 +60,13 @@ HashTable.prototype.set = function(key, value) {
     this.storage = newStorage;
     this.SIZE *= 2;
   }
-  const hashKey = hashCode(key, this.SIZE)
+  const hashKey = hashCode(key, this.SIZE);
   if (!this.storage[hashKey]) {
     this.storage[hashKey] = {};
     this.storage[hashKey][key] = value;
-  }
-  else {
+  } else {
     this.storage[hashKey][key] = value;
   }
-  
 };
 
 /**
@@ -101,7 +97,6 @@ HashTable.prototype.remove = function(key) {
   if (!this.storage[hashKey][key]) return undefined;
   const value = this.storage[hashKey][key];
   delete this.storage[hashKey][key];
-  
   return value;
 };
 
@@ -110,23 +105,21 @@ HashTable.prototype.remove = function(key) {
 function hashCode(string, size) {
   let hash = 0;
   if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
+  for (let i = 0; i < string.length; i += 1) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
   return Math.abs(hash) % size;
 }
 const hash = new HashTable();
 hash.set('abc', 'five');
 hash.set('def', 'six');
 hash.set('cba', 'seven');
-console.log(hash)
-hash.set('a','a')
 console.log(hash);
-hash.set('b','b')
+hash.set('a', 'a');
+console.log(hash);
+hash.set('b', 'b');
 
 // Do not remove!!
 

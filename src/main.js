@@ -23,13 +23,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-  const hashKey = hashCode(key, this.SIZE)
-  console.log(hashKey)
+  const hashKey = hashCode(key, this.SIZE);
   if (!this.storage[hashKey]) {
     this.storage[hashKey] = {};
     this.storage[hashKey][key] = value;
-  }
-  else {
+  } else {
     this.storage[hashKey][key] = value;
   }
 };
@@ -64,29 +62,25 @@ HashTable.prototype.remove = function(key) {
   delete this.storage[hashKey][key];
   return value;
 };
-
-
 // Do not modify
 function hashCode(string, size) {
   let hash = 0;
   if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
+  for (let i = 0; i < string.length; i += 1) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
   return Math.abs(hash) % size;
 }
 const hash = new HashTable();
 hash.set('abc', 'five');
 hash.set('def', 'six');
 hash.set('cba', 'seven');
-console.log(hash)
+console.log(hash);
 console.log(hash.get('cba'));
-console.log(hash.get('abc'))
+console.log(hash.get('abc'));
 console.log(hash.remove('cba'));
-console.log(hash)
+console.log(hash);
 // Do not remove!!
 module.exports = HashTable;
