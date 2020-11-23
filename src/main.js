@@ -2,6 +2,8 @@
 * HashTable costructor
 *
 * construct a new hash table
+//key is converted into an integer index by hash function
+//this index decides where key-value pair belongs
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
@@ -10,6 +12,8 @@ function HashTable() {
   
   this.storage = new Array(this.SIZE);
 }
+
+console.log(new Array(this.SIZE))//undefined
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,7 +28,21 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //decl variable, assign to empty obj(do i need this?)
+  // const bucket = {};
+  const bucket = this.storage;
+  //if no key, add each new key-value pair into HashTable's bucket
+  if(key === undefined) bucket.key = value;
+  //if key already has value, overwrite existing value with new value
+  if(bucket.hasOwnProperty('key')) bucket.key = value;
+  //if hashed address(index?) has key-value pair, avoid collision by separate chaining or linear probing(??)
 
+  //push key-value pair into HashTable array
+  for(const[key, value] of Object.entries(bucket)) {
+    bucket.push([key, value]);
+  }
+  //return index/key of object ---> this will be index of array
+  return bucket.storage;
 };
 
 /**
@@ -38,7 +56,15 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //decl variable(do i need this?)
+  const array = this.storage; //can i do this?
+  //iterate through HashTable array
+  for(let i = 0; i < array.length; i++) {
+    //check to see if key exists; if it does, return corresponding value stored
+    if(array[i][0]) return array[i];
+    //if more than 1 value is stored at an address, (?)
+  }
+    
 };
 
 /**
@@ -50,7 +76,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const array = this.storage;
+  //iterate through HashTable 
+  for(let i = 0; i < array.length; i++) {
+    //if key is undefined, return undefined
+    if(!array[i][0]) return undefined; 
+    //if key is defined, delete key and delete value
+    if(array[i][0]) delete array[i];
+  }
+    
 };
 
 
