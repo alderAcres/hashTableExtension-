@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -23,8 +23,10 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  // LinkedList.find the key
+  // if found, just update it
+  // else, just LinkedList.add a new node
 };
 
 /**
@@ -37,8 +39,10 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function (key) {
+  // LinkedList.find the key
+  // If found, return the value
+  // else return undefined
 };
 
 /**
@@ -49,26 +53,104 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function (key) {
 
 };
 
-
 // Do not modify
 function hashCode(string, size) {
-  'use strict';
-  
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
+    hash &= hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
 // Do not remove!!
 module.exports = HashTable;
+
+// Linked List class
+function LinkedList() {
+  this.head = null;
+  this.tail = null;
+}
+// Node class
+function Node(key, value) {
+  this.key = key;
+  this.value = value;
+  this.next = null;
+}
+// Linked List Methods
+// Add
+LinkedList.prototype.add = function (key, value) {
+  // create a newNode w/ key, value
+  const newNode = new Node(key, value);
+  // if this.head is null, assign head and tail to be newNode
+  if (this.head === null) {
+    this.head = newNode;
+    this.tail = newNode;
+  } else {
+    // else...
+    // assign this.tail's next to be newNode
+    this.tail.next = newNode;
+    // update this.tail to be newNode
+    this.tail = newNode;
+  }
+};
+// Find
+LinkedList.prototype.find = function (key, currentNode = this.head) {
+  // starting with head, check...
+  // if currentNode is null, return undefined
+  if (currentNode === null) return undefined;
+  // if currentNode contains key, return currentNode
+  if (currentNode.key === key) return currentNode;
+  // else recursively call find on currentNode's next
+  LinkedList.prototype.find(key, currentNode.next);
+};
+// Remove
+LinkedList.prototype.remove = function (key, previousNode = null, currentNode = this.head) {
+  // starting with head, check...
+  // if currentNode is null, return undefined
+  if (currentNode === null) return undefined;
+  // if currentNode contains key and is the head, reassign head to be the next node
+  // else if currentNode contains key, point prevNode's next at currentNode's next
+  // why is this.tail undefined after the first recursive call?
+  console.log(this.tail);
+  if (currentNode.key === key) {
+    (currentNode === this.head) ? this.head = currentNode.next : previousNode.next = currentNode.next;
+    // if currentNode contains key and is the tail, reassign tail to be prevNode
+    // console.log(currentNode);
+    if (currentNode === this.tail) {
+      console.log('test');
+      this.tail = previousNode;
+    }
+  } else {
+    // else recursively call remove on currentNode's next
+    LinkedList.prototype.remove(key, currentNode, currentNode.next);
+  }
+};
+
+/*
+Edge cases:
+not found
+found in LL with one node
+found in head vs body/tail
+if found in tail, must reassign tail
+*/
+
+const myLL = new LinkedList();
+myLL.add('a', 0);
+myLL;
+const foundNode = myLL.find('a');
+foundNode;
+myLL;
+myLL.add('b', 1);
+myLL.add('c', 2);
+myLL;
+myLL.remove('c');
+console.log(myLL);
