@@ -9,7 +9,19 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+
+  function LinkedList() {
+    this.head = null;
+    this.tail = null;
+  }
+
+  function Node(val) {
+    this.value = val;
+    this.next = null;
+  }
 }
+
+
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,8 +36,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let encryptedIndex = hashCode(key, this.SIZE);
+  if (this.storage[encryptedIndex] !== undefined) {
+    let linkedList = new LinkedList;
+    this.storage[encryptedIndex] = linkedList.head;
+    this.storage[encryptedIndex] = linkedList;
+    linkedList.tail = value;
+  }
+  this.storage[encryptedIndex] = value;
 };
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +59,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let encryptedIndex = hashCode(key);
+  return this.storage[encryptedIndex];
 };
+
+
+
+// console.log('hello!')
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +76,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let encryptedIndex = hashCode(key);
+  if (!this.storage[encryptedIndex]) return undefined;
+  let removed = this.storage[encryptedIndex];
+  this.storage[encryptedIndex] = undefined;
+  console.log(removed)
+  return removed;
 };
+
+let hashTest = new HashTable();
+hashTest.set(5, 'sarah');
+console.log(hashTest);
 
 
 // Do not modify
