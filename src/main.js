@@ -11,6 +11,11 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+function LinkedList() {
+  this.head = null;
+  this.tail = null;
+}
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -23,8 +28,23 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
+HashTable.prototype.set = function(key, value) { 
 
+  //need to implement LinkedList for storing more than one value?
+  
+  if (!this.storage[hashCode(key, this.SIZE) - 1][key]) {
+    this.storage[hashCode(key, this.SIZE) - 1] = new LinkList()
+      LinkedList.head = value
+      LinkedList.tail = value
+  }
+
+  else this.storage[hashCode(key, this.SIZE) - 1][key] = value
+  //check how many element in the array is not undefined
+  let counter = 0;
+  this.storage.forEach(el => {
+    if (el !== undefined) counter++;
+  })
+  return counter;
 };
 
 /**
@@ -38,7 +58,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let bucket = this.storage[hashCode(key, this.SIZE) - 1] 
 
+  return this.storage[hashCode(key, this.SIZE) - 1][key]
 };
 
 /**
@@ -50,7 +72,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let bucket = this.storage[hashCode(key, this.SIZE) - 1]
+  
+  if (bucket === undefined) return undefined;
+  const keyValuePair = this.storage[hashCode(key, this.SIZE) - 1]
+  delete this.storage[hashCode(key, this.SIZE) - 1][key]
+  return keyValuePair;
 };
 
 
@@ -72,3 +99,6 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+console.log(hashCode('kit', 16))
