@@ -14,6 +14,42 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+
+function fillCheck(array) {
+  let full = 0;
+  array.forEach(element => {if (element) full += 1});
+  return (full / array.length);
+}
+
+HashTable.prototype.set = function(key, value) {
+  const position = hashCode(key, this.SIZE);
+  if (!this.storage[position]) this.storage[position] = {};
+  this.storage[position][key] = value;
+  //if this.storage.length > this.size * .75
+  if (fillCheck(this.storage) > this.SIZE * .75) {
+    
+  }
+  
+  //resize hash table
+  //ran out of time here!
+};
+
+HashTable.prototype.get = function(key) {
+  const position = hashCode(key, this.SIZE);
+  return this.storage[position][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  const position = hashCode(key, this.SIZE);
+  const value = this.storage[position][key];
+  delete this.storage[position][key];
+  return value;
+};
 
 
 
@@ -36,3 +72,17 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+const table = new HashTable;
+table.set('george', 'washington');
+table.set('john', 'adams')
+table.set('thomas', 'jefferson');
+table.set('james', 'madison')
+// console.log(table.length); //undefined--it's an object
+// console.log(Array.isArray(table)) //false
+// console.log(typeof table) //object
+// console.log(Array.isArray(this.storage)) //false
+// console.log(typeof this.storage) //undefined--access problem?
+// console.log(table.storage) //here it is
+// console.log(table.storage.length) //16, although it isn't full.
+console.log(fillCheck(table.storage)); //25
