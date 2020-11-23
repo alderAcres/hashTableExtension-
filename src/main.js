@@ -62,7 +62,7 @@ HashTable.prototype.get = function(key) {
   for(let i = 0; i < array.length; i++) {
     //check to see if key exists; if it does, return corresponding value stored
     if(array[i][0]) return array[i];
-    //if more than 1 value is stored at an address, (?)
+    //if more than 1 value is stored at an address, (closure?)
   }
     
 };
