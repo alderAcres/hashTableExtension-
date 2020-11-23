@@ -14,7 +14,45 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 5;
+  
+  this.storage = new Array(this.SIZE);
+}
+// If adding the new item will push the number of stored items to over 75% of
+// the hash table's SIZE, then double the hash table's SIZE and rehash everything
 
+// if curr length of storage obj + 1 is greater than 75% of storage length, rehash 
+HashTable.prototype.set = function(key, value) {
+  const idx = hashCode(key, this.SIZE);
+  // check if adding new item will increase storage
+  const numOfObjs = Object.keys(this.storage); 
+  if ((!this.storage[idx]) && (((numOfObjs.length) + 1) > ((this.storage.length) * .75))) {
+    this.storage = new Array(this.SIZE * 2)
+  }
+  if (this.storage[idx]) {
+    this.storage[idx][key] = value;
+  } else {
+  this.storage[idx] = {};
+  this.storage[idx][key] = value;
+  }
+};
+
+HashTable.prototype.get = function(key) {
+  // declar a var to hold indx of input key
+  const idx = hashCode(key, this.SIZE);
+  // returns value of key
+  return this.storage[idx][key]
+};
+
+HashTable.prototype.remove = function(key) {
+  // declar a var to hold indx of input key
+  const idx = hashCode(key, this.SIZE);
+  // return undefined if key doesn't exist
+  if (!this.storage[idx][key]) return undefined;
+  // if key exists, delete key from storage
+  delete this.storage[idx][key];
+};
 
 
 // YOUR CODE ABOVE
@@ -33,6 +71,22 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+ const newHash = new HashTable();
+console.log(newHash.storage.length)
+newHash.set('A', 'apple')
+console.log(Object.keys(newHash.storage))
+newHash.set('D', 'dandy')
+console.log(newHash.storage)
+console.log(Object.keys(newHash.storage))
+newHash.set('Ddd', 'derp')
+console.log(newHash.storage.length)
+newHash.set('Hellohellotest', 'zzz')
+newHash.set('Testing', 'zzzbabb')
+console.log(newHash)
+console.log(newHash.storage.length)
+// console.log(Object.keys(newHash.storage))
+// console.log(newHash.get('D'))
 
 // Do not remove!!
 module.exports = HashTable;
