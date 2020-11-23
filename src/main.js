@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // declar a var to hold indx of input key
+  const idx = hashCode(key, this.SIZE);
+  // check if obj exists on index
+  if (this.storage[idx]) {
+  // if it exists, set key and val
+    this.storage[idx][key] = value;
+  } else {
+  // if it doesn't exist, declare an obj on index
+  this.storage[idx] = {};
+  // set key and val properties
+  this.storage[idx][key] = value;
+  }
 };
 
 /**
@@ -38,7 +49,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // declar a var to hold indx of input key
+  const idx = hashCode(key, this.SIZE);
+  // returns value of key
+  return this.storage[idx][key]
 };
 
 /**
@@ -50,7 +64,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // declar a var to hold indx of input key
+  const idx = hashCode(key, this.SIZE);
+  // return undefined if key doesn't exist
+  if (!this.storage[idx][key]) return undefined;
+  // if key exists, delete key from storage
+  delete this.storage[idx][key];
 };
 
 
@@ -69,6 +88,20 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+// const newHash = new HashTable();
+// console.log(newHash.storage)
+// console.log(newHash.storage.Object(keys))
+// newHash.set('A', 'apple')
+// newHash.set('D', 'dandy')
+// newHash.set('Ddd', 'derp')
+// console.log(newHash.storage)
+
+// console.log(newHash.get('D'))
+
+// console.log(newHash.remove('ham'))
+// newHash.remove('Ddd')
+// console.log(newHash.storage)
 
 // Do not remove!!
 module.exports = HashTable;
