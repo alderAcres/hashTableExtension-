@@ -24,6 +24,14 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  //create index by hashing key
+  let index = this.hashCode(key);
+  //check if there is anything sored at the index, if not then create an array at that index
+  if(!this.storage[index]) {
+    this.storage[index] = [];
+  }
+  //push array with key value pair into array at that index..this should handle collisions
+  this.storage[index].push([key, value]);
 
 };
 
@@ -38,7 +46,21 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //hash passed in key to create index
+  let index = this.hashCode(key);
+  //check to see if anything exists at that index
+  if(this.storage[index]) {
+    //iterate over the array at that index to find particular matching key/value pair in sub-arrays
+    for(let i = 0; i < this.storage[index].length; i++) {
+      //check if the 0th index on the ith subarray matches the passed in key
+      if(this.storage[index][i][0] === key) {
+        // if there is a match return the key/value pair.
+        return this.storage[index][i];
+      }
+    }
+  }
+  //if we don't find anything at that index, return undefined
+  return undefined;
 };
 
 /**
@@ -50,7 +72,20 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //hash passed in key to get index
+  let index = this.hashCode(key);
+  //check to see if anything exists at that particular index
+  if(this.storage[index]) {
+    //iterate over the array at that index to find particular matching key/value pair in sub-arrays
+    for(let i = 0; i < this.storage[index].length; i++) {
+      //check if the 0th index on the ith subarray matches the passed in key
+      if(this.storage[index][i][0] === key) {
+        // if there is a match return the key/value pair, delete that pair
+        delete this.storage[index][i];
+      }
+    }
+  }
+  //return undefined if key is not found in hash table
 };
 
 
