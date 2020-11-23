@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //take in the key and convert it into a hash value 
+  let hashValue = hashCode(key); 
+  //check if storage[hashValue] is undefined
+  //if so, then create an array and THEN push array of [key, value]
+  if(!this.storage[hashValue]){
+    this.storage[hashValue] = []; 
+    this.storage[hashValue].push([key, value]); 
+  } else {
+    //if not, then just push an array of [key, value]
+    this.storage[hashValue].push([key, value]); 
+  }
+    
 };
 
 /**
@@ -38,7 +49,17 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //instantiate hash value with the key 
+  let hashValue = hashCode(key); 
+  //initialize a options variable and set it equal to the array at that index 
+  let options = this.storage[hashValue]; 
+  //Iterate through the options array and check for a matching key 
+  for(let i = 0; i < options.length; i++){
+    //once found, then just return the value associated with that key 
+    if(options[0] === key){
+      return options[1]; 
+    }
+  }
 };
 
 /**
@@ -50,7 +71,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //instantiate hash value with key 
+  let hashValue = hashCode(key); 
+  //initialize options variable and set it equal to the array at that index 
+  let options = this.storage[hashValue]; 
+  //iterate through options array to find the key value pair that matches 
+  for(let i = 0; i < options.length; i++){
+    //once found, then delete the VALUE and return nothing
+    if(options[0] === key){
+      delete options[1]; 
+      return; 
+    }    
+  }
+    
+  //if nothing is found, then just return undefined
+  return undefined; 
 };
 
 
