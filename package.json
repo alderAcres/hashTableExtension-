@@ -25,5 +25,11 @@
   "homepage": "https://github.com/CodesmithLLC/cs-fundamentals-1-assessment",
   "dependencies": {
     "request": "^2.69.0"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true
   }
 }
