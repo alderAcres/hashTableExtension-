@@ -15,6 +15,88 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable(size = 16) {
+  this.SIZE = size;
+  
+  this.storage = new Array(this.SIZE);
+}
+
+HashTable.prototype.set = function(key, value) {
+  let hash = hashCode(key, this.SIZE)
+
+  if (this.storage[hash]){
+    let rewrite = false
+    for (let i = 0; i< this.storage[hash].length; i++){
+      if (this.storage[hash][i][0] === key){
+        this.storage[hash][i][1] = value
+        rewrite = true
+      }
+    }
+    if (!rewrite) {
+      this.storage[hash].push([key, value])
+    }
+  } else {
+    this.storage[hash] = [[key, value]]
+  }
+
+  let len = this.storage.flat().length
+
+  //check if the size is greater than 75% of this.SIZE
+  if (Math.floor(this.SIZE*.75)<len) {
+    let resizedHashTable = new HashTable(this.SIZE*2)
+
+    for (let entry of this.storage){
+      if (entry){
+        for (let pair of entry){
+          resizedHashTable.set(pair[0], pair[1])
+        }
+      }
+    }
+    this.storage = resizedHashTable.storage
+  }
+  
+
+
+  return len
+};
+
+
+HashTable.prototype.get = function(key) {
+  let hash = hashCode(key, this.SIZE)
+  for (let pair of this.storage[hash]){
+    if (pair[0] === key) return pair
+  }
+};
+
+
+HashTable.prototype.remove = function(key) {
+  let hash = hashCode(key, this.SIZE)
+  let returnVal = undefined
+  for (let i = 0; i< this.storage[hash].length; i++){
+    if (this.storage[hash][i][0] === key){
+      returnVal = this.storage[hash][i][1]
+      this.storage[hash].splice(i, 1)
+    }
+  }
+
+  //check if there is less than 25% entries
+  //then resize
+  let len = this.storage.flat().length
+  if (Math.floor(this.SIZE*.25)>len){
+    let resizedHashTable = new HashTable(this.SIZE/2)
+
+    for (let entry of this.storage){
+      if (entry){
+        for (let pair of entry){
+          resizedHashTable.set(pair[0], pair[1])
+        }
+      }
+    }
+    this.storage = resizedHashTable.storage
+  }
+
+  return returnVal
+};
 
 
 // YOUR CODE ABOVE
@@ -33,6 +115,15 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+
+let newHashTable = new HashTable()
+newHashTable.set(1, "firstVal")
+newHashTable.set("uhh", "secondVal")
+newHashTable.remove(1)
+console.log(newHashTable.storage)
+
 
 // Do not remove!!
 module.exports = HashTable;
