@@ -77,6 +77,8 @@ HashTable.prototype.remove = function(key) {
 //** if we're returning the deleted entry, I would save the value, first, then return it after deletion**/
   //remove key/value of pair passed in
   delete this[currenthash][key];
+  //also decrment our hashtotal of entries
+  this.hashtotal -= 1;
 };
 
 
