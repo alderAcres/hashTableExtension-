@@ -90,7 +90,7 @@ let value = this.hash(key);
   }
   // return value
   return value;
-
+// test
 };
 
 
