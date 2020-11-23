@@ -1,3 +1,5 @@
+// import { delete as } from "request";
+
 /**
 * HashTable costructor
 *
@@ -25,7 +27,21 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+  // declare var to store result of hashed key
+  const myAddress = hashCode(key, this.SIZE);
+
+  // conditional check to see if value is stored in said key, if not then create obj and store
+  if(this.storage[myAddress] === undefined) this.storage[myAddress] = {};
+
+  this.storage[myAddress][key] = value;
+  // console.log( this.storage);
+  
+
+
 };
+
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -39,6 +55,10 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+  const myAddress = hashCode(key, this.SIZE);
+
+  return this.storage[myAddress][key];
+
 };
 
 /**
@@ -50,6 +70,18 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+
+  const myAddress = hashCode(key, this.SIZE);
+
+  // console.log(this.storage[myAddress]);
+
+  if(!this.storage[myAddress][key]) return undefined;
+
+  if(this.storage[myAddress][key]) delete this.storage[myAddress][key];
+
+
+  // console.log('in remove ' + this.storage);
+
 
 };
 
@@ -69,6 +101,23 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+let myHash = new HashTable();
+
+myHash.set('hi', 'bye' );
+myHash.set('hi', 'try');
+myHash.set('meow', 'cat')
+
+console.log(myHash.storage);
+
+console.log(myHash.get('hi'));
+
+myHash.remove('hi');
+
+console.log(myHash.storage);
+
+
 
 // Do not remove!!
 module.exports = HashTable;
