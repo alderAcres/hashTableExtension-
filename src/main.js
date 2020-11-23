@@ -24,7 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // create a const index, assign a unique location within the hashtable by using hashfunction
+  const index = this.storage[hashCode(JSON.stringify(key), this.SIZE)];
+  // test if the bucket being accessed in hash has a value stored in it
+  if (!this.storage[hashCode(JSON.stringify(key), this.SIZE)]) {
+    // if so, store an empty object literal in this bucket to handle collisions
+    this.storage[hashCode(JSON.stringify(key), this.SIZE)] = {};
+    // create a key/value pair with entered in arguments in the object literal nested in the bucket
+    this.storage[hashCode(JSON.stringify(key), this.SIZE)][key] = value;
+  } else {
+    // if the bucket already has a value stored in it, create a key/value pair with the arguments
+      // in the object stored there
+    this.storage[hashCode(JSON.stringify(key), this.SIZE)][key] = value;
+  }
 };
 
 /**
@@ -38,7 +50,9 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // return the value stored at address main from entering the input as an argument to hashCode 
+  // at the key of input
+  return this.storage[hashCode(JSON.stringify(key), this.SIZE)][key];
 };
 
 /**
@@ -50,9 +64,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // save the value stored at address main from entering the input as an argument to hashCode 
+  // at the key of input
+  const value = this.storage[hashCode(JSON.stringify(key), this.SIZE)][key];
+  // delete the key/value pair at this key
+  delete this.storage[hashCode(JSON.stringify(key), this.SIZE)][key];
+  return value;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
@@ -72,3 +90,22 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+/*******************Test Suite *************************/
+const testHash = new HashTable();
+// test initial contents of hash
+console.log('testHash:', testHash);
+for (let i = 0; i < 18; i += 1) {
+  testHash.set(`key${i}`, `value${i}`);
+}
+// test set method
+console.log('testHash:', testHash);
+testHash.set('key5', 'newValue');
+console.log('testHash:', testHash);
+// test get method
+console.log('testHash.get(\'key10\'):', testHash.get('key10'));
+console.log('testHash.get(\'key16\'):', testHash.get('key16'));
+// test remove method
+console.log('testHash.remove(\'key16\'):', testHash.remove('key16'));
+console.log('testHash.remove(\'key10\'):', testHash.remove('key10'));
+console.log('testHash.get(\'key10\'):', testHash.get('key10'));
+console.log('testHash.get(\'key16\'):', testHash.get('key16'));
