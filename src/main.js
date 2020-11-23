@@ -1,5 +1,5 @@
 /**
-* HashTable costructor
+* HashTable constructor
 *
 * construct a new hash table
 *
@@ -10,6 +10,8 @@ function HashTable() {
   
   this.storage = new Array(this.SIZE);
 }
+
+const hashTable1 = new HashTable();
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -24,7 +26,7 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  hashTable1.key = value;
 };
 
 /**
@@ -38,7 +40,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  return hashTable1[key];
 };
 
 /**
@@ -50,7 +52,7 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  delete hashTable1[key];
 };
 
 
