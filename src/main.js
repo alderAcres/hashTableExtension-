@@ -24,11 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let keyIndexNum = hashCode(key, this.SIZE)
+  this.storage[keyIndexNum] = {}
+  if(this.storage[keyIndexNum] === undefined){
+    this.storage[keyIndexNum][key] = value
+  }else{
+    this.storage[keyIndexNum][key] = value
+  }
 };
 
+
 /**
-* get - Retrieves a value stored in the hash table with a specified key
+ * get - Retrieves a value stored in the hash table with a specified key
 *
 * - If more than one value is stored at the key's hashed address, then you must retrieve
 *   the correct value that was originally stored with the provided key
@@ -38,19 +45,28 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let keyIndexNum = hashCode(key, this.SIZE)
+  if(this.storage[keyIndexNum][key] !== undefined){
+    return this.storage[keyIndexNum][key]
+  }
 };
 
 /**
-* remove - delete a key/value pair from the hash table
-*
-* - If the key does not exist in the hash table, return undefined
+ * remove - delete a key/value pair from the hash table
+ *
+ * - If the key does not exist in the hash table, return undefined
 *
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let keyIndexNum = hashCode(key, this.SIZE);
+  let keyValue = this.storage[keyIndexNum][key];
+  if(this.storage[keyIndexNum][key] !== undefined){
+    delete this.storage[keyIndexNum][key];
+    return keyValue;
+  }
+  else return undefined;
 };
 
 
@@ -72,3 +88,11 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+const test = new HashTable()
+test.set('DAD', '949-220')
+console.log(test)
+// test.get('DAD')
+// console.log(test.get('DAD'))
+// // console.log(test.remove('DAD'))
+// console.log(test.remove('MOM'))
