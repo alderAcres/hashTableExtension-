@@ -7,7 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.keys = [];
+  this.values = []
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,6 +25,9 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+//invoke the hashCode function on the key passed into func, passing in size
+this.keys.push(key)
+this.values.push(value)
 
 };
 
@@ -38,7 +42,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  for (var i=0;i<this.keys.length;i++){
+    var keyVal = this.keys[i];
+    if (keyVal === key) {
+        return this.values[i]
+    }
+}
 };
 
 /**
