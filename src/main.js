@@ -7,8 +7,10 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  // check slides from last week what this function is about  
   this.storage = new Array(this.SIZE);
+  // new keyword creates new object with the template called HashTable
+
 }
 
 /**
@@ -24,7 +26,7 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // what is set? 
 };
 
 /**
@@ -38,7 +40,7 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // what is get used for?
 };
 
 /**
