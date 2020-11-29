@@ -8,7 +8,7 @@
 function HashTable() {
   this.SIZE = 16;
   this.storage = new Array(this.SIZE);
-}
+};
 
 /**
 * set - Adds given value to the hash table with specified key.
@@ -23,8 +23,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-  const hashedIndex = hashCode(key, this.SIZE)
-  this.storage[hashedIndex] = value
+  const hashedIndex = hashCode(key, this.SIZE);
+  if(this.storage[hashedIndex]){
+    this.storage[hashedIndex][key] = value;
+  } else {
+    this.storage[hashedIndex] = {};
+    this.storage[hashedIndex][key] = value;
+  };
 };
 
 /**
@@ -38,8 +43,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-  const hashedIndex = hashCode(key, this.SIZE)
-  return this.storage[hashedIndex]
+  const hashedIndex = hashCode(key, this.SIZE);
+  let holder = this.storage[hashedIndex];
+  for (let item in holder){
+    if (item === key){
+      return holder[item];
+    };
+  };
 };
 
 /**
@@ -51,10 +61,24 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
   const hashedIndex = hashCode(key, this.SIZE)
   if (this.storage[hashedIndex] !== undefined){
-  delete this.storage[hashedIndex] 
+    let holder = this.storage[hashedIndex];
+    let removedValue;
+    let sizeOfItem = 0;
+    for (let item in holder){
+      sizeOfItem++;
+      if(item === key){
+        removedValue = holder[key];
+      }
+    }
+    if (sizeOfItem > 1){
+      delete holder[key];
+      return removedValue;
+    } else {
+      delete this.storage[hashedIndex];
+      return removedValue;
+    }
   } else {
     return undefined;
   }
@@ -81,10 +105,12 @@ function hashCode(string, size) {
 module.exports = HashTable;
 
 
-// let newTable = new HashTable()
-// newTable.set('evan1','test1')
-// newTable.set('evan2','test2')
-// newTable.set('evan3','test3')
-// console.log(newTable.get('evan1'))
+let newTable = new HashTable()
+console.log(newTable)
+newTable.set('evan1','test1')
+newTable.set('evan2','test2')
+newTable.set('evan3','test3')
+newTable.set('evan3', 'test4')
+console.log(newTable.get('evan1'))
 // console.log(newTable.remove('evan3'))
-// console.log(newTable)
+console.log(newTable)

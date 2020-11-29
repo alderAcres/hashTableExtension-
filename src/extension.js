@@ -18,32 +18,43 @@
 function HashTable() {
   this.SIZE = 16;
   this.storage = new Array(this.SIZE);
-  this.keys = {};
   this.counter = 0;
 }
 // Important to note that I *think* this achieves the set functionality but I don't know if it undermines the security of a hashtable by having the values of the keys in the body of the object. 
 HashTable.prototype.set = function(key, value) {
-  ++this.counter
+  ++this.counter;
+  if (this.counter/this.SIZE <= 0.75){
+    const hashedIndex = hashCode(key, this.SIZE);
+    if(this.storage[hashedIndex]){
+      this.storage[hashedIndex][key] = value;
+    } else {
+      this.storage[hashedIndex] = {};
+      this.storage[hashedIndex][key] = value;
+    };
+  }
   if (this.counter/this.SIZE >= 0.75){
-    let hashedIndex = hashCode(key, this.SIZE)
-    this.keys[key]
-    this.storage[hashedIndex] = value
+    const hashedIndex = hashCode(key, this.SIZE);
+      if(this.storage[hashedIndex]){
+        this.storage[hashedIndex][key] = value;
+      } else {
+        this.storage[hashedIndex] = {};
+        this.storage[hashedIndex][key] = value;
+      };
     let holderObj = {};
-     for (let i in this.keys){
-      holderObj[i] = this.get(this.keys[i])
+     for (let savedItem in this.storage){
+      for (let subkey in this.storage[savedItem]){
+        holderObj[subkey] = this.storage[savedItem][subkey]
+      }
      }
      this.SIZE = this.SIZE*2
-     this.storage = new Array(this.SIZE)
-     for (let keyz in holderObj){
-      let hashedIndex = hashCode(keyz, this.SIZE)
-      this.storage[hashedIndex] = holderObj[keyz]
+     this.storage = new Array(this.SIZE) 
+     for (let valuekey in holderObj){
+      let hashedIndex = hashCode(valuekey, this.SIZE)
+      this.storage[hashedIndex] = {};
+      this.storage[hashedIndex][valuekey] = holderObj[valuekey];
      }
-  }
-  let hashedIndex = hashCode(key, this.SIZE)
-  this.keys[key] = key
-  this.storage[hashedIndex] = value
-
-};
+  };
+}
 
 HashTable.prototype.get = function(key) {
 
@@ -51,18 +62,8 @@ HashTable.prototype.get = function(key) {
   return this.storage[hashedIndex]
 };
 
+
 HashTable.prototype.remove = function(key) {
-  this.counter--
-  const hashedIndex = hashCode(key, this.SIZE)
-  
-  if (this.storage[hashedIndex] !== undefined){
-  delete this.storage[hashedIndex] 
-    if (this.counter/this.SIZE < 0.25){
-      // same process of saving keys etc from set and rehashing. I ran out of time because i originally made this.keys an array and refactored it to be an object once i started the remove method. Would have had to find the index of the value and slice the array versus deleteing a key value pair from the object.
-    }
-  } else {
-    return undefined;
-  }
 };
 
 // YOUR CODE ABOVE
@@ -96,9 +97,7 @@ newTable.set('evan8','test8')
 newTable.set('evan9','test9')
 newTable.set('evan10','test10')
 newTable.set('evan11','test12')
-newTable.set('evan12','test12')
-// console.log(newTable.keys)
-newTable.set('evan13','test13')
-
-newTable.remove('evan13')
+// newTable.set('evan12','test12')
+console.log(newTable.keys)
+// newTable.set('evan13','test13')
 console.log(newTable)
