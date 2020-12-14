@@ -11,6 +11,11 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+function Node(key, value){
+  this.value = value;
+  this.key = key;
+}
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
@@ -24,7 +29,20 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  let hash = hashCode(key, this.size);
+  let stored = new Node(key, value);
+  if(this.storage[hash] && arguments.length > 1){
+    if(Array.isArray(this.storage[hash])){
+      this.storage[hash].push(stored);
+    } else {
+      let head = this.storage[hash];
+      this.storage[hash] = [];
+      this.storage[hash].push(head);
+      this.storage[hash].push(stored);
+    }
+  } else {
+    this.storage[hash] = stored;
+  }
 };
 
 /**
@@ -38,7 +56,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  let hash = hashCode(key);
+  if(!this.storage[hash]) return null;
+  else if(!Array.isArray(this.storage[hash])) return this.storage[hash].value;
+  else if(Array.isArray(this.storage[hash])){
+    for(let each of this.storage[hash]){
+      if(each.key === key) return each.value;
+    }
+  }
 };
 
 /**
@@ -50,7 +75,21 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  let hash = hashCode(key);
+  if(!this.storage[hash]) return undefined;
+  else if(!Array.isArray(this.storage[hash])){
+    let store = this.storage[hash];
+    this.storage[hash] = undefined;
+    return store.value;
+  } 
+  else if(Array.isArray(this.storage[hash])){
+    for(let i = 0;  i < this.storage[hash].length; i++){
+      if(this.storage[hash][i].key === key){
+        [this.storage[hash][i], this.storage[hash][0]] = [this.storage[hash][0], this.storage[hash][i]];
+        return this.storage[hash].shift().value;
+      }
+    }
+  }
 };
 
 
@@ -72,3 +111,14 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+let table = new HashTable();
+table.set('chess', 'cheese');
+table.set('cheese', false);
+console.log(table);
+console.log(table.get('cheese'));
+table.remove('cheese');
+console.log(table.remove('cheese'));
+console.log(table);
+
