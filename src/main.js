@@ -7,8 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.items = 0;
 }
 
 /**
@@ -24,7 +24,17 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  //run the key through the hashCode function to determine the index
+  const obj = this.storage;
+  const index = hashCode(key, this.SIZE);
+  //if that element within the array is undefined, create an object
+  if (obj[index] === undefined) obj[index] = {};
+  //add the key value pair to the object
+  obj[index][key] = value;
+  //increase this.items by 1
+  this.items += 1;
+  //return the this.items
+  return this.items;
 };
 
 /**
@@ -38,6 +48,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  //run the key through the hashCode function to determine the index
+  const obj = this.storage;
+  const index = hashCode(key, this.SIZE);
+
+  if (obj[index] === undefined) return undefined;
+  if (key in obj[index]) return obj[index][key];
+  else return undefined;
 
 };
 
@@ -50,9 +67,34 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  //run the key through the hashCode function to determine the index
+  const obj = this.storage;
+  const index = hashCode(key, this.SIZE);
 
+  if (obj[index] === undefined) return undefined;
+  if (obj[index][key]) {
+    const deletedValue = obj[index][key];
+    delete obj[index][key];
+    this.items -= 1;
+    return deletedValue;
+  }
+  return;;
 };
 
+// const arr = new HashTable();
+// const first = arr.set('test', 'candy');
+// first
+// arr
+
+// const firstGet = arr.get('test')
+// firstGet
+
+// const second = arr.set('money', 555);
+// const third = arr.set('Danny', true)
+// arr
+// const firstRemove = arr.remove('test');
+// firstRemove
+// arr
 
 // Do not modify
 function hashCode(string, size) {
