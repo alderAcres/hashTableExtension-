@@ -20,22 +20,60 @@ function HashTable() {
 }
 
 
+// method to handle resizing the table and rehashing its contents
+// returns a new HashTable; doesn't mutate the existing one.
+// TODO: mutate the HashTable instead.
+HashTable.prototype.resize = function(newSize) {
+  // todo: test if I need to hash this's contents to a hold table, change the size of this, then rehash the hold table's contents back to this
+  // const hold = new HashTable();
+  
+  // RESIZE
+  this.SIZE = newSize;
+
+  // REHASH
+  // iterate over the this object's storage
+  for (let bucket = 0; bucket < this.storage.length; bucket++) {
+    // if bucket is not empty
+    if (this.storage[bucket] !== undefined && this.storage[bucket] !== {}) {
+      console.log("Bucket contents: ", this.storage[bucket])
+      // iterate over contents of bucket
+      for (let key in this.storage[bucket]) {
+        // hash each item to newHash
+        this.set(key, this.storage[bucket][value]);
+      }
+    }
+    else console.log("Empty bucket");
+  }
+
+  
+  // RETURN
+  // return newHash;
+}
+
 
 HashTable.prototype.set = function(key, value) {
+  // resize if needed
+  if (this.count + 1 > 0.75 * this.SIZE) {
+    this.resize(this.SIZE * 2);
+  }
+
   const bucket = hashCode(key, this.SIZE);
-  // case: there are no items at this key in this bucket --> increment count
+  // if there are no items at this key in this bucket, increment count
   if(!this.storage[bucket] || !this.storage[bucket][key]) {
     this.count++;
   }
+
   this.storage[bucket] = { [key]: value };
   return this.count;
 };
 
-// const myHash = new HashTable();
+const myHash = new HashTable();
 // console.log(myHash.set("1", "overwrite me")); // 1
-// console.log(myHash.set("1", "first value")); // 1
-// console.log(myHash.set("2", "second value")); // 2
-// console.log(myHash);
+console.log(myHash.set("1", "first value")); // 1
+console.log(myHash.set("2", "second value")); 
+console.log(myHash.set("3", 3)); 
+console.log(myHash.set("4", 4)); // 2
+console.log(myHash);
 
 
 
