@@ -25,7 +25,18 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
 
+  let hashedIndex = hashCode(key, this.SIZE)
+
+  if (!this.storage[hashedIndex]){
+    this.storage[hashedIndex] = {};
+    this.storage[hashedIndex][key] = value;
+  } else {
+    this.storage[hashedIndex][key] = value;
+  }
+
 };
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +49,14 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let hashedIndex = hashCode(key, this.SIZE)
 
+  if (this.storage[hashedIndex]){
+    return this.storage[hashedIndex][key]
+  }
+  return 'GET Error: No key found';
 };
+
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -51,7 +68,26 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
 
-};
+  let hashedIndex = hashCode(key, this.SIZE);
+
+  if (this.storage[hashedIndex]){
+    let keysInBucket = Object.keys(this.storage[hashedIndex]);
+
+    if (keysInBucket.length === 1 && this.storage[hashedIndex].hasOwnProperty(key)){
+      let result = this.storage[hashedIndex][key]
+      this.storage[hashedIndex] = undefined;
+      return result;
+    } 
+
+    if (this.storage[hashedIndex].hasOwnProperty(key)){
+      let result = this.storage[hashedIndex][key];
+      delete this.storage[hashedIndex][key];
+      return result;
+    }
+    return 'This should not print'
+} else {
+      return 'REMOVE ERROR: No Key Found'
+}};
 
 
 // Do not modify
@@ -69,6 +105,16 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+
+
+
+//TESTING BELOW
+
+
+
+
 
 // Do not remove!!
 module.exports = HashTable;
