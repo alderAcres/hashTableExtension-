@@ -14,8 +14,67 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  this.items = 0;
+}
 
+HashTable.prototype.set = function(key, value) {
+  //run the key through the hashCode function to determine the index
+  const obj = this.storage;
+  const index = hashCode(key, this.SIZE);
 
+  if (this.items > (this.SIZE * 3 / 4)){
+    //double the size of this.SIZE
+    this.SIZE *= 2;
+    this.items = 0;
+    //create a new storage array
+    this.newStorage = new Array(this.SIZE);
+    //loop over every index of the old storage array
+    this.storage.forEach(obj = {
+      if (typeof obj === 'object') {
+      //if the element is an object loop over every key value pair
+        //run each key through the hashcode function
+        //create an object, if it doesnt exist
+        //add that key value to that index
+      }
+    });
+
+  } else {
+    if (obj[index] === undefined) obj[index] = {};
+    obj[index][key] = value;
+    this.items += 1;
+    return this.items;
+  }
+
+};
+
+HashTable.prototype.get = function(key) {
+  //run the key through the hashCode function to determine the index
+  const obj = this.storage;
+  const index = hashCode(key, this.SIZE);
+
+  if (obj[index] === undefined) return undefined;
+  if (key in obj[index]) return obj[index][key];
+  else return undefined;
+
+};
+
+HashTable.prototype.remove = function(key) {
+  //run the key through the hashCode function to determine the index
+  const obj = this.storage;
+  const index = hashCode(key, this.SIZE);
+
+  if (obj[index] === undefined) return undefined;
+  if (obj[index][key]) {
+    const deletedValue = obj[index][key];
+    delete obj[index][key];
+    this.items -= 1;
+    return deletedValue;
+  }
+  return;;
+};
 
 // YOUR CODE ABOVE
 
