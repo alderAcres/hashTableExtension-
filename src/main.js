@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
   this.tableSize = 0
 }
@@ -34,13 +33,6 @@ HashTable.prototype.set = function(key, value) {
   return this.tableSize;
 };
 
-const testTable = new HashTable();
-testTable.set('name', 'daniel');
-console.log(testTable.storage);
-testTable.set('name', 'Chloe');
-console.log(testTable.storage);
-testTable.set('age', 26)
-console.log(testTable.storage);
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -60,10 +52,6 @@ HashTable.prototype.get = function(key) {
   return output;
 };
 
-console.log(testTable.get('name'));
-console.log(testTable.get('age'));
-console.log(testTable.get('hobbies'));
-
 /**
 * remove - delete a key/value pair from the hash table
 *
@@ -81,10 +69,6 @@ HashTable.prototype.remove = function(key) {
   }
   return removed;
 };
-
-console.log(testTable.remove('age'))
-console.log(testTable.storage)
-console.log(testTable.remove('age'))
 
 
 // Do not modify
