@@ -21,12 +21,8 @@ function HashTable() {
 
 
 // method to handle resizing the table and rehashing its contents
-// returns a new HashTable; doesn't mutate the existing one.
-// TODO: mutate the HashTable instead.
-HashTable.prototype.resize = function(newSize) {
-  // todo: test if I need to hash this's contents to a hold table, change the size of this, then rehash the hold table's contents back to this
-  // const hold = new HashTable();
-  
+// TODO: solve error causing duplicate items in resized table
+HashTable.prototype.resize = function(newSize) { 
   // RESIZE
   this.SIZE = newSize;
 
@@ -35,19 +31,16 @@ HashTable.prototype.resize = function(newSize) {
   for (let bucket = 0; bucket < this.storage.length; bucket++) {
     // if bucket is not empty
     if (this.storage[bucket] !== undefined && this.storage[bucket] !== {}) {
-      console.log("Bucket contents: ", this.storage[bucket])
       // iterate over contents of bucket
       for (let key in this.storage[bucket]) {
-        // hash each item to newHash
-        this.set(key, this.storage[bucket][value]);
+        const holdVal = this.storage[bucket][key];
+        // remove from old bucket
+        this.remove(key);
+        // reheash to new bucket
+        this.set(key, holdVal);
       }
     }
-    else console.log("Empty bucket");
   }
-
-  
-  // RETURN
-  // return newHash;
 }
 
 
@@ -67,14 +60,6 @@ HashTable.prototype.set = function(key, value) {
   return this.count;
 };
 
-const myHash = new HashTable();
-// console.log(myHash.set("1", "overwrite me")); // 1
-console.log(myHash.set("1", "first value")); // 1
-console.log(myHash.set("2", "second value")); 
-console.log(myHash.set("3", 3)); 
-console.log(myHash.set("4", 4)); // 2
-console.log(myHash);
-
 
 
 HashTable.prototype.get = function(key) {
@@ -82,11 +67,8 @@ HashTable.prototype.get = function(key) {
   return this.storage[bucket] ? this.storage[bucket][key] : undefined;
 };
 
-// console.log(myHash.get("3")); // undefined
-// console.log(myHash.get("2")); // 'second value'
 
-
-
+// TODO: resize if needed
 HashTable.prototype.remove = function(key) {
   const bucket = hashCode(key, this.SIZE);
   if (!this.storage[bucket]) {
@@ -98,6 +80,26 @@ HashTable.prototype.remove = function(key) {
   return removed;
 };
 
+// TESTS FOR SET + RESIZE
+const myHash = new HashTable();
+// console.log(myHash.set("1", "overwrite me")); // 1
+myHash.set("1", "first value"); // 1
+myHash.set("2", "second value"); 
+myHash.set("3", 3); 
+myHash.set("4", 4);
+myHash.set("5", 5);
+myHash.set("6", 6);
+myHash.set("7", 7);
+myHash.set("8", 8);
+myHash.set("9", 9);
+myHash.set("10", 10);
+myHash.set("11", 11);
+myHash.set("12", 4);
+myHash.set("13", 13);
+console.log("Result of resizing: ", myHash);
+
+
+// TESTS FOR REMOVE + RESIZE
 // console.log(myHash.remove("2")); // 'second value'
 // console.log(myHash.count); // 1
 // console.log(myHash.remove("3")); // undefined
