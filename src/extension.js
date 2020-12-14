@@ -48,9 +48,9 @@ HashTable.prototype.set = function(key, value) {
     const newSize = this.SIZE * 2;
     const newStorage = new Array(newSize);
 
-    this.storage.forEach((bucket) => {
-      for (const [key, value] of Object.entries(bucket)) {
-        newStorage.set(key, value);
+    this.storage.forEach((bucketObj) => {
+      for (const [existingKey, existingValue] of Object.entries(bucketObj)) {
+        newStorage.set(existingKey, existingValue);
       }
     })
 
