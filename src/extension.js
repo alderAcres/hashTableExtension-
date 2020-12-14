@@ -75,7 +75,6 @@ HashTable.prototype.remove = function(key) {
 
   if(this.SIZE > 16 && this.storage.length < this.SIZE * 0.25) {
     this.SIZE = this.SIZE / 2;
-    console.log('touched')
     let hashIndex = hashCode(key, this.SIZE);
     this.storage[hashIndex] = key;
     this.storage[hashIndex][key] = value;
