@@ -24,7 +24,11 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // set hash number for current function calling using hash code
+  const hash = hashCode(key, this.SIZE)
+  // set the give key and value as an object at the calculated current hash = value will overwrite if key has already been used
+  // need to use bracket notatioin on key b/c it's a variable
+  hashTable.storage[hash]= {[key]: value};
 };
 
 /**
@@ -38,7 +42,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // find has for key that we are looking up
+  const hash = hashCode(key, this.SIZE)
+  // return the value of the key that we are looking up making sure to only return the value of key we are looking up if there is more than one property stored at the hash
+  return hashTable.storage[hash][key];
 };
 
 /**
@@ -50,7 +57,12 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // set hash for remove function call
+  const hash = hashCode(key, this.SIZE)
+  // if the property doesn't exist at the hash, return undefined
+  if (hashTable.storage[hash] === undefined) return undefined;
+  // otherwise delete the property at the hash.
+  delete hashTable.storage[hash]; 
 };
 
 
@@ -72,3 +84,10 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+const hashTable = new HashTable();
+hashTable.set('test1', 1)
+hashTable.set('test2', 2)
+hashTable.set('test1', 'testx')
+console.log(hashTable.get('test1'))
+hashTable.remove('test1')
