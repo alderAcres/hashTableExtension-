@@ -24,7 +24,10 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  let index = hashCode(key, this.SIZE);
 
+  if (!this.storage[index]) this.storage[index] = new LinkedList();
+  this.storage[index].push({[key]: value});
 };
 
 /**
@@ -38,7 +41,19 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
 
+  let currentNode = this.storage[index].head;
+
+  if(!currentNode) return 'No nodes found, did you set up your List structure correctly?'
+  if (Object.keys(currentNode.value).includes(key)) return currentNode.value[key];
+
+  while (currentNode.next !== null){
+    currentNode = currentNode.next;
+    if (Object.keys(currentNode.value).includes(key)) return currentNode.value[key];
+  }
+
+  return 'No match among the Linked List!! Did you forget to check your spelling, Benji..?'
 };
 
 /**
@@ -50,7 +65,46 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  let index = hashCode(key,16);
 
+  if (!this.storage[index])
+    return;
+
+  let currentNode = this.storage[index].head;
+
+  if(!currentNode) return;
+
+  if (Object.keys(currentNode.value).includes(key)){
+    currentNode.next = this.storage[index].head;
+    return currentNode.value[key];
+  }
+  
+  let nextNode = currentNode.next;
+
+  if (Object.keys(nextNode.value).includes(key)){
+    currentNode.next = nextNode.next;
+
+    if(this.storage[index].head == nextNode)
+      this.storage[index].head == currentNode;
+
+    return nextNode.value[key];
+  }
+
+  while (nextNode !== null){
+    currentNode = nextNode;
+    nextNode = currentNode.next;
+
+    if (Object.keys(nextNode.value).includes(key)){
+      currentNode.next = nextNode.next;
+
+      if(this.storage[index].head == nextNode)
+        this.storage[index].head == currentNode;
+  
+      return nextNode.value[key];
+    };
+  }
+
+  return;
 };
 
 
@@ -72,3 +126,31 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+//Building out a quick LinkedList class to use to make retreiving from Get easier!
+
+class LinkedList{
+  constructor(){
+    this.head = null;
+    this.tail = null;
+  }
+
+  push(value){
+    let newNode = new Noodle(value);
+
+    if (this.head == null){
+      this.head = newNode;
+      this.tail = newNode;
+    } else {
+      this.tail.next = newNode;
+      this.tail = newNode;
+    }
+  }
+}
+
+class Noodle{
+  constructor(value){
+    this.value = value;
+    this.next = null;
+  }
+}
