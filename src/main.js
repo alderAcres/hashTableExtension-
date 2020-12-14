@@ -7,7 +7,6 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,6 +23,15 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(value, this.SIZE);
+  if (this.storage[hash] !== undefined){
+    //check to see if linked list already exists
+    //if so, save value at drawer tail, replacing existing tail.next and add next key pointing at null to value
+    //if not, implement linked list in drawer saving current contents at head and adding new value to head.next 
+     this.storage[hash].head = this.storage[hash]
+  }
+     //if (!this.storage[hash][key])
+  this.storage[hash][key] = value;
 
 };
 
@@ -38,7 +46,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const hash = hashCode(key, this.SIZE);
+  const drawer = this.storage[hash];
 
+  return drawer[key];
 };
 
 /**
