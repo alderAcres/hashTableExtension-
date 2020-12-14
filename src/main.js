@@ -6,9 +6,9 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
-  this.SIZE = 16;
-  
-  this.storage = new Array(this.SIZE);
+  this.size = 16;
+
+  this.storage = new Array(this.size);
 }
 
 /**
@@ -23,9 +23,23 @@ function HashTable() {
 * @param {string|number|boolean} value - value to be stored in hash table
 * @return {number} The new number of items stored in the hash table
 */
-HashTable.prototype.set = function(key, value) {
-
+HashTable.prototype.set = function (key, value) {
+  const hashIndex = hashCode(key, this.size);
+  if (HashTable[hashIndex] === undefined) {
+    this.storage[hashIndex] = {};
+    this.storage[hashIndex][key] = value;
+    this.size++;
+    return this.size;
+  }
+  this.storage[hashIndex][key] = value;
+  this.size++;
+  return this.size;
 };
+
+const testHash = new HashTable();
+testHash.set(1, 2);
+testHash.set(3, 4);
+console.log(testHash);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -37,9 +51,23 @@ HashTable.prototype.set = function(key, value) {
 * @return {string|number|boolean} The value stored with the specifed key in the
 * hash table
 */
-HashTable.prototype.get = function(key) {
-
+HashTable.prototype.get = function (key) {
+  // create a hash index
+  const hashIndex = hashCode(key, this.size);
+  // return undefined if there's nothing at the hash table at that index
+  if (this.storage[hashIndex] === undefined) return undefined;
+  // check if there's multiple
+  // if(Object.keys(this.storage[hashIndex]).length > 1){
+  //   const firstKey = Object.keys(this.storage[hashIndex])[0]
+  //   return this.storage[hashIndex][firstKey];
+  // }
+  return this.storage[hashIndex][key];
 };
+
+const testHash = new HashTable();
+testHash.set(1, 2);
+testHash.set(3, 4);
+console.log(testHash.get(3));
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -49,24 +77,40 @@ HashTable.prototype.get = function(key) {
 * @param {string} key - key to be found and deleted in hash table
 * @return {string|number|boolean} The value deleted from the hash table
 */
-HashTable.prototype.remove = function(key) {
+HashTable.prototype.remove = function (key) {
+  // //create our hash index
+  const hashIndex = hashCode(key, this.size);
+  // check if there's a key value pair at hash index in hash table and return undefined if not
+  if (this.storage[hashIndex][key] === undefined) return undefined;
+
+  // if(this.get(key) === undefined) return undefined;
+
+  // store the key value pair to remove in a variable
+  const removedKeyVal = this.storage[hashIndex];
+
+  // remove the key value pair
+  delete this.storage[hashIndex];
+
+  // return the key value pair that was removed
+  return removedKeyVal;
 
 };
-
+// const testHash = new HashTable();
+// testHash.set(1, 2);
+// testHash.set(3, 4);
+// console.log(testHash.remove(3));
 
 // Do not modify
 function hashCode(string, size) {
-  'use strict';
-  
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
+    hash &= hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
