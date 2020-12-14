@@ -7,8 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.itemsStored = 0;
 }
 
 /**
@@ -24,35 +24,51 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const bucketNum = hashCode(key, this.SIZE);
+  const has = Object.prototype.hasOwnProperty;
 
+  if (this.storage[bucketNum] === undefined) this.storage[bucketNum] = {};
+  if (has.call(this.storage[bucketNum], key) === false) this.itemsStored++;
+
+  this.storage[bucketNum][key] = value;
+  return this.itemsStored;
 };
 
 /**
-* get - Retrieves a value stored in the hash table with a specified key
-*
-* - If more than one value is stored at the key's hashed address, then you must retrieve
-*   the correct value that was originally stored with the provided key
-*
-* @param {string} key - key to lookup in hash table
-* @return {string|number|boolean} The value stored with the specifed key in the
-* hash table
-*/
+ * get - Retrieves a value stored in the hash table with a specified key
+ *
+ * - If more than one value is stored at the key's hashed address, then you must retrieve
+ *   the correct value that was originally stored with the provided key
+ *
+ * @param {string} key - key to lookup in hash table
+ * @return {string|number|boolean} The value stored with the specifed key in the
+ * hash table
+ */
 HashTable.prototype.get = function(key) {
+  const bucketNum = hashCode(key, this.SIZE);
 
+  return this.storage[bucketNum][key];
 };
 
 /**
-* remove - delete a key/value pair from the hash table
-*
-* - If the key does not exist in the hash table, return undefined
-*
-* @param {string} key - key to be found and deleted in hash table
-* @return {string|number|boolean} The value deleted from the hash table
-*/
+ * remove - delete a key/value pair from the hash table
+ *
+ * - If the key does not exist in the hash table, return undefined
+ *
+ * @param {string} key - key to be found and deleted in hash table
+ * @return {string|number|boolean} The value deleted from the hash table
+ */
 HashTable.prototype.remove = function(key) {
+  const bucketNum = hashCode(key, this.SIZE);
+  const has = Object.prototype.hasOwnProperty;
 
+  if (has.call(this.storage[bucketNum], key)) {
+    const removedItem = this.storage[bucketNum][key]
+    delete this.storage[bucketNum][key];
+    this.itemsStored--;
+    return removedItem;
+  } else return;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
@@ -72,3 +88,15 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// const testHash = new HashTable();
+// console.log(testHash.set('Alvin', 24)); // 1
+// console.log("testHash:", testHash);
+// console.log(testHash.set('Alvin', 36)); // 1
+// console.log("testHash duplicate:", testHash);
+// console.log(testHash.set('Codesmith', 'computer')); // 2
+// console.log("two items:", testHash);
+// console.log(testHash.get('Alvin')); // 36
+// console.log(testHash.remove('Alvin')); // 36
+// console.log(testHash.get('Codesmith')); // 'computer'
+// console.log(testHash.remove('Codesmith')); // 'computer'
