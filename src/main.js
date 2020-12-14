@@ -25,10 +25,7 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   const bucket = hashCode(key, this.SIZE);
-  if(!this.storage[bucket]) {
-    this.storage[bucket] = { [key]: value };
-  }
-  this.storage[bucket][key] = value;
+  this.storage[bucket] = { [key]: value };
 };
 
 const myHash = new HashTable();
@@ -68,7 +65,7 @@ HashTable.prototype.remove = function(key) {
   if (!this.storage[bucket]) {
     return;
   } 
-  
+
   const removed = this.storage[bucket][key] 
   delete this.storage[bucket][key];
   return removed;
