@@ -6,9 +6,22 @@
 * - You may modify this constructor as you need to achieve the challenges below.
 */
 function HashTable() {
+  // the length of the array to be created
   this.SIZE = 16;
-  
+  // the array itself
   this.storage = new Array(this.SIZE);
+}
+
+// a function to add nodes to our hash table
+function Node(key, value){
+  this.value = value;
+  this.key = key;
+  this.next = null;
+}
+// a function to create new linked lists
+function LinkedList() {
+  this.head = null;
+  this.tail = null;
 }
 
 /**
@@ -24,8 +37,24 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // simply storing the unique hash code in a variable
+  let hash = hashCode(key, this.SIZE)
 
+  // if that hashCode exists, create a linked list containing the head and tail
+  if(this.storage[hash]){ 
+    // creating a new node for later use
+    let node = new Node(key, value)
+  }
+  // adding a new node
+  this.storage[hash] = new Node(value, key)
 };
+
+// creating a new hash table
+const hash = new HashTable()
+// testing my set function
+hash.set('Hello', 1)
+
+console.log(hash)
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -69,6 +98,7 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
 
 // Do not remove!!
 module.exports = HashTable;
