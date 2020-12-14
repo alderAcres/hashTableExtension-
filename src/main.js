@@ -8,7 +8,8 @@
 function HashTable() {
   this.SIZE = 16;
   
-  this.storage = new Array(this.SIZE);
+  this.storage = new Array(this.SIZE); // creates an array with array length of 16 to start off.
+  // this.bucket = hashCode(this.key, this.SIZE)
 }
 
 /**
@@ -24,7 +25,20 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  // key is converted into an integer index by using the hashCode func
+  // the index decides where the key-value pair record belongs
+  const bucket = hashCode(key, this.SIZE);
 
+  // create values array for the key:value pair to be added as a subarray into this.storage  
+  const values = [];
+  values.push({key: value});
+  // if values do not exist, add them, otherwise,
+  if (!this.storage[bucket]) {
+    this.storage[bucket] = values;
+  } else {
+    this.storage[bucket].push(values);
+  }
+  return this.storage;
 };
 
 /**
@@ -38,6 +52,16 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const bucket = hashCode(key, this.SIZE);
+
+  // return value in specified key in the bucket
+
+  // create variable subarray to point to the element in the bucket
+  let subarray = this.storage[bucket];
+  // iterate through the objects in the subarray and locate the value at given key
+  for (let i = 0; i < subarray.length; i++) {
+    if (subarray[i][key]) return subarray[i][key];
+  }
 
 };
 
@@ -50,6 +74,15 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const bucket = hashCode(key, this.SIZE);
+
+  // create variable subarray to point to the element in the bucket
+  let subarray = this.storage[bucket];
+  // iterate through the objects in the subarray and locate the value at given key
+  for (let i = 0; i < subarray.length; i++) {
+    if (subarray[i][key]) delete subarray[i][key];
+    else return undefined;
+  }
 
 };
 
