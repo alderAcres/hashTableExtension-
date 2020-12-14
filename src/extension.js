@@ -69,13 +69,34 @@ HashTable.prototype.remove = function(key) {
   const removeValue = this.get(key);
   let hashIndex = hashCode(key, this.SIZE);
   delete this.storage[hashIndex][key];
+  this.storage.length--;
+  console.log(this.storage.length)
+  console.log(this.storage.length < this.SIZE * 0.25)
 
   if(this.SIZE > 16 && this.storage.length < this.SIZE * 0.25) {
-    this.SIZE = this.SIZE / 2
+    this.SIZE = this.SIZE / 2;
+    console.log('touched')
+    let hashIndex = hashCode(key, this.SIZE);
+    this.storage[hashIndex] = key;
+    this.storage[hashIndex][key] = value;
   }
 
   return removeValue;
 };
+
+console.log(newHash.remove('hello17'), newHash.SIZE)
+console.log(newHash.remove('hello16'), newHash.SIZE)
+console.log(newHash.remove('hello15'), newHash.SIZE)
+console.log(newHash.remove('hello14'), newHash.SIZE)
+console.log(newHash.remove('hello13'), newHash.SIZE)
+console.log(newHash.remove('hello12'), newHash.SIZE)
+console.log(newHash.remove('hello10'), newHash.SIZE)
+console.log(newHash.remove('hello8'), newHash.SIZE)
+console.log(newHash.remove('hello7'), newHash.SIZE)
+console.log(newHash.remove('hello6'), newHash.SIZE)
+console.log(newHash.remove('hello5'), newHash.SIZE)
+console.log(newHash.remove('hello4'), newHash.SIZE)
+
 
 // YOUR CODE ABOVE
 
