@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  // determine which hash bucket to navigate to and store in hash const:
+  const hash = hashCode(key, this.SIZE);
+  // check if anything exists within hash bucket => if not, initialize obj w/ key:value pair:
+  if (!this.storage[hash]) {
+    this.storage[hash] = {
+      [key]: value,
+    };
+  // otherwise, add element as key:value pair within existing object (overwrite if key exists):
+  } else {
+    this.storage[hash][key] = value;
+  }
+  // returns the new number of items stored in hash table:
+  return this.storage;
 };
 
 /**
@@ -38,7 +50,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  // determine which hash bucket to navigate to and store in hash const:
+  const hash = hashCode(key, this.SIZE);
+  // check if hash bucket is empty or if no value is stored within bucket at the key
+  // return out of function
+  if (!this.storage[hash] || this.storage[hash][key] === undefined) return;
+  // otherwise, return the value stored within the bucket at the key provided:
+  return this.storage[hash][key];
 };
 
 /**
@@ -50,9 +68,16 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  // determine which bucket to navigate to and store in hash const:
+  const hash = hashCode(key, this.SIZE);
+  // check if hash bucket if empty or if no value is stored in key; return out of function
+  if (!this.storage[hash] || this.storage[hash][key] === undefined) return undefined;
+  // otherwise, store the target value to be deleted in const
+  // delete the value from hash table, then return deleted value:
+  const deletedValue = this.storage[hash][key];
+  delete this.storage[hash][key];
+  return deletedValue;
 };
-
 
 // Do not modify
 function hashCode(string, size) {
@@ -72,3 +97,17 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// tests for functionality:
+// const test = new HashTable();
+// test.set('first', 'a');
+// test.set('second', 'b');
+// test.set('third', 'c');
+// test.set('fourth', 'd');
+// console.log(test);
+// console.log(test.get('first'));
+// console.log(test.remove('second'));
+// console.log(test);
+// console.log(test.set('second', 'g'));
+// console.log(test.remove('fifth'));
+// console.log(test.set('first', 'k'));
