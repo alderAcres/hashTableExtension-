@@ -24,7 +24,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const itemLocation = hashCode(key, this.SIZE);
+  if(!this.storage[itemLocation]){
+    this.storage[itemLocation] = {};
+    this.storage[itemLocation][key] = value;
+  }
+  this.storage[itemLocation][key] = value;
+  
 };
 
 /**
@@ -39,6 +45,10 @@ HashTable.prototype.set = function(key, value) {
 */
 HashTable.prototype.get = function(key) {
 
+  const itemLocation = hashCode(key, this.SIZE);
+  if(!this.storage[itemLocation][key]) return undefined;
+
+  return this.storage[itemLocation][key];
 };
 
 /**
@@ -50,7 +60,13 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const itemLocation = hashCode(key, this.SIZE);
+  if(!this.storage[itemLocation][key]) return undefined
 
+  const rmItem = {}
+  rmItem[key] = this.storage[itemLocation][key];
+  delete this.storage[itemLocation][key];
+  return rmItem;
 };
 
 
@@ -70,5 +86,14 @@ function hashCode(string, size) {
   return Math.abs(hash) % size;
 }
 
+// const container = new HashTable();
+// container.set("burger", "$3.99")
+// container.set("banana", "$5.00")
+// container.set("fries", "$1.99")
+// container.set("chicken", "$4.99")
+// container.set("api", "$2.00")
+// console.log(container.remove("chicken"));
+// console.log(container.storage);
+// console.log(container.get("banana"))
 // Do not remove!!
 module.exports = HashTable;
