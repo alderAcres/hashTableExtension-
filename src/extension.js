@@ -16,7 +16,7 @@
 // const HashTable = require("./main"); 
 
 function HashTable() {
-  this.SIZE = 10;
+  this.SIZE = 16;
 
   this.storage = new Array(this.SIZE);
   this.totalItems = 0;
