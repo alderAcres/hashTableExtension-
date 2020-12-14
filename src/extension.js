@@ -43,6 +43,7 @@ HashTable.prototype.set = function(key, value) {
     let arrayOfAllKeys = [];
     this.storage.forEach(bucket => arrayOfAllEntries = [...Object.entries(bucket)]);
     // iterate over all of the key-value pairs, and use the helper hasher function to re-bucket everything
+    
   } else {
     helperHasher(key, value);
   };
