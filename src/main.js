@@ -9,6 +9,7 @@ function HashTable() {
   this.SIZE = 16;
   
   this.storage = new Array(this.SIZE);
+  this.numItems = 0;
 }
 
 /**
@@ -24,7 +25,22 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const bucket = hashCode(key, this.SIZE);
+  let isNewKey = true;
 
+  if (this.storage[bucket]) {
+    if (this.storage[bucket][key] !== undefined) {
+      isNewKey = false;
+    }
+    this.storage[bucket][key] = value;
+  } else {
+    this.storage[bucket] = {
+      [key]: value
+    };
+  }
+
+  if (isNewKey) this.numItems++;
+  return this.numItems;
 };
 
 /**
@@ -38,7 +54,11 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const bucket = hashCode(key, this.SIZE);
 
+  if (this.storage[bucket] && this.storage[bucket][key] !== undefined){
+    return this.storage[bucket][key];
+  }
 };
 
 /**
@@ -50,7 +70,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const bucket = hashCode(key, this.SIZE);
 
+  if (this.storage[bucket] && this.storage[bucket][key] !== undefined) {
+    const valueToDelete = this.storage[bucket][key];
+    delete this.storage[bucket][key];
+    this.numItems--;
+    return valueToDelete;
+  }
 };
 
 
@@ -72,3 +99,23 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// TESTING
+const myTable = new HashTable();
+console.log(myTable.set('name', '0'));
+console.log(myTable.numItems);
+
+console.log(myTable.set('name', 'Shelby'));
+console.log(myTable.numItems);
+
+console.log(myTable.set('location', 'New York'));
+console.log(myTable.numItems);
+
+console.log(myTable.get('location'));
+
+console.log(myTable.remove('location'));
+console.log(myTable.get('location'));
+console.log(myTable.numItems);
+
+console.log(myTable.get('age'));
+console.log(myTable.remove('age'));
