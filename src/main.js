@@ -1,3 +1,4 @@
+
 /**
 * HashTable costructor
 *
@@ -24,7 +25,10 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hashIndex = hashCode(key,this.SIZE);
+  // since duplicate keys can be overwritten, we can use an object instead of a list as our storage.
+  if (!this.storage[hashIndex]) this.storage[hashIndex] = {}; // create empty object in bucket if not initialized
+  this.storage[hashIndex][key] = value;
 };
 
 /**
@@ -38,7 +42,8 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hashIndex = hashCode(key, this.SIZE);
+  return this.storage[hashIndex]?.[key]
 };
 
 /**
@@ -50,7 +55,10 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hashIndex = hashCode(key, this.SIZE);
+  const storedVal  = this.storage[hashIndex]?.[key];
+  delete this.storage[hashIndex]?.[key];
+  return storedVal;
 };
 
 
@@ -72,3 +80,30 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+// tests
+
+// test set and get
+const mockTable = new HashTable();
+mockTable.set('claudio', 'santos')
+console.log(mockTable.get('claudio'));
+
+// test collision
+console.log(`hash for 'claudio' is: ${hashCode('claudio', mockTable.SIZE)}`)
+const collisionKey = 'CLAUDIO';
+console.log(`hash for ${collisionKey} is: ${hashCode(collisionKey, mockTable.SIZE)}`)
+
+mockTable.set(collisionKey, 'screaming')
+console.log(mockTable.get(collisionKey))
+// test collision didn't overwrite original key
+console.log(mockTable.get('claudio'))
+
+//test key can be overwriten
+mockTable.set('claudio', 'bye');
+console.log(mockTable.get('claudio'))
+
+
+// test delete return value or undefined
+console.log(mockTable.remove(collisionKey));
+console.log(mockTable.remove(collisionKey));
