@@ -52,9 +52,7 @@ HashTable.prototype.set = function (key, value) {
   } else {
     this.storage[hashCodeEval][key] = value
   }
-
-
-  return hash
+  return hashCodeEval
 };
 
 /**
