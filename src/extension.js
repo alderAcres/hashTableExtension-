@@ -13,11 +13,59 @@
         (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
 */
 
-// PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.count = 0;
+  this.storage = new Array(this.SIZE);
+}
 
 
 
-// YOUR CODE ABOVE
+HashTable.prototype.set = function(key, value) {
+  const bucket = hashCode(key, this.SIZE);
+  // case: there are no items at this key in this bucket --> increment count
+  if(!this.storage[bucket] || !this.storage[bucket][key]) {
+    this.count++;
+  }
+  this.storage[bucket] = { [key]: value };
+  return this.count;
+};
+
+// const myHash = new HashTable();
+// console.log(myHash.set("1", "overwrite me")); // 1
+// console.log(myHash.set("1", "first value")); // 1
+// console.log(myHash.set("2", "second value")); // 2
+// console.log(myHash);
+
+
+
+HashTable.prototype.get = function(key) {
+  const bucket = hashCode(key, this.SIZE);
+  return this.storage[bucket] ? this.storage[bucket][key] : undefined;
+};
+
+// console.log(myHash.get("3")); // undefined
+// console.log(myHash.get("2")); // 'second value'
+
+
+
+HashTable.prototype.remove = function(key) {
+  const bucket = hashCode(key, this.SIZE);
+  if (!this.storage[bucket]) {
+    return;
+  } 
+  this.count--;
+  const removed = this.storage[bucket][key] 
+  delete this.storage[bucket][key];
+  return removed;
+};
+
+// console.log(myHash.remove("2")); // 'second value'
+// console.log(myHash.count); // 1
+// console.log(myHash.remove("3")); // undefined
+// console.log(myHash.count); // 1
+
+
 
 function hashCode(string, size) {
   'use strict';
