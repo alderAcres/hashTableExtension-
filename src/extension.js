@@ -14,8 +14,42 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  const itemLocation = hashCode(key, this.SIZE);
+  if(!this.storage[itemLocation]){
+    this.storage[itemLocation] = {};
+    this.storage[itemLocation][key] = value;
+  }
+  this.storage[itemLocation][key] = value;
+  //increate Size
+  const seventyFive = this.SIZE * .75 *100;
+  const currentSpace = this.storage.filter
+  
+};
 
+HashTable.prototype.get = function(key) {
+
+  const itemLocation = hashCode(key, this.SIZE);
+  if(!this.storage[itemLocation][key]) return undefined;
+
+  return this.storage[itemLocation][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  const itemLocation = hashCode(key, this.SIZE);
+  if(!this.storage[itemLocation][key]) return undefined
+
+  const rmItem = {}
+  rmItem[key] = this.storage[itemLocation][key];
+  delete this.storage[itemLocation][key];
+  return rmItem;
+};
 
 // YOUR CODE ABOVE
 
