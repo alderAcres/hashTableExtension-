@@ -11,6 +11,8 @@ function HashTable() {
   this.storage = new Array(this.SIZE);
 }
 
+console.log('hi')
+
 /**
 * set - Adds given value to the hash table with specified key.
 *
