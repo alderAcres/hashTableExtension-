@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.itemCount = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,24 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  
+  const valObj = {};
+  let index = hashCode(key, this.SIZE);
+  valObj[key] = value;
+  // sets value at key but does not overwrite duplicate keys with new value
+  //if (this.storage[index] === undefined) {
+    if (!Array.isArray(this.storage[index])) {
+      this.storage[index] = [valObj];
+    } else {
+      this.storage[index].push(valObj);
+    }
+    this.itemCount++;
+    return this.itemCount;
+  // } else {
+  //   console.log("key already exists")
+  // }
 
+  
 };
 
 /**
@@ -38,7 +55,18 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  let index = hashCode(key, this.SIZE);
+  
+  const result = [];
+  
+  for (let i = 0; i < this.storage[index].length; i++) {
+    if (this.storage[index][i][key]) {
+      result.push(this.storage[index][i])
+    }
 
+  }
+  
+  return result;
 };
 
 /**
@@ -50,7 +78,17 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE);
+  let returnVal;
+  const keyArray = this.storage[index]
 
+  for (let i = 0; i < keyArray.length; i++) {
+    if (keyArray[i][key]) {
+      returnVal = keyArray[i]
+      keyArray.splice(i, 1)
+    }
+  }
+  return returnVal;
 };
 
 
@@ -72,3 +110,19 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// console.log(hashCode('hutu', 16))
+// console.log(hashCode('utuh', 16))
+let myHash = new HashTable()
+console.log(myHash.set("chicken", 25))
+myHash.set("chicken", 27)
+myHash.set("chicken", 49)
+console.log(myHash.set("nekcihc", 39))
+console.log(myHash.set("tutsi", 457))
+console.log(myHash.set("hutu", 47))
+console.log(myHash.set("istut", true))
+myHash.set("istut", false)
+console.log(myHash.set("utuh", 76))
+//console.log(myHash.get("chicken"))
+console.log(myHash.remove("chicken"))
+console.log(myHash.storage)
