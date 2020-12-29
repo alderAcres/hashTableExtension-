@@ -15,6 +15,83 @@
 
 // PASTE AND MODIFY YOUR CODE BELOW
 
+function HashTable() {
+  this.SIZE = 16;
+  
+  this.storage = new Array(this.SIZE);
+}
+
+
+HashTable.prototype.set = function(key, value) {
+
+  let sizeCounter = 0
+
+  for(let x = 0; x < this.SIZE; x++) {
+    if(this.storage[x] === undefined) {
+      sizeCounter++
+    }
+  }
+ 
+  const size = this.SIZE
+
+  const percentEmpty = (sizeCounter / size)
+
+  if(percentEmpty <= .25) {
+    this.SIZE = this.SIZE * 2
+  }
+
+  let index = hashCode(key, this.SIZE);
+  
+  if(!this.storage[index]){
+    this.storage[index] = [ ];
+  }
+  this.storage[index].push([key,value])
+
+  return index
+};
+
+HashTable.prototype.remove = function(key) {
+
+  let index = hashCode(key, this.SIZE)
+  
+  // if there is no bucket
+  if(!this.storage[index])return null
+
+     for(let storage of this.storage[index]){
+       //console.log(storage)
+       // if key  matches
+       if(storage[0] === key){
+         
+         // value
+         let val = storage[1]
+         storage[0] = undefined
+         storage[1] = undefined
+         return val
+        }
+     }
+
+    //REALIZING WITH 5 MINS LEFT THAT THIS WILL NEVER
+    //RUN BECAUSE IM RETURNING VAL ON LINE 69 
+    // WHOOPS
+
+     let sizeCounter = 0
+
+     for(let x = 0; x < this.SIZE; x++) {
+       if(this.storage[x] === undefined) {
+         sizeCounter++
+       }
+     }
+    
+    const size = this.SIZE
+   
+    const percentEmpty = (sizeCounter / size)
+   
+    if(size > 16 && percentEmpty > .75) {
+      this.SIZE = this.SIZE / 2
+    }
+    console.log(this.SIZE)
+
+};
 
 
 // YOUR CODE ABOVE
@@ -33,6 +110,10 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
+
+//console.log(table.storage)
+
 
 // Do not remove!!
 module.exports = HashTable;
