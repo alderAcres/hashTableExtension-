@@ -5,6 +5,7 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
+//
 function HashTable() {
   this.SIZE = 16;
   
