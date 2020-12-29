@@ -1,5 +1,5 @@
 /**
-* HashTable costructor
+* HashTable constructor
 *
 * construct a new hash table
 *
@@ -24,8 +24,21 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(key, this.SIZE);
 
+  if (this.storage[hash]) {
+    this.storage[hash][key] = value;
+  } else {
+    const obj = {};
+    obj[key] = value;
+    this.storage[hash] = obj;
+  }
 };
+
+let hashTable = new HashTable();
+console.log(hashTable);
+hashTable.set('k1', 'v1');
+console.log('hashTable', hashTable);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
