@@ -7,8 +7,8 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
   this.storage = new Array(this.SIZE);
+  this.length = 0;
 }
 
 /**
@@ -24,7 +24,18 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hashAddress = hashCode(key, this.SIZE);
+  // console.log("Hash for ", key, " :", hashAddress);
+  // If this address is empty
+  if (!this.storage[hashAddress]) {
+    this.storage[hashAddress] = {};
+  }
+  // If there is no existing value at the key
+  if (!this.storage[hashAddress][key]) {
+    this.length++;
+  }
+  this.storage[hashAddress][key] = value;
+  return this.length;
 };
 
 /**
@@ -38,7 +49,12 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hashAddress = hashCode(key, this.SIZE);
+  // console.log("Hash for ", key, " : ", hashAddress);
+  if (this.storage[hashAddress]) {
+    return this.storage[hashAddress][key];
+  }
+  return undefined;
 };
 
 /**
@@ -50,7 +66,14 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hashAddress = hashCode(key, this.SIZE);
+  let removedItem;
+  if (this.storage[hashAddress]) {
+    removedItem = this.storage[hashAddress][key];
+    delete this.storage[hashAddress][key];
+    this.length--;
+  }
+  return removedItem;
 };
 
 
@@ -72,3 +95,47 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+
+// Test Cases
+const testHT = new HashTable();
+console.log("Initial HT: ----------");
+console.log(testHT);
+console.log(testHT.SIZE);
+console.log(testHT.length);
+
+console.log("Adding items to the HT: ----------");
+testHT.set("a", 5);
+testHT.set("b", 2);
+testHT.set("c", 3);
+testHT.set("d", 4);
+testHT.set("aa", 11);
+console.log(testHT);
+console.log(testHT.SIZE);
+console.log(testHT.length);
+
+console.log("Resetting an existing item in the HT: ----------");
+testHT.set("a", 1);
+console.log(testHT);
+
+console.log("Adding an item that causes collision in the HT: ----------");
+testHT.set("A", 1);
+console.log(testHT);
+console.log(testHT.SIZE);
+console.log(testHT.length);
+
+console.log("Retriving items from the HT: ----------");
+console.log(testHT.get("A"));
+console.log(testHT.get("a"));
+console.log(testHT.get("b"));
+console.log(testHT.get("c"));
+console.log(testHT.get("d"));
+console.log(testHT.get("aa"));
+console.log(testHT.get("z"));
+console.log(testHT);
+
+console.log("Removing items from the HT: ----------");
+console.log(testHT.remove("d"));
+console.log(testHT.remove("A"));
+console.log(testHT.remove("z"));
+console.log(testHT);
