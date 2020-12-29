@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.stored = 0
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,7 +24,23 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+    // first decalare an index variable, and set it to the invocation of hashcode 
+    // using the key as the string parameter and then the size property of the hastable as the size parameter
+    const index = hashCode (key, this.SIZE);
+    //  check if there is already a object at the index value of the storage property
+    //  if there already is a value add new key value pair from .set to that object
+    //  finally update the value of the indexed position for the storage property
+    if (this.storage[index]){
+        this.storage[index][key] = value;
+    } else {
+      //  if there is no value there (the else case) create an object with the k/v pair from the .set function
+      const obj = {};
+      obj[key] = value; 
+      this.storage[index] = obj;
+      //  increment this.stored property because you are now adding an item to an additional index
+      this.stored += 1;
+    }
+    return this.stored;
 };
 
 /**
@@ -38,7 +54,10 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  //  declare an index constant that is set to the output of the hashcode function when invoked with key parameter
+  const index = hashCode(key, this.SIZE);
+  //  return the key of the value of the storage property @ the index constant
+  return this.storage[index][key];
 };
 
 /**
@@ -50,9 +69,31 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  //  declare index constant that is set to teh output of the hashcode function when invoeked with key and this.zie
+  const index = hashCode(key, this.SIZE);
+  //  declare a result variable and assignt that equal to the object value of the given key for the storage property at the index constant
+  const result = this.storage[index][key];
+  //  delete k/v pair @ object present in the storage property at the const index variable
+  delete this.storage[index][key];
+  //  return result
+  //  i'd say you'd have to correct the this.stored property if the index container in the Hashtable becomes empty, but since there's still an empty object should i just leave it as is? **to be fixed in extension
+  return result;
 };
 
+// const table = new HashTable()
+// table.set('one', 1)
+
+// console.log(table)
+
+// table.set('two', 2)
+
+// console.log(table)
+
+// console.log(table.remove('two'))
+// table.set('three', 3)
+
+// console.log(table)
+// console.log(table.remove('two'))
 
 // Do not modify
 function hashCode(string, size) {
@@ -69,6 +110,7 @@ function hashCode(string, size) {
   
   return Math.abs(hash) % size;
 }
+
 
 // Do not remove!!
 module.exports = HashTable;
