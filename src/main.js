@@ -71,9 +71,17 @@ console.log("hashTable.get('asdf')", hashTable.get('asdf'));
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  const cache = this.storage[hash][key];
+  delete this.storage[hash][key];
+  return cache;
 };
 
+for (let i = 0; i < 3; i++) {
+  console.log(hashTable.remove('k' + i));
+}
+
+console.log('hashTable', hashTable);
 
 // Do not modify
 function hashCode(string, size) {
