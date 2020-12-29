@@ -51,7 +51,22 @@ HashTable.prototype.set = function(key, value) {
     this.storage[hash] = obj;
   }
   this.noStored++;
+
+  if (this.noStored / this.SIZE >= 0.75) this.doubleSize();
 };
+
+HashTable.prototype.doubleSize = function() {
+  this.SIZE = this.SIZE * 2;
+  const replacement = new HashTable(this.SIZE);
+
+  for (hash in this.storage) {
+    for (const [key, value] of Object.entries(this.storage[hash])) {
+      replacement.set(key, value);
+    }
+  }
+
+  this.storage = replacement.storage;
+}
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -85,21 +100,21 @@ HashTable.prototype.remove = function(key) {
   return cache;
 };
 
+// Create hash table
 let hashTable = new HashTable();
-console.log(hashTable);
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 16; i++) {
   hashTable.set('k' + i, 'v' + i);
 }
-console.log('hashTable', hashTable);
+console.log('hashTable with new values', hashTable);
 
 
-for (let i = 0; i < 3; i++) {
-  console.log(hashTable.get('k' + i, 'v' + i));
+for (let i = 0; i < 16; i++) {
+  console.log(`k${i}, v${i}`, hashTable.get('k' + i, 'v' + i));
 }
 console.log("hashTable.get('asdf')", hashTable.get('asdf'));
 
-for (let i = 0; i < 3; i++) {
-  console.log(hashTable.remove('k' + i));
+for (let i = 0; i < 16; i++) {
+  console.log(`remove k${i}`, hashTable.remove('k' + i));
 }
 
 console.log('hashTable', hashTable);
