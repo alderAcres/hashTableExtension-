@@ -14,7 +14,101 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.itemCount = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(key, this.SIZE);
+  const cap = (this.itemCount + 1) / this.SIZE;
+
+  if (this.storage[hash] === undefined || this.storage[hash][key] === undefined) {
+    if (cap > 0.75) {
+      this.oldStorage = this.storage;
+      this.SIZE *= 2;
+      this.storage = new Array(this.SIZE);
+      this.itemCount = 0;
+      
+      //rerun for the new value
+      const hash = hashCode(key, this.SIZE);
+      this.storage[hash] = {};
+      this.itemCount += 1;
+      this.storage[hash][key] = value;
+
+      for (let i = 0; i < this.oldStorage.length; i++) {
+        if (this.oldStorage[i] !== undefined) {
+          for (const oldKey in this.oldStorage[i]) {
+            this.set(oldKey, this.oldStorage[i][oldKey]);
+          }
+        }
+      }
+
+      return this.itemCount;
+    }
+  }
+  
+
+  if (this.storage[hash] === undefined) {
+    this.storage[hash] = {};
+  }
+
+  if (this.storage[hash][key] === undefined) {
+    this.itemCount += 1;
+  }
+
+  this.storage[hash][key] = value;
+
+  return this.itemCount;
+};
+
+// TESTS:
+const hashtest = new HashTable();
+console.log(hashtest);
+console.log(hashtest.set('dan', 90));
+console.log(hashtest.set('dan', 95));
+console.log(hashtest.set('nad', 100));
+console.log(hashtest.set('anna', 91));
+console.log(hashtest.set('barry', 91));
+console.log(hashtest.set('carol', 91));
+console.log(hashtest.set('beth', 91));
+console.log(hashtest.set('ellen', 91));
+console.log(hashtest.set('mary', 91));
+console.log(hashtest.set('joe', 91));
+console.log(hashtest.set('bob', 91));
+console.log(hashtest.set('ken', 91));
+console.log(hashtest.set('chris', 91));
+console.log(hashtest);
+console.log(hashtest.set('yeri', 91));
+console.log(hashtest);
+
+
+HashTable.prototype.get = function(key) {
+  const hash = hashCode(key, this.SIZE);
+
+  return this.storage[hash][key];
+};
+
+HashTable.prototype.remove = function(key) {
+  const hash = hashCode(key, this.SIZE);
+  const cap = (this.itemCount - 1) / this.SIZE;
+
+  if (this.storage[hash][key] !== undefined) {
+    if (this.SIZE > 16 && this.cap < 0.25) {
+      
+    }
+  }
+
+  // if (this.storage[hash][key] === undefined) {
+  //   return undefined;
+  // } 
+
+  // const deletedItem = this.storage[hash][key];
+  // delete this.storage[hash][key];
+  // this.itemCount -= 1;
+  // return deletedItem;
+};
 
 
 // YOUR CODE ABOVE

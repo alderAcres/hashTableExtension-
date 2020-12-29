@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.itemCount = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,8 +24,28 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
+  const hash = hashCode(key, this.SIZE);
 
+  if (this.storage[hash] === undefined) {
+    this.storage[hash] = {};
+  }
+
+  if (this.storage[hash][key] === undefined) {
+    this.itemCount += 1;
+  }
+
+  this.storage[hash][key] = value;
+
+  return this.itemCount;
 };
+
+// TESTS:
+const hashtest = new HashTable();
+console.log(hashtest);
+console.log(hashtest.set('dan', 90));
+console.log(hashtest.set('dan', 95));
+console.log(hashtest.set('nad', 100));
+console.log(hashtest);
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +58,13 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
+  const hash = hashCode(key, this.SIZE);
 
+  return this.storage[hash][key];
 };
+
+// TESTS:
+console.log(hashtest.get('nad'));
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,23 +75,35 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const hash = hashCode(key, this.SIZE);
 
+  if (this.storage[hash][key] === undefined) {
+    return undefined;
+  }
+
+  const deletedItem = this.storage[hash][key];
+  delete this.storage[hash][key];
+  this.itemCount -= 1;
+  return deletedItem;
 };
 
+// TESTS:
+console.log(hashtest.remove('nad'));
+console.log(hashtest);
 
 // Do not modify
 function hashCode(string, size) {
   'use strict';
-  
+
   let hash = 0;
   if (string.length === 0) return hash;
-  
+
   for (let i = 0; i < string.length; i++) {
     const letter = string.charCodeAt(i);
     hash = ((hash << 5) - hash) + letter;
     hash = hash & hash; // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash) % size;
 }
 
