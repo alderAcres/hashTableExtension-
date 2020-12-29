@@ -14,8 +14,121 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.length = 0;
+  this.storage = new Array(this.SIZE);
+}
 
+/**
+* set - Adds given value to the hash table with specified key.
+*
+* - If the provided key has already been used to store another value, simply overwrite
+*   the existing value with the new value.
+* - If the hashed address already contains another key/value pair, you must handle
+*   the collision appropriately.
+*
+* @param {string} key - key to be used to create hashed address
+* @param {string|number|boolean} value - value to be stored in hash table
+* @return {number} The new number of items stored in the hash table
+*/
+HashTable.prototype.set = function(key, value) {
+  if(this.length + 1 >= (this.SIZE * 0.75)) {
+    this.doubleHashtable();
+  }
 
+  let currentSlot = this.storage[hashCode(key, this.SIZE)]
+  if(!currentSlot) {
+    const newValue = {}
+    newValue[key] = value;
+    this.storage[hashCode(key, this.SIZE)]  = newValue;
+  } else {
+    currentSlot[key] = value
+  }
+  this.length++;
+  return this.length;
+};
+
+/**
+* get - Retrieves a value stored in the hash table with a specified key
+*
+* - If more than one value is stored at the key's hashed address, then you must retrieve
+*   the correct value that was originally stored with the provided key
+*
+* @param {string} key - key to lookup in hash table
+* @return {string|number|boolean} The value stored with the specifed key in the
+* hash table
+*/
+HashTable.prototype.get = function(key) {
+  let currentSlot = this.storage[hashCode(key, this.SIZE)]
+  if(currentSlot) {
+    return currentSlot[key];
+  }
+  throw "No value found"
+};
+
+/**
+* remove - delete a key/value pair from the hash table
+*
+* - If the key does not exist in the hash table, return undefined
+*
+* @param {string} key - key to be found and deleted in hash table
+* @return {string|number|boolean} The value deleted from the hash table
+*/
+HashTable.prototype.remove = function(key) {
+  if((this.SIZE > 16) && this.length - 1 <= (this.SIZE * 0.25)) {
+    this.halfHashtable();
+  }
+
+  let currentSlot = this.storage[hashCode(key, this.SIZE)][key]
+  if(currentSlot) {
+    let tmp = currentSlot[key];
+    delete this.storage[hashCode(key, this.SIZE)][key];
+    this.length--;
+    return tmp
+  }
+  throw "No value found"
+};
+
+HashTable.prototype.doubleHashtable = function() {
+  this.SIZE *= 2;
+  tmpStorage = new Array(this.SIZE); 
+
+  // this rehashes keys with collition too
+  this.storage.forEach(element => {
+    for (const [key, value] of Object.entries(element)) {
+      let currentSlot = tmpStorage[hashCode(key, this.SIZE)]
+      if(!currentSlot) {
+        const newValue = {}
+        newValue[key] = value;
+        tmpStorage[hashCode(key, this.SIZE)]  = newValue;
+      } else {
+        currentSlot[key] = value
+      }
+    }
+  });
+  this.storage = tmpStorage;
+};
+
+HashTable.prototype.halfHashtable = function() {
+  this.SIZE /= 2;
+  tmpStorage = new Array(this.SIZE); 
+
+  // this rehashes keys with collition too
+  this.storage.forEach(element => {
+    for (const [key, value] of Object.entries(element)) {
+      let currentSlot = tmpStorage[hashCode(key, this.SIZE)]
+      if(!currentSlot) {
+        const newValue = {}
+        newValue[key] = value;
+        tmpStorage[hashCode(key, this.SIZE)]  = newValue;
+      } else {
+        currentSlot[key] = value
+      }
+    }
+  });
+  this.storage = tmpStorage;
+};
 
 // YOUR CODE ABOVE
 
@@ -36,3 +149,19 @@ function hashCode(string, size) {
 
 // Do not remove!!
 module.exports = HashTable;
+
+// const myHashtable = new HashTable();
+// console.log("SIZE = ", myHashtable.SIZE)
+// console.log("myHashtable = ", myHashtable.storage)
+// myHashtable.set("2", "world");
+// myHashtable.set("hello", "world");
+// myHashtable.set("22", "world");
+// myHashtable.set("4", "world");
+// console.log("SIZE = ", myHashtable.SIZE)
+// console.log("myHashtable = ", myHashtable.storage)
+
+// myHashtable.remove("hello");
+// myHashtable.remove("2");
+
+// console.log("SIZE = ", myHashtable.SIZE)
+// console.log("myHashtable = ", myHashtable.storage)
