@@ -14,8 +14,65 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+function HashTable() {
+  this.SIZE = 16;
+  this.storage = new Array(this.SIZE);
+  // add two new variables that tracks how many addresses were taken
+  this.stored = 0;
+}
+HashTable.prototype.set = function(key, value) {
+  const hashI = hashCode(key, this.SIZE);
+  if(this.storage[hashI] !== undefined) {
+    this.storage[hashI][key] = value;
+  } else {
+    const obj = {};
+    obj[key] = value;
+    this.storage[hashI] = obj;
+    // increment on how many addresses are taken
+    this.stored += 1;
+    // check capacity of hash table, if over 75% double size
+    if(this.stored >= 0.75 * this.SIZE) {
+      this.rehash();
+    }
+  }
+  return hashI;
+};
+HashTable.prototype.get = function(key) {
+  const hashI = hashCode(key, this.SIZE);
+  return this.storage[hashI][key];
+};
+HashTable.prototype.remove = function(key) {
+  const hashI = hashCode(key, this.SIZE);
+  const output = this.storage[hashI][key];
+  delete this.storage[hashI][key];
+  this.stored -= 1;
+  if(this.stored <= 0.25 * this.SIZE && this.SIZE > 16) {
+    this.rehash();
+  }
+  return output;
+};
 
-
+HashTable.prototype.rehash = function(size) {
+  this.SIZE *= 2;
+  this.stored = 0;
+  let storage = this.storage;
+  this.storage = new Array(this.SIZE);
+  storage.forEach(obj => {
+    for (let key in obj) {
+      let hashKey = hashCode(key, this.SIZE);
+      if (!this.storage[hashKey]) {
+        let tempObj = {};
+        tempObj[key] = obj[key];
+        this.storage[hashKey] = tempObj;
+        this.stored++;
+      } else {
+        //check for passing in same key with diff value
+        this.storage[hashKey][key] = obj[key];
+        this.stored++;
+      }
+    }
+  });
+}
 
 // YOUR CODE ABOVE
 
