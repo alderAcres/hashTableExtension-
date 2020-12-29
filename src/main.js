@@ -7,7 +7,7 @@
 */
 function HashTable() {
   this.SIZE = 16;
-  
+  this.items = 0;
   this.storage = new Array(this.SIZE);
 }
 
@@ -24,8 +24,19 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const index = hashCode(key, this.SIZE);
+  const newObj = {}
+  newObj[key] = value
+  if (this.storage[index]) {
+    this.storage[index].push(newObj);
+  } else {
+    this.items++;
+    this.storage[index] = [newObj];
+  }
+  return this.items;
 };
+
+
 
 /**
 * get - Retrieves a value stored in the hash table with a specified key
@@ -38,8 +49,22 @@ HashTable.prototype.set = function(key, value) {
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
-};
+  const index = hashCode(key, this.SIZE);
+  for (let i = 0; i < this.storage[index].length; i++) {
+    if (this.storage[index][i][key]) {
+      return this.storage[index][i][key];
+    }
+  }
+}
+// const test = new HashTable();
+// test.set('1','value1')
+// test.set('2', 'value2')
+// console.log(test.storage);
+// const newO = {};
+// newO['asda'] = 'asda'
+// test.storage[1].unshift(newO);
+// console.log(test.storage)  
+// console.log(test.get('1'))
 
 /**
 * remove - delete a key/value pair from the hash table
@@ -50,8 +75,26 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
+  const index = hashCode(key, this.SIZE);
 
+  for (let i = 0; i < this.storage[index].length; i++) {
+    if (this.storage[index][i][key]) {
+      const removedItem = this.storage[index][i];
+      this.storage[index].splice(i, 1);
+      // Decrements this.items if array is empty
+      if (!this.storage[index].length) {
+        this.items--;
+      }
+      return removedItem;
+    }
+  }
 };
+const test = new HashTable();
+test.set('1','value1')
+test.set('2', 'value2')
+console.log(test.storage);
+console.log(test.remove('1'));
+console.log(test.storage)
 
 
 // Do not modify
