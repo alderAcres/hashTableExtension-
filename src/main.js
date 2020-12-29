@@ -25,7 +25,6 @@ function HashTable() {
 */
 HashTable.prototype.set = function(key, value) {
   const hash = hashCode(key, this.SIZE);
-
   if (this.storage[hash]) {
     this.storage[hash][key] = value;
   } else {
@@ -37,7 +36,9 @@ HashTable.prototype.set = function(key, value) {
 
 let hashTable = new HashTable();
 console.log(hashTable);
-hashTable.set('k1', 'v1');
+for (let i = 0; i < 3; i++) {
+  hashTable.set('k' + i, 'v' + i);
+}
 console.log('hashTable', hashTable);
 
 /**
@@ -47,12 +48,19 @@ console.log('hashTable', hashTable);
 *   the correct value that was originally stored with the provided key
 *
 * @param {string} key - key to lookup in hash table
-* @return {string|number|boolean} The value stored with the specifed key in the
+* @return {string|number|boolean} The value stored with the specified key in the
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash]) return this.storage[hash][key];
+  return undefined;
 };
+
+for (let i = 0; i < 3; i++) {
+  console.log(hashTable.get('k' + i, 'v' + i));
+}
+console.log("hashTable.get('asdf')", hashTable.get('asdf'));
 
 /**
 * remove - delete a key/value pair from the hash table
