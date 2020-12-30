@@ -34,13 +34,6 @@ HashTable.prototype.set = function(key, value) {
   }
 };
 
-let hashTable = new HashTable();
-console.log(hashTable);
-for (let i = 0; i < 3; i++) {
-  hashTable.set('k' + i, 'v' + i);
-}
-console.log('hashTable', hashTable);
-
 /**
 * get - Retrieves a value stored in the hash table with a specified key
 *
@@ -57,11 +50,6 @@ HashTable.prototype.get = function(key) {
   return undefined;
 };
 
-for (let i = 0; i < 3; i++) {
-  console.log(hashTable.get('k' + i, 'v' + i));
-}
-console.log("hashTable.get('asdf')", hashTable.get('asdf'));
-
 /**
 * remove - delete a key/value pair from the hash table
 *
@@ -77,11 +65,24 @@ HashTable.prototype.remove = function(key) {
   return cache;
 };
 
-for (let i = 0; i < 3; i++) {
-  console.log(hashTable.remove('k' + i));
-}
+// MY TESTS
+// let hashTable = new HashTable();
+// console.log(hashTable);
+// for (let i = 0; i < 16; i++) {
+//   hashTable.set('k' + i, 'v' + i);
+// }
+// console.log('hashTable', hashTable);
 
-console.log('hashTable', hashTable);
+// for (let i = 0; i < 16; i++) {
+//   console.log(hashTable.get('k' + i, 'v' + i));
+// }
+// console.log("hashTable.get('asdf')", hashTable.get('asdf'));
+
+// for (let i = 0; i < 16; i++) {
+//   console.log(hashTable.remove('k' + i));
+// }
+
+// console.log('hashTable', hashTable);
 
 // Do not modify
 function hashCode(string, size) {
