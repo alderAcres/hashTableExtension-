@@ -52,8 +52,10 @@ HashTable.prototype.set = function(key, value) {
   }
   this.noStored++;
 
-  if (this.noStored / this.SIZE >= 0.75) this.doubleSize();
+  if (this.aboveCapacity()) this.doubleSize();
 };
+
+HashTable.prototype.aboveCapacity = function() { return this.noStored / this.SIZE >= 0.75; }
 
 HashTable.prototype.doubleSize = function() {
   this.SIZE = this.SIZE * 2;
@@ -102,9 +104,7 @@ HashTable.prototype.halveSize = function() {
 
 HashTable.prototype.rehash = function() {
   const rehash = new HashTable(this.SIZE);
-
   for (hash in this.storage) for (const [k, v] of Object.entries(this.storage[hash])) rehash.set(k, v);
-
   this.storage = rehash.storage;
 }
 
