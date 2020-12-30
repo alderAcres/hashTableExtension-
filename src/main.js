@@ -59,6 +59,7 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
   const hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash]) return undefined;
   const cache = this.storage[hash][key];
   delete this.storage[hash][key];
   return cache;
@@ -77,7 +78,7 @@ for (let i = 0; i < 16; i++) {
 }
 console.log("hashTable.get('asdf')", hashTable.get('asdf'));
 
-for (let i = 0; i < 16; i++) {
+for (let i = 0; i < 17; i++) {
   console.log(hashTable.remove('k' + i));
 }
 
