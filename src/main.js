@@ -65,26 +65,6 @@ HashTable.prototype.remove = function(key) {
   return cache;
 };
 
-// -- MY TESTS --
-const hashTable = new HashTable();
-console.log(hashTable);
-for (let i = 0; i < 16; i++) {
-  hashTable.set('k' + i, 'v' + i);
-}
-console.log('hashTable', hashTable);
-
-for (let i = 0; i < 16; i++) {
-  console.log(hashTable.get('k' + i, 'v' + i));
-}
-console.log("hashTable.get('asdf')", hashTable.get('asdf'));
-
-for (let i = 0; i < 17; i++) {
-  console.log(hashTable.remove('k' + i));
-}
-
-console.log('hashTable', hashTable);
-// -- END OF TESTS --
-
 // Do not modify
 function hashCode(string, size) {
   'use strict';
