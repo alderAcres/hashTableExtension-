@@ -22,8 +22,9 @@
 *
 * - You may modify this constructor as you need to achieve the challenges below.
 */
-function HashTable(size = 16) {
+function HashTable(size = 16, minSize = 16) {
   this.SIZE = size;
+  this.MIN_SIZE = minSize;
   
   this.storage = new Array(this.SIZE);
   this.noStored = 0;
@@ -97,8 +98,27 @@ HashTable.prototype.remove = function(key) {
   const cache = this.storage[hash][key];
   delete this.storage[hash][key];
   this.noStored--;
+
+  if (this.noStored / this.SIZE <= 0.25) this.halveSize();
+
   return cache;
 };
+
+HashTable.prototype.halveSize = function() {
+  this.SIZE = Math.round(this.SIZE / 2);
+
+  if (this.SIZE < this.MIN_SIZE) this.SIZE = this.MIN_SIZE;
+
+  const replacement = new HashTable(this.SIZE);
+
+  for (hash in this.storage) {
+    for (const [key, value] of Object.entries(this.storage[hash])) {
+      replacement.set(key, value);
+    }
+  }
+
+  this.storage = replacement.storage;
+}
 
 // Create hash table
 let hashTable = new HashTable();
