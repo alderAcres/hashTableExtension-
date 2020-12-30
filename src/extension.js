@@ -87,6 +87,7 @@ HashTable.prototype.get = function(key) {
 */
 HashTable.prototype.remove = function(key) {
   const hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash]) return undefined;
   const cache = this.storage[hash][key];
   delete this.storage[hash][key];
   this.noStored--;
@@ -94,7 +95,7 @@ HashTable.prototype.remove = function(key) {
   return cache;
 };
 
-HashTable.prototype.belowCapacity = function() { return this.noStored / this.SIZE <= 0.25 && this.SIZE > this.MIN_SIZE }
+HashTable.prototype.belowCapacity = function() { return this.noStored / this.SIZE <= 0.25 && this.SIZE > this.MIN_SIZE; }
 
 HashTable.prototype.halveSize = function() {
   this.SIZE = Math.round(this.SIZE / 2);
@@ -120,7 +121,7 @@ for (let i = 0; i < 32; i++) {
 }
 console.log("hashTable.get('asdf')", hashTable.get('asdf'));
 
-for (let i = 0; i < 32; i++) {
+for (let i = 0; i < 33; i++) {
   console.log(`remove: k${i}`, hashTable.remove('k' + i));
 }
 
