@@ -58,15 +58,7 @@ HashTable.prototype.set = function(key, value) {
 
 HashTable.prototype.doubleSize = function() {
   this.SIZE = this.SIZE * 2;
-  const replacement = new HashTable(this.SIZE);
-
-  for (hash in this.storage) {
-    for (const [key, value] of Object.entries(this.storage[hash])) {
-      replacement.set(key, value);
-    }
-  }
-
-  this.storage = replacement.storage;
+  this.rehash();
 }
 
 /**
@@ -99,7 +91,7 @@ HashTable.prototype.remove = function(key) {
   delete this.storage[hash][key];
   this.noStored--;
 
-  if (this.noStored / this.SIZE <= 0.25) this.halveSize();
+  if ((this.noStored / this.SIZE <= 0.25) && this.SIZE > this.MIN_SIZE) this.halveSize();
 
   return cache;
 };
@@ -120,21 +112,33 @@ HashTable.prototype.halveSize = function() {
   this.storage = replacement.storage;
 }
 
+HashTable.prototype.rehash = function() {
+  const replacement = new HashTable(this.SIZE);
+
+  for (hash in this.storage) {
+    for (const [key, value] of Object.entries(this.storage[hash])) {
+      replacement.set(key, value);
+    }
+  }
+
+  this.storage = replacement.storage;
+}
+
 // Create hash table
 let hashTable = new HashTable();
-for (let i = 0; i < 16; i++) {
+for (let i = 0; i < 32; i++) {
   hashTable.set('k' + i, 'v' + i);
 }
 console.log('hashTable with new values', hashTable);
 
 
-for (let i = 0; i < 16; i++) {
-  console.log(`k${i}, v${i}`, hashTable.get('k' + i, 'v' + i));
+for (let i = 0; i < 32; i++) {
+  console.log(`get: k${i}, v${i}`, hashTable.get('k' + i, 'v' + i));
 }
 console.log("hashTable.get('asdf')", hashTable.get('asdf'));
 
-for (let i = 0; i < 16; i++) {
-  console.log(`remove k${i}`, hashTable.remove('k' + i));
+for (let i = 0; i < 32; i++) {
+  console.log(`remove: k${i}`, hashTable.remove('k' + i));
 }
 
 console.log('hashTable', hashTable);
