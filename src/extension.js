@@ -98,18 +98,7 @@ HashTable.prototype.remove = function(key) {
 
 HashTable.prototype.halveSize = function() {
   this.SIZE = Math.round(this.SIZE / 2);
-
-  if (this.SIZE < this.MIN_SIZE) this.SIZE = this.MIN_SIZE;
-
-  const replacement = new HashTable(this.SIZE);
-
-  for (hash in this.storage) {
-    for (const [key, value] of Object.entries(this.storage[hash])) {
-      replacement.set(key, value);
-    }
-  }
-
-  this.storage = replacement.storage;
+  this.rehash();
 }
 
 HashTable.prototype.rehash = function() {
