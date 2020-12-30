@@ -116,26 +116,6 @@ HashTable.prototype.rehash = function() {
   this.storage = rehash.storage;
 }
 
-// MY TESTS
-const hashTable = new HashTable();
-for (let i = 0; i < 32; i++) {
-  hashTable.set('k' + i, 'v' + i);
-}
-console.log('hashTable with new values', hashTable);
-
-
-for (let i = 0; i < 32; i++) {
-  console.log(`get: k${i}, v${i}`, hashTable.get('k' + i, 'v' + i));
-}
-console.log("hashTable.get('asdf')", hashTable.get('asdf'));
-
-for (let i = 0; i < 33; i++) {
-  console.log(`remove: k${i}`, hashTable.remove('k' + i));
-}
-
-console.log('hashTable', hashTable);
-// -- END OF TESTS --
-
 // YOUR CODE ABOVE
 
 function hashCode(string, size) {
