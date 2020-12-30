@@ -1,5 +1,5 @@
 /**
-* HashTable costructor
+* HashTable constructor
 *
 * construct a new hash table
 *
@@ -24,7 +24,13 @@ function HashTable() {
 * @return {number} The new number of items stored in the hash table
 */
 HashTable.prototype.set = function(key, value) {
-
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash]) this.storage[hash][key] = value;
+  else {
+    const obj = {};
+    obj[key] = value;
+    this.storage[hash] = obj;
+  }
 };
 
 /**
@@ -34,11 +40,13 @@ HashTable.prototype.set = function(key, value) {
 *   the correct value that was originally stored with the provided key
 *
 * @param {string} key - key to lookup in hash table
-* @return {string|number|boolean} The value stored with the specifed key in the
+* @return {string|number|boolean} The value stored with the specified key in the
 * hash table
 */
 HashTable.prototype.get = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  if (this.storage[hash]) return this.storage[hash][key];
+  return undefined;
 };
 
 /**
@@ -50,9 +58,32 @@ HashTable.prototype.get = function(key) {
 * @return {string|number|boolean} The value deleted from the hash table
 */
 HashTable.prototype.remove = function(key) {
-
+  const hash = hashCode(key, this.SIZE);
+  if (!this.storage[hash]) return undefined;
+  const cache = this.storage[hash][key];
+  delete this.storage[hash][key];
+  return cache;
 };
 
+// -- MY TESTS --
+const hashTable = new HashTable();
+console.log(hashTable);
+for (let i = 0; i < 16; i++) {
+  hashTable.set('k' + i, 'v' + i);
+}
+console.log('hashTable', hashTable);
+
+for (let i = 0; i < 16; i++) {
+  console.log(hashTable.get('k' + i, 'v' + i));
+}
+console.log("hashTable.get('asdf')", hashTable.get('asdf'));
+
+for (let i = 0; i < 17; i++) {
+  console.log(hashTable.remove('k' + i));
+}
+
+console.log('hashTable', hashTable);
+// -- END OF TESTS --
 
 // Do not modify
 function hashCode(string, size) {
