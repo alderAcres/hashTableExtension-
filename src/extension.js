@@ -21,6 +21,7 @@
 * construct a new hash table
 *
 * - You may modify this constructor as you need to achieve the challenges below.
+*   - I have allowed the user to set the size and the minimum size if they choose.
 */
 function HashTable(size = 16, minSize = 16) {
   this.SIZE = size;
@@ -51,11 +52,13 @@ HashTable.prototype.set = function(key, value) {
     this.storage[hash] = obj;
   }
   this.noStored++;
-  if (this.aboveCapacity()) this.doubleSize();
+  if (this.isAboveCapacity()) this.doubleSize();
 };
 
-HashTable.prototype.aboveCapacity = function() { return this.noStored / this.SIZE >= 0.75; }
+// Check if the HashTable is above capacity -> 75% or more full
+HashTable.prototype.isAboveCapacity = function() { return this.noStored / this.SIZE >= 0.75; }
 
+// Double the size of the HashTable, then rehash everything
 HashTable.prototype.doubleSize = function() {
   this.SIZE = this.SIZE * 2;
   this.rehash();
@@ -91,19 +94,24 @@ HashTable.prototype.remove = function(key) {
   const cache = this.storage[hash][key];
   delete this.storage[hash][key];
   this.noStored--;
-  if (this.belowCapacity()) this.halveSize();
+  if (this.isBelowCapacity()) this.halveSize();
   return cache;
 };
 
-HashTable.prototype.belowCapacity = function() { return this.noStored / this.SIZE <= 0.25 && this.SIZE > this.MIN_SIZE; }
+// Check if the HashTable is below capacity
+// This is the case when it is under 25% full and the size is larger than the minimum size
+HashTable.prototype.isBelowCapacity = function() { return this.noStored / this.SIZE <= 0.25 && this.SIZE > this.MIN_SIZE; }
 
+// Halve the size of the HashTable, then rehash everything
 HashTable.prototype.halveSize = function() {
   this.SIZE = Math.round(this.SIZE / 2);
   this.rehash();
 }
 
+// Rehash the HashTable
 HashTable.prototype.rehash = function() {
   const rehash = new HashTable(this.SIZE);
+  // Re-set every key value pair inside every hash in storage
   for (hash in this.storage) for (const [k, v] of Object.entries(this.storage[hash])) rehash.set(k, v);
   this.storage = rehash.storage;
 }
