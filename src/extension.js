@@ -44,9 +44,8 @@ function HashTable(size = 16, minSize = 16) {
 */
 HashTable.prototype.set = function(key, value) {
   const hash = hashCode(key, this.SIZE);
-  if (this.storage[hash]) {
-    this.storage[hash][key] = value;
-  } else {
+  if (this.storage[hash]) this.storage[hash][key] = value;
+  else {
     const obj = {};
     obj[key] = value;
     this.storage[hash] = obj;
@@ -102,19 +101,15 @@ HashTable.prototype.halveSize = function() {
 }
 
 HashTable.prototype.rehash = function() {
-  const replacement = new HashTable(this.SIZE);
+  const rehash = new HashTable(this.SIZE);
 
-  for (hash in this.storage) {
-    for (const [key, value] of Object.entries(this.storage[hash])) {
-      replacement.set(key, value);
-    }
-  }
+  for (hash in this.storage) for (const [k, v] of Object.entries(this.storage[hash])) rehash.set(k, v);
 
-  this.storage = replacement.storage;
+  this.storage = rehash.storage;
 }
 
-// Create hash table
-let hashTable = new HashTable();
+// MY TESTS
+const hashTable = new HashTable();
 for (let i = 0; i < 32; i++) {
   hashTable.set('k' + i, 'v' + i);
 }
@@ -131,6 +126,7 @@ for (let i = 0; i < 32; i++) {
 }
 
 console.log('hashTable', hashTable);
+// -- END OF TESTS --
 
 // YOUR CODE ABOVE
 
