@@ -13,8 +13,38 @@
         (rounding down), then reduce the hash table's SIZE by 1/2 and rehash everything.
 */
 
+const HashTable = require("./main");
+
 // PASTE AND MODIFY YOUR CODE BELOW
 
+HashTable.prototype.set = function(key, value) {
+
+  let hashIndex = hashCode(key, this.SIZE);
+
+  if(!this.storage[hashIndex]) {
+    this.storage[hashIndex] = {};
+    this.count++;
+  } else {
+    this.storage[hashIndex][key] = value;
+    this.count++;
+  }
+
+  if (this.count >= 0.75 * this.SIZE) this.rehash();
+
+};
+
+//couldnt finish this bit here
+HashTable.prototype.remove = function(key) {
+
+  let hashIndex = hashCode(key, this.SIZE);
+  let element = this.storage[hashIndex][key];
+  
+  delete this.storage[hashIndex][key];
+  this.count--;
+
+  return element;
+
+};
 
 
 // YOUR CODE ABOVE
@@ -32,6 +62,30 @@ function hashCode(string, size) {
   }
   
   return Math.abs(hash) % size;
+}
+
+HashTable.prototype.rehash = function(size) {
+  this.SIZE *= 2;       //double up the size of hashtable (16 x 2)
+  this.count = 0;       //set counter 
+
+  let storage = this.storage;   //copy over everything from this.storage to storage
+  this.storage = new Array(this.SIZE);    //set new storage to the new size (32)
+
+  storage.forEach(obj => {    //loop over each object inside the hashtable array 
+    for (let key in obj) {
+      let hashIndex = hashCode(key, this.SIZE);
+      if (!this.storage[hashIndex]) {       //if index is empty, create object, assign key-values
+        let tempObj = {};
+        tempObj[key] = obj[key];
+        this.storage[hashIndex] = tempObj;
+        this.count++;                       //keep track of the size of the hashtable
+      } else {
+        this.storage[hashIndex][key] = obj[key];    //else replace values to the key
+        this.count++;
+      }
+    }
+  });
+
 }
 
 // Do not remove!!
