@@ -14,25 +14,81 @@
 */
 
 // PASTE AND MODIFY YOUR CODE BELOW
+class HashTable {
+  constructor() {
+    this.SIZE = 16;
+    this.storage = {};
+    this.count = 0;
+  }
 
+  set(key, value) {
+    this.count += 1;
+    const keyValue = key;
+    const index = this.hashCode(key, this.SIZE);
+    if (!this.storage[index]) {
+      this.storage[index] = {};
+      this.storage[index][key] = value;
+    } else this.storage[index][keyValue] = value;
+    if (this.count / this.SIZE >= 0.75) this.resize(this.SIZE * 2);
+  }
 
+  get(key) {
+    const index = this.hashCode(key, this.size);
+    for (const [keys, hashObj] of Object.entries(this.storage)) {
+      if (keys === index) {
+        for (const [hashKey, hashVal] of Object.entries(hashObj)) {
+          if (hashKey === key) return hashVal;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  remove(key) {
+    let value;
+    const index = this.hashCode(key, this.SIZE);
+    if (!this.storage[index][key]) return undefined;
+    for (const [keys, vals] of Object.entries(this.storage)) {
+      if (index.toString() === keys) {
+        value = vals[key];
+        delete vals[key];
+        this.count -= 1;
+      }
+    }
+
+    if (this.count / this.SIZE <= 0.25 && this.SIZE > 16) this.resize(this.SIZE / 2);
+    return value;
+  }
+
+  resize(newLimit) {
+    const oldStorage = this.storage;
+    this.SIZE = newLimit;
+    this.storage = {};
+    this.count = 0;
+
+    for (const [key, val] of Object.entries(oldStorage)) {
+      if (key) {
+        for (const [hashKey, hashVal] of Object.entries(val)) {
+          this.set(hashKey, hashVal);
+        }
+      }
+    }
+    return this.storage;
+  }
+
+  hashCode(string, size) {
+    let hash = 0;
+    if (string.length === 0) return hash;
+    for (let i = 0; i < string.length; i += 1) {
+      const letter = string.charCodeAt(i);
+      hash = ((hash << 5) - hash) + letter;
+      hash &= hash;
+    }
+    return Math.abs(hash) % size;
+  }
+}
 
 // YOUR CODE ABOVE
-
-function hashCode(string, size) {
-  'use strict';
-  
-  let hash = 0;
-  if (string.length === 0) return hash;
-  
-  for (let i = 0; i < string.length; i++) {
-    const letter = string.charCodeAt(i);
-    hash = ((hash << 5) - hash) + letter;
-    hash = hash & hash; // Convert to 32bit integer
-  }
-  
-  return Math.abs(hash) % size;
-}
 
 // Do not remove!!
 module.exports = HashTable;
